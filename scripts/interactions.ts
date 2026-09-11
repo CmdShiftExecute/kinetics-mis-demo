@@ -62,10 +62,20 @@ async function alignment(page: Page, sel: string) {
 
 const browser = await chromium.launch();
 const errors: string[] = [];
+/** During the deliberate missing-data check a 404 in the console is the expected evidence, not a fault. */
+let expectMissing = false;
+let expected404 = 0;
 async function newPage(width: number, reducedMotion: 'reduce' | 'no-preference' = 'no-preference') {
   const context = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 1, ignoreHTTPSErrors: insecure, reducedMotion });
   const page = await context.newPage();
-  page.on('console', (m) => m.type() === 'error' && errors.push(`[${width}] ${m.text()}`));
+  page.on('console', (m) => {
+    if (m.type() !== 'error') return;
+    if (expectMissing && /404/.test(m.text())) {
+      expected404++;
+      return;
+    }
+    errors.push(`[${width}] ${m.text()}`);
+  });
   page.on('pageerror', (e) => errors.push(`[${width}] ${String(e)}`));
   return { context, page };
 }
@@ -139,6 +149,11 @@ try {
   await page.waitForTimeout(200);
   const valuesOpen = await page.locator('#ov-values').evaluate((el) => (el as HTMLDetailsElement).open);
   check(valueRows === 12 && valuesOpen, `Exact monthly values are in a table with ${valueRows} rows, opened by keyboard`);
+  await page.locator('#delivery svg.vchart').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(900);
+  const bars = await page.evaluate(() => Array.from(document.querySelectorAll('#delivery svg.vchart rect.vbar')).map((r) => [r.getAttribute('height'), r.getAttribute('y')]));
+  const barsOk = bars.length === 12 && bars.every(([h, y]) => h != null && y != null && Number.isFinite(Number(h)) && Number.isFinite(Number(y)) && Number(h) >= 1);
+  check(barsOk, `Every variance bar carries a numeric height and y attribute after animating in (${bars.length} bars)`);
   const axisNote = await page.locator('#delivery .chart-axis-note').first().innerText();
   check(/starts at .* not zero/i.test(axisNote), `Truncated revenue axis is labelled ("${axisNote.slice(0, 60)}")`);
 
@@ -286,9 +301,11 @@ try {
   await page.goto(`${base}/no/such/page`, { waitUntil: 'networkidle' });
   const nf = (await page.locator('h1').first().innerText()).trim();
   check(/nothing here/i.test(nf), `Invalid route shows the not-found page (h1 "${nf}")`);
+  expectMissing = true;
   await page.goto(`${base}/v/no-such-vertical`, { waitUntil: 'networkidle' });
   const missing = await page.locator('.errbox').innerText();
-  check(/no such vertical/i.test(missing) && /not found|HTTP|valid JSON/i.test(missing), `Missing vertical data shows a readable error ("${missing.replace(/\n/g, ' ').slice(0, 90)}")`);
+  expectMissing = false;
+  check(/no such vertical/i.test(missing) && /not found|HTTP|valid JSON/i.test(missing), `Missing vertical data shows a readable error ("${missing.replace(/\n/g, ' ').slice(0, 90)}"; ${expected404} expected 404 in the console)`);
   await page.route('**/data/rollup.json', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '{"meta": {}}' }));
   await page.goto(`${base}/`, { waitUntil: 'networkidle' });
   const malformed = await page.locator('.errbox').innerText();

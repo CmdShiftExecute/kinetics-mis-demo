@@ -218,8 +218,11 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
               <motion.rect
                 className={cx('vbar', neg && 'neg', p.forecast != null && 'fc')}
                 x={cx0 - barW / 2}
+                y={top}
                 width={barW}
-                {...(reduce ? { y: top, height: Math.max(1, h) } : { initial: { y: vy(0), height: 1 }, whileInView: { y: top, height: Math.max(1, h) }, viewport: { once: true, amount: 0.4 }, transition: { duration: 0.6, delay: 0.03 * p.index, ease: 'easeOut' } })}
+                height={Math.max(1, h)}
+                style={{ originY: neg ? 0 : 1 }}
+                {...(reduce ? {} : { initial: { scaleY: 0 }, whileInView: { scaleY: 1 }, viewport: { once: true, amount: 0.4 }, transition: { duration: 0.6, delay: 0.03 * p.index, ease: 'easeOut' } })}
               />
               {(!dense || p.index % 2 === 1) && (
                 <text className={neg ? 'hz' : undefined} x={cx0} y={neg ? top + h + 11 : top - 4} textAnchor="middle">

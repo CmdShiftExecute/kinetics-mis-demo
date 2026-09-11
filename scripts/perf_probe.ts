@@ -26,7 +26,7 @@ const page = await context.newPage();
 const t0 = Date.now();
 await page.goto(`${base}${path}`, { waitUntil: 'networkidle' });
 await page.evaluate(() => document.fonts.ready);
-await page.waitForSelector('table.mis');
+await page.waitForSelector('section.sec');
 const loadMs = Date.now() - t0;
 await page.waitForTimeout(800);
 const result = await page.evaluate(

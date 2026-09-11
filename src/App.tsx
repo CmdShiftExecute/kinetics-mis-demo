@@ -3,8 +3,8 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { TableSkeleton } from './components/Skeleton';
+import Overview from './pages/Overview';
 
-const Overview = lazy(() => import('./pages/Overview'));
 const SalesReport = lazy(() => import('./pages/SalesReport'));
 const DeliveryReport = lazy(() => import('./pages/DeliveryReport'));
 const NetProfitReport = lazy(() => import('./pages/NetProfitReport'));
@@ -23,6 +23,11 @@ function Fallback() {
     </div>
   );
 }
+
+/*
+ * The overview is in the main bundle so the first paint needs one script; every other
+ * route is split and loaded on demand.
+ */
 
 /** Scroll to the top on every path change, or to the anchor when the address carries one. */
 function ScrollManager() {
