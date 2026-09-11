@@ -24,6 +24,8 @@ const arg = (name: string, fallback: string) => {
 };
 const base = arg('base', 'http://127.0.0.1:4180').replace(/\/$/, '');
 const out = arg('out', join(process.cwd(), 'screenshots'));
+/** Accept the tailnet's self-signed certificate when pointed at node-ss. */
+const insecure = args.includes('--insecure');
 mkdirSync(out, { recursive: true });
 
 const failures: string[] = [];
@@ -33,7 +35,7 @@ const check = (ok: boolean, what: string) => {
 };
 
 const browser = await chromium.launch();
-const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, ignoreHTTPSErrors: insecure });
 const page = await context.newPage();
 const errors: string[] = [];
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));

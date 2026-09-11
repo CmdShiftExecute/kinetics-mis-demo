@@ -17,8 +17,10 @@ const arg = (name: string, fallback: string) => {
   const i = args.indexOf(`--${name}`);
   return i >= 0 && args[i + 1] ? args[i + 1]! : fallback;
 };
-const base = arg('base', 'http://127.0.0.1:4173').replace(/\/$/, '');
+const base = arg('base', 'http://127.0.0.1:4180').replace(/\/$/, '');
 const out = arg('out', join(process.cwd(), 'screenshots'));
+/** Accept the tailnet's self-signed certificate when pointed at node-ss. */
+const insecure = args.includes('--insecure');
 const tag = arg('tag', 'halvard-mis');
 
 const pages = [
@@ -39,6 +41,7 @@ try {
       viewport: { width: vp.width, height: vp.height },
       deviceScaleFactor: 2,
       reducedMotion: 'reduce',
+      ignoreHTTPSErrors: insecure,
       isMobile: vp.mobile ?? false,
       hasTouch: vp.mobile ?? false,
     });
