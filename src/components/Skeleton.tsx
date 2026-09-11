@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 /** A loading state shaped like the table it replaces. */
 export function TableSkeleton({ rows = 8 }: { rows?: number }) {
   return (
@@ -10,14 +12,17 @@ export function TableSkeleton({ rows = 8 }: { rows?: number }) {
   );
 }
 
-export function ErrorBlock({ message }: { message: string }) {
+export function ErrorBlock({ title = 'Data not loaded', message, back }: { title?: string; message: string; back?: { to: string; label: string } }) {
   return (
     <div className="errbox" role="alert">
-      <p className="bracket bad">[ Data not loaded ]</p>
+      <p className="display sec-title bad">{title}</p>
       <p style={{ margin: 'var(--s-sm) 0 0' }}>{message}</p>
       <p className="muted" style={{ margin: 'var(--s-sm) 0 0' }}>
-        The page reads finished tables from public/data. Regenerate them with <code>bun run data</code>.
+        The page reads finished tables from public/data. Regenerate them with <code>bun run data</code> and check them with <code>bun run reconcile</code>.
       </p>
+      <Link to={back?.to ?? '/'} className="drill-link press">
+        {back?.label ?? 'Back to the overview'}
+      </Link>
     </div>
   );
 }

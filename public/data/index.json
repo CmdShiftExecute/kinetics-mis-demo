@@ -2,51 +2,167 @@
  {
   "slug": "electrical-distribution",
   "name": "Electrical Distribution",
-  "file": "verticals/electrical-distribution.json"
+  "file": "verticals/electrical-distribution.json",
+  "engineers": [
+   {
+    "slug": "rohan-pillai",
+    "name": "Rohan Pillai"
+   },
+   {
+    "slug": "farah-haddad",
+    "name": "Farah Haddad"
+   },
+   {
+    "slug": "dinesh-iyer",
+    "name": "Dinesh Iyer"
+   },
+   {
+    "slug": "marwan-saleh",
+    "name": "Marwan Saleh"
+   },
+   {
+    "slug": "kavya-nair",
+    "name": "Kavya Nair"
+   }
+  ]
  },
  {
   "slug": "cooling",
   "name": "Cooling",
-  "file": "verticals/cooling.json"
+  "file": "verticals/cooling.json",
+  "engineers": [
+   {
+    "slug": "joseph-villanueva",
+    "name": "Joseph Villanueva"
+   },
+   {
+    "slug": "lina-khoury",
+    "name": "Lina Khoury"
+   },
+   {
+    "slug": "arjun-sethi",
+    "name": "Arjun Sethi"
+   }
+  ]
  },
  {
   "slug": "mechanical-systems",
   "name": "Mechanical Systems",
-  "file": "verticals/mechanical-systems.json"
+  "file": "verticals/mechanical-systems.json",
+  "engineers": [
+   {
+    "slug": "bassem-farouk",
+    "name": "Bassem Farouk"
+   },
+   {
+    "slug": "sneha-menon",
+    "name": "Sneha Menon"
+   },
+   {
+    "slug": "tarek-hamdan",
+    "name": "Tarek Hamdan"
+   }
+  ]
  },
  {
   "slug": "pumps-and-water",
   "name": "Pumps and Water",
-  "file": "verticals/pumps-and-water.json"
+  "file": "verticals/pumps-and-water.json",
+  "engineers": [
+   {
+    "slug": "omar-nasser",
+    "name": "Omar Nasser"
+   },
+   {
+    "slug": "meera-dsouza",
+    "name": "Meera Dsouza"
+   }
+  ]
  },
  {
   "slug": "vertical-transport",
   "name": "Vertical Transport",
-  "file": "verticals/vertical-transport.json"
+  "file": "verticals/vertical-transport.json",
+  "engineers": [
+   {
+    "slug": "hana-qureshi",
+    "name": "Hana Qureshi"
+   },
+   {
+    "slug": "yusuf-rahman",
+    "name": "Yusuf Rahman"
+   },
+   {
+    "slug": "divya-bhatt",
+    "name": "Divya Bhatt"
+   }
+  ]
  },
  {
   "slug": "metering",
   "name": "Metering",
-  "file": "verticals/metering.json"
+  "file": "verticals/metering.json",
+  "engineers": [
+   {
+    "slug": "karim-mansour",
+    "name": "Karim Mansour"
+   },
+   {
+    "slug": "ananya-kapoor",
+    "name": "Ananya Kapoor"
+   }
+  ]
  },
  {
   "slug": "automation",
   "name": "Automation",
-  "file": "verticals/automation.json"
+  "file": "verticals/automation.json",
+  "engineers": [
+   {
+    "slug": "nadia-zaki",
+    "name": "Nadia Zaki"
+   },
+   {
+    "slug": "vikram-fernandes",
+    "name": "Vikram Fernandes"
+   }
+  ]
  },
  {
   "slug": "fabrication",
   "name": "Fabrication",
-  "file": "verticals/fabrication.json"
+  "file": "verticals/fabrication.json",
+  "engineers": [
+   {
+    "slug": "rami-aziz",
+    "name": "Rami Aziz"
+   }
+  ]
  },
  {
   "slug": "trading",
   "name": "Trading",
-  "file": "verticals/trading.json"
+  "file": "verticals/trading.json",
+  "engineers": [
+   {
+    "slug": "faisal-reyes",
+    "name": "Faisal Reyes"
+   }
+  ]
  },
  {
   "slug": "services",
   "name": "Services",
-  "file": "verticals/services.json"
+  "file": "verticals/services.json",
+  "engineers": [
+   {
+    "slug": "ziad-abdel-rahman",
+    "name": "Ziad Abdel-Rahman"
+   },
+   {
+    "slug": "priya-kulkarni",
+    "name": "Priya Kulkarni"
+   }
+  ]
  }
 ]

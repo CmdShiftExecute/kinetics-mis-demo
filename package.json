@@ -6,12 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "reconcile": "bun scripts/reconcile.ts",
     "preview": "vite preview",
     "lint": "oxlint",
     "data": "bun scripts/generate_demo_data.ts",
     "screenshots": "bun scripts/screenshots.ts",
     "contrast": "bun scripts/check_contrast.ts",
-    "check": "bun run data && bun run build && bun run contrast",
+    "check": "bun run data && bun run reconcile && bun run typecheck && bun run lint && bun run build && bun run contrast",
     "interactions": "bun scripts/interactions.ts"
   },
   "dependencies": {

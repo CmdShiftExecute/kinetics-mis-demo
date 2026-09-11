@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
 import type { PlGroup, PlRung, PlRungKey } from '../../data/schema';
-import { cx, k, pct } from '../lib/format';
-import { useRowReveal } from './Reveal';
+import { cx, k, pct, pts, signedK } from '../lib/format';
 
 interface Props {
   groups: PlGroup[];
   cols: { ytd: string; forecast: string; budget: string };
-  tip: string;
+  /** Show a forecast-versus-budget column: after every group, or after the last group only. */
+  showVariance?: 'all' | 'last';
 }
 
 const fmt = (r: PlRung, v: number) => (r.isPercent ? pct(v) : k(v));
@@ -15,15 +14,17 @@ const isBad = (r: PlRung, v: number) => (r.key === 'buProfitability' || r.key ==
 
 /**
  * The P&L ladder, revenue down to BU-level net profit. Hover or focus a rung
- * and the rail explains what it means and which table feeds it.
+ * and the rail explains what it means and which table feeds it. The rail is
+ * a supplement: every definition is also in the section's disclosure.
  */
-export function PlLadder({ groups, cols, tip }: Props) {
+export function PlLadder({ groups, cols, showVariance }: Props) {
   const [active, setActive] = useState<PlRungKey | null>(null);
-  const rowReveal = useRowReveal();
   const first = groups[0]!;
   const rung = active ? first.rungs.find((r) => r.key === active) : undefined;
   const totalGroup = groups[groups.length - 1]!;
   const totalRung = rung ? totalGroup.rungs.find((r) => r.key === rung.key) : undefined;
+  const lastKey = totalGroup.key;
+  const spanOf = (key: string) => (showVariance === 'all' || (showVariance === 'last' && key === lastKey) ? 4 : 3);
 
   return (
     <div className="pl">
@@ -32,40 +33,37 @@ export function PlLadder({ groups, cols, tip }: Props) {
           <thead>
             {groups.length > 1 && (
               <tr>
-                <th />
+                <td className="blank" />
                 {groups.map((g) => (
-                  <th key={g.key} className="group" colSpan={3}>
+                  <th key={g.key} className="group" scope="colgroup" colSpan={spanOf(g.key)}>
                     {g.label}
                   </th>
                 ))}
               </tr>
             )}
             <tr>
-              <th>Rung</th>
+              <th scope="col">Line</th>
               {groups.map((g) => (
-                <MemoHeads key={g.key} cols={cols} />
+                <Heads key={g.key} cols={cols} showVariance={spanOf(g.key) === 4} />
               ))}
             </tr>
           </thead>
           <tbody>
-            {first.rungs.map((r, i) => (
-              <motion.tr
+            {first.rungs.map((r) => (
+              <tr
                 key={r.key}
                 className={cx('rung', r.subtotal && 'sub', active === r.key && 'active')}
                 tabIndex={0}
                 onMouseEnter={() => setActive(r.key)}
                 onFocus={() => setActive(r.key)}
                 aria-describedby="pl-rail"
-                {...rowReveal(i)}
               >
-                <td>{r.label}</td>
+                <th scope="row">{r.label}</th>
                 {groups.map((g) => {
                   const gr = g.rungs.find((x) => x.key === r.key)!;
-                  return (
-                    <RungCells key={g.key} r={gr} tip={tip} />
-                  );
+                  return <RungCells key={g.key} r={gr} showVariance={spanOf(g.key) === 4} />;
                 })}
-              </motion.tr>
+              </tr>
             ))}
           </tbody>
         </table>
@@ -73,27 +71,29 @@ export function PlLadder({ groups, cols, tip }: Props) {
       <aside className="pl-rail" id="pl-rail" aria-live="polite">
         {rung ? (
           <>
-            <p className="label">Rung</p>
+            <p className="label">Line</p>
             <h3>{rung.label}</h3>
             <p>{rung.definition}</p>
             <p className="label">Fed by</p>
             <p>{rung.feeds}</p>
             {totalRung && (
               <dl className="vals">
-                <dt className="label">{cols.ytd}</dt>
+                <dt>{cols.ytd}</dt>
                 <dd className="num">{fmt(totalRung, totalRung.ytd)}</dd>
-                <dt className="label">{cols.forecast}</dt>
+                <dt>{cols.forecast}</dt>
                 <dd className="num">{fmt(totalRung, totalRung.forecast)}</dd>
-                <dt className="label">{cols.budget}</dt>
+                <dt>{cols.budget}</dt>
                 <dd className="num">{fmt(totalRung, totalRung.budget)}</dd>
+                <dt>Forecast vs budget</dt>
+                <dd className={cx('num', totalRung.dForecastVsBudget < 0 && 'bad')}>{totalRung.isPercent ? pts(totalRung.dForecastVsBudget) : signedK(totalRung.dForecastVsBudget)}</dd>
               </dl>
             )}
           </>
         ) : (
           <>
             <p className="label">Definitions</p>
-            <p style={{ marginTop: 'var(--s-md)' }}>Hover or tab to any rung of the ladder to see what it means and which table feeds it.</p>
-            <p className="muted">Costs below gross margin are static values from the monthly finance extract. Revenue and margin are live from the sales tables.</p>
+            <p style={{ marginTop: 'var(--s-md)' }}>Hover or tab to any line of the ladder to see what it means and which table feeds it.</p>
+            <p className="muted">Costs below gross margin are synthetic ratios of revenue; the forecast column annualises the elapsed months. No phased profit budget exists, so profit is compared full year to full year.</p>
           </>
         )}
       </aside>
@@ -101,28 +101,24 @@ export function PlLadder({ groups, cols, tip }: Props) {
   );
 }
 
-function MemoHeads({ cols }: { cols: Props['cols'] }) {
+function Heads({ cols, showVariance }: { cols: Props['cols']; showVariance?: boolean }) {
   return (
     <>
-      <th>{cols.ytd}</th>
-      <th>{cols.forecast}</th>
-      <th>{cols.budget}</th>
+      <th scope="col">{cols.ytd}</th>
+      <th scope="col">{cols.forecast}</th>
+      <th scope="col">{cols.budget}</th>
+      {showVariance && <th scope="col">Forecast vs budget</th>}
     </>
   );
 }
 
-function RungCells({ r, tip }: { r: PlRung; tip: string }) {
+function RungCells({ r, showVariance }: { r: PlRung; showVariance?: boolean }) {
   return (
     <>
-      <td className={cx('num', isBad(r, r.ytd) && 'bad')} data-tip={`${tip} Fed by: ${r.feeds}.`}>
-        {fmt(r, r.ytd)}
-      </td>
-      <td className={cx('num', isBad(r, r.forecast) && 'bad')} data-tip={`${tip} Forecast column annualises year-to-date costs.`}>
-        {fmt(r, r.forecast)}
-      </td>
-      <td className={cx('num', isBad(r, r.budget) && 'bad')} data-tip={`${tip} Budget as approved for FY.`}>
-        {fmt(r, r.budget)}
-      </td>
+      <td className={cx('num', isBad(r, r.ytd) && 'bad')}>{fmt(r, r.ytd)}</td>
+      <td className={cx('num', isBad(r, r.forecast) && 'bad')}>{fmt(r, r.forecast)}</td>
+      <td className={cx('num', isBad(r, r.budget) && 'bad')}>{fmt(r, r.budget)}</td>
+      {showVariance && <td className={cx('num', r.dForecastVsBudget < 0 && 'bad')}>{r.isPercent ? pts(r.dForecastVsBudget) : signedK(r.dForecastVsBudget)}</td>}
     </>
   );
 }

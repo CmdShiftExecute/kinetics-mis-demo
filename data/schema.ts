@@ -6,13 +6,17 @@
  * sorting, filtering and formatting. If a figure on screen is wrong, the
  * fix is in the generator or in this schema, never in a component.
  *
- * Units: all money values are AED thousands unless the field name says
- * otherwise. Percentages are plain numbers (21.4 means 21.4 percent).
+ * Precision policy: every money value is an integer in AED thousands,
+ * rounded once at the lowest level the generator produces (a product line
+ * in one month). Every total anywhere is a sum of those integers, so
+ * independently published tables tie exactly. Percentages are plain numbers
+ * rounded to one decimal (21.4 means 21.4 percent) and are derived from the
+ * integer sums, never from other percentages.
+ *
  * Timestamps are GST (Asia/Dubai, +04:00). Never UTC.
  */
 
 export type Slug = string;
-export type Verdict = 'ON TRACK' | 'WATCH' | 'BEHIND';
 
 export interface Meta {
   company: string;
@@ -21,9 +25,13 @@ export interface Meta {
   /** Human label for the year-to-date window, e.g. "January to August 2026". */
   periodLabel: string;
   monthsElapsed: number;
+  /** Label of the last closed month, e.g. "August 2026". */
+  currentMonthLabel: string;
+  /** Label of the month before it, e.g. "July 2026". */
+  previousMonthLabel: string;
   /** Label for the near-month forecast column, e.g. "September 2026". */
   nearMonth: string;
-  /** Label for the remaining-months forecast column, e.g. "October to December". */
+  /** Label for the remaining-months forecast column, e.g. "October to December 2026". */
   restOfYear: string;
   /** ISO 8601 with a +04:00 offset. */
   dataAsOf: string;
@@ -39,13 +47,18 @@ export interface Meta {
 
 /** A named table that a figure was read from, so any number can name its source. */
 export interface Source {
-  /** Stable key, e.g. "rollup.sales". */
   key: string;
-  /** Human label, e.g. "Sales performance by vertical". */
   label: string;
 }
 
-/* ---------- Roll-up (front page) ---------- */
+/** A measure definition: what is measured, for which period, against which comparator. */
+export interface Definition {
+  key: string;
+  term: string;
+  text: string;
+}
+
+/* ---------- Sales ---------- */
 
 export interface SalesRow {
   slug: Slug;
@@ -58,23 +71,26 @@ export interface SalesRow {
   budgetRevenue: number;
   budgetGm: number;
   budgetGmPct: number;
-  /** Revenue delta against budget, AED thousands. */
+  /** YTD revenue less YTD budget, AED thousands. */
   dRevenue: number;
-  /** Gross margin delta against budget, AED thousands. */
+  /** YTD revenue less YTD budget, percent of budget. */
+  dRevenuePct: number;
+  /** YTD gross margin less YTD budget gross margin, AED thousands. */
   dGm: number;
-  /** Gross margin percent delta against budget, percentage points. */
+  /** YTD GM percent less budget GM percent, percentage points. */
   dGmPts: number;
 }
 
 export interface EngineerSummary {
   name: string;
-  /** Route segment for the engineer's own page. */
   slug: string;
   ytdRevenue: number;
   ytdGm: number;
   ytdGmPct: number;
   budgetRevenue: number;
   dRevenue: number;
+  fyForecast: number;
+  fyBudget: number;
 }
 
 export interface NettingItem {
@@ -91,7 +107,7 @@ export interface Netting {
   grossSumYtd: number;
   /** Revenue that appears on two sheets, AED thousands. */
   doubleCountedYtd: number;
-  /** The single figure the front page shows everywhere. */
+  /** The single figure every summary table shows. */
   nettedYtd: number;
   grossSumFy: number;
   doubleCountedFy: number;
@@ -99,6 +115,15 @@ export interface Netting {
   explanation: string;
   items: NettingItem[];
 }
+
+export interface SalesTable {
+  rows: SalesRow[];
+  subtotalExcludingLargest: SalesRow;
+  total: SalesRow;
+  netting: Netting;
+}
+
+/* ---------- Delivery (forecast) ---------- */
 
 export interface ForecastRow {
   slug: Slug;
@@ -109,9 +134,32 @@ export interface ForecastRow {
   restOfYearForecast: number;
   fyForecast: number;
   fyBudget: number;
+  /** FY forecast less FY budget, AED thousands. */
+  dFy: number;
   fcVsBudgetPct: number;
   yoyPct: number;
 }
+
+export interface ForecastTable {
+  rows: ForecastRow[];
+  subtotalExcludingLargest: ForecastRow;
+  total: ForecastRow;
+}
+
+export interface MonthPoint {
+  month: string;
+  /** Index 1 to 12. */
+  index: number;
+  /** Closed months carry an actual; later months carry null. */
+  actual: number | null;
+  /** Open months carry a forecast; closed months carry null. */
+  forecast: number | null;
+  budget: number;
+  /** Actual for closed months, forecast for open months, less budget. AED thousands. */
+  variance: number;
+}
+
+/* ---------- Profit and loss ---------- */
 
 export type PlRungKey =
   | 'revenue'
@@ -129,17 +177,16 @@ export type PlRungKey =
 export interface PlRung {
   key: PlRungKey;
   label: string;
-  /** Plain-English definition shown on hover. */
   definition: string;
-  /** Which table feeds this rung. */
+  /** Which table or extract feeds this rung, and how it is allocated. */
   feeds: string;
-  /** Whether the rung is a subtotal (rendered with a rule above it). */
   subtotal: boolean;
-  /** Percent rungs are formatted as percentages, everything else as AED thousands. */
   isPercent: boolean;
   ytd: number;
   forecast: number;
   budget: number;
+  /** FY forecast less FY budget. AED thousands, or percentage points for percent rungs. */
+  dForecastVsBudget: number;
 }
 
 export interface PlGroup {
@@ -156,81 +203,192 @@ export interface ProfitabilityRow {
   fyNp: number;
   gmPct: number;
   npPct: number;
-  /** Share of netted group revenue, percent. Attribution basis, sums to 100. */
+  /** Share of netted division forecast revenue, percent, allocated so the rows sum to exactly 100.0. */
   revenueShare: number;
 }
 
+export interface ProfitabilityTable {
+  rows: ProfitabilityRow[];
+  subtotalExcludingLargest: ProfitabilityRow;
+  total: ProfitabilityRow;
+}
+
+/* ---------- Receivables ---------- */
+
+export type ReasonKey = 'internalGroup' | 'followUpNoResponse' | 'disputesAndNotDue';
+
 export interface ReasonBuckets {
   internalGroup: number;
-  noTimelineOrResponse: number;
+  followUpNoResponse: number;
   disputesAndNotDue: number;
 }
 
-export interface OverdueSummaryRow {
+/** The three reference buckets, with the third split into its two components. */
+export interface ReasonSplit extends ReasonBuckets {
+  /** Balances the engineer has flagged as disputed. */
+  disputed: number;
+  /** Balances with nothing beyond the customer's terms. */
+  withinTerms: number;
+}
+
+export interface ReceivableItem {
+  customer: string;
+  engineer: string;
+  engineerSlug: string;
+  vertical: Slug;
+  verticalName: string;
+  totalOutstanding: number;
+  pastDue: number;
+  reason: ReasonKey;
+  remark: string;
+}
+
+export interface ReceivableSummaryRow {
   slug: Slug;
   name: string;
+  /** Net to collect at the previous month end. */
   previousMonth: number;
+  /** Net to collect at the current month end. */
   currentMonth: number;
   change: number;
-  reasons: ReasonBuckets;
-  /** The largest single remark for this vertical, shown on hover. */
-  topRemark: string;
-  /** Overdue beyond one year, AED thousands. */
-  overOneYear: number;
-  /** Share of this vertical's overdue that is older than a year, percent. */
-  overOneYearPct: number;
-  /** True when overOneYearPct breaches the same threshold the Collecting verdict uses. */
-  agingFlag: boolean;
+  totalOutstanding: number;
+  provision: number;
+  /** Beyond the customer's contractual terms, from invoice date plus terms. */
+  pastDue: number;
+  pastDuePct: number;
+  /** Invoice age over one year, whatever the terms. */
+  agedOverOneYear: number;
+  agedOverOneYearPct: number;
+  notYetDue: number;
+  disputed: number;
+  reasons: ReasonSplit;
+  /** The three largest balances in this vertical. */
+  largest: ReceivableItem[];
 }
 
-export interface MonthPoint {
-  month: string;
-  /** Index 1 to 12. */
-  index: number;
-  actual: number | null;
-  forecast: number | null;
-  budget: number;
+export interface ReceivablesTable {
+  rows: ReceivableSummaryRow[];
+  subtotalExcludingLargest: ReceivableSummaryRow;
+  total: ReceivableSummaryRow;
+  /** The five largest balances in the division under each reason. */
+  largestByReason: Record<ReasonKey, ReceivableItem[]>;
 }
 
-export interface ScorecardItem {
-  key: 'selling' | 'delivering' | 'keeping' | 'earning' | 'collecting';
-  /** The MD's question this line answers. */
-  question: string;
-  label: string;
-  verdict: Verdict;
-  /** The single figure that justifies the verdict, already formatted. */
-  figure: string;
-  note: string;
+/* ---------- Working capital ---------- */
+
+export interface UnbilledSummaryRow {
+  slug: Slug;
+  name: string;
+  projects: number;
+  previousMonth: number;
+  newProjects: number;
+  clearedProjects: number;
+  ongoingChanges: number;
+  currentMonth: number;
+  /** Unbilled older than 60 days since delivery. */
+  agedOver60: number;
+  provision: number;
 }
 
-export interface Readout {
-  headline: {
-    /** AED millions, one decimal. */
-    valueMillions: number;
-    label: string;
-    sub: string;
+export interface InventorySummaryRow {
+  slug: Slug;
+  name: string;
+  totalStock: number;
+  underOneYear: number;
+  oneToTwoYears: number;
+  twoToThreeYears: number;
+  overThreeYears: number;
+  agedOverOneYear: number;
+  nonMovingObsolete: number;
+  provision: number;
+  mappedToPurchaseOrders: number;
+  mappedOverOneYear: number;
+  freeStock: number;
+  freeStockOverOneYear: number;
+  inTransit: number;
+}
+
+export interface WorkingCapitalRow {
+  slug: Slug;
+  name: string;
+  receivablesNet: number;
+  receivablesPastDue: number;
+  unbilled: number;
+  inventoryStock: number;
+  inventoryFreeStockOverOneYear: number;
+  inTransit: number;
+  total: number;
+}
+
+/* ---------- Overview ---------- */
+
+export interface Overview {
+  sales: {
+    ytdRevenue: number;
+    ytdBudget: number;
+    variance: number;
+    variancePct: number;
+    ytdGmPct: number;
+    budgetGmPct: number;
+    gmPts: number;
   };
-  lines: string[];
-  scorecard: ScorecardItem[];
-  /** Thresholds used, so the rule is visible and editable. */
-  thresholds: Record<string, string>;
+  delivery: {
+    fyForecast: number;
+    fyBudget: number;
+    variance: number;
+    variancePct: number;
+    priorYear: number;
+    yoyPct: number;
+  };
+  profit: {
+    ytd: { grossMargin: number; buProfitability: number; buNetProfit: number };
+    forecast: { grossMargin: number; buProfitability: number; buNetProfit: number };
+    budget: { grossMargin: number; buProfitability: number; buNetProfit: number };
+    npForecastVsBudget: number;
+    lossMakers: { slug: Slug; name: string; fyNp: number }[];
+  };
+  receivables: {
+    previousMonth: number;
+    currentMonth: number;
+    change: number;
+    totalOutstanding: number;
+    pastDue: number;
+    pastDuePct: number;
+    agedOverOneYear: number;
+    agedOverOneYearPct: number;
+    /** The three largest verticals by net to collect and their combined share. */
+    concentration: { slugs: Slug[]; names: string[]; share: number };
+  };
+  workingCapital: {
+    receivablesNet: number;
+    unbilled: number;
+    inventoryStock: number;
+    freeStockOverOneYear: number;
+    total: number;
+  };
 }
 
 export interface Rollup {
   meta: Meta;
-  readout: Readout;
   sources: Record<string, Source>;
-  sales: { rows: SalesRow[]; total: SalesRow; netting: Netting };
+  definitions: Record<string, Definition>;
+  precisionPolicy: string[];
+  assumptions: string[];
+  overview: Overview;
+  sales: SalesTable;
   engineerSplit: Record<Slug, EngineerSummary[]>;
-  forecast: { rows: ForecastRow[]; total: ForecastRow };
+  forecast: ForecastTable;
   pl: PlGroup[];
   largestVertical: { slug: Slug; name: string };
-  profitability: { rows: ProfitabilityRow[]; total: ProfitabilityRow };
-  overdue: { rows: OverdueSummaryRow[]; total: OverdueSummaryRow };
+  profitability: ProfitabilityTable;
+  receivables: ReceivablesTable;
+  unbilled: { rows: UnbilledSummaryRow[]; total: UnbilledSummaryRow };
+  inventory: { rows: InventorySummaryRow[]; total: InventorySummaryRow };
+  workingCapital: { rows: WorkingCapitalRow[]; total: WorkingCapitalRow };
   monthly: MonthPoint[];
 }
 
-/* ---------- Vertical sheet (drill page) ---------- */
+/* ---------- Vertical sheet ---------- */
 
 export interface ProductRow {
   product: string;
@@ -256,25 +414,37 @@ export interface ProductRow {
 
 export interface EngineerRow extends Omit<ProductRow, 'product' | 'alsoReportedOn'> {
   engineer: string;
-  /** Route segment for the engineer's own page, unique across the company. */
   slug: string;
-  /** The vertical the engineer belongs to; the engineer page lives under it. */
   homeVertical: Slug;
-  /** True when this engineer belongs to another vertical and appears here only for a shared product line. */
+  /** Set when this engineer belongs to another vertical and appears here only for a shared product line. */
   fromOtherVertical: Slug | null;
+  /** Annual cost to employ, AED thousands: the ROI denominator. */
+  ctcAnnual: number;
+  /** Cost to employ for the elapsed months. */
+  ctcYtd: number;
+  ctcPriorYear: number;
+  /** Prior-year gross margin over prior-year cost to employ. */
   roiPriorYear: number;
+  /** YTD gross margin over cost to employ for the elapsed months. */
   roiYtd: number;
+  /** FY budget gross margin over annual cost to employ. */
   roiBudget: number;
+  /** FY forecast gross margin over annual cost to employ. */
   roiForecast: number;
   products: ProductRow[];
 }
 
 export interface TargetRow {
   productLine: string;
+  sector: string;
+  /** Full-year target, equal to the approved budget for the line. */
   target: number;
   aspiration: number;
   achieved: number;
   achievedPct: number;
+  /** Seasonally phased budget for the elapsed months. */
+  budgetToDate: number;
+  achievedVsBudgetToDate: number;
 }
 
 export interface InTransitItem {
@@ -284,28 +454,55 @@ export interface InTransitItem {
   expectedArrival: string;
 }
 
-export interface Inventory {
+export interface InventoryLine {
+  product: string;
   totalStock: number;
   underOneYear: number;
-  overOneYear: number;
-  overTwoYears: number;
+  oneToTwoYears: number;
+  twoToThreeYears: number;
   overThreeYears: number;
+  agedOverOneYear: number;
+  nonMovingObsolete: number;
   provision: number;
   mappedToPurchaseOrders: number;
+  mappedOverOneYear: number;
   freeStock: number;
   freeStockOverOneYear: number;
+}
+
+export interface Inventory {
+  lines: InventoryLine[];
+  total: InventoryLine;
   inTransit: InTransitItem[];
+}
+
+export type UnbilledStatus = 'new' | 'cleared' | 'ongoing';
+
+export interface UnbilledAging {
+  le60: number;
+  d61to90: number;
+  d91to120: number;
+  d121to180: number;
+  d181to365: number;
+  d366to545: number;
+  d546to730: number;
+  over730: number;
 }
 
 export interface UnbilledProject {
   ref: string;
   project: string;
   engineer: string;
+  engineerSlug: string;
   customer: string;
   /** Three values: two months ago, last month, this month. */
   trend: [number, number, number];
+  status: UnbilledStatus;
+  aging: UnbilledAging;
+  agedOver60: number;
   provision: number;
-  remark: string;
+  previousRemark: string;
+  currentRemark: string;
 }
 
 export interface UnbilledBridge {
@@ -316,10 +513,27 @@ export interface UnbilledBridge {
   currentMonth: number;
 }
 
-export interface OverdueDetailRow {
+export interface ProductionRow {
+  month: string;
+  deliveredQty: number;
+  value: number;
+  materialCost: number;
+  labourCost: number;
+}
+
+export interface Production {
+  qtyUnit: string;
+  rows: ProductionRow[];
+  total: ProductionRow;
+}
+
+export interface CustomerBalanceRow {
   engineer: string;
+  engineerSlug: string;
   customer: string;
   terms: string;
+  termsDays: number;
+  invoices: number;
   bucket0to30: number;
   bucket31to90: number;
   bucket91to365: number;
@@ -328,16 +542,21 @@ export interface OverdueDetailRow {
   totalOutstanding: number;
   provision: number;
   netToCollect: number;
-  /** Overdue is everything beyond the 0 to 30 day bucket. */
-  overdue: number;
+  /** Within terms: invoice age at or below the customer's terms. */
+  notYetDue: number;
+  /** Beyond terms: invoice age above the customer's terms. */
+  pastDue: number;
+  agedOverOneYear: number;
   dispute: boolean;
-  previousMonthOverdue: number;
+  reason: ReasonKey;
+  /** Net to collect at the previous month end. */
+  previousMonthNet: number;
+  change: number;
   previousRemark: string;
   currentRemark: string;
-  reason: keyof ReasonBuckets;
 }
 
-export interface EngineerOverdue {
+export interface EngineerBalance {
   engineer: string;
   slug: string;
   customers: number;
@@ -349,13 +568,15 @@ export interface EngineerOverdue {
   totalOutstanding: number;
   provision: number;
   netToCollect: number;
-  overdue: number;
-  previousMonthOverdue: number;
-  change: number;
+  notYetDue: number;
+  pastDue: number;
+  agedOverOneYear: number;
   disputed: number;
+  previousMonthNet: number;
+  change: number;
 }
 
-export interface OverdueTotals extends Omit<EngineerOverdue, 'engineer'> {}
+export type BalanceTotals = Omit<EngineerBalance, 'engineer' | 'slug'>;
 
 export interface VerticalData {
   meta: Meta;
@@ -363,30 +584,43 @@ export interface VerticalData {
   name: string;
   isLargest: boolean;
   sources: Record<string, Source>;
+  definitions: Record<string, Definition>;
   headline: {
     ytdRevenue: number;
     budgetRevenue: number;
+    dRevenue: number;
     ytdGmPct: number;
+    budgetGmPct: number;
     fyForecast: number;
     fyBudget: number;
-    overdue: number;
+    dFy: number;
+    buNetProfitYtd: number;
+    buNetProfitForecast: number;
+    buNetProfitBudget: number;
+    receivablesNet: number;
+    receivablesChange: number;
+    pastDue: number;
   };
   sales: {
     engineers: EngineerRow[];
-    /** Sheet total: every row on this sheet, including rows shared from other verticals. */
+    /** Every row on this sheet, including rows shared from other verticals. */
     sheetTotal: EngineerRow;
-    /** Attributed total: only this vertical's own engineers. Equals the front page figure. */
+    /** Only this vertical's own engineers. Equals the summary figure. */
     attributedTotal: EngineerRow;
+    /** Sub-totals by product line across every row on the sheet, as the reference sheet carries them. */
+    byProduct: ProductRow[];
   };
   pl: PlRung[];
   targets: TargetRow[];
   inventory: Inventory;
   unbilled: { projects: UnbilledProject[]; bridge: UnbilledBridge };
-  overdue: {
-    rows: OverdueDetailRow[];
-    byEngineer: EngineerOverdue[];
-    total: OverdueTotals;
-    reasons: ReasonBuckets;
+  /** Present only for a vertical that runs a factory. */
+  production: Production | null;
+  receivables: {
+    rows: CustomerBalanceRow[];
+    byEngineer: EngineerBalance[];
+    total: BalanceTotals;
+    reasons: ReasonSplit;
   };
   monthly: MonthPoint[];
 }
@@ -399,24 +633,30 @@ export interface EngineerData {
   name: string;
   vertical: { slug: Slug; name: string };
   sources: Record<string, Source>;
+  definitions: Record<string, Definition>;
   headline: {
     ytdRevenue: number;
     budgetRevenue: number;
+    dRevenue: number;
     ytdGmPct: number;
     fyForecast: number;
     fyBudget: number;
+    dFy: number;
     roiYtd: number;
     roiBudget: number;
-    overdue: number;
-    overdueChange: number;
+    ctcYtd: number;
+    ctcAnnual: number;
+    /** YTD gross margin less YTD cost to employ. Not a profit and loss: vertical and group costs are excluded. */
+    directContributionYtd: number;
+    receivablesNet: number;
+    receivablesChange: number;
+    pastDue: number;
   };
-  /** The engineer's row with product sub-rows, including lines also reported on another vertical's sheet. */
   sales: EngineerRow;
   monthly: MonthPoint[];
   targets: TargetRow[];
   unbilled: { projects: UnbilledProject[]; bridge: UnbilledBridge };
-  overdue: { rows: OverdueDetailRow[]; total: OverdueTotals; reasons: ReasonBuckets };
-  /** The other engineers of the same vertical, for navigation. */
+  receivables: { rows: CustomerBalanceRow[]; total: BalanceTotals; reasons: ReasonSplit };
   peers: { slug: string; name: string }[];
 }
 
@@ -424,4 +664,24 @@ export interface VerticalIndexEntry {
   slug: Slug;
   name: string;
   file: string;
+  engineers: { slug: string; name: string }[];
+}
+
+/* ---------- Reconciliation ---------- */
+
+export interface Assertion {
+  id: string;
+  statement: string;
+  left: number;
+  right: number;
+  pass: boolean;
+}
+
+export interface Reconciliation {
+  /** ISO 8601 with a +04:00 offset. */
+  checkedAt: string;
+  policy: string[];
+  assertions: Assertion[];
+  passed: number;
+  failed: number;
 }

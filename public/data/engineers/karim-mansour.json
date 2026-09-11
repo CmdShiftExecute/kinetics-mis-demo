@@ -5,15 +5,17 @@
   "fiscalYear": 2026,
   "periodLabel": "January to August 2026",
   "monthsElapsed": 8,
+  "currentMonthLabel": "August 2026",
+  "previousMonthLabel": "July 2026",
   "nearMonth": "September 2026",
   "restOfYear": "October to December 2026",
   "dataAsOf": "2026-09-07T09:30:00+04:00",
   "dataAsOfLabel": "07 Sep 2026 09:30 GST",
-  "revision": "R3",
+  "revision": "R4",
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:59:46+04:00"
+  "generatedAt": "2026-09-12T02:57:39+04:00"
  },
  "slug": "karim-mansour",
  "name": "Karim Mansour",
@@ -38,9 +40,17 @@
    "key": "rollup.profitability",
    "label": "Vertical profitability"
   },
-  "rollup.overdue": {
-   "key": "rollup.overdue",
-   "label": "Overdue collections by vertical"
+  "rollup.receivables": {
+   "key": "rollup.receivables",
+   "label": "Receivables by vertical"
+  },
+  "rollup.unbilled": {
+   "key": "rollup.unbilled",
+   "label": "Unbilled by vertical"
+  },
+  "rollup.inventory": {
+   "key": "rollup.inventory",
+   "label": "Inventory by vertical"
   },
   "rollup.monthly": {
    "key": "rollup.monthly",
@@ -48,7 +58,7 @@
   },
   "vertical.sales": {
    "key": "vertical.sales",
-   "label": "Sales performance by engineer"
+   "label": "Sales performance by sales engineer"
   },
   "vertical.pl": {
    "key": "vertical.pl",
@@ -66,9 +76,13 @@
    "key": "vertical.unbilled",
    "label": "Unbilled projects and month bridge"
   },
-  "vertical.overdue": {
-   "key": "vertical.overdue",
-   "label": "Overdue by engineer and customer"
+  "vertical.production": {
+   "key": "vertical.production",
+   "label": "Production schedule"
+  },
+  "vertical.receivables": {
+   "key": "vertical.receivables",
+   "label": "Receivables by engineer and customer"
   },
   "engineer.sales": {
    "key": "engineer.sales",
@@ -82,43 +96,289 @@
    "key": "engineer.unbilled",
    "label": "Unbilled projects against one engineer"
   },
-  "engineer.overdue": {
-   "key": "engineer.overdue",
-   "label": "Overdue by customer, one engineer"
+  "engineer.receivables": {
+   "key": "engineer.receivables",
+   "label": "Receivables by customer, one engineer"
+  }
+ },
+ "definitions": {
+  "ytdRevenue": {
+   "key": "ytdRevenue",
+   "term": "YTD revenue",
+   "text": "Invoiced revenue for January to August 2026, AED thousands, each product line counted once in its home vertical."
+  },
+  "ytdBudget": {
+   "key": "ytdBudget",
+   "term": "YTD budget",
+   "text": "The approved 2026 budget phased by month and summed for the same 8 months."
+  },
+  "variance": {
+   "key": "variance",
+   "term": "Variance",
+   "text": "Actual less budget for the same period, AED thousands. Negative is below budget and is shown in red."
+  },
+  "gmPct": {
+   "key": "gmPct",
+   "term": "GM percent",
+   "text": "Gross margin divided by revenue for the same period."
+  },
+  "openOrders": {
+   "key": "openOrders",
+   "term": "Open orders",
+   "text": "Confirmed customer orders on the system that are not yet invoiced. Not revenue."
+  },
+  "expectedOrders": {
+   "key": "expectedOrders",
+   "term": "Expected orders",
+   "text": "Opportunities the engineer rates above 90 percent probability, plus letters of intent. Not secured business and not revenue."
+  },
+  "fyForecast": {
+   "key": "fyForecast",
+   "term": "FY forecast",
+   "text": "YTD actual revenue plus the engineer forecasts for September 2026 and October to December 2026."
+  },
+  "fyBudget": {
+   "key": "fyBudget",
+   "term": "FY budget",
+   "text": "The approved 2026 revenue budget for the full year."
+  },
+  "nearMonth": {
+   "key": "nearMonth",
+   "term": "Near-month forecast",
+   "text": "The engineer forecast for September 2026, the first open month."
+  },
+  "restOfYear": {
+   "key": "restOfYear",
+   "term": "Rest-of-year forecast",
+   "text": "The engineer forecast for October to December 2026."
+  },
+  "priorYear": {
+   "key": "priorYear",
+   "term": "Prior year",
+   "text": "Full-year 2025 actual revenue and gross margin."
+  },
+  "yoy": {
+   "key": "yoy",
+   "term": "Year on year",
+   "text": "FY 2026 forecast against FY 2025 actual, percent."
+  },
+  "plColumns": {
+   "key": "plColumns",
+   "term": "P&L columns",
+   "text": "YTD is January to August 2026 actual. FY forecast is the full year, with costs annualised from the elapsed months. FY budget is the approved full-year budget. No phased profit budget exists for the elapsed months, so profit is compared full year to full year only."
+  },
+  "buProfitability": {
+   "key": "buProfitability",
+   "term": "BU profitability",
+   "text": "Gross margin less salary, warehouse cost, warehouse salaries and common admin. The rung a vertical head controls."
+  },
+  "buNetProfit": {
+   "key": "buNetProfit",
+   "term": "BU-level net profit",
+   "text": "BU profitability less provisions, inter-company interest and corporate overhead."
+  },
+  "roiYtd": {
+   "key": "roiYtd",
+   "term": "ROI year to date",
+   "text": "YTD gross margin divided by the engineer's cost to employ for the same 8 months. A multiple, not a percentage."
+  },
+  "roiBudget": {
+   "key": "roiBudget",
+   "term": "Budget ROI",
+   "text": "FY budget gross margin divided by annual cost to employ."
+  },
+  "roiForecast": {
+   "key": "roiForecast",
+   "term": "Forecast ROI",
+   "text": "FY forecast gross margin divided by annual cost to employ."
+  },
+  "roiPriorYear": {
+   "key": "roiPriorYear",
+   "term": "Prior-year ROI",
+   "text": "FY 2025 gross margin divided by FY 2025 cost to employ."
+  },
+  "directContribution": {
+   "key": "directContribution",
+   "term": "Direct contribution",
+   "text": "YTD gross margin less YTD cost to employ. Not a profit and loss: warehouse, admin, provisions and group charges are booked at the vertical, not the person."
+  },
+  "totalOutstanding": {
+   "key": "totalOutstanding",
+   "term": "Total outstanding",
+   "text": "All unpaid invoices at August 2026 month end, whatever their age."
+  },
+  "netToCollect": {
+   "key": "netToCollect",
+   "term": "Net to collect",
+   "text": "Total outstanding less the provision. The balance the business still expects to collect. It is not a cash forecast and carries no date."
+  },
+  "provisionReceivable": {
+   "key": "provisionReceivable",
+   "term": "Provision (receivables)",
+   "text": "Half of balances aged 1 to 2 years, all of balances aged over 2 years, and a quarter of a disputed balance aged 91 to 365 days."
+  },
+  "agingBuckets": {
+   "key": "agingBuckets",
+   "term": "Aging buckets",
+   "text": "Days since the invoice date, whatever the payment terms. A balance can sit in 31 to 90 days and still be within terms."
+  },
+  "pastDue": {
+   "key": "pastDue",
+   "term": "Past due",
+   "text": "Invoices older than the customer’s payment terms, from invoice date plus terms. This is the contractual measure of lateness."
+  },
+  "notYetDue": {
+   "key": "notYetDue",
+   "term": "Not yet due",
+   "text": "Invoices inside the customer’s payment terms."
+  },
+  "agedOverOneYear": {
+   "key": "agedOverOneYear",
+   "term": "Aged over one year",
+   "text": "Invoices older than 365 days."
+  },
+  "dispute": {
+   "key": "dispute",
+   "term": "Dispute",
+   "text": "The engineer has flagged the balance as disputed by the customer."
+  },
+  "reasons": {
+   "key": "reasons",
+   "term": "Reasons for non-collection",
+   "text": "Each customer balance carries one reason: internal group companies; follow-up, no timeline or no response; disputes and not yet due. The third is shown split into disputed balances and balances with nothing past due. Reasons partition total outstanding."
+  },
+  "monthOnMonth": {
+   "key": "monthOnMonth",
+   "term": "Month on month",
+   "text": "Net to collect at August 2026 month end against July 2026 month end."
+  },
+  "unbilled": {
+   "key": "unbilled",
+   "term": "Unbilled",
+   "text": "Work delivered and not yet invoiced, by project. The three-month trend shows two months ago, last month and this month."
+  },
+  "unbilledAging": {
+   "key": "unbilledAging",
+   "term": "Unbilled aging",
+   "text": "Days since delivery, in the eight bands used by the reference pack."
+  },
+  "bridge": {
+   "key": "bridge",
+   "term": "Month bridge",
+   "text": "Previous month, plus projects new this month, less projects cleared by invoicing, plus or less changes on ongoing projects, equals current month."
+  },
+  "inventoryBands": {
+   "key": "inventoryBands",
+   "term": "Inventory age bands",
+   "text": "Stock value at cost by age since receipt: under 1 year, 1 to 2, 2 to 3, over 3 years. The bands sum to total stock."
+  },
+  "inventoryProvision": {
+   "key": "inventoryProvision",
+   "term": "Provision (inventory)",
+   "text": "Half of stock aged 2 to 3 years plus all stock over 3 years."
+  },
+  "mappedLpo": {
+   "key": "mappedLpo",
+   "term": "Mapped to purchase orders",
+   "text": "Stock already allocated to a customer order. Free stock is total stock less this."
+  },
+  "freeStockOverOneYear": {
+   "key": "freeStockOverOneYear",
+   "term": "Free stock over one year",
+   "text": "Unallocated stock older than a year: the part of inventory most at risk."
+  },
+  "nonMoving": {
+   "key": "nonMoving",
+   "term": "Non-moving or obsolete",
+   "text": "Stock with no movement in the year, or superseded. A subset of the over-3-year band."
+  },
+  "inTransit": {
+   "key": "inTransit",
+   "term": "In transit",
+   "text": "Goods paid for or committed and not yet received, with the expected arrival date. Not included in stock."
+  },
+  "target": {
+   "key": "target",
+   "term": "Target",
+   "text": "The full-year 2026 target for the product line, equal to its approved budget."
+  },
+  "aspiration": {
+   "key": "aspiration",
+   "term": "Aspiration",
+   "text": "The stretch figure agreed with the vertical head."
+  },
+  "budgetToDate": {
+   "key": "budgetToDate",
+   "term": "Budget to date",
+   "text": "The target phased by month and summed for January to August 2026. Achieved is compared with this, not with the full-year target."
+  },
+  "attributedTotal": {
+   "key": "attributedTotal",
+   "term": "Attributed total",
+   "text": "This vertical’s own engineers only. This is the figure every summary table carries."
+  },
+  "sheetTotal": {
+   "key": "sheetTotal",
+   "term": "Sheet total",
+   "text": "Every row on this sheet, including product lines sold by other verticals’ engineers. Adding sheet totals across verticals would double count them."
+  },
+  "revenueShare": {
+   "key": "revenueShare",
+   "term": "Revenue share",
+   "text": "Share of netted division forecast revenue, allocated to one decimal so the rows sum to exactly 100.0."
+  },
+  "workingCapital": {
+   "key": "workingCapital",
+   "term": "Working capital tied up",
+   "text": "Net receivables plus unbilled plus stock at cost. Goods in transit are shown beside it and not added."
+  },
+  "production": {
+   "key": "production",
+   "term": "Production",
+   "text": "Factory output by month: quantity delivered, its invoiced value, and the material and labour cost booked. Value ties to the vertical’s monthly revenue."
   }
  },
  "headline": {
-  "ytdRevenue": 3581,
-  "budgetRevenue": 3187,
-  "ytdGmPct": 26.3,
-  "fyForecast": 5456,
-  "fyBudget": 4980,
+  "ytdRevenue": 3578,
+  "budgetRevenue": 3184,
+  "dRevenue": 394,
+  "ytdGmPct": 26.2,
+  "fyForecast": 5451,
+  "fyBudget": 4976,
+  "dFy": 475,
   "roiYtd": 5.5,
   "roiBudget": 5.2,
-  "overdue": 1359,
-  "overdueChange": -4
+  "ctcYtd": 171,
+  "ctcAnnual": 257,
+  "directContributionYtd": 768,
+  "receivablesNet": 552,
+  "receivablesChange": -20,
+  "pastDue": 500
  },
  "sales": {
   "engineer": "Karim Mansour",
   "slug": "karim-mansour",
   "homeVertical": "metering",
   "fromOtherVertical": null,
-  "openOrders": 1175,
-  "expectedOrders": 380,
-  "ytdRevenue": 3581,
-  "ytdGm": 941,
-  "ytdBudgetRevenue": 3187,
-  "ytdBudgetGm": 851,
-  "nearMonthForecast": 448,
-  "restOfYearForecast": 1428,
-  "fyForecastRevenue": 5456,
-  "fyForecastGm": 1442,
-  "fyBudgetRevenue": 4980,
+  "openOrders": 1174,
+  "expectedOrders": 379,
+  "ytdRevenue": 3578,
+  "ytdGm": 939,
+  "ytdBudgetRevenue": 3184,
+  "ytdBudgetGm": 850,
+  "nearMonthForecast": 446,
+  "restOfYearForecast": 1427,
+  "fyForecastRevenue": 5451,
+  "fyForecastGm": 1441,
+  "fyBudgetRevenue": 4976,
   "fyBudgetGm": 1329,
-  "priorYearRevenue": 4194,
-  "priorYearGm": 1089,
-  "ytdGmPct": 26.3,
+  "priorYearRevenue": 4206,
+  "priorYearGm": 1091,
+  "ytdGmPct": 26.2,
   "budgetGmPct": 26.7,
+  "ctcAnnual": 257,
+  "ctcYtd": 171,
+  "ctcPriorYear": 244,
   "roiPriorYear": 4.5,
   "roiYtd": 5.5,
   "roiBudget": 5.2,
@@ -127,29 +387,29 @@
    {
     "product": "Utility meters",
     "alsoReportedOn": null,
-    "openOrders": 159,
-    "expectedOrders": 131,
-    "ytdRevenue": 699,
-    "ytdGm": 187,
+    "openOrders": 158,
+    "expectedOrders": 130,
+    "ytdRevenue": 697,
+    "ytdGm": 186,
     "ytdGmPct": 26.7,
-    "ytdBudgetRevenue": 650,
+    "ytdBudgetRevenue": 648,
     "ytdBudgetGm": 187,
-    "budgetGmPct": 28.8,
-    "nearMonthForecast": 93,
-    "restOfYearForecast": 289,
-    "fyForecastRevenue": 1081,
-    "fyForecastGm": 298,
-    "fyBudgetRevenue": 1016,
-    "fyBudgetGm": 292,
-    "priorYearRevenue": 835,
+    "budgetGmPct": 28.9,
+    "nearMonthForecast": 92,
+    "restOfYearForecast": 288,
+    "fyForecastRevenue": 1077,
+    "fyForecastGm": 297,
+    "fyBudgetRevenue": 1012,
+    "fyBudgetGm": 291,
+    "priorYearRevenue": 836,
     "priorYearGm": 231
    },
    {
     "product": "Sub-metering",
     "alsoReportedOn": null,
-    "openOrders": 430,
+    "openOrders": 431,
     "expectedOrders": 155,
-    "ytdRevenue": 1481,
+    "ytdRevenue": 1482,
     "ytdGm": 366,
     "ytdGmPct": 24.7,
     "ytdBudgetRevenue": 1264,
@@ -157,32 +417,32 @@
     "budgetGmPct": 24.1,
     "nearMonthForecast": 182,
     "restOfYearForecast": 563,
-    "fyForecastRevenue": 2226,
-    "fyForecastGm": 544,
-    "fyBudgetRevenue": 1975,
-    "fyBudgetGm": 475,
-    "priorYearRevenue": 1667,
-    "priorYearGm": 393
+    "fyForecastRevenue": 2227,
+    "fyForecastGm": 545,
+    "fyBudgetRevenue": 1976,
+    "fyBudgetGm": 476,
+    "priorYearRevenue": 1672,
+    "priorYearGm": 394
    },
    {
     "product": "Meter data platform",
     "alsoReportedOn": null,
-    "openOrders": 586,
+    "openOrders": 585,
     "expectedOrders": 94,
-    "ytdRevenue": 1401,
-    "ytdGm": 388,
+    "ytdRevenue": 1399,
+    "ytdGm": 387,
     "ytdGmPct": 27.7,
-    "ytdBudgetRevenue": 1273,
-    "ytdBudgetGm": 360,
-    "budgetGmPct": 28.3,
-    "nearMonthForecast": 173,
+    "ytdBudgetRevenue": 1272,
+    "ytdBudgetGm": 359,
+    "budgetGmPct": 28.2,
+    "nearMonthForecast": 172,
     "restOfYearForecast": 576,
-    "fyForecastRevenue": 2149,
-    "fyForecastGm": 600,
-    "fyBudgetRevenue": 1989,
+    "fyForecastRevenue": 2147,
+    "fyForecastGm": 599,
+    "fyBudgetRevenue": 1988,
     "fyBudgetGm": 562,
-    "priorYearRevenue": 1692,
-    "priorYearGm": 465
+    "priorYearRevenue": 1698,
+    "priorYearGm": 466
    }
   ]
  },
@@ -190,109 +450,130 @@
   {
    "month": "Jan",
    "index": 1,
-   "actual": 379,
+   "actual": 378,
    "forecast": null,
-   "budget": 349
+   "budget": 348,
+   "variance": 30
   },
   {
    "month": "Feb",
    "index": 2,
    "actual": 420,
    "forecast": null,
-   "budget": 374
+   "budget": 373,
+   "variance": 47
   },
   {
    "month": "Mar",
    "index": 3,
-   "actual": 498,
+   "actual": 497,
    "forecast": null,
-   "budget": 438
+   "budget": 438,
+   "variance": 59
   },
   {
    "month": "Apr",
    "index": 4,
    "actual": 461,
    "forecast": null,
-   "budget": 408
+   "budget": 408,
+   "variance": 53
   },
   {
    "month": "May",
    "index": 5,
-   "actual": 477,
+   "actual": 476,
    "forecast": null,
-   "budget": 418
+   "budget": 418,
+   "variance": 58
   },
   {
    "month": "Jun",
    "index": 6,
    "actual": 435,
    "forecast": null,
-   "budget": 398
+   "budget": 398,
+   "variance": 37
   },
   {
    "month": "Jul",
    "index": 7,
-   "actual": 439,
+   "actual": 438,
    "forecast": null,
-   "budget": 388
+   "budget": 388,
+   "variance": 50
   },
   {
    "month": "Aug",
    "index": 8,
    "actual": 473,
    "forecast": null,
-   "budget": 413
+   "budget": 413,
+   "variance": 60
   },
   {
    "month": "Sep",
    "index": 9,
    "actual": null,
-   "forecast": 447,
-   "budget": 428
+   "forecast": 446,
+   "budget": 428,
+   "variance": 18
   },
   {
    "month": "Oct",
    "index": 10,
    "actual": null,
-   "forecast": 468,
-   "budget": 448
+   "forecast": 467,
+   "budget": 448,
+   "variance": 19
   },
   {
    "month": "Nov",
    "index": 11,
    "actual": null,
    "forecast": 482,
-   "budget": 458
+   "budget": 458,
+   "variance": 24
   },
   {
    "month": "Dec",
    "index": 12,
    "actual": null,
    "forecast": 478,
-   "budget": 458
+   "budget": 458,
+   "variance": 20
   }
  ],
  "targets": [
   {
    "productLine": "Utility meters",
-   "target": 1016,
-   "aspiration": 1138,
-   "achieved": 699,
-   "achievedPct": 68.8
+   "sector": "Trading",
+   "target": 1012,
+   "aspiration": 1188,
+   "achieved": 697,
+   "achievedPct": 68.9,
+   "budgetToDate": 648,
+   "achievedVsBudgetToDate": 49
   },
   {
    "productLine": "Sub-metering",
-   "target": 1975,
-   "aspiration": 2247,
-   "achieved": 1481,
-   "achievedPct": 75
+   "sector": "Projects",
+   "target": 1976,
+   "aspiration": 2195,
+   "achieved": 1482,
+   "achievedPct": 75,
+   "budgetToDate": 1264,
+   "achievedVsBudgetToDate": 218
   },
   {
    "productLine": "Meter data platform",
-   "target": 1989,
-   "aspiration": 2294,
-   "achieved": 1401,
-   "achievedPct": 70.4
+   "sector": "Projects",
+   "target": 1988,
+   "aspiration": 2465,
+   "achieved": 1399,
+   "achievedPct": 70.4,
+   "budgetToDate": 1272,
+   "achievedVsBudgetToDate": 127
   }
  ],
  "unbilled": {
@@ -305,85 +586,82 @@
    "currentMonth": 0
   }
  },
- "overdue": {
+ "receivables": {
   "rows": [
    {
     "engineer": "Karim Mansour",
-    "customer": "Harbourline Aviation Services",
-    "terms": "30 percent advance, balance 60 days",
-    "bucket0to30": 503,
-    "bucket31to90": 293,
-    "bucket91to365": 214,
+    "engineerSlug": "karim-mansour",
+    "customer": "Blue Harbour Marine Works",
+    "terms": "Against delivery",
+    "termsDays": 0,
+    "invoices": 3,
+    "bucket0to30": 132,
+    "bucket31to90": 0,
+    "bucket91to365": 312,
     "bucket1to2y": 0,
     "bucketOver2y": 0,
-    "totalOutstanding": 1010,
+    "totalOutstanding": 444,
+    "provision": 78,
+    "netToCollect": 366,
+    "notYetDue": 0,
+    "pastDue": 444,
+    "agedOverOneYear": 0,
+    "dispute": true,
+    "reason": "disputesAndNotDue",
+    "previousMonthNet": 379,
+    "change": -13,
+    "previousRemark": "Dispute raised with the client project team",
+    "currentRemark": "Client disputes variation on order"
+   },
+   {
+    "engineer": "Karim Mansour",
+    "engineerSlug": "karim-mansour",
+    "customer": "Redsand Logistics",
+    "terms": "30 percent advance, balance at 60 days",
+    "termsDays": 60,
+    "invoices": 2,
+    "bucket0to30": 130,
+    "bucket31to90": 56,
+    "bucket91to365": 0,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 186,
     "provision": 0,
-    "netToCollect": 1010,
-    "overdue": 507,
+    "netToCollect": 186,
+    "notYetDue": 130,
+    "pastDue": 56,
+    "agedOverOneYear": 0,
     "dispute": false,
-    "previousMonthOverdue": 541,
+    "reason": "followUpNoResponse",
+    "previousMonthNet": 193,
+    "change": -7,
     "previousRemark": "Escalated to client finance head",
-    "currentRemark": "Client finance head confirmed release this month",
-    "reason": "noTimelineOrResponse"
-   },
-   {
-    "engineer": "Karim Mansour",
-    "customer": "Crescent Bay Builders",
-    "terms": "60 days from invoice",
-    "bucket0to30": 206,
-    "bucket31to90": 275,
-    "bucket91to365": 268,
-    "bucket1to2y": 0,
-    "bucketOver2y": 0,
-    "totalOutstanding": 749,
-    "provision": 0,
-    "netToCollect": 749,
-    "overdue": 543,
-    "dispute": false,
-    "previousMonthOverdue": 490,
-    "previousRemark": "Promised in August, not received",
-    "currentRemark": "No response to three reminders",
-    "reason": "noTimelineOrResponse"
-   },
-   {
-    "engineer": "Karim Mansour",
-    "customer": "Al Rawabi Developments",
-    "terms": "30 days from invoice",
-    "bucket0to30": 155,
-    "bucket31to90": 222,
-    "bucket91to365": 87,
-    "bucket1to2y": 0,
-    "bucketOver2y": 0,
-    "totalOutstanding": 464,
-    "provision": 0,
-    "netToCollect": 464,
-    "overdue": 309,
-    "dispute": false,
-    "previousMonthOverdue": 332,
-    "previousRemark": "Promised in August, not received",
-    "currentRemark": "Group settlement scheduled for Q4",
-    "reason": "disputesAndNotDue"
+    "currentRemark": "No response to three reminders"
    }
   ],
   "total": {
-   "customers": 3,
-   "bucket0to30": 864,
-   "bucket31to90": 790,
-   "bucket91to365": 569,
+   "customers": 2,
+   "bucket0to30": 262,
+   "bucket31to90": 56,
+   "bucket91to365": 312,
    "bucket1to2y": 0,
    "bucketOver2y": 0,
-   "totalOutstanding": 2223,
-   "provision": 0,
-   "netToCollect": 2223,
-   "overdue": 1359,
-   "previousMonthOverdue": 1363,
-   "change": -4,
-   "disputed": 0
+   "totalOutstanding": 630,
+   "provision": 78,
+   "netToCollect": 552,
+   "notYetDue": 130,
+   "pastDue": 500,
+   "agedOverOneYear": 0,
+   "disputed": 444,
+   "previousMonthNet": 572,
+   "change": -20
   },
   "reasons": {
    "internalGroup": 0,
-   "noTimelineOrResponse": 1050,
-   "disputesAndNotDue": 309
+   "followUpNoResponse": 186,
+   "disputesAndNotDue": 444,
+   "disputed": 444,
+   "withinTerms": 0
   }
  },
  "peers": [

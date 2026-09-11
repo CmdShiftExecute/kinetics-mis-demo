@@ -9,7 +9,7 @@ export function k(n: number): string {
   return n < 0 ? `${MINUS}${s}` : s;
 }
 
-/** Signed AED thousands, for deltas. */
+/** Signed AED thousands, for variances. */
 export function signedK(n: number): string {
   if (n > 0) return `+${k(n)}`;
   return k(n);
@@ -35,15 +35,20 @@ export function pts(n: number): string {
   return s;
 }
 
-/** AED millions from thousands, e.g. "AED 12.3M". */
+/** AED millions from thousands for prose, e.g. "AED 12.3m". Tables stay in thousands. */
 export function mil(thousands: number, d = 1): string {
   const v = Math.abs(thousands) / 1000;
-  return `${thousands < 0 ? MINUS : ''}AED ${v.toFixed(d)}M`;
+  return `${thousands < 0 ? MINUS : ''}AED ${v.toFixed(d)}m`;
 }
 
 /** A multiple, e.g. "2.4x". */
 export function mult(n: number): string {
   return `${n.toFixed(1)}x`;
+}
+
+/** A plain count. */
+export function count(n: number): string {
+  return String(n);
 }
 
 /** "07 Sep 2026" from a YYYY-MM-DD string, no timezone arithmetic. */
@@ -56,3 +61,5 @@ export function dateLabel(iso: string): string {
 export function cx(...parts: Array<string | false | null | undefined>): string {
   return parts.filter(Boolean).join(' ');
 }
+
+export const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;

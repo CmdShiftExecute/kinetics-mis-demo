@@ -5,15 +5,17 @@
   "fiscalYear": 2026,
   "periodLabel": "January to August 2026",
   "monthsElapsed": 8,
+  "currentMonthLabel": "August 2026",
+  "previousMonthLabel": "July 2026",
   "nearMonth": "September 2026",
   "restOfYear": "October to December 2026",
   "dataAsOf": "2026-09-07T09:30:00+04:00",
   "dataAsOfLabel": "07 Sep 2026 09:30 GST",
-  "revision": "R3",
+  "revision": "R4",
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:59:46+04:00"
+  "generatedAt": "2026-09-12T02:57:39+04:00"
  },
  "slug": "trading",
  "name": "Trading",
@@ -35,9 +37,17 @@
    "key": "rollup.profitability",
    "label": "Vertical profitability"
   },
-  "rollup.overdue": {
-   "key": "rollup.overdue",
-   "label": "Overdue collections by vertical"
+  "rollup.receivables": {
+   "key": "rollup.receivables",
+   "label": "Receivables by vertical"
+  },
+  "rollup.unbilled": {
+   "key": "rollup.unbilled",
+   "label": "Unbilled by vertical"
+  },
+  "rollup.inventory": {
+   "key": "rollup.inventory",
+   "label": "Inventory by vertical"
   },
   "rollup.monthly": {
    "key": "rollup.monthly",
@@ -45,7 +55,7 @@
   },
   "vertical.sales": {
    "key": "vertical.sales",
-   "label": "Sales performance by engineer"
+   "label": "Sales performance by sales engineer"
   },
   "vertical.pl": {
    "key": "vertical.pl",
@@ -63,9 +73,13 @@
    "key": "vertical.unbilled",
    "label": "Unbilled projects and month bridge"
   },
-  "vertical.overdue": {
-   "key": "vertical.overdue",
-   "label": "Overdue by engineer and customer"
+  "vertical.production": {
+   "key": "vertical.production",
+   "label": "Production schedule"
+  },
+  "vertical.receivables": {
+   "key": "vertical.receivables",
+   "label": "Receivables by engineer and customer"
   },
   "engineer.sales": {
    "key": "engineer.sales",
@@ -79,18 +93,263 @@
    "key": "engineer.unbilled",
    "label": "Unbilled projects against one engineer"
   },
-  "engineer.overdue": {
-   "key": "engineer.overdue",
-   "label": "Overdue by customer, one engineer"
+  "engineer.receivables": {
+   "key": "engineer.receivables",
+   "label": "Receivables by customer, one engineer"
+  }
+ },
+ "definitions": {
+  "ytdRevenue": {
+   "key": "ytdRevenue",
+   "term": "YTD revenue",
+   "text": "Invoiced revenue for January to August 2026, AED thousands, each product line counted once in its home vertical."
+  },
+  "ytdBudget": {
+   "key": "ytdBudget",
+   "term": "YTD budget",
+   "text": "The approved 2026 budget phased by month and summed for the same 8 months."
+  },
+  "variance": {
+   "key": "variance",
+   "term": "Variance",
+   "text": "Actual less budget for the same period, AED thousands. Negative is below budget and is shown in red."
+  },
+  "gmPct": {
+   "key": "gmPct",
+   "term": "GM percent",
+   "text": "Gross margin divided by revenue for the same period."
+  },
+  "openOrders": {
+   "key": "openOrders",
+   "term": "Open orders",
+   "text": "Confirmed customer orders on the system that are not yet invoiced. Not revenue."
+  },
+  "expectedOrders": {
+   "key": "expectedOrders",
+   "term": "Expected orders",
+   "text": "Opportunities the engineer rates above 90 percent probability, plus letters of intent. Not secured business and not revenue."
+  },
+  "fyForecast": {
+   "key": "fyForecast",
+   "term": "FY forecast",
+   "text": "YTD actual revenue plus the engineer forecasts for September 2026 and October to December 2026."
+  },
+  "fyBudget": {
+   "key": "fyBudget",
+   "term": "FY budget",
+   "text": "The approved 2026 revenue budget for the full year."
+  },
+  "nearMonth": {
+   "key": "nearMonth",
+   "term": "Near-month forecast",
+   "text": "The engineer forecast for September 2026, the first open month."
+  },
+  "restOfYear": {
+   "key": "restOfYear",
+   "term": "Rest-of-year forecast",
+   "text": "The engineer forecast for October to December 2026."
+  },
+  "priorYear": {
+   "key": "priorYear",
+   "term": "Prior year",
+   "text": "Full-year 2025 actual revenue and gross margin."
+  },
+  "yoy": {
+   "key": "yoy",
+   "term": "Year on year",
+   "text": "FY 2026 forecast against FY 2025 actual, percent."
+  },
+  "plColumns": {
+   "key": "plColumns",
+   "term": "P&L columns",
+   "text": "YTD is January to August 2026 actual. FY forecast is the full year, with costs annualised from the elapsed months. FY budget is the approved full-year budget. No phased profit budget exists for the elapsed months, so profit is compared full year to full year only."
+  },
+  "buProfitability": {
+   "key": "buProfitability",
+   "term": "BU profitability",
+   "text": "Gross margin less salary, warehouse cost, warehouse salaries and common admin. The rung a vertical head controls."
+  },
+  "buNetProfit": {
+   "key": "buNetProfit",
+   "term": "BU-level net profit",
+   "text": "BU profitability less provisions, inter-company interest and corporate overhead."
+  },
+  "roiYtd": {
+   "key": "roiYtd",
+   "term": "ROI year to date",
+   "text": "YTD gross margin divided by the engineer's cost to employ for the same 8 months. A multiple, not a percentage."
+  },
+  "roiBudget": {
+   "key": "roiBudget",
+   "term": "Budget ROI",
+   "text": "FY budget gross margin divided by annual cost to employ."
+  },
+  "roiForecast": {
+   "key": "roiForecast",
+   "term": "Forecast ROI",
+   "text": "FY forecast gross margin divided by annual cost to employ."
+  },
+  "roiPriorYear": {
+   "key": "roiPriorYear",
+   "term": "Prior-year ROI",
+   "text": "FY 2025 gross margin divided by FY 2025 cost to employ."
+  },
+  "directContribution": {
+   "key": "directContribution",
+   "term": "Direct contribution",
+   "text": "YTD gross margin less YTD cost to employ. Not a profit and loss: warehouse, admin, provisions and group charges are booked at the vertical, not the person."
+  },
+  "totalOutstanding": {
+   "key": "totalOutstanding",
+   "term": "Total outstanding",
+   "text": "All unpaid invoices at August 2026 month end, whatever their age."
+  },
+  "netToCollect": {
+   "key": "netToCollect",
+   "term": "Net to collect",
+   "text": "Total outstanding less the provision. The balance the business still expects to collect. It is not a cash forecast and carries no date."
+  },
+  "provisionReceivable": {
+   "key": "provisionReceivable",
+   "term": "Provision (receivables)",
+   "text": "Half of balances aged 1 to 2 years, all of balances aged over 2 years, and a quarter of a disputed balance aged 91 to 365 days."
+  },
+  "agingBuckets": {
+   "key": "agingBuckets",
+   "term": "Aging buckets",
+   "text": "Days since the invoice date, whatever the payment terms. A balance can sit in 31 to 90 days and still be within terms."
+  },
+  "pastDue": {
+   "key": "pastDue",
+   "term": "Past due",
+   "text": "Invoices older than the customer’s payment terms, from invoice date plus terms. This is the contractual measure of lateness."
+  },
+  "notYetDue": {
+   "key": "notYetDue",
+   "term": "Not yet due",
+   "text": "Invoices inside the customer’s payment terms."
+  },
+  "agedOverOneYear": {
+   "key": "agedOverOneYear",
+   "term": "Aged over one year",
+   "text": "Invoices older than 365 days."
+  },
+  "dispute": {
+   "key": "dispute",
+   "term": "Dispute",
+   "text": "The engineer has flagged the balance as disputed by the customer."
+  },
+  "reasons": {
+   "key": "reasons",
+   "term": "Reasons for non-collection",
+   "text": "Each customer balance carries one reason: internal group companies; follow-up, no timeline or no response; disputes and not yet due. The third is shown split into disputed balances and balances with nothing past due. Reasons partition total outstanding."
+  },
+  "monthOnMonth": {
+   "key": "monthOnMonth",
+   "term": "Month on month",
+   "text": "Net to collect at August 2026 month end against July 2026 month end."
+  },
+  "unbilled": {
+   "key": "unbilled",
+   "term": "Unbilled",
+   "text": "Work delivered and not yet invoiced, by project. The three-month trend shows two months ago, last month and this month."
+  },
+  "unbilledAging": {
+   "key": "unbilledAging",
+   "term": "Unbilled aging",
+   "text": "Days since delivery, in the eight bands used by the reference pack."
+  },
+  "bridge": {
+   "key": "bridge",
+   "term": "Month bridge",
+   "text": "Previous month, plus projects new this month, less projects cleared by invoicing, plus or less changes on ongoing projects, equals current month."
+  },
+  "inventoryBands": {
+   "key": "inventoryBands",
+   "term": "Inventory age bands",
+   "text": "Stock value at cost by age since receipt: under 1 year, 1 to 2, 2 to 3, over 3 years. The bands sum to total stock."
+  },
+  "inventoryProvision": {
+   "key": "inventoryProvision",
+   "term": "Provision (inventory)",
+   "text": "Half of stock aged 2 to 3 years plus all stock over 3 years."
+  },
+  "mappedLpo": {
+   "key": "mappedLpo",
+   "term": "Mapped to purchase orders",
+   "text": "Stock already allocated to a customer order. Free stock is total stock less this."
+  },
+  "freeStockOverOneYear": {
+   "key": "freeStockOverOneYear",
+   "term": "Free stock over one year",
+   "text": "Unallocated stock older than a year: the part of inventory most at risk."
+  },
+  "nonMoving": {
+   "key": "nonMoving",
+   "term": "Non-moving or obsolete",
+   "text": "Stock with no movement in the year, or superseded. A subset of the over-3-year band."
+  },
+  "inTransit": {
+   "key": "inTransit",
+   "term": "In transit",
+   "text": "Goods paid for or committed and not yet received, with the expected arrival date. Not included in stock."
+  },
+  "target": {
+   "key": "target",
+   "term": "Target",
+   "text": "The full-year 2026 target for the product line, equal to its approved budget."
+  },
+  "aspiration": {
+   "key": "aspiration",
+   "term": "Aspiration",
+   "text": "The stretch figure agreed with the vertical head."
+  },
+  "budgetToDate": {
+   "key": "budgetToDate",
+   "term": "Budget to date",
+   "text": "The target phased by month and summed for January to August 2026. Achieved is compared with this, not with the full-year target."
+  },
+  "attributedTotal": {
+   "key": "attributedTotal",
+   "term": "Attributed total",
+   "text": "This vertical’s own engineers only. This is the figure every summary table carries."
+  },
+  "sheetTotal": {
+   "key": "sheetTotal",
+   "term": "Sheet total",
+   "text": "Every row on this sheet, including product lines sold by other verticals’ engineers. Adding sheet totals across verticals would double count them."
+  },
+  "revenueShare": {
+   "key": "revenueShare",
+   "term": "Revenue share",
+   "text": "Share of netted division forecast revenue, allocated to one decimal so the rows sum to exactly 100.0."
+  },
+  "workingCapital": {
+   "key": "workingCapital",
+   "term": "Working capital tied up",
+   "text": "Net receivables plus unbilled plus stock at cost. Goods in transit are shown beside it and not added."
+  },
+  "production": {
+   "key": "production",
+   "term": "Production",
+   "text": "Factory output by month: quantity delivered, its invoiced value, and the material and labour cost booked. Value ties to the vertical’s monthly revenue."
   }
  },
  "headline": {
-  "ytdRevenue": 3507,
+  "ytdRevenue": 3508,
   "budgetRevenue": 3776,
+  "dRevenue": -268,
   "ytdGmPct": 12.8,
-  "fyForecast": 5562,
-  "fyBudget": 5900,
-  "overdue": 159
+  "budgetGmPct": 13.1,
+  "fyForecast": 5565,
+  "fyBudget": 5901,
+  "dFy": -336,
+  "buNetProfitYtd": -109,
+  "buNetProfitForecast": -119,
+  "buNetProfitBudget": -83,
+  "receivablesNet": 590,
+  "receivablesChange": 94,
+  "pastDue": 330
  },
  "sales": {
   "engineers": [
@@ -99,23 +358,26 @@
     "slug": "faisal-reyes",
     "homeVertical": "trading",
     "fromOtherVertical": null,
-    "openOrders": 1108,
+    "openOrders": 1109,
     "expectedOrders": 697,
-    "ytdRevenue": 3507,
+    "ytdRevenue": 3508,
     "ytdGm": 449,
     "ytdBudgetRevenue": 3776,
     "ytdBudgetGm": 493,
-    "nearMonthForecast": 493,
-    "restOfYearForecast": 1562,
-    "fyForecastRevenue": 5562,
-    "fyForecastGm": 717,
-    "fyBudgetRevenue": 5900,
+    "nearMonthForecast": 494,
+    "restOfYearForecast": 1563,
+    "fyForecastRevenue": 5565,
+    "fyForecastGm": 718,
+    "fyBudgetRevenue": 5901,
     "fyBudgetGm": 770,
-    "priorYearRevenue": 5641,
-    "priorYearGm": 695,
+    "priorYearRevenue": 5633,
+    "priorYearGm": 694,
     "ytdGmPct": 12.8,
     "budgetGmPct": 13.1,
-    "roiPriorYear": 3.9,
+    "ctcAnnual": 190,
+    "ctcYtd": 127,
+    "ctcPriorYear": 181,
+    "roiPriorYear": 3.8,
     "roiYtd": 3.5,
     "roiBudget": 4.1,
     "roiForecast": 3.8,
@@ -123,19 +385,19 @@
      {
       "product": "Cables",
       "alsoReportedOn": null,
-      "openOrders": 287,
+      "openOrders": 288,
       "expectedOrders": 159,
-      "ytdRevenue": 815,
+      "ytdRevenue": 816,
       "ytdGm": 87,
       "ytdGmPct": 10.7,
       "ytdBudgetRevenue": 853,
       "ytdBudgetGm": 106,
-      "budgetGmPct": 12.5,
-      "nearMonthForecast": 112,
-      "restOfYearForecast": 355,
-      "fyForecastRevenue": 1282,
-      "fyForecastGm": 146,
-      "fyBudgetRevenue": 1333,
+      "budgetGmPct": 12.4,
+      "nearMonthForecast": 113,
+      "restOfYearForecast": 356,
+      "fyForecastRevenue": 1285,
+      "fyForecastGm": 147,
+      "fyBudgetRevenue": 1334,
       "fyBudgetGm": 166,
       "priorYearRevenue": 1293,
       "priorYearGm": 139
@@ -145,19 +407,19 @@
       "alsoReportedOn": null,
       "openOrders": 162,
       "expectedOrders": 156,
-      "ytdRevenue": 682,
+      "ytdRevenue": 681,
       "ytdGm": 114,
-      "ytdGmPct": 16.8,
-      "ytdBudgetRevenue": 750,
+      "ytdGmPct": 16.7,
+      "ytdBudgetRevenue": 749,
       "ytdBudgetGm": 116,
       "budgetGmPct": 15.5,
       "nearMonthForecast": 96,
       "restOfYearForecast": 313,
-      "fyForecastRevenue": 1091,
+      "fyForecastRevenue": 1090,
       "fyForecastGm": 177,
       "fyBudgetRevenue": 1171,
       "fyBudgetGm": 181,
-      "priorYearRevenue": 1160,
+      "priorYearRevenue": 1163,
       "priorYearGm": 162
      },
      {
@@ -165,19 +427,19 @@
       "alsoReportedOn": null,
       "openOrders": 357,
       "expectedOrders": 143,
-      "ytdRevenue": 972,
+      "ytdRevenue": 973,
       "ytdGm": 124,
       "ytdGmPct": 12.7,
-      "ytdBudgetRevenue": 1058,
+      "ytdBudgetRevenue": 1059,
       "ytdBudgetGm": 118,
       "budgetGmPct": 11.1,
       "nearMonthForecast": 140,
       "restOfYearForecast": 431,
-      "fyForecastRevenue": 1543,
+      "fyForecastRevenue": 1544,
       "fyForecastGm": 186,
       "fyBudgetRevenue": 1654,
       "fyBudgetGm": 184,
-      "priorYearRevenue": 1570,
+      "priorYearRevenue": 1567,
       "priorYearGm": 174
      },
      {
@@ -197,8 +459,8 @@
       "fyForecastGm": 208,
       "fyBudgetRevenue": 1742,
       "fyBudgetGm": 239,
-      "priorYearRevenue": 1618,
-      "priorYearGm": 220
+      "priorYearRevenue": 1610,
+      "priorYearGm": 219
      }
     ]
    }
@@ -208,23 +470,26 @@
    "slug": "sheet-total",
    "homeVertical": "trading",
    "fromOtherVertical": null,
-   "openOrders": 1108,
+   "openOrders": 1109,
    "expectedOrders": 697,
-   "ytdRevenue": 3507,
+   "ytdRevenue": 3508,
    "ytdGm": 449,
    "ytdBudgetRevenue": 3776,
    "ytdBudgetGm": 493,
-   "nearMonthForecast": 493,
-   "restOfYearForecast": 1562,
-   "fyForecastRevenue": 5562,
-   "fyForecastGm": 717,
-   "fyBudgetRevenue": 5900,
+   "nearMonthForecast": 494,
+   "restOfYearForecast": 1563,
+   "fyForecastRevenue": 5565,
+   "fyForecastGm": 718,
+   "fyBudgetRevenue": 5901,
    "fyBudgetGm": 770,
-   "priorYearRevenue": 5641,
-   "priorYearGm": 695,
+   "priorYearRevenue": 5633,
+   "priorYearGm": 694,
    "ytdGmPct": 12.8,
    "budgetGmPct": 13.1,
-   "roiPriorYear": 3.9,
+   "ctcAnnual": 190,
+   "ctcYtd": 127,
+   "ctcPriorYear": 181,
+   "roiPriorYear": 3.8,
    "roiYtd": 3.5,
    "roiBudget": 4.1,
    "roiForecast": 3.8,
@@ -235,51 +500,138 @@
    "slug": "attributed-total",
    "homeVertical": "trading",
    "fromOtherVertical": null,
-   "openOrders": 1108,
+   "openOrders": 1109,
    "expectedOrders": 697,
-   "ytdRevenue": 3507,
+   "ytdRevenue": 3508,
    "ytdGm": 449,
    "ytdBudgetRevenue": 3776,
    "ytdBudgetGm": 493,
-   "nearMonthForecast": 493,
-   "restOfYearForecast": 1562,
-   "fyForecastRevenue": 5562,
-   "fyForecastGm": 717,
-   "fyBudgetRevenue": 5900,
+   "nearMonthForecast": 494,
+   "restOfYearForecast": 1563,
+   "fyForecastRevenue": 5565,
+   "fyForecastGm": 718,
+   "fyBudgetRevenue": 5901,
    "fyBudgetGm": 770,
-   "priorYearRevenue": 5641,
-   "priorYearGm": 695,
+   "priorYearRevenue": 5633,
+   "priorYearGm": 694,
    "ytdGmPct": 12.8,
    "budgetGmPct": 13.1,
-   "roiPriorYear": 3.9,
+   "ctcAnnual": 190,
+   "ctcYtd": 127,
+   "ctcPriorYear": 181,
+   "roiPriorYear": 3.8,
    "roiYtd": 3.5,
    "roiBudget": 4.1,
    "roiForecast": 3.8,
    "products": []
-  }
+  },
+  "byProduct": [
+   {
+    "product": "Cables",
+    "alsoReportedOn": null,
+    "openOrders": 288,
+    "expectedOrders": 159,
+    "ytdRevenue": 816,
+    "ytdGm": 87,
+    "ytdBudgetRevenue": 853,
+    "ytdBudgetGm": 106,
+    "nearMonthForecast": 113,
+    "restOfYearForecast": 356,
+    "fyForecastRevenue": 1285,
+    "fyForecastGm": 147,
+    "fyBudgetRevenue": 1334,
+    "fyBudgetGm": 166,
+    "priorYearRevenue": 1293,
+    "priorYearGm": 139,
+    "ytdGmPct": 10.7,
+    "budgetGmPct": 12.4
+   },
+   {
+    "product": "Lighting",
+    "alsoReportedOn": null,
+    "openOrders": 162,
+    "expectedOrders": 156,
+    "ytdRevenue": 681,
+    "ytdGm": 114,
+    "ytdBudgetRevenue": 749,
+    "ytdBudgetGm": 116,
+    "nearMonthForecast": 96,
+    "restOfYearForecast": 313,
+    "fyForecastRevenue": 1090,
+    "fyForecastGm": 177,
+    "fyBudgetRevenue": 1171,
+    "fyBudgetGm": 181,
+    "priorYearRevenue": 1163,
+    "priorYearGm": 162,
+    "ytdGmPct": 16.7,
+    "budgetGmPct": 15.5
+   },
+   {
+    "product": "Consumables",
+    "alsoReportedOn": null,
+    "openOrders": 357,
+    "expectedOrders": 143,
+    "ytdRevenue": 973,
+    "ytdGm": 124,
+    "ytdBudgetRevenue": 1059,
+    "ytdBudgetGm": 118,
+    "nearMonthForecast": 140,
+    "restOfYearForecast": 431,
+    "fyForecastRevenue": 1544,
+    "fyForecastGm": 186,
+    "fyBudgetRevenue": 1654,
+    "fyBudgetGm": 184,
+    "priorYearRevenue": 1567,
+    "priorYearGm": 174,
+    "ytdGmPct": 12.7,
+    "budgetGmPct": 11.1
+   },
+   {
+    "product": "Tools",
+    "alsoReportedOn": null,
+    "openOrders": 302,
+    "expectedOrders": 239,
+    "ytdRevenue": 1038,
+    "ytdGm": 124,
+    "ytdBudgetRevenue": 1115,
+    "ytdBudgetGm": 153,
+    "nearMonthForecast": 145,
+    "restOfYearForecast": 463,
+    "fyForecastRevenue": 1646,
+    "fyForecastGm": 208,
+    "fyBudgetRevenue": 1742,
+    "fyBudgetGm": 239,
+    "priorYearRevenue": 1610,
+    "priorYearGm": 219,
+    "ytdGmPct": 11.9,
+    "budgetGmPct": 13.7
+   }
+  ]
  },
  "pl": [
   {
    "key": "revenue",
    "label": "Revenue",
-   "definition": "Invoiced sales for the period, counted once per product line.",
-   "feeds": "Sales performance, engineer rows",
+   "definition": "Invoiced sales for the period, each product line counted once in its home vertical.",
+   "feeds": "Sales performance, engineer and product rows",
    "subtotal": false,
    "isPercent": false,
-   "ytd": 3507,
-   "forecast": 5562,
-   "budget": 5900
+   "ytd": 3508,
+   "forecast": 5565,
+   "budget": 5901,
+   "dForecastVsBudget": -336
   },
   {
    "key": "grossMargin",
    "label": "Gross margin",
    "definition": "Revenue less the cost of goods sold, before any operating cost.",
-   "feeds": "Sales performance, engineer rows",
+   "feeds": "Sales performance, engineer and product rows",
    "subtotal": false,
    "isPercent": false,
    "ytd": 449,
    "forecast": 718,
-   "budget": 771
+   "budget": 770,
+   "dForecastVsBudget": -52
   },
   {
    "key": "gmPct",
@@ -290,146 +642,235 @@
    "isPercent": true,
    "ytd": 12.8,
    "forecast": 12.9,
-   "budget": 13.1
+   "budget": 13,
+   "dForecastVsBudget": -0.1
   },
   {
    "key": "salaryCtc",
    "label": "Salary cost to company",
    "definition": "Full employment cost of the vertical: engineers, support staff, benefits and end of service.",
-   "feeds": "Finance cost extract, monthly static value",
+   "feeds": "Synthetic: engineer cost to employ times a 1.35 support factor; the forecast annualises the elapsed months",
    "subtotal": false,
    "isPercent": false,
    "ytd": 171,
    "forecast": 257,
-   "budget": 251
+   "budget": 251,
+   "dForecastVsBudget": 6
   },
   {
    "key": "warehouseCost",
    "label": "Warehouse cost",
    "definition": "Rent, handling and freight for stock held by this vertical.",
-   "feeds": "Finance cost extract, monthly static value",
+   "feeds": "Synthetic: a fixed ratio of revenue per vertical; the forecast annualises the elapsed months",
    "subtotal": false,
    "isPercent": false,
    "ytd": 58,
    "forecast": 87,
-   "budget": 91
+   "budget": 91,
+   "dForecastVsBudget": -4
   },
   {
    "key": "warehouseSalaries",
    "label": "Warehouse salaries",
    "definition": "Storekeepers and logistics staff allocated by stock share.",
-   "feeds": "Finance cost extract, monthly static value",
+   "feeds": "Synthetic: a fixed ratio of revenue per vertical; the forecast annualises the elapsed months",
    "subtotal": false,
    "isPercent": false,
    "ytd": 51,
    "forecast": 76,
-   "budget": 79
+   "budget": 79,
+   "dForecastVsBudget": -3
   },
   {
    "key": "commonAdmin",
    "label": "Common admin, selling and depreciation",
-   "definition": "Shared division costs allocated by revenue share.",
-   "feeds": "Finance cost extract, allocation key",
+   "definition": "Shared division costs allocated to verticals by revenue share.",
+   "feeds": "Synthetic: a fixed ratio of revenue per vertical; the forecast annualises the elapsed months",
    "subtotal": false,
    "isPercent": false,
    "ytd": 174,
    "forecast": 261,
-   "budget": 273
+   "budget": 273,
+   "dForecastVsBudget": -12
   },
   {
    "key": "buProfitability",
    "label": "BU profitability",
    "definition": "Gross margin less the four operating cost lines above. The vertical head is judged on this rung.",
-   "feeds": "Derived",
+   "feeds": "Derived: gross margin less salary, warehouse cost, warehouse salaries and common admin",
    "subtotal": true,
    "isPercent": false,
    "ytd": -5,
    "forecast": 37,
-   "budget": 76
+   "budget": 76,
+   "dForecastVsBudget": -39
   },
   {
    "key": "provisionsInterCo",
    "label": "Provisions and inter-company interest",
-   "definition": "Bad debt and stock provisions booked this period, plus interest on group funding.",
-   "feeds": "Finance cost extract and the overdue provision column",
+   "definition": "Bad debt and stock provisions charged this period, plus interest on group funding. A charge for the period, not the provision balance shown in the receivables and inventory tables.",
+   "feeds": "Synthetic: a fixed ratio of revenue per vertical",
    "subtotal": false,
    "isPercent": false,
    "ytd": 28,
    "forecast": 42,
-   "budget": 36
+   "budget": 36,
+   "dForecastVsBudget": 6
   },
   {
    "key": "corporateOverhead",
    "label": "Corporate overhead",
-   "definition": "Group head office charge allocated to the division.",
-   "feeds": "Group allocation",
+   "definition": "Group head office charge allocated to the division by revenue share.",
+   "feeds": "Synthetic: a fixed ratio of revenue per vertical",
    "subtotal": false,
    "isPercent": false,
    "ytd": 76,
    "forecast": 114,
-   "budget": 123
+   "budget": 123,
+   "dForecastVsBudget": -9
   },
   {
    "key": "buNetProfit",
    "label": "BU-level net profit",
    "definition": "What the vertical keeps after every cost it carries, including group charges.",
-   "feeds": "Derived",
+   "feeds": "Derived: BU profitability less provisions and corporate overhead",
    "subtotal": true,
    "isPercent": false,
    "ytd": -109,
    "forecast": -119,
-   "budget": -83
+   "budget": -83,
+   "dForecastVsBudget": -36
   }
  ],
  "targets": [
   {
    "productLine": "Cables",
-   "target": 1333,
-   "aspiration": 1637,
-   "achieved": 815,
-   "achievedPct": 61.1
+   "sector": "Trading",
+   "target": 1334,
+   "aspiration": 1572,
+   "achieved": 816,
+   "achievedPct": 61.2,
+   "budgetToDate": 853,
+   "achievedVsBudgetToDate": -37
   },
   {
    "productLine": "Lighting",
+   "sector": "Trading",
    "target": 1171,
-   "aspiration": 1355,
-   "achieved": 682,
-   "achievedPct": 58.2
+   "aspiration": 1357,
+   "achieved": 681,
+   "achievedPct": 58.2,
+   "budgetToDate": 749,
+   "achievedVsBudgetToDate": -68
   },
   {
    "productLine": "Consumables",
+   "sector": "Trading",
    "target": 1654,
-   "aspiration": 1854,
-   "achieved": 972,
-   "achievedPct": 58.8
+   "aspiration": 1878,
+   "achieved": 973,
+   "achievedPct": 58.8,
+   "budgetToDate": 1059,
+   "achievedVsBudgetToDate": -86
   },
   {
    "productLine": "Tools",
+   "sector": "Trading",
    "target": 1742,
-   "aspiration": 2085,
+   "aspiration": 2012,
    "achieved": 1038,
-   "achievedPct": 59.6
+   "achievedPct": 59.6,
+   "budgetToDate": 1115,
+   "achievedVsBudgetToDate": -77
   }
  ],
  "inventory": {
-  "totalStock": 553,
-  "underOneYear": 425,
-  "overOneYear": 73,
-  "overTwoYears": 28,
-  "overThreeYears": 27,
-  "provision": 41,
-  "mappedToPurchaseOrders": 210,
-  "freeStock": 343,
-  "freeStockOverOneYear": 94,
-  "inTransit": [
+  "lines": [
    {
-    "item": "Sub-meter batch, 1,200 units",
-    "value": 53,
-    "expectedArrival": "2026-11-19"
+    "product": "Cables",
+    "totalStock": 175,
+    "underOneYear": 100,
+    "oneToTwoYears": 42,
+    "twoToThreeYears": 23,
+    "overThreeYears": 10,
+    "agedOverOneYear": 75,
+    "nonMovingObsolete": 6,
+    "provision": 22,
+    "mappedToPurchaseOrders": 66,
+    "mappedOverOneYear": 8,
+    "freeStock": 109,
+    "freeStockOverOneYear": 51
    },
    {
-    "item": "Chiller module, two units",
-    "value": 113,
+    "product": "Lighting",
+    "totalStock": 178,
+    "underOneYear": 108,
+    "oneToTwoYears": 42,
+    "twoToThreeYears": 18,
+    "overThreeYears": 10,
+    "agedOverOneYear": 70,
+    "nonMovingObsolete": 3,
+    "provision": 19,
+    "mappedToPurchaseOrders": 89,
+    "mappedOverOneYear": 15,
+    "freeStock": 89,
+    "freeStockOverOneYear": 44
+   },
+   {
+    "product": "Consumables",
+    "totalStock": 116,
+    "underOneYear": 72,
+    "oneToTwoYears": 28,
+    "twoToThreeYears": 7,
+    "overThreeYears": 9,
+    "agedOverOneYear": 44,
+    "nonMovingObsolete": 5,
+    "provision": 13,
+    "mappedToPurchaseOrders": 44,
+    "mappedOverOneYear": 17,
+    "freeStock": 72,
+    "freeStockOverOneYear": 32
+   },
+   {
+    "product": "Tools",
+    "totalStock": 102,
+    "underOneYear": 58,
+    "oneToTwoYears": 28,
+    "twoToThreeYears": 12,
+    "overThreeYears": 4,
+    "agedOverOneYear": 44,
+    "nonMovingObsolete": 3,
+    "provision": 10,
+    "mappedToPurchaseOrders": 36,
+    "mappedOverOneYear": 7,
+    "freeStock": 66,
+    "freeStockOverOneYear": 22
+   }
+  ],
+  "total": {
+   "product": "Total",
+   "totalStock": 571,
+   "underOneYear": 338,
+   "oneToTwoYears": 140,
+   "twoToThreeYears": 60,
+   "overThreeYears": 33,
+   "agedOverOneYear": 233,
+   "nonMovingObsolete": 17,
+   "provision": 64,
+   "mappedToPurchaseOrders": 235,
+   "mappedOverOneYear": 47,
+   "freeStock": 336,
+   "freeStockOverOneYear": 149
+  },
+  "inTransit": [
+   {
+    "item": "Pump sets, six units",
+    "value": 111,
+    "expectedArrival": "2026-10-28"
+   },
+   {
+    "item": "Sheet steel coils",
+    "value": 81,
     "expectedArrival": "2026-11-04"
    }
   ]
@@ -444,66 +885,104 @@
    "currentMonth": 0
   }
  },
- "overdue": {
+ "production": null,
+ "receivables": {
   "rows": [
    {
     "engineer": "Faisal Reyes",
-    "customer": "Corniche Medical Centre",
-    "terms": "Against delivery",
-    "bucket0to30": 222,
-    "bucket31to90": 50,
-    "bucket91to365": 109,
+    "engineerSlug": "faisal-reyes",
+    "customer": "Dunelight Hospitality",
+    "terms": "30 percent advance, balance at 60 days",
+    "termsDays": 60,
+    "invoices": 5,
+    "bucket0to30": 291,
+    "bucket31to90": 99,
+    "bucket91to365": 0,
+    "bucket1to2y": 171,
+    "bucketOver2y": 0,
+    "totalOutstanding": 561,
+    "provision": 86,
+    "netToCollect": 475,
+    "notYetDue": 291,
+    "pastDue": 270,
+    "agedOverOneYear": 171,
+    "dispute": true,
+    "reason": "disputesAndNotDue",
+    "previousMonthNet": 387,
+    "change": 88,
+    "previousRemark": "Site meeting held on the variation claim",
+    "currentRemark": "Client disputes variation on order 4852, credit note under review"
+   },
+   {
+    "engineer": "Faisal Reyes",
+    "engineerSlug": "faisal-reyes",
+    "customer": "Halvard Facilities Management (group)",
+    "terms": "45 days, post-dated cheque",
+    "termsDays": 45,
+    "invoices": 3,
+    "bucket0to30": 20,
+    "bucket31to90": 35,
+    "bucket91to365": 60,
     "bucket1to2y": 0,
     "bucketOver2y": 0,
-    "totalOutstanding": 381,
+    "totalOutstanding": 115,
     "provision": 0,
-    "netToCollect": 381,
-    "overdue": 159,
+    "netToCollect": 115,
+    "notYetDue": 55,
+    "pastDue": 60,
+    "agedOverOneYear": 0,
     "dispute": false,
-    "previousMonthOverdue": 148,
-    "previousRemark": "Reminder sent 05 Aug 2026",
-    "currentRemark": "No response to three reminders",
-    "reason": "noTimelineOrResponse"
+    "reason": "internalGroup",
+    "previousMonthNet": 109,
+    "change": 6,
+    "previousRemark": "Raised with group finance",
+    "currentRemark": "Intercompany offset agreed with group finance, posting in September"
    }
   ],
   "byEngineer": [
    {
     "engineer": "Faisal Reyes",
     "slug": "faisal-reyes",
-    "customers": 1,
-    "bucket0to30": 222,
-    "bucket31to90": 50,
-    "bucket91to365": 109,
-    "bucket1to2y": 0,
+    "customers": 2,
+    "bucket0to30": 311,
+    "bucket31to90": 134,
+    "bucket91to365": 60,
+    "bucket1to2y": 171,
     "bucketOver2y": 0,
-    "totalOutstanding": 381,
-    "provision": 0,
-    "netToCollect": 381,
-    "overdue": 159,
-    "previousMonthOverdue": 148,
-    "change": 11,
-    "disputed": 0
+    "totalOutstanding": 676,
+    "provision": 86,
+    "netToCollect": 590,
+    "notYetDue": 346,
+    "pastDue": 330,
+    "agedOverOneYear": 171,
+    "disputed": 561,
+    "previousMonthNet": 496,
+    "change": 94
    }
   ],
   "total": {
-   "customers": 1,
-   "bucket0to30": 222,
-   "bucket31to90": 50,
-   "bucket91to365": 109,
-   "bucket1to2y": 0,
+   "customers": 2,
+   "bucket0to30": 311,
+   "bucket31to90": 134,
+   "bucket91to365": 60,
+   "bucket1to2y": 171,
    "bucketOver2y": 0,
-   "totalOutstanding": 381,
-   "provision": 0,
-   "netToCollect": 381,
-   "overdue": 159,
-   "previousMonthOverdue": 148,
-   "change": 11,
-   "disputed": 0
+   "totalOutstanding": 676,
+   "provision": 86,
+   "netToCollect": 590,
+   "notYetDue": 346,
+   "pastDue": 330,
+   "agedOverOneYear": 171,
+   "disputed": 561,
+   "previousMonthNet": 496,
+   "change": 94
   },
   "reasons": {
-   "internalGroup": 0,
-   "noTimelineOrResponse": 159,
-   "disputesAndNotDue": 0
+   "internalGroup": 115,
+   "followUpNoResponse": 0,
+   "disputesAndNotDue": 561,
+   "disputed": 561,
+   "withinTerms": 0
   }
  },
  "monthly": [
@@ -512,84 +991,96 @@
    "index": 1,
    "actual": 391,
    "forecast": null,
-   "budget": 413
+   "budget": 413,
+   "variance": -22
   },
   {
    "month": "Feb",
    "index": 2,
-   "actual": 410,
+   "actual": 411,
    "forecast": null,
-   "budget": 443
+   "budget": 443,
+   "variance": -32
   },
   {
    "month": "Mar",
    "index": 3,
-   "actual": 489,
+   "actual": 488,
    "forecast": null,
-   "budget": 519
+   "budget": 519,
+   "variance": -31
   },
   {
    "month": "Apr",
    "index": 4,
-   "actual": 452,
+   "actual": 453,
    "forecast": null,
-   "budget": 484
+   "budget": 484,
+   "variance": -31
   },
   {
    "month": "May",
    "index": 5,
    "actual": 464,
    "forecast": null,
-   "budget": 496
+   "budget": 495,
+   "variance": -31
   },
   {
    "month": "Jun",
    "index": 6,
    "actual": 435,
    "forecast": null,
-   "budget": 472
+   "budget": 472,
+   "variance": -37
   },
   {
    "month": "Jul",
    "index": 7,
    "actual": 428,
    "forecast": null,
-   "budget": 460
+   "budget": 460,
+   "variance": -32
   },
   {
    "month": "Aug",
    "index": 8,
-   "actual": 439,
+   "actual": 438,
    "forecast": null,
-   "budget": 490
+   "budget": 490,
+   "variance": -52
   },
   {
    "month": "Sep",
    "index": 9,
    "actual": null,
-   "forecast": 492,
-   "budget": 507
+   "forecast": 494,
+   "budget": 508,
+   "variance": -14
   },
   {
    "month": "Oct",
    "index": 10,
    "actual": null,
    "forecast": 519,
-   "budget": 531
+   "budget": 531,
+   "variance": -12
   },
   {
    "month": "Nov",
    "index": 11,
    "actual": null,
-   "forecast": 526,
-   "budget": 543
+   "forecast": 527,
+   "budget": 543,
+   "variance": -16
   },
   {
    "month": "Dec",
    "index": 12,
    "actual": null,
    "forecast": 517,
-   "budget": 543
+   "budget": 543,
+   "variance": -26
   }
  ]
 }

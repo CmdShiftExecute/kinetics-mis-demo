@@ -1,0 +1,3705 @@
+{
+ "checkedAt": "2026-09-12T02:57:40+04:00",
+ "policy": [
+  "Every money value is an integer in AED thousands, rounded once at the lowest level the generator produces: one product line in one month.",
+  "Every total is a sum of those integers. Sales, forecast, profit and loss, monthly series, vertical files and engineer files therefore tie exactly, with no display rounding.",
+  "Gross margin is rounded once per product line and column; margins at every higher level are sums.",
+  "Percentages are rounded to one decimal and derived from the integer sums, never from other percentages.",
+  "Revenue shares are allocated to one decimal by largest remainder so the ten rows sum to exactly 100.0.",
+  "Cost lines below gross margin are rounded once per vertical and column; division groups are sums of vertical rungs.",
+  "scripts/reconcile.ts re-reads the written JSON and asserts every cross-table equality. Its result is published on the Data basis page."
+ ],
+ "assertions": [
+  {
+   "id": "sales-rows-total",
+   "statement": "Sales rows sum to the netted division total (YTD revenue)",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  },
+  {
+   "id": "sales-netting",
+   "statement": "Sales total equals the netted YTD figure in the netting note",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  },
+  {
+   "id": "netting-gross",
+   "statement": "Netted YTD plus double-counted YTD equals the gross sheet sum",
+   "left": 139197,
+   "right": 139197,
+   "pass": true
+  },
+  {
+   "id": "sales-subtotal",
+   "statement": "Subtotal excluding the largest vertical plus the largest vertical equals the total (YTD revenue)",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  },
+  {
+   "id": "sales-pl-revenue",
+   "statement": "Sales YTD revenue equals P&L YTD revenue",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  },
+  {
+   "id": "sales-pl-gm",
+   "statement": "Sales YTD gross margin equals P&L YTD gross margin",
+   "left": 28322,
+   "right": 28322,
+   "pass": true
+  },
+  {
+   "id": "monthly-ytd",
+   "statement": "Monthly actuals sum to sales YTD revenue",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  },
+  {
+   "id": "monthly-forecast",
+   "statement": "Monthly forecasts sum to the near-month plus rest-of-year forecast",
+   "left": 76877,
+   "right": 76877,
+   "pass": true
+  },
+  {
+   "id": "monthly-budget",
+   "statement": "Monthly budgets sum to the FY budget",
+   "left": 215378,
+   "right": 215378,
+   "pass": true
+  },
+  {
+   "id": "forecast-components",
+   "statement": "YTD actual plus near-month plus rest-of-year equals FY forecast",
+   "left": 211872,
+   "right": 211872,
+   "pass": true
+  },
+  {
+   "id": "forecast-rows-total",
+   "statement": "Forecast rows sum to the division FY forecast",
+   "left": 211872,
+   "right": 211872,
+   "pass": true
+  },
+  {
+   "id": "forecast-sales-ytd",
+   "statement": "Forecast table YTD equals sales table YTD",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  },
+  {
+   "id": "forecast-pl",
+   "statement": "FY forecast revenue equals P&L forecast revenue",
+   "left": 211872,
+   "right": 211872,
+   "pass": true
+  },
+  {
+   "id": "budget-pl",
+   "statement": "FY budget revenue equals P&L budget revenue",
+   "left": 215378,
+   "right": 215378,
+   "pass": true
+  },
+  {
+   "id": "profitability-pl",
+   "statement": "Profitability total FY revenue equals P&L forecast revenue",
+   "left": 211872,
+   "right": 211872,
+   "pass": true
+  },
+  {
+   "id": "profitability-np",
+   "statement": "Profitability total FY net profit equals P&L forecast BU-level net profit",
+   "left": 11320,
+   "right": 11320,
+   "pass": true
+  },
+  {
+   "id": "profitability-rows",
+   "statement": "Profitability rows sum to the total (FY net profit)",
+   "left": 11320,
+   "right": 11320,
+   "pass": true
+  },
+  {
+   "id": "shares-100",
+   "statement": "Revenue shares sum to 100.0 (tenths)",
+   "left": 1000,
+   "right": 1000,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-revenue-ytd",
+   "statement": "P&L Revenue, ytd: excluding largest plus largest equals total",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-revenue-forecast",
+   "statement": "P&L Revenue, forecast: excluding largest plus largest equals total",
+   "left": 211872,
+   "right": 211872,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-revenue-budget",
+   "statement": "P&L Revenue, budget: excluding largest plus largest equals total",
+   "left": 215378,
+   "right": 215378,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-grossMargin-ytd",
+   "statement": "P&L Gross margin, ytd: excluding largest plus largest equals total",
+   "left": 28322,
+   "right": 28322,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-grossMargin-forecast",
+   "statement": "P&L Gross margin, forecast: excluding largest plus largest equals total",
+   "left": 44510,
+   "right": 44510,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-grossMargin-budget",
+   "statement": "P&L Gross margin, budget: excluding largest plus largest equals total",
+   "left": 45226,
+   "right": 45226,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-salaryCtc-ytd",
+   "statement": "P&L Salary cost to company, ytd: excluding largest plus largest equals total",
+   "left": 6860,
+   "right": 6860,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-salaryCtc-forecast",
+   "statement": "P&L Salary cost to company, forecast: excluding largest plus largest equals total",
+   "left": 10292,
+   "right": 10292,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-salaryCtc-budget",
+   "statement": "P&L Salary cost to company, budget: excluding largest plus largest equals total",
+   "left": 10085,
+   "right": 10085,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-warehouseCost-ytd",
+   "statement": "P&L Warehouse cost, ytd: excluding largest plus largest equals total",
+   "left": 2228,
+   "right": 2228,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-warehouseCost-forecast",
+   "statement": "P&L Warehouse cost, forecast: excluding largest plus largest equals total",
+   "left": 3339,
+   "right": 3339,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-warehouseCost-budget",
+   "statement": "P&L Warehouse cost, budget: excluding largest plus largest equals total",
+   "left": 3331,
+   "right": 3331,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-warehouseSalaries-ytd",
+   "statement": "P&L Warehouse salaries, ytd: excluding largest plus largest equals total",
+   "left": 1999,
+   "right": 1999,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-warehouseSalaries-forecast",
+   "statement": "P&L Warehouse salaries, forecast: excluding largest plus largest equals total",
+   "left": 2998,
+   "right": 2998,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-warehouseSalaries-budget",
+   "statement": "P&L Warehouse salaries, budget: excluding largest plus largest equals total",
+   "left": 2968,
+   "right": 2968,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-commonAdmin-ytd",
+   "statement": "P&L Common admin, selling and depreciation, ytd: excluding largest plus largest equals total",
+   "left": 6283,
+   "right": 6283,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-commonAdmin-forecast",
+   "statement": "P&L Common admin, selling and depreciation, forecast: excluding largest plus largest equals total",
+   "left": 9425,
+   "right": 9425,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-commonAdmin-budget",
+   "statement": "P&L Common admin, selling and depreciation, budget: excluding largest plus largest equals total",
+   "left": 9290,
+   "right": 9290,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-buProfitability-ytd",
+   "statement": "P&L BU profitability, ytd: excluding largest plus largest equals total",
+   "left": 10952,
+   "right": 10952,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-buProfitability-forecast",
+   "statement": "P&L BU profitability, forecast: excluding largest plus largest equals total",
+   "left": 18456,
+   "right": 18456,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-buProfitability-budget",
+   "statement": "P&L BU profitability, budget: excluding largest plus largest equals total",
+   "left": 19552,
+   "right": 19552,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-provisionsInterCo-ytd",
+   "statement": "P&L Provisions and inter-company interest, ytd: excluding largest plus largest equals total",
+   "left": 998,
+   "right": 998,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-provisionsInterCo-forecast",
+   "statement": "P&L Provisions and inter-company interest, forecast: excluding largest plus largest equals total",
+   "left": 1500,
+   "right": 1500,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-provisionsInterCo-budget",
+   "statement": "P&L Provisions and inter-company interest, budget: excluding largest plus largest equals total",
+   "left": 1222,
+   "right": 1222,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-corporateOverhead-ytd",
+   "statement": "P&L Corporate overhead, ytd: excluding largest plus largest equals total",
+   "left": 3756,
+   "right": 3756,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-corporateOverhead-forecast",
+   "statement": "P&L Corporate overhead, forecast: excluding largest plus largest equals total",
+   "left": 5636,
+   "right": 5636,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-corporateOverhead-budget",
+   "statement": "P&L Corporate overhead, budget: excluding largest plus largest equals total",
+   "left": 5749,
+   "right": 5749,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-buNetProfit-ytd",
+   "statement": "P&L BU-level net profit, ytd: excluding largest plus largest equals total",
+   "left": 6198,
+   "right": 6198,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-buNetProfit-forecast",
+   "statement": "P&L BU-level net profit, forecast: excluding largest plus largest equals total",
+   "left": 11320,
+   "right": 11320,
+   "pass": true
+  },
+  {
+   "id": "pl-groups-buNetProfit-budget",
+   "statement": "P&L BU-level net profit, budget: excluding largest plus largest equals total",
+   "left": 12581,
+   "right": 12581,
+   "pass": true
+  },
+  {
+   "id": "pl-bu-profitability",
+   "statement": "P&L BU profitability equals gross margin less the four operating cost lines (YTD)",
+   "left": 10952,
+   "right": 10952,
+   "pass": true
+  },
+  {
+   "id": "pl-bu-np",
+   "statement": "P&L BU-level net profit equals BU profitability less provisions and corporate overhead (YTD)",
+   "left": 6198,
+   "right": 6198,
+   "pass": true
+  },
+  {
+   "id": "receivables-rows-net",
+   "statement": "Receivables rows sum to the division net to collect",
+   "left": 102653,
+   "right": 102653,
+   "pass": true
+  },
+  {
+   "id": "receivables-change",
+   "statement": "Division net to collect change equals current less previous month",
+   "left": 4377,
+   "right": 4377,
+   "pass": true
+  },
+  {
+   "id": "receivables-net-def",
+   "statement": "Net to collect equals total outstanding less provision",
+   "left": 102653,
+   "right": 102653,
+   "pass": true
+  },
+  {
+   "id": "receivables-due-split",
+   "statement": "Not yet due plus past due equals total outstanding",
+   "left": 106932,
+   "right": 106932,
+   "pass": true
+  },
+  {
+   "id": "reasons-sum",
+   "statement": "The three reasons for non-collection sum to total outstanding",
+   "left": 106932,
+   "right": 106932,
+   "pass": true
+  },
+  {
+   "id": "reasons-split",
+   "statement": "Disputed plus within terms equals the disputes-and-not-due bucket",
+   "left": 15755,
+   "right": 15755,
+   "pass": true
+  },
+  {
+   "id": "unbilled-rows",
+   "statement": "Unbilled rows sum to the division current month",
+   "left": 9053,
+   "right": 9053,
+   "pass": true
+  },
+  {
+   "id": "unbilled-bridge",
+   "statement": "Division unbilled bridge reconciles",
+   "left": 9053,
+   "right": 9053,
+   "pass": true
+  },
+  {
+   "id": "inventory-rows",
+   "statement": "Inventory rows sum to the division total stock",
+   "left": 23177,
+   "right": 23177,
+   "pass": true
+  },
+  {
+   "id": "inventory-bands",
+   "statement": "Division inventory age bands sum to total stock",
+   "left": 23177,
+   "right": 23177,
+   "pass": true
+  },
+  {
+   "id": "inventory-free",
+   "statement": "Division free stock equals total stock less stock mapped to purchase orders",
+   "left": 12211,
+   "right": 12211,
+   "pass": true
+  },
+  {
+   "id": "wc-total",
+   "statement": "Working capital total equals net receivables plus unbilled plus stock",
+   "left": 134883,
+   "right": 134883,
+   "pass": true
+  },
+  {
+   "id": "wc-receivables",
+   "statement": "Working capital receivables equal the receivables table net to collect",
+   "left": 102653,
+   "right": 102653,
+   "pass": true
+  },
+  {
+   "id": "overview-sales",
+   "statement": "Overview sales revenue equals the sales table total",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  },
+  {
+   "id": "overview-delivery",
+   "statement": "Overview FY forecast equals the forecast table total",
+   "left": 211872,
+   "right": 211872,
+   "pass": true
+  },
+  {
+   "id": "overview-np",
+   "statement": "Overview FY forecast net profit equals the P&L rung",
+   "left": 11320,
+   "right": 11320,
+   "pass": true
+  },
+  {
+   "id": "overview-receivables",
+   "statement": "Overview net to collect equals the receivables table total",
+   "left": 102653,
+   "right": 102653,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-attributed-sales",
+   "statement": "Electrical Distribution: attributed YTD revenue equals the summary sales row",
+   "left": 49143,
+   "right": 49143,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-attributed-forecast",
+   "statement": "Electrical Distribution: attributed FY forecast equals the summary forecast row",
+   "left": 77102,
+   "right": 77102,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-engineers-sum",
+   "statement": "Electrical Distribution: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 49143,
+   "right": 49143,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-sheet-vs-attributed",
+   "statement": "Electrical Distribution: sheet total less shared rows equals the attributed total",
+   "left": 49143,
+   "right": 49143,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-rohan-pillai-products",
+   "statement": "Electrical Distribution: Rohan Pillai's product rows sum to the engineer row (YTD revenue)",
+   "left": 9651,
+   "right": 9651,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-farah-haddad-products",
+   "statement": "Electrical Distribution: Farah Haddad's product rows sum to the engineer row (YTD revenue)",
+   "left": 10394,
+   "right": 10394,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-dinesh-iyer-products",
+   "statement": "Electrical Distribution: Dinesh Iyer's product rows sum to the engineer row (YTD revenue)",
+   "left": 10162,
+   "right": 10162,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-marwan-saleh-products",
+   "statement": "Electrical Distribution: Marwan Saleh's product rows sum to the engineer row (YTD revenue)",
+   "left": 6882,
+   "right": 6882,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-kavya-nair-products",
+   "statement": "Electrical Distribution: Kavya Nair's product rows sum to the engineer row (YTD revenue)",
+   "left": 12054,
+   "right": 12054,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-by-product",
+   "statement": "Electrical Distribution: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 49143,
+   "right": 49143,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-pl-revenue",
+   "statement": "Electrical Distribution: P&L YTD revenue equals attributed YTD revenue",
+   "left": 49143,
+   "right": 49143,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-pl-gm",
+   "statement": "Electrical Distribution: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 9164,
+   "right": 9164,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-pl-np",
+   "statement": "Electrical Distribution: P&L forecast net profit equals the profitability row",
+   "left": 4002,
+   "right": 4002,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-monthly",
+   "statement": "Electrical Distribution: monthly actuals sum to YTD revenue",
+   "left": 49143,
+   "right": 49143,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-headline-np",
+   "statement": "Electrical Distribution: headline net profit equals the P&L rung",
+   "left": 2246,
+   "right": 2246,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-receivables-total",
+   "statement": "Electrical Distribution: customer rows sum to the vertical net to collect",
+   "left": 62487,
+   "right": 62487,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-receivables-summary",
+   "statement": "Electrical Distribution: vertical net to collect equals the summary receivables row",
+   "left": 62487,
+   "right": 62487,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-receivables-engineers",
+   "statement": "Electrical Distribution: engineer subtotals sum to the vertical total outstanding",
+   "left": 63975,
+   "right": 63975,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-receivables-reasons",
+   "statement": "Electrical Distribution: reasons sum to total outstanding",
+   "left": 63975,
+   "right": 63975,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-farah-haddad-dunelight-hospitality-buckets",
+   "statement": "Electrical Distribution: Dunelight Hospitality aging buckets sum to total outstanding",
+   "left": 9185,
+   "right": 9185,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-dinesh-iyer-halvard-facilities-management-group--buckets",
+   "statement": "Electrical Distribution: Halvard Facilities Management (group) aging buckets sum to total outstanding",
+   "left": 7803,
+   "right": 7803,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-marwan-saleh-amberfield-schools-buckets",
+   "statement": "Electrical Distribution: Amberfield Schools aging buckets sum to total outstanding",
+   "left": 7113,
+   "right": 7113,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-marwan-saleh-ironline-mep-contracting-buckets",
+   "statement": "Electrical Distribution: Ironline MEP Contracting aging buckets sum to total outstanding",
+   "left": 6472,
+   "right": 6472,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-kavya-nair-tamarind-retail-holdings-buckets",
+   "statement": "Electrical Distribution: Tamarind Retail Holdings aging buckets sum to total outstanding",
+   "left": 6015,
+   "right": 6015,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-kavya-nair-corniche-medical-centre-buckets",
+   "statement": "Electrical Distribution: Corniche Medical Centre aging buckets sum to total outstanding",
+   "left": 5920,
+   "right": 5920,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-dinesh-iyer-blue-harbour-marine-works-buckets",
+   "statement": "Electrical Distribution: Blue Harbour Marine Works aging buckets sum to total outstanding",
+   "left": 5719,
+   "right": 5719,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-marwan-saleh-meridian-contracting-buckets",
+   "statement": "Electrical Distribution: Meridian Contracting aging buckets sum to total outstanding",
+   "left": 5593,
+   "right": 5593,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-farah-haddad-westgate-industrial-park-buckets",
+   "statement": "Electrical Distribution: Westgate Industrial Park aging buckets sum to total outstanding",
+   "left": 4913,
+   "right": 4913,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-rohan-pillai-oryx-cold-chain-buckets",
+   "statement": "Electrical Distribution: Oryx Cold Chain aging buckets sum to total outstanding",
+   "left": 3408,
+   "right": 3408,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-dinesh-iyer-palmline-residential-buckets",
+   "statement": "Electrical Distribution: Palmline Residential aging buckets sum to total outstanding",
+   "left": 1834,
+   "right": 1834,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-unbilled-bridge",
+   "statement": "Electrical Distribution: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-unbilled-summary",
+   "statement": "Electrical Distribution: unbilled current month equals the summary unbilled row",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-inventory-lines",
+   "statement": "Electrical Distribution: inventory lines sum to the vertical total stock",
+   "left": 7760,
+   "right": 7760,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-inventory-summary",
+   "statement": "Electrical Distribution: inventory total equals the summary inventory row",
+   "left": 7760,
+   "right": 7760,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-inventory-bands",
+   "statement": "Electrical Distribution: inventory age bands sum to total stock",
+   "left": 7760,
+   "right": 7760,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-target-lv-switchgear",
+   "statement": "Electrical Distribution: LV switchgear achieved less budget to date equals the stated variance",
+   "left": -232,
+   "right": -232,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-target-busway-systems",
+   "statement": "Electrical Distribution: Busway systems achieved less budget to date equals the stated variance",
+   "left": 39,
+   "right": 39,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-target-distribution-boards",
+   "statement": "Electrical Distribution: Distribution boards achieved less budget to date equals the stated variance",
+   "left": -442,
+   "right": -442,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-target-power-factor-correction",
+   "statement": "Electrical Distribution: Power factor correction achieved less budget to date equals the stated variance",
+   "left": -177,
+   "right": -177,
+   "pass": true
+  },
+  {
+   "id": "electrical-distribution-target-cable-management",
+   "statement": "Electrical Distribution: Cable management achieved less budget to date equals the stated variance",
+   "left": -281,
+   "right": -281,
+   "pass": true
+  },
+  {
+   "id": "cooling-attributed-sales",
+   "statement": "Cooling: attributed YTD revenue equals the summary sales row",
+   "left": 22815,
+   "right": 22815,
+   "pass": true
+  },
+  {
+   "id": "cooling-attributed-forecast",
+   "statement": "Cooling: attributed FY forecast equals the summary forecast row",
+   "left": 35381,
+   "right": 35381,
+   "pass": true
+  },
+  {
+   "id": "cooling-engineers-sum",
+   "statement": "Cooling: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 22815,
+   "right": 22815,
+   "pass": true
+  },
+  {
+   "id": "cooling-sheet-vs-attributed",
+   "statement": "Cooling: sheet total less shared rows equals the attributed total",
+   "left": 22815,
+   "right": 22815,
+   "pass": true
+  },
+  {
+   "id": "cooling-joseph-villanueva-products",
+   "statement": "Cooling: Joseph Villanueva's product rows sum to the engineer row (YTD revenue)",
+   "left": 6161,
+   "right": 6161,
+   "pass": true
+  },
+  {
+   "id": "cooling-lina-khoury-products",
+   "statement": "Cooling: Lina Khoury's product rows sum to the engineer row (YTD revenue)",
+   "left": 9263,
+   "right": 9263,
+   "pass": true
+  },
+  {
+   "id": "cooling-arjun-sethi-products",
+   "statement": "Cooling: Arjun Sethi's product rows sum to the engineer row (YTD revenue)",
+   "left": 7391,
+   "right": 7391,
+   "pass": true
+  },
+  {
+   "id": "cooling-by-product",
+   "statement": "Cooling: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 22815,
+   "right": 22815,
+   "pass": true
+  },
+  {
+   "id": "cooling-pl-revenue",
+   "statement": "Cooling: P&L YTD revenue equals attributed YTD revenue",
+   "left": 22815,
+   "right": 22815,
+   "pass": true
+  },
+  {
+   "id": "cooling-pl-gm",
+   "statement": "Cooling: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 5048,
+   "right": 5048,
+   "pass": true
+  },
+  {
+   "id": "cooling-pl-np",
+   "statement": "Cooling: P&L forecast net profit equals the profitability row",
+   "left": 2909,
+   "right": 2909,
+   "pass": true
+  },
+  {
+   "id": "cooling-monthly",
+   "statement": "Cooling: monthly actuals sum to YTD revenue",
+   "left": 22815,
+   "right": 22815,
+   "pass": true
+  },
+  {
+   "id": "cooling-headline-np",
+   "statement": "Cooling: headline net profit equals the P&L rung",
+   "left": 1711,
+   "right": 1711,
+   "pass": true
+  },
+  {
+   "id": "cooling-receivables-total",
+   "statement": "Cooling: customer rows sum to the vertical net to collect",
+   "left": 13068,
+   "right": 13068,
+   "pass": true
+  },
+  {
+   "id": "cooling-receivables-summary",
+   "statement": "Cooling: vertical net to collect equals the summary receivables row",
+   "left": 13068,
+   "right": 13068,
+   "pass": true
+  },
+  {
+   "id": "cooling-receivables-engineers",
+   "statement": "Cooling: engineer subtotals sum to the vertical total outstanding",
+   "left": 14248,
+   "right": 14248,
+   "pass": true
+  },
+  {
+   "id": "cooling-receivables-reasons",
+   "statement": "Cooling: reasons sum to total outstanding",
+   "left": 14248,
+   "right": 14248,
+   "pass": true
+  },
+  {
+   "id": "cooling-arjun-sethi-northshore-facilities-buckets",
+   "statement": "Cooling: Northshore Facilities aging buckets sum to total outstanding",
+   "left": 3476,
+   "right": 3476,
+   "pass": true
+  },
+  {
+   "id": "cooling-arjun-sethi-falcon-ridge-estates-buckets",
+   "statement": "Cooling: Falcon Ridge Estates aging buckets sum to total outstanding",
+   "left": 3462,
+   "right": 3462,
+   "pass": true
+  },
+  {
+   "id": "cooling-lina-khoury-al-rawabi-developments-buckets",
+   "statement": "Cooling: Al Rawabi Developments aging buckets sum to total outstanding",
+   "left": 3073,
+   "right": 3073,
+   "pass": true
+  },
+  {
+   "id": "cooling-arjun-sethi-dunelight-hospitality-buckets",
+   "statement": "Cooling: Dunelight Hospitality aging buckets sum to total outstanding",
+   "left": 2315,
+   "right": 2315,
+   "pass": true
+  },
+  {
+   "id": "cooling-joseph-villanueva-silverstone-data-centres-buckets",
+   "statement": "Cooling: Silverstone Data Centres aging buckets sum to total outstanding",
+   "left": 1922,
+   "right": 1922,
+   "pass": true
+  },
+  {
+   "id": "cooling-unbilled-bridge",
+   "statement": "Cooling: unbilled bridge reconciles",
+   "left": 4416,
+   "right": 4416,
+   "pass": true
+  },
+  {
+   "id": "cooling-unbilled-summary",
+   "statement": "Cooling: unbilled current month equals the summary unbilled row",
+   "left": 4416,
+   "right": 4416,
+   "pass": true
+  },
+  {
+   "id": "cooling-UB-COO-1040-aging",
+   "statement": "Cooling: UB-COO-1040 unbilled aging bands sum to its current balance",
+   "left": 1445,
+   "right": 1445,
+   "pass": true
+  },
+  {
+   "id": "cooling-UB-COO-1049-aging",
+   "statement": "Cooling: UB-COO-1049 unbilled aging bands sum to its current balance",
+   "left": 1265,
+   "right": 1265,
+   "pass": true
+  },
+  {
+   "id": "cooling-UB-COO-1055-aging",
+   "statement": "Cooling: UB-COO-1055 unbilled aging bands sum to its current balance",
+   "left": 1706,
+   "right": 1706,
+   "pass": true
+  },
+  {
+   "id": "cooling-inventory-lines",
+   "statement": "Cooling: inventory lines sum to the vertical total stock",
+   "left": 2588,
+   "right": 2588,
+   "pass": true
+  },
+  {
+   "id": "cooling-inventory-summary",
+   "statement": "Cooling: inventory total equals the summary inventory row",
+   "left": 2588,
+   "right": 2588,
+   "pass": true
+  },
+  {
+   "id": "cooling-inventory-bands",
+   "statement": "Cooling: inventory age bands sum to total stock",
+   "left": 2588,
+   "right": 2588,
+   "pass": true
+  },
+  {
+   "id": "cooling-target-chillers",
+   "statement": "Cooling: Chillers achieved less budget to date equals the stated variance",
+   "left": 141,
+   "right": 141,
+   "pass": true
+  },
+  {
+   "id": "cooling-target-air-handling-units",
+   "statement": "Cooling: Air handling units achieved less budget to date equals the stated variance",
+   "left": -73,
+   "right": -73,
+   "pass": true
+  },
+  {
+   "id": "cooling-target-fan-coil-units",
+   "statement": "Cooling: Fan coil units achieved less budget to date equals the stated variance",
+   "left": 429,
+   "right": 429,
+   "pass": true
+  },
+  {
+   "id": "cooling-target-cooling-towers",
+   "statement": "Cooling: Cooling towers achieved less budget to date equals the stated variance",
+   "left": 234,
+   "right": 234,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-attributed-sales",
+   "statement": "Mechanical Systems: attributed YTD revenue equals the summary sales row",
+   "left": 15388,
+   "right": 15388,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-attributed-forecast",
+   "statement": "Mechanical Systems: attributed FY forecast equals the summary forecast row",
+   "left": 24708,
+   "right": 24708,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-engineers-sum",
+   "statement": "Mechanical Systems: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 15388,
+   "right": 15388,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-sheet-vs-attributed",
+   "statement": "Mechanical Systems: sheet total less shared rows equals the attributed total",
+   "left": 15388,
+   "right": 15388,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-bassem-farouk-products",
+   "statement": "Mechanical Systems: Bassem Farouk's product rows sum to the engineer row (YTD revenue)",
+   "left": 4684,
+   "right": 4684,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-sneha-menon-products",
+   "statement": "Mechanical Systems: Sneha Menon's product rows sum to the engineer row (YTD revenue)",
+   "left": 4574,
+   "right": 4574,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-tarek-hamdan-products",
+   "statement": "Mechanical Systems: Tarek Hamdan's product rows sum to the engineer row (YTD revenue)",
+   "left": 6130,
+   "right": 6130,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-by-product",
+   "statement": "Mechanical Systems: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 15388,
+   "right": 15388,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-pl-revenue",
+   "statement": "Mechanical Systems: P&L YTD revenue equals attributed YTD revenue",
+   "left": 15388,
+   "right": 15388,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-pl-gm",
+   "statement": "Mechanical Systems: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 3019,
+   "right": 3019,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-pl-np",
+   "statement": "Mechanical Systems: P&L forecast net profit equals the profitability row",
+   "left": 1210,
+   "right": 1210,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-monthly",
+   "statement": "Mechanical Systems: monthly actuals sum to YTD revenue",
+   "left": 15388,
+   "right": 15388,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-headline-np",
+   "statement": "Mechanical Systems: headline net profit equals the P&L rung",
+   "left": 593,
+   "right": 593,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-receivables-total",
+   "statement": "Mechanical Systems: customer rows sum to the vertical net to collect",
+   "left": 9734,
+   "right": 9734,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-receivables-summary",
+   "statement": "Mechanical Systems: vertical net to collect equals the summary receivables row",
+   "left": 9734,
+   "right": 9734,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-receivables-engineers",
+   "statement": "Mechanical Systems: engineer subtotals sum to the vertical total outstanding",
+   "left": 10267,
+   "right": 10267,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-receivables-reasons",
+   "statement": "Mechanical Systems: reasons sum to total outstanding",
+   "left": 10267,
+   "right": 10267,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-tarek-hamdan-amberfield-schools-buckets",
+   "statement": "Mechanical Systems: Amberfield Schools aging buckets sum to total outstanding",
+   "left": 3109,
+   "right": 3109,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-tarek-hamdan-northshore-facilities-buckets",
+   "statement": "Mechanical Systems: Northshore Facilities aging buckets sum to total outstanding",
+   "left": 1833,
+   "right": 1833,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-bassem-farouk-blue-harbour-marine-works-buckets",
+   "statement": "Mechanical Systems: Blue Harbour Marine Works aging buckets sum to total outstanding",
+   "left": 1449,
+   "right": 1449,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-tarek-hamdan-kalima-facilities-buckets",
+   "statement": "Mechanical Systems: Kalima Facilities aging buckets sum to total outstanding",
+   "left": 1439,
+   "right": 1439,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-sneha-menon-oryx-cold-chain-buckets",
+   "statement": "Mechanical Systems: Oryx Cold Chain aging buckets sum to total outstanding",
+   "left": 1219,
+   "right": 1219,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-bassem-farouk-westgate-industrial-park-buckets",
+   "statement": "Mechanical Systems: Westgate Industrial Park aging buckets sum to total outstanding",
+   "left": 1218,
+   "right": 1218,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-unbilled-bridge",
+   "statement": "Mechanical Systems: unbilled bridge reconciles",
+   "left": 2602,
+   "right": 2602,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-unbilled-summary",
+   "statement": "Mechanical Systems: unbilled current month equals the summary unbilled row",
+   "left": 2602,
+   "right": 2602,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-UB-MEC-1041-aging",
+   "statement": "Mechanical Systems: UB-MEC-1041 unbilled aging bands sum to its current balance",
+   "left": 935,
+   "right": 935,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-UB-MEC-1049-aging",
+   "statement": "Mechanical Systems: UB-MEC-1049 unbilled aging bands sum to its current balance",
+   "left": 703,
+   "right": 703,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-UB-MEC-1054-aging",
+   "statement": "Mechanical Systems: UB-MEC-1054 unbilled aging bands sum to its current balance",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-UB-MEC-1064-aging",
+   "statement": "Mechanical Systems: UB-MEC-1064 unbilled aging bands sum to its current balance",
+   "left": 964,
+   "right": 964,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-inventory-lines",
+   "statement": "Mechanical Systems: inventory lines sum to the vertical total stock",
+   "left": 2465,
+   "right": 2465,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-inventory-summary",
+   "statement": "Mechanical Systems: inventory total equals the summary inventory row",
+   "left": 2465,
+   "right": 2465,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-inventory-bands",
+   "statement": "Mechanical Systems: inventory age bands sum to total stock",
+   "left": 2465,
+   "right": 2465,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-target-fire-dampers",
+   "statement": "Mechanical Systems: Fire dampers achieved less budget to date equals the stated variance",
+   "left": -450,
+   "right": -450,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-target-insulation",
+   "statement": "Mechanical Systems: Insulation achieved less budget to date equals the stated variance",
+   "left": -835,
+   "right": -835,
+   "pass": true
+  },
+  {
+   "id": "mechanical-systems-target-valves-and-actuators",
+   "statement": "Mechanical Systems: Valves and actuators achieved less budget to date equals the stated variance",
+   "left": -269,
+   "right": -269,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-attributed-sales",
+   "statement": "Pumps and Water: attributed YTD revenue equals the summary sales row",
+   "left": 11851,
+   "right": 11851,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-attributed-forecast",
+   "statement": "Pumps and Water: attributed FY forecast equals the summary forecast row",
+   "left": 18522,
+   "right": 18522,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-engineers-sum",
+   "statement": "Pumps and Water: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 11851,
+   "right": 11851,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-sheet-vs-attributed",
+   "statement": "Pumps and Water: sheet total less shared rows equals the attributed total",
+   "left": 11851,
+   "right": 11851,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-omar-nasser-products",
+   "statement": "Pumps and Water: Omar Nasser's product rows sum to the engineer row (YTD revenue)",
+   "left": 6194,
+   "right": 6194,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-meera-dsouza-products",
+   "statement": "Pumps and Water: Meera Dsouza's product rows sum to the engineer row (YTD revenue)",
+   "left": 5657,
+   "right": 5657,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-by-product",
+   "statement": "Pumps and Water: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 11851,
+   "right": 11851,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-pl-revenue",
+   "statement": "Pumps and Water: P&L YTD revenue equals attributed YTD revenue",
+   "left": 11851,
+   "right": 11851,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-pl-gm",
+   "statement": "Pumps and Water: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 3143,
+   "right": 3143,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-pl-np",
+   "statement": "Pumps and Water: P&L forecast net profit equals the profitability row",
+   "left": 1813,
+   "right": 1813,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-monthly",
+   "statement": "Pumps and Water: monthly actuals sum to YTD revenue",
+   "left": 11851,
+   "right": 11851,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-headline-np",
+   "statement": "Pumps and Water: headline net profit equals the P&L rung",
+   "left": 1100,
+   "right": 1100,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-receivables-total",
+   "statement": "Pumps and Water: customer rows sum to the vertical net to collect",
+   "left": 2259,
+   "right": 2259,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-receivables-summary",
+   "statement": "Pumps and Water: vertical net to collect equals the summary receivables row",
+   "left": 2259,
+   "right": 2259,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-receivables-engineers",
+   "statement": "Pumps and Water: engineer subtotals sum to the vertical total outstanding",
+   "left": 2259,
+   "right": 2259,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-receivables-reasons",
+   "statement": "Pumps and Water: reasons sum to total outstanding",
+   "left": 2259,
+   "right": 2259,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-meera-dsouza-halvard-facilities-management-group--buckets",
+   "statement": "Pumps and Water: Halvard Facilities Management (group) aging buckets sum to total outstanding",
+   "left": 876,
+   "right": 876,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-meera-dsouza-sable-ridge-properties-buckets",
+   "statement": "Pumps and Water: Sable Ridge Properties aging buckets sum to total outstanding",
+   "left": 855,
+   "right": 855,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-omar-nasser-oryx-cold-chain-buckets",
+   "statement": "Pumps and Water: Oryx Cold Chain aging buckets sum to total outstanding",
+   "left": 528,
+   "right": 528,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-unbilled-bridge",
+   "statement": "Pumps and Water: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-unbilled-summary",
+   "statement": "Pumps and Water: unbilled current month equals the summary unbilled row",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-inventory-lines",
+   "statement": "Pumps and Water: inventory lines sum to the vertical total stock",
+   "left": 1800,
+   "right": 1800,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-inventory-summary",
+   "statement": "Pumps and Water: inventory total equals the summary inventory row",
+   "left": 1800,
+   "right": 1800,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-inventory-bands",
+   "statement": "Pumps and Water: inventory age bands sum to total stock",
+   "left": 1800,
+   "right": 1800,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-target-end-suction-pumps",
+   "statement": "Pumps and Water: End suction pumps achieved less budget to date equals the stated variance",
+   "left": 188,
+   "right": 188,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-target-booster-sets",
+   "statement": "Pumps and Water: Booster sets achieved less budget to date equals the stated variance",
+   "left": 1,
+   "right": 1,
+   "pass": true
+  },
+  {
+   "id": "pumps-and-water-target-water-treatment",
+   "statement": "Pumps and Water: Water treatment achieved less budget to date equals the stated variance",
+   "left": -116,
+   "right": -116,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-attributed-sales",
+   "statement": "Vertical Transport: attributed YTD revenue equals the summary sales row",
+   "left": 9390,
+   "right": 9390,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-attributed-forecast",
+   "statement": "Vertical Transport: attributed FY forecast equals the summary forecast row",
+   "left": 15085,
+   "right": 15085,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-engineers-sum",
+   "statement": "Vertical Transport: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 9390,
+   "right": 9390,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-sheet-vs-attributed",
+   "statement": "Vertical Transport: sheet total less shared rows equals the attributed total",
+   "left": 9390,
+   "right": 9390,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-hana-qureshi-products",
+   "statement": "Vertical Transport: Hana Qureshi's product rows sum to the engineer row (YTD revenue)",
+   "left": 2672,
+   "right": 2672,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-yusuf-rahman-products",
+   "statement": "Vertical Transport: Yusuf Rahman's product rows sum to the engineer row (YTD revenue)",
+   "left": 3411,
+   "right": 3411,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-divya-bhatt-products",
+   "statement": "Vertical Transport: Divya Bhatt's product rows sum to the engineer row (YTD revenue)",
+   "left": 3307,
+   "right": 3307,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-by-product",
+   "statement": "Vertical Transport: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 9390,
+   "right": 9390,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-pl-revenue",
+   "statement": "Vertical Transport: P&L YTD revenue equals attributed YTD revenue",
+   "left": 9390,
+   "right": 9390,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-pl-gm",
+   "statement": "Vertical Transport: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 1749,
+   "right": 1749,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-pl-np",
+   "statement": "Vertical Transport: P&L forecast net profit equals the profitability row",
+   "left": -175,
+   "right": -175,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-monthly",
+   "statement": "Vertical Transport: monthly actuals sum to YTD revenue",
+   "left": 9390,
+   "right": 9390,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-headline-np",
+   "statement": "Vertical Transport: headline net profit equals the P&L rung",
+   "left": -234,
+   "right": -234,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-receivables-total",
+   "statement": "Vertical Transport: customer rows sum to the vertical net to collect",
+   "left": 8486,
+   "right": 8486,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-receivables-summary",
+   "statement": "Vertical Transport: vertical net to collect equals the summary receivables row",
+   "left": 8486,
+   "right": 8486,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-receivables-engineers",
+   "statement": "Vertical Transport: engineer subtotals sum to the vertical total outstanding",
+   "left": 9052,
+   "right": 9052,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-receivables-reasons",
+   "statement": "Vertical Transport: reasons sum to total outstanding",
+   "left": 9052,
+   "right": 9052,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-yusuf-rahman-westgate-industrial-park-buckets",
+   "statement": "Vertical Transport: Westgate Industrial Park aging buckets sum to total outstanding",
+   "left": 1604,
+   "right": 1604,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-hana-qureshi-crescent-bay-builders-buckets",
+   "statement": "Vertical Transport: Crescent Bay Builders aging buckets sum to total outstanding",
+   "left": 1551,
+   "right": 1551,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-divya-bhatt-meridian-contracting-buckets",
+   "statement": "Vertical Transport: Meridian Contracting aging buckets sum to total outstanding",
+   "left": 1335,
+   "right": 1335,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-divya-bhatt-palmline-residential-buckets",
+   "statement": "Vertical Transport: Palmline Residential aging buckets sum to total outstanding",
+   "left": 1254,
+   "right": 1254,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-yusuf-rahman-amberfield-schools-buckets",
+   "statement": "Vertical Transport: Amberfield Schools aging buckets sum to total outstanding",
+   "left": 1251,
+   "right": 1251,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-hana-qureshi-falcon-ridge-estates-buckets",
+   "statement": "Vertical Transport: Falcon Ridge Estates aging buckets sum to total outstanding",
+   "left": 1087,
+   "right": 1087,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-yusuf-rahman-dunelight-hospitality-buckets",
+   "statement": "Vertical Transport: Dunelight Hospitality aging buckets sum to total outstanding",
+   "left": 727,
+   "right": 727,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-divya-bhatt-halvard-facilities-management-group--buckets",
+   "statement": "Vertical Transport: Halvard Facilities Management (group) aging buckets sum to total outstanding",
+   "left": 243,
+   "right": 243,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-unbilled-bridge",
+   "statement": "Vertical Transport: unbilled bridge reconciles",
+   "left": 1279,
+   "right": 1279,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-unbilled-summary",
+   "statement": "Vertical Transport: unbilled current month equals the summary unbilled row",
+   "left": 1279,
+   "right": 1279,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-UB-VER-1040-aging",
+   "statement": "Vertical Transport: UB-VER-1040 unbilled aging bands sum to its current balance",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-UB-VER-1047-aging",
+   "statement": "Vertical Transport: UB-VER-1047 unbilled aging bands sum to its current balance",
+   "left": 595,
+   "right": 595,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-UB-VER-1055-aging",
+   "statement": "Vertical Transport: UB-VER-1055 unbilled aging bands sum to its current balance",
+   "left": 684,
+   "right": 684,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-inventory-lines",
+   "statement": "Vertical Transport: inventory lines sum to the vertical total stock",
+   "left": 2679,
+   "right": 2679,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-inventory-summary",
+   "statement": "Vertical Transport: inventory total equals the summary inventory row",
+   "left": 2679,
+   "right": 2679,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-inventory-bands",
+   "statement": "Vertical Transport: inventory age bands sum to total stock",
+   "left": 2679,
+   "right": 2679,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-target-passenger-lifts",
+   "statement": "Vertical Transport: Passenger lifts achieved less budget to date equals the stated variance",
+   "left": -176,
+   "right": -176,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-target-escalators",
+   "statement": "Vertical Transport: Escalators achieved less budget to date equals the stated variance",
+   "left": -281,
+   "right": -281,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-target-modernisation",
+   "statement": "Vertical Transport: Modernisation achieved less budget to date equals the stated variance",
+   "left": -303,
+   "right": -303,
+   "pass": true
+  },
+  {
+   "id": "vertical-transport-target-maintenance-contracts",
+   "statement": "Vertical Transport: Maintenance contracts achieved less budget to date equals the stated variance",
+   "left": -663,
+   "right": -663,
+   "pass": true
+  },
+  {
+   "id": "metering-attributed-sales",
+   "statement": "Metering: attributed YTD revenue equals the summary sales row",
+   "left": 7206,
+   "right": 7206,
+   "pass": true
+  },
+  {
+   "id": "metering-attributed-forecast",
+   "statement": "Metering: attributed FY forecast equals the summary forecast row",
+   "left": 10887,
+   "right": 10887,
+   "pass": true
+  },
+  {
+   "id": "metering-engineers-sum",
+   "statement": "Metering: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 7206,
+   "right": 7206,
+   "pass": true
+  },
+  {
+   "id": "metering-sheet-vs-attributed",
+   "statement": "Metering: sheet total less shared rows equals the attributed total",
+   "left": 7206,
+   "right": 7206,
+   "pass": true
+  },
+  {
+   "id": "metering-karim-mansour-products",
+   "statement": "Metering: Karim Mansour's product rows sum to the engineer row (YTD revenue)",
+   "left": 3578,
+   "right": 3578,
+   "pass": true
+  },
+  {
+   "id": "metering-ananya-kapoor-products",
+   "statement": "Metering: Ananya Kapoor's product rows sum to the engineer row (YTD revenue)",
+   "left": 3628,
+   "right": 3628,
+   "pass": true
+  },
+  {
+   "id": "metering-by-product",
+   "statement": "Metering: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 7206,
+   "right": 7206,
+   "pass": true
+  },
+  {
+   "id": "metering-pl-revenue",
+   "statement": "Metering: P&L YTD revenue equals attributed YTD revenue",
+   "left": 7206,
+   "right": 7206,
+   "pass": true
+  },
+  {
+   "id": "metering-pl-gm",
+   "statement": "Metering: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 1877,
+   "right": 1877,
+   "pass": true
+  },
+  {
+   "id": "metering-pl-np",
+   "statement": "Metering: P&L forecast net profit equals the profitability row",
+   "left": 738,
+   "right": 738,
+   "pass": true
+  },
+  {
+   "id": "metering-monthly",
+   "statement": "Metering: monthly actuals sum to YTD revenue",
+   "left": 7206,
+   "right": 7206,
+   "pass": true
+  },
+  {
+   "id": "metering-headline-np",
+   "statement": "Metering: headline net profit equals the P&L rung",
+   "left": 483,
+   "right": 483,
+   "pass": true
+  },
+  {
+   "id": "metering-receivables-total",
+   "statement": "Metering: customer rows sum to the vertical net to collect",
+   "left": 2060,
+   "right": 2060,
+   "pass": true
+  },
+  {
+   "id": "metering-receivables-summary",
+   "statement": "Metering: vertical net to collect equals the summary receivables row",
+   "left": 2060,
+   "right": 2060,
+   "pass": true
+  },
+  {
+   "id": "metering-receivables-engineers",
+   "statement": "Metering: engineer subtotals sum to the vertical total outstanding",
+   "left": 2138,
+   "right": 2138,
+   "pass": true
+  },
+  {
+   "id": "metering-receivables-reasons",
+   "statement": "Metering: reasons sum to total outstanding",
+   "left": 2138,
+   "right": 2138,
+   "pass": true
+  },
+  {
+   "id": "metering-ananya-kapoor-halvard-contracting-group--buckets",
+   "statement": "Metering: Halvard Contracting (group) aging buckets sum to total outstanding",
+   "left": 665,
+   "right": 665,
+   "pass": true
+  },
+  {
+   "id": "metering-ananya-kapoor-oryx-cold-chain-buckets",
+   "statement": "Metering: Oryx Cold Chain aging buckets sum to total outstanding",
+   "left": 455,
+   "right": 455,
+   "pass": true
+  },
+  {
+   "id": "metering-karim-mansour-blue-harbour-marine-works-buckets",
+   "statement": "Metering: Blue Harbour Marine Works aging buckets sum to total outstanding",
+   "left": 444,
+   "right": 444,
+   "pass": true
+  },
+  {
+   "id": "metering-ananya-kapoor-harbourline-aviation-services-buckets",
+   "statement": "Metering: Harbourline Aviation Services aging buckets sum to total outstanding",
+   "left": 388,
+   "right": 388,
+   "pass": true
+  },
+  {
+   "id": "metering-karim-mansour-redsand-logistics-buckets",
+   "statement": "Metering: Redsand Logistics aging buckets sum to total outstanding",
+   "left": 186,
+   "right": 186,
+   "pass": true
+  },
+  {
+   "id": "metering-unbilled-bridge",
+   "statement": "Metering: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "metering-unbilled-summary",
+   "statement": "Metering: unbilled current month equals the summary unbilled row",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "metering-inventory-lines",
+   "statement": "Metering: inventory lines sum to the vertical total stock",
+   "left": 1296,
+   "right": 1296,
+   "pass": true
+  },
+  {
+   "id": "metering-inventory-summary",
+   "statement": "Metering: inventory total equals the summary inventory row",
+   "left": 1296,
+   "right": 1296,
+   "pass": true
+  },
+  {
+   "id": "metering-inventory-bands",
+   "statement": "Metering: inventory age bands sum to total stock",
+   "left": 1296,
+   "right": 1296,
+   "pass": true
+  },
+  {
+   "id": "metering-target-utility-meters",
+   "statement": "Metering: Utility meters achieved less budget to date equals the stated variance",
+   "left": 49,
+   "right": 49,
+   "pass": true
+  },
+  {
+   "id": "metering-target-sub-metering",
+   "statement": "Metering: Sub-metering achieved less budget to date equals the stated variance",
+   "left": 490,
+   "right": 490,
+   "pass": true
+  },
+  {
+   "id": "metering-target-meter-data-platform",
+   "statement": "Metering: Meter data platform achieved less budget to date equals the stated variance",
+   "left": 399,
+   "right": 399,
+   "pass": true
+  },
+  {
+   "id": "automation-attributed-sales",
+   "statement": "Automation: attributed YTD revenue equals the summary sales row",
+   "left": 6831,
+   "right": 6831,
+   "pass": true
+  },
+  {
+   "id": "automation-attributed-forecast",
+   "statement": "Automation: attributed FY forecast equals the summary forecast row",
+   "left": 10818,
+   "right": 10818,
+   "pass": true
+  },
+  {
+   "id": "automation-engineers-sum",
+   "statement": "Automation: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 6831,
+   "right": 6831,
+   "pass": true
+  },
+  {
+   "id": "automation-sheet-vs-attributed",
+   "statement": "Automation: sheet total less shared rows equals the attributed total",
+   "left": 6831,
+   "right": 6831,
+   "pass": true
+  },
+  {
+   "id": "automation-nadia-zaki-products",
+   "statement": "Automation: Nadia Zaki's product rows sum to the engineer row (YTD revenue)",
+   "left": 2883,
+   "right": 2883,
+   "pass": true
+  },
+  {
+   "id": "automation-vikram-fernandes-products",
+   "statement": "Automation: Vikram Fernandes's product rows sum to the engineer row (YTD revenue)",
+   "left": 3948,
+   "right": 3948,
+   "pass": true
+  },
+  {
+   "id": "automation-by-product",
+   "statement": "Automation: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 6831,
+   "right": 6831,
+   "pass": true
+  },
+  {
+   "id": "automation-pl-revenue",
+   "statement": "Automation: P&L YTD revenue equals attributed YTD revenue",
+   "left": 6831,
+   "right": 6831,
+   "pass": true
+  },
+  {
+   "id": "automation-pl-gm",
+   "statement": "Automation: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 1755,
+   "right": 1755,
+   "pass": true
+  },
+  {
+   "id": "automation-pl-np",
+   "statement": "Automation: P&L forecast net profit equals the profitability row",
+   "left": 541,
+   "right": 541,
+   "pass": true
+  },
+  {
+   "id": "automation-monthly",
+   "statement": "Automation: monthly actuals sum to YTD revenue",
+   "left": 6831,
+   "right": 6831,
+   "pass": true
+  },
+  {
+   "id": "automation-headline-np",
+   "statement": "Automation: headline net profit equals the P&L rung",
+   "left": 222,
+   "right": 222,
+   "pass": true
+  },
+  {
+   "id": "automation-receivables-total",
+   "statement": "Automation: customer rows sum to the vertical net to collect",
+   "left": 2283,
+   "right": 2283,
+   "pass": true
+  },
+  {
+   "id": "automation-receivables-summary",
+   "statement": "Automation: vertical net to collect equals the summary receivables row",
+   "left": 2283,
+   "right": 2283,
+   "pass": true
+  },
+  {
+   "id": "automation-receivables-engineers",
+   "statement": "Automation: engineer subtotals sum to the vertical total outstanding",
+   "left": 2593,
+   "right": 2593,
+   "pass": true
+  },
+  {
+   "id": "automation-receivables-reasons",
+   "statement": "Automation: reasons sum to total outstanding",
+   "left": 2593,
+   "right": 2593,
+   "pass": true
+  },
+  {
+   "id": "automation-nadia-zaki-halvard-contracting-group--buckets",
+   "statement": "Automation: Halvard Contracting (group) aging buckets sum to total outstanding",
+   "left": 1018,
+   "right": 1018,
+   "pass": true
+  },
+  {
+   "id": "automation-vikram-fernandes-harbourline-aviation-services-buckets",
+   "statement": "Automation: Harbourline Aviation Services aging buckets sum to total outstanding",
+   "left": 592,
+   "right": 592,
+   "pass": true
+  },
+  {
+   "id": "automation-nadia-zaki-corniche-medical-centre-buckets",
+   "statement": "Automation: Corniche Medical Centre aging buckets sum to total outstanding",
+   "left": 504,
+   "right": 504,
+   "pass": true
+  },
+  {
+   "id": "automation-nadia-zaki-sable-ridge-properties-buckets",
+   "statement": "Automation: Sable Ridge Properties aging buckets sum to total outstanding",
+   "left": 479,
+   "right": 479,
+   "pass": true
+  },
+  {
+   "id": "automation-unbilled-bridge",
+   "statement": "Automation: unbilled bridge reconciles",
+   "left": 756,
+   "right": 756,
+   "pass": true
+  },
+  {
+   "id": "automation-unbilled-summary",
+   "statement": "Automation: unbilled current month equals the summary unbilled row",
+   "left": 756,
+   "right": 756,
+   "pass": true
+  },
+  {
+   "id": "automation-UB-AUT-1041-aging",
+   "statement": "Automation: UB-AUT-1041 unbilled aging bands sum to its current balance",
+   "left": 388,
+   "right": 388,
+   "pass": true
+  },
+  {
+   "id": "automation-UB-AUT-1050-aging",
+   "statement": "Automation: UB-AUT-1050 unbilled aging bands sum to its current balance",
+   "left": 368,
+   "right": 368,
+   "pass": true
+  },
+  {
+   "id": "automation-inventory-lines",
+   "statement": "Automation: inventory lines sum to the vertical total stock",
+   "left": 1914,
+   "right": 1914,
+   "pass": true
+  },
+  {
+   "id": "automation-inventory-summary",
+   "statement": "Automation: inventory total equals the summary inventory row",
+   "left": 1914,
+   "right": 1914,
+   "pass": true
+  },
+  {
+   "id": "automation-inventory-bands",
+   "statement": "Automation: inventory age bands sum to total stock",
+   "left": 1914,
+   "right": 1914,
+   "pass": true
+  },
+  {
+   "id": "automation-target-building-controllers",
+   "statement": "Automation: Building controllers achieved less budget to date equals the stated variance",
+   "left": -24,
+   "right": -24,
+   "pass": true
+  },
+  {
+   "id": "automation-target-field-devices",
+   "statement": "Automation: Field devices achieved less budget to date equals the stated variance",
+   "left": -246,
+   "right": -246,
+   "pass": true
+  },
+  {
+   "id": "automation-target-motor-control",
+   "statement": "Automation: Motor control achieved less budget to date equals the stated variance",
+   "left": -87,
+   "right": -87,
+   "pass": true
+  },
+  {
+   "id": "automation-target-software-licences",
+   "statement": "Automation: Software licences achieved less budget to date equals the stated variance",
+   "left": -44,
+   "right": -44,
+   "pass": true
+  },
+  {
+   "id": "fabrication-attributed-sales",
+   "statement": "Fabrication: attributed YTD revenue equals the summary sales row",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "fabrication-attributed-forecast",
+   "statement": "Fabrication: attributed FY forecast equals the summary forecast row",
+   "left": 6380,
+   "right": 6380,
+   "pass": true
+  },
+  {
+   "id": "fabrication-engineers-sum",
+   "statement": "Fabrication: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "fabrication-sheet-vs-attributed",
+   "statement": "Fabrication: sheet total less shared rows equals the attributed total",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "fabrication-rami-aziz-products",
+   "statement": "Fabrication: Rami Aziz's product rows sum to the engineer row (YTD revenue)",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "fabrication-joseph-villanueva-products",
+   "statement": "Fabrication: Joseph Villanueva's product rows sum to the engineer row (YTD revenue)",
+   "left": 2473,
+   "right": 2473,
+   "pass": true
+  },
+  {
+   "id": "fabrication-bassem-farouk-products",
+   "statement": "Fabrication: Bassem Farouk's product rows sum to the engineer row (YTD revenue)",
+   "left": 687,
+   "right": 687,
+   "pass": true
+  },
+  {
+   "id": "fabrication-tarek-hamdan-products",
+   "statement": "Fabrication: Tarek Hamdan's product rows sum to the engineer row (YTD revenue)",
+   "left": 1042,
+   "right": 1042,
+   "pass": true
+  },
+  {
+   "id": "fabrication-by-product",
+   "statement": "Fabrication: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 8263,
+   "right": 8263,
+   "pass": true
+  },
+  {
+   "id": "fabrication-pl-revenue",
+   "statement": "Fabrication: P&L YTD revenue equals attributed YTD revenue",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "fabrication-pl-gm",
+   "statement": "Fabrication: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 729,
+   "right": 729,
+   "pass": true
+  },
+  {
+   "id": "fabrication-pl-np",
+   "statement": "Fabrication: P&L forecast net profit equals the profitability row",
+   "left": -53,
+   "right": -53,
+   "pass": true
+  },
+  {
+   "id": "fabrication-monthly",
+   "statement": "Fabrication: monthly actuals sum to YTD revenue",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "fabrication-headline-np",
+   "statement": "Fabrication: headline net profit equals the P&L rung",
+   "left": -62,
+   "right": -62,
+   "pass": true
+  },
+  {
+   "id": "fabrication-receivables-total",
+   "statement": "Fabrication: customer rows sum to the vertical net to collect",
+   "left": 482,
+   "right": 482,
+   "pass": true
+  },
+  {
+   "id": "fabrication-receivables-summary",
+   "statement": "Fabrication: vertical net to collect equals the summary receivables row",
+   "left": 482,
+   "right": 482,
+   "pass": true
+  },
+  {
+   "id": "fabrication-receivables-engineers",
+   "statement": "Fabrication: engineer subtotals sum to the vertical total outstanding",
+   "left": 520,
+   "right": 520,
+   "pass": true
+  },
+  {
+   "id": "fabrication-receivables-reasons",
+   "statement": "Fabrication: reasons sum to total outstanding",
+   "left": 520,
+   "right": 520,
+   "pass": true
+  },
+  {
+   "id": "fabrication-rami-aziz-halvard-contracting-group--buckets",
+   "statement": "Fabrication: Halvard Contracting (group) aging buckets sum to total outstanding",
+   "left": 520,
+   "right": 520,
+   "pass": true
+  },
+  {
+   "id": "fabrication-unbilled-bridge",
+   "statement": "Fabrication: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "fabrication-unbilled-summary",
+   "statement": "Fabrication: unbilled current month equals the summary unbilled row",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "fabrication-inventory-lines",
+   "statement": "Fabrication: inventory lines sum to the vertical total stock",
+   "left": 940,
+   "right": 940,
+   "pass": true
+  },
+  {
+   "id": "fabrication-inventory-summary",
+   "statement": "Fabrication: inventory total equals the summary inventory row",
+   "left": 940,
+   "right": 940,
+   "pass": true
+  },
+  {
+   "id": "fabrication-inventory-bands",
+   "statement": "Fabrication: inventory age bands sum to total stock",
+   "left": 940,
+   "right": 940,
+   "pass": true
+  },
+  {
+   "id": "fabrication-target-sheet-metal-enclosures",
+   "statement": "Fabrication: Sheet metal enclosures achieved less budget to date equals the stated variance",
+   "left": -57,
+   "right": -57,
+   "pass": true
+  },
+  {
+   "id": "fabrication-target-structural-brackets",
+   "statement": "Fabrication: Structural brackets achieved less budget to date equals the stated variance",
+   "left": -61,
+   "right": -61,
+   "pass": true
+  },
+  {
+   "id": "fabrication-target-site-fabrication",
+   "statement": "Fabrication: Site fabrication achieved less budget to date equals the stated variance",
+   "left": 86,
+   "right": 86,
+   "pass": true
+  },
+  {
+   "id": "fabrication-production",
+   "statement": "Fabrication: production value ties to YTD revenue",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "trading-attributed-sales",
+   "statement": "Trading: attributed YTD revenue equals the summary sales row",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "trading-attributed-forecast",
+   "statement": "Trading: attributed FY forecast equals the summary forecast row",
+   "left": 5565,
+   "right": 5565,
+   "pass": true
+  },
+  {
+   "id": "trading-engineers-sum",
+   "statement": "Trading: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "trading-sheet-vs-attributed",
+   "statement": "Trading: sheet total less shared rows equals the attributed total",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "trading-faisal-reyes-products",
+   "statement": "Trading: Faisal Reyes's product rows sum to the engineer row (YTD revenue)",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "trading-by-product",
+   "statement": "Trading: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "trading-pl-revenue",
+   "statement": "Trading: P&L YTD revenue equals attributed YTD revenue",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "trading-pl-gm",
+   "statement": "Trading: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 449,
+   "right": 449,
+   "pass": true
+  },
+  {
+   "id": "trading-pl-np",
+   "statement": "Trading: P&L forecast net profit equals the profitability row",
+   "left": -119,
+   "right": -119,
+   "pass": true
+  },
+  {
+   "id": "trading-monthly",
+   "statement": "Trading: monthly actuals sum to YTD revenue",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "trading-headline-np",
+   "statement": "Trading: headline net profit equals the P&L rung",
+   "left": -109,
+   "right": -109,
+   "pass": true
+  },
+  {
+   "id": "trading-receivables-total",
+   "statement": "Trading: customer rows sum to the vertical net to collect",
+   "left": 590,
+   "right": 590,
+   "pass": true
+  },
+  {
+   "id": "trading-receivables-summary",
+   "statement": "Trading: vertical net to collect equals the summary receivables row",
+   "left": 590,
+   "right": 590,
+   "pass": true
+  },
+  {
+   "id": "trading-receivables-engineers",
+   "statement": "Trading: engineer subtotals sum to the vertical total outstanding",
+   "left": 676,
+   "right": 676,
+   "pass": true
+  },
+  {
+   "id": "trading-receivables-reasons",
+   "statement": "Trading: reasons sum to total outstanding",
+   "left": 676,
+   "right": 676,
+   "pass": true
+  },
+  {
+   "id": "trading-faisal-reyes-dunelight-hospitality-buckets",
+   "statement": "Trading: Dunelight Hospitality aging buckets sum to total outstanding",
+   "left": 561,
+   "right": 561,
+   "pass": true
+  },
+  {
+   "id": "trading-faisal-reyes-halvard-facilities-management-group--buckets",
+   "statement": "Trading: Halvard Facilities Management (group) aging buckets sum to total outstanding",
+   "left": 115,
+   "right": 115,
+   "pass": true
+  },
+  {
+   "id": "trading-unbilled-bridge",
+   "statement": "Trading: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "trading-unbilled-summary",
+   "statement": "Trading: unbilled current month equals the summary unbilled row",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "trading-inventory-lines",
+   "statement": "Trading: inventory lines sum to the vertical total stock",
+   "left": 571,
+   "right": 571,
+   "pass": true
+  },
+  {
+   "id": "trading-inventory-summary",
+   "statement": "Trading: inventory total equals the summary inventory row",
+   "left": 571,
+   "right": 571,
+   "pass": true
+  },
+  {
+   "id": "trading-inventory-bands",
+   "statement": "Trading: inventory age bands sum to total stock",
+   "left": 571,
+   "right": 571,
+   "pass": true
+  },
+  {
+   "id": "trading-target-cables",
+   "statement": "Trading: Cables achieved less budget to date equals the stated variance",
+   "left": -37,
+   "right": -37,
+   "pass": true
+  },
+  {
+   "id": "trading-target-lighting",
+   "statement": "Trading: Lighting achieved less budget to date equals the stated variance",
+   "left": -68,
+   "right": -68,
+   "pass": true
+  },
+  {
+   "id": "trading-target-consumables",
+   "statement": "Trading: Consumables achieved less budget to date equals the stated variance",
+   "left": -86,
+   "right": -86,
+   "pass": true
+  },
+  {
+   "id": "trading-target-tools",
+   "statement": "Trading: Tools achieved less budget to date equals the stated variance",
+   "left": -77,
+   "right": -77,
+   "pass": true
+  },
+  {
+   "id": "services-attributed-sales",
+   "statement": "Services: attributed YTD revenue equals the summary sales row",
+   "left": 4802,
+   "right": 4802,
+   "pass": true
+  },
+  {
+   "id": "services-attributed-forecast",
+   "statement": "Services: attributed FY forecast equals the summary forecast row",
+   "left": 7424,
+   "right": 7424,
+   "pass": true
+  },
+  {
+   "id": "services-engineers-sum",
+   "statement": "Services: own engineer rows sum to the attributed total (YTD revenue)",
+   "left": 4802,
+   "right": 4802,
+   "pass": true
+  },
+  {
+   "id": "services-sheet-vs-attributed",
+   "statement": "Services: sheet total less shared rows equals the attributed total",
+   "left": 4802,
+   "right": 4802,
+   "pass": true
+  },
+  {
+   "id": "services-ziad-abdel-rahman-products",
+   "statement": "Services: Ziad Abdel-Rahman's product rows sum to the engineer row (YTD revenue)",
+   "left": 1963,
+   "right": 1963,
+   "pass": true
+  },
+  {
+   "id": "services-priya-kulkarni-products",
+   "statement": "Services: Priya Kulkarni's product rows sum to the engineer row (YTD revenue)",
+   "left": 2839,
+   "right": 2839,
+   "pass": true
+  },
+  {
+   "id": "services-by-product",
+   "statement": "Services: product-line sub-totals sum to the sheet total (YTD revenue)",
+   "left": 4802,
+   "right": 4802,
+   "pass": true
+  },
+  {
+   "id": "services-pl-revenue",
+   "statement": "Services: P&L YTD revenue equals attributed YTD revenue",
+   "left": 4802,
+   "right": 4802,
+   "pass": true
+  },
+  {
+   "id": "services-pl-gm",
+   "statement": "Services: P&L YTD gross margin equals attributed YTD gross margin",
+   "left": 1389,
+   "right": 1389,
+   "pass": true
+  },
+  {
+   "id": "services-pl-np",
+   "statement": "Services: P&L forecast net profit equals the profitability row",
+   "left": 454,
+   "right": 454,
+   "pass": true
+  },
+  {
+   "id": "services-monthly",
+   "statement": "Services: monthly actuals sum to YTD revenue",
+   "left": 4802,
+   "right": 4802,
+   "pass": true
+  },
+  {
+   "id": "services-headline-np",
+   "statement": "Services: headline net profit equals the P&L rung",
+   "left": 248,
+   "right": 248,
+   "pass": true
+  },
+  {
+   "id": "services-receivables-total",
+   "statement": "Services: customer rows sum to the vertical net to collect",
+   "left": 1204,
+   "right": 1204,
+   "pass": true
+  },
+  {
+   "id": "services-receivables-summary",
+   "statement": "Services: vertical net to collect equals the summary receivables row",
+   "left": 1204,
+   "right": 1204,
+   "pass": true
+  },
+  {
+   "id": "services-receivables-engineers",
+   "statement": "Services: engineer subtotals sum to the vertical total outstanding",
+   "left": 1204,
+   "right": 1204,
+   "pass": true
+  },
+  {
+   "id": "services-receivables-reasons",
+   "statement": "Services: reasons sum to total outstanding",
+   "left": 1204,
+   "right": 1204,
+   "pass": true
+  },
+  {
+   "id": "services-priya-kulkarni-falcon-ridge-estates-buckets",
+   "statement": "Services: Falcon Ridge Estates aging buckets sum to total outstanding",
+   "left": 407,
+   "right": 407,
+   "pass": true
+  },
+  {
+   "id": "services-ziad-abdel-rahman-sable-ridge-properties-buckets",
+   "statement": "Services: Sable Ridge Properties aging buckets sum to total outstanding",
+   "left": 321,
+   "right": 321,
+   "pass": true
+  },
+  {
+   "id": "services-priya-kulkarni-halvard-contracting-group--buckets",
+   "statement": "Services: Halvard Contracting (group) aging buckets sum to total outstanding",
+   "left": 321,
+   "right": 321,
+   "pass": true
+  },
+  {
+   "id": "services-priya-kulkarni-greenway-districts-buckets",
+   "statement": "Services: Greenway Districts aging buckets sum to total outstanding",
+   "left": 155,
+   "right": 155,
+   "pass": true
+  },
+  {
+   "id": "services-unbilled-bridge",
+   "statement": "Services: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "services-unbilled-summary",
+   "statement": "Services: unbilled current month equals the summary unbilled row",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "services-inventory-lines",
+   "statement": "Services: inventory lines sum to the vertical total stock",
+   "left": 1164,
+   "right": 1164,
+   "pass": true
+  },
+  {
+   "id": "services-inventory-summary",
+   "statement": "Services: inventory total equals the summary inventory row",
+   "left": 1164,
+   "right": 1164,
+   "pass": true
+  },
+  {
+   "id": "services-inventory-bands",
+   "statement": "Services: inventory age bands sum to total stock",
+   "left": 1164,
+   "right": 1164,
+   "pass": true
+  },
+  {
+   "id": "services-target-annual-maintenance-contracts",
+   "statement": "Services: Annual maintenance contracts achieved less budget to date equals the stated variance",
+   "left": 30,
+   "right": 30,
+   "pass": true
+  },
+  {
+   "id": "services-target-spares",
+   "statement": "Services: Spares achieved less budget to date equals the stated variance",
+   "left": 62,
+   "right": 62,
+   "pass": true
+  },
+  {
+   "id": "services-target-commissioning",
+   "statement": "Services: Commissioning achieved less budget to date equals the stated variance",
+   "left": 101,
+   "right": 101,
+   "pass": true
+  },
+  {
+   "id": "rohan-pillai-sales",
+   "statement": "Rohan Pillai: engineer file YTD revenue equals the vertical sheet row",
+   "left": 9651,
+   "right": 9651,
+   "pass": true
+  },
+  {
+   "id": "rohan-pillai-monthly",
+   "statement": "Rohan Pillai: monthly actuals sum to YTD revenue",
+   "left": 9651,
+   "right": 9651,
+   "pass": true
+  },
+  {
+   "id": "rohan-pillai-receivables",
+   "statement": "Rohan Pillai: customer rows sum to the engineer total outstanding",
+   "left": 3408,
+   "right": 3408,
+   "pass": true
+  },
+  {
+   "id": "rohan-pillai-receivables-vertical",
+   "statement": "Rohan Pillai: engineer receivables equal the vertical's engineer subtotal",
+   "left": 3408,
+   "right": 3408,
+   "pass": true
+  },
+  {
+   "id": "rohan-pillai-contribution",
+   "statement": "Rohan Pillai: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1803,
+   "right": 1803,
+   "pass": true
+  },
+  {
+   "id": "rohan-pillai-bridge",
+   "statement": "Rohan Pillai: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "farah-haddad-sales",
+   "statement": "Farah Haddad: engineer file YTD revenue equals the vertical sheet row",
+   "left": 10394,
+   "right": 10394,
+   "pass": true
+  },
+  {
+   "id": "farah-haddad-monthly",
+   "statement": "Farah Haddad: monthly actuals sum to YTD revenue",
+   "left": 10394,
+   "right": 10394,
+   "pass": true
+  },
+  {
+   "id": "farah-haddad-receivables",
+   "statement": "Farah Haddad: customer rows sum to the engineer total outstanding",
+   "left": 14098,
+   "right": 14098,
+   "pass": true
+  },
+  {
+   "id": "farah-haddad-receivables-vertical",
+   "statement": "Farah Haddad: engineer receivables equal the vertical's engineer subtotal",
+   "left": 13492,
+   "right": 13492,
+   "pass": true
+  },
+  {
+   "id": "farah-haddad-contribution",
+   "statement": "Farah Haddad: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1977,
+   "right": 1977,
+   "pass": true
+  },
+  {
+   "id": "farah-haddad-bridge",
+   "statement": "Farah Haddad: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "dinesh-iyer-sales",
+   "statement": "Dinesh Iyer: engineer file YTD revenue equals the vertical sheet row",
+   "left": 10162,
+   "right": 10162,
+   "pass": true
+  },
+  {
+   "id": "dinesh-iyer-monthly",
+   "statement": "Dinesh Iyer: monthly actuals sum to YTD revenue",
+   "left": 10162,
+   "right": 10162,
+   "pass": true
+  },
+  {
+   "id": "dinesh-iyer-receivables",
+   "statement": "Dinesh Iyer: customer rows sum to the engineer total outstanding",
+   "left": 15356,
+   "right": 15356,
+   "pass": true
+  },
+  {
+   "id": "dinesh-iyer-receivables-vertical",
+   "statement": "Dinesh Iyer: engineer receivables equal the vertical's engineer subtotal",
+   "left": 14474,
+   "right": 14474,
+   "pass": true
+  },
+  {
+   "id": "dinesh-iyer-contribution",
+   "statement": "Dinesh Iyer: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1348,
+   "right": 1348,
+   "pass": true
+  },
+  {
+   "id": "dinesh-iyer-bridge",
+   "statement": "Dinesh Iyer: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "marwan-saleh-sales",
+   "statement": "Marwan Saleh: engineer file YTD revenue equals the vertical sheet row",
+   "left": 6882,
+   "right": 6882,
+   "pass": true
+  },
+  {
+   "id": "marwan-saleh-monthly",
+   "statement": "Marwan Saleh: monthly actuals sum to YTD revenue",
+   "left": 6882,
+   "right": 6882,
+   "pass": true
+  },
+  {
+   "id": "marwan-saleh-receivables",
+   "statement": "Marwan Saleh: customer rows sum to the engineer total outstanding",
+   "left": 19178,
+   "right": 19178,
+   "pass": true
+  },
+  {
+   "id": "marwan-saleh-receivables-vertical",
+   "statement": "Marwan Saleh: engineer receivables equal the vertical's engineer subtotal",
+   "left": 19178,
+   "right": 19178,
+   "pass": true
+  },
+  {
+   "id": "marwan-saleh-contribution",
+   "statement": "Marwan Saleh: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1257,
+   "right": 1257,
+   "pass": true
+  },
+  {
+   "id": "marwan-saleh-bridge",
+   "statement": "Marwan Saleh: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "kavya-nair-sales",
+   "statement": "Kavya Nair: engineer file YTD revenue equals the vertical sheet row",
+   "left": 12054,
+   "right": 12054,
+   "pass": true
+  },
+  {
+   "id": "kavya-nair-monthly",
+   "statement": "Kavya Nair: monthly actuals sum to YTD revenue",
+   "left": 12054,
+   "right": 12054,
+   "pass": true
+  },
+  {
+   "id": "kavya-nair-receivables",
+   "statement": "Kavya Nair: customer rows sum to the engineer total outstanding",
+   "left": 11935,
+   "right": 11935,
+   "pass": true
+  },
+  {
+   "id": "kavya-nair-receivables-vertical",
+   "statement": "Kavya Nair: engineer receivables equal the vertical's engineer subtotal",
+   "left": 11935,
+   "right": 11935,
+   "pass": true
+  },
+  {
+   "id": "kavya-nair-contribution",
+   "statement": "Kavya Nair: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1735,
+   "right": 1735,
+   "pass": true
+  },
+  {
+   "id": "kavya-nair-bridge",
+   "statement": "Kavya Nair: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "joseph-villanueva-sales",
+   "statement": "Joseph Villanueva: engineer file YTD revenue equals the vertical sheet row",
+   "left": 6161,
+   "right": 6161,
+   "pass": true
+  },
+  {
+   "id": "joseph-villanueva-monthly",
+   "statement": "Joseph Villanueva: monthly actuals sum to YTD revenue",
+   "left": 6161,
+   "right": 6161,
+   "pass": true
+  },
+  {
+   "id": "joseph-villanueva-receivables",
+   "statement": "Joseph Villanueva: customer rows sum to the engineer total outstanding",
+   "left": 1922,
+   "right": 1922,
+   "pass": true
+  },
+  {
+   "id": "joseph-villanueva-receivables-vertical",
+   "statement": "Joseph Villanueva: engineer receivables equal the vertical's engineer subtotal",
+   "left": 1922,
+   "right": 1922,
+   "pass": true
+  },
+  {
+   "id": "joseph-villanueva-contribution",
+   "statement": "Joseph Villanueva: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1108,
+   "right": 1108,
+   "pass": true
+  },
+  {
+   "id": "joseph-villanueva-bridge",
+   "statement": "Joseph Villanueva: unbilled bridge reconciles",
+   "left": 1265,
+   "right": 1265,
+   "pass": true
+  },
+  {
+   "id": "lina-khoury-sales",
+   "statement": "Lina Khoury: engineer file YTD revenue equals the vertical sheet row",
+   "left": 9263,
+   "right": 9263,
+   "pass": true
+  },
+  {
+   "id": "lina-khoury-monthly",
+   "statement": "Lina Khoury: monthly actuals sum to YTD revenue",
+   "left": 9263,
+   "right": 9263,
+   "pass": true
+  },
+  {
+   "id": "lina-khoury-receivables",
+   "statement": "Lina Khoury: customer rows sum to the engineer total outstanding",
+   "left": 3073,
+   "right": 3073,
+   "pass": true
+  },
+  {
+   "id": "lina-khoury-receivables-vertical",
+   "statement": "Lina Khoury: engineer receivables equal the vertical's engineer subtotal",
+   "left": 2930,
+   "right": 2930,
+   "pass": true
+  },
+  {
+   "id": "lina-khoury-contribution",
+   "statement": "Lina Khoury: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1925,
+   "right": 1925,
+   "pass": true
+  },
+  {
+   "id": "lina-khoury-bridge",
+   "statement": "Lina Khoury: unbilled bridge reconciles",
+   "left": 3151,
+   "right": 3151,
+   "pass": true
+  },
+  {
+   "id": "arjun-sethi-sales",
+   "statement": "Arjun Sethi: engineer file YTD revenue equals the vertical sheet row",
+   "left": 7391,
+   "right": 7391,
+   "pass": true
+  },
+  {
+   "id": "arjun-sethi-monthly",
+   "statement": "Arjun Sethi: monthly actuals sum to YTD revenue",
+   "left": 7391,
+   "right": 7391,
+   "pass": true
+  },
+  {
+   "id": "arjun-sethi-receivables",
+   "statement": "Arjun Sethi: customer rows sum to the engineer total outstanding",
+   "left": 9253,
+   "right": 9253,
+   "pass": true
+  },
+  {
+   "id": "arjun-sethi-receivables-vertical",
+   "statement": "Arjun Sethi: engineer receivables equal the vertical's engineer subtotal",
+   "left": 8216,
+   "right": 8216,
+   "pass": true
+  },
+  {
+   "id": "arjun-sethi-contribution",
+   "statement": "Arjun Sethi: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1476,
+   "right": 1476,
+   "pass": true
+  },
+  {
+   "id": "arjun-sethi-bridge",
+   "statement": "Arjun Sethi: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "bassem-farouk-sales",
+   "statement": "Bassem Farouk: engineer file YTD revenue equals the vertical sheet row",
+   "left": 4684,
+   "right": 4684,
+   "pass": true
+  },
+  {
+   "id": "bassem-farouk-monthly",
+   "statement": "Bassem Farouk: monthly actuals sum to YTD revenue",
+   "left": 4684,
+   "right": 4684,
+   "pass": true
+  },
+  {
+   "id": "bassem-farouk-receivables",
+   "statement": "Bassem Farouk: customer rows sum to the engineer total outstanding",
+   "left": 2667,
+   "right": 2667,
+   "pass": true
+  },
+  {
+   "id": "bassem-farouk-receivables-vertical",
+   "statement": "Bassem Farouk: engineer receivables equal the vertical's engineer subtotal",
+   "left": 2667,
+   "right": 2667,
+   "pass": true
+  },
+  {
+   "id": "bassem-farouk-contribution",
+   "statement": "Bassem Farouk: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 722,
+   "right": 722,
+   "pass": true
+  },
+  {
+   "id": "bassem-farouk-bridge",
+   "statement": "Bassem Farouk: unbilled bridge reconciles",
+   "left": 964,
+   "right": 964,
+   "pass": true
+  },
+  {
+   "id": "sneha-menon-sales",
+   "statement": "Sneha Menon: engineer file YTD revenue equals the vertical sheet row",
+   "left": 4574,
+   "right": 4574,
+   "pass": true
+  },
+  {
+   "id": "sneha-menon-monthly",
+   "statement": "Sneha Menon: monthly actuals sum to YTD revenue",
+   "left": 4574,
+   "right": 4574,
+   "pass": true
+  },
+  {
+   "id": "sneha-menon-receivables",
+   "statement": "Sneha Menon: customer rows sum to the engineer total outstanding",
+   "left": 1219,
+   "right": 1219,
+   "pass": true
+  },
+  {
+   "id": "sneha-menon-receivables-vertical",
+   "statement": "Sneha Menon: engineer receivables equal the vertical's engineer subtotal",
+   "left": 1219,
+   "right": 1219,
+   "pass": true
+  },
+  {
+   "id": "sneha-menon-contribution",
+   "statement": "Sneha Menon: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 830,
+   "right": 830,
+   "pass": true
+  },
+  {
+   "id": "sneha-menon-bridge",
+   "statement": "Sneha Menon: unbilled bridge reconciles",
+   "left": 935,
+   "right": 935,
+   "pass": true
+  },
+  {
+   "id": "tarek-hamdan-sales",
+   "statement": "Tarek Hamdan: engineer file YTD revenue equals the vertical sheet row",
+   "left": 6130,
+   "right": 6130,
+   "pass": true
+  },
+  {
+   "id": "tarek-hamdan-monthly",
+   "statement": "Tarek Hamdan: monthly actuals sum to YTD revenue",
+   "left": 6130,
+   "right": 6130,
+   "pass": true
+  },
+  {
+   "id": "tarek-hamdan-receivables",
+   "statement": "Tarek Hamdan: customer rows sum to the engineer total outstanding",
+   "left": 6381,
+   "right": 6381,
+   "pass": true
+  },
+  {
+   "id": "tarek-hamdan-receivables-vertical",
+   "statement": "Tarek Hamdan: engineer receivables equal the vertical's engineer subtotal",
+   "left": 5848,
+   "right": 5848,
+   "pass": true
+  },
+  {
+   "id": "tarek-hamdan-contribution",
+   "statement": "Tarek Hamdan: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 880,
+   "right": 880,
+   "pass": true
+  },
+  {
+   "id": "tarek-hamdan-bridge",
+   "statement": "Tarek Hamdan: unbilled bridge reconciles",
+   "left": 703,
+   "right": 703,
+   "pass": true
+  },
+  {
+   "id": "omar-nasser-sales",
+   "statement": "Omar Nasser: engineer file YTD revenue equals the vertical sheet row",
+   "left": 6194,
+   "right": 6194,
+   "pass": true
+  },
+  {
+   "id": "omar-nasser-monthly",
+   "statement": "Omar Nasser: monthly actuals sum to YTD revenue",
+   "left": 6194,
+   "right": 6194,
+   "pass": true
+  },
+  {
+   "id": "omar-nasser-receivables",
+   "statement": "Omar Nasser: customer rows sum to the engineer total outstanding",
+   "left": 528,
+   "right": 528,
+   "pass": true
+  },
+  {
+   "id": "omar-nasser-receivables-vertical",
+   "statement": "Omar Nasser: engineer receivables equal the vertical's engineer subtotal",
+   "left": 528,
+   "right": 528,
+   "pass": true
+  },
+  {
+   "id": "omar-nasser-contribution",
+   "statement": "Omar Nasser: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1400,
+   "right": 1400,
+   "pass": true
+  },
+  {
+   "id": "omar-nasser-bridge",
+   "statement": "Omar Nasser: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "meera-dsouza-sales",
+   "statement": "Meera Dsouza: engineer file YTD revenue equals the vertical sheet row",
+   "left": 5657,
+   "right": 5657,
+   "pass": true
+  },
+  {
+   "id": "meera-dsouza-monthly",
+   "statement": "Meera Dsouza: monthly actuals sum to YTD revenue",
+   "left": 5657,
+   "right": 5657,
+   "pass": true
+  },
+  {
+   "id": "meera-dsouza-receivables",
+   "statement": "Meera Dsouza: customer rows sum to the engineer total outstanding",
+   "left": 1731,
+   "right": 1731,
+   "pass": true
+  },
+  {
+   "id": "meera-dsouza-receivables-vertical",
+   "statement": "Meera Dsouza: engineer receivables equal the vertical's engineer subtotal",
+   "left": 1731,
+   "right": 1731,
+   "pass": true
+  },
+  {
+   "id": "meera-dsouza-contribution",
+   "statement": "Meera Dsouza: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 1252,
+   "right": 1252,
+   "pass": true
+  },
+  {
+   "id": "meera-dsouza-bridge",
+   "statement": "Meera Dsouza: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "hana-qureshi-sales",
+   "statement": "Hana Qureshi: engineer file YTD revenue equals the vertical sheet row",
+   "left": 2672,
+   "right": 2672,
+   "pass": true
+  },
+  {
+   "id": "hana-qureshi-monthly",
+   "statement": "Hana Qureshi: monthly actuals sum to YTD revenue",
+   "left": 2672,
+   "right": 2672,
+   "pass": true
+  },
+  {
+   "id": "hana-qureshi-receivables",
+   "statement": "Hana Qureshi: customer rows sum to the engineer total outstanding",
+   "left": 2638,
+   "right": 2638,
+   "pass": true
+  },
+  {
+   "id": "hana-qureshi-receivables-vertical",
+   "statement": "Hana Qureshi: engineer receivables equal the vertical's engineer subtotal",
+   "left": 2513,
+   "right": 2513,
+   "pass": true
+  },
+  {
+   "id": "hana-qureshi-contribution",
+   "statement": "Hana Qureshi: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 259,
+   "right": 259,
+   "pass": true
+  },
+  {
+   "id": "hana-qureshi-bridge",
+   "statement": "Hana Qureshi: unbilled bridge reconciles",
+   "left": 595,
+   "right": 595,
+   "pass": true
+  },
+  {
+   "id": "yusuf-rahman-sales",
+   "statement": "Yusuf Rahman: engineer file YTD revenue equals the vertical sheet row",
+   "left": 3411,
+   "right": 3411,
+   "pass": true
+  },
+  {
+   "id": "yusuf-rahman-monthly",
+   "statement": "Yusuf Rahman: monthly actuals sum to YTD revenue",
+   "left": 3411,
+   "right": 3411,
+   "pass": true
+  },
+  {
+   "id": "yusuf-rahman-receivables",
+   "statement": "Yusuf Rahman: customer rows sum to the engineer total outstanding",
+   "left": 3582,
+   "right": 3582,
+   "pass": true
+  },
+  {
+   "id": "yusuf-rahman-receivables-vertical",
+   "statement": "Yusuf Rahman: engineer receivables equal the vertical's engineer subtotal",
+   "left": 3582,
+   "right": 3582,
+   "pass": true
+  },
+  {
+   "id": "yusuf-rahman-contribution",
+   "statement": "Yusuf Rahman: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 354,
+   "right": 354,
+   "pass": true
+  },
+  {
+   "id": "yusuf-rahman-bridge",
+   "statement": "Yusuf Rahman: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "divya-bhatt-sales",
+   "statement": "Divya Bhatt: engineer file YTD revenue equals the vertical sheet row",
+   "left": 3307,
+   "right": 3307,
+   "pass": true
+  },
+  {
+   "id": "divya-bhatt-monthly",
+   "statement": "Divya Bhatt: monthly actuals sum to YTD revenue",
+   "left": 3307,
+   "right": 3307,
+   "pass": true
+  },
+  {
+   "id": "divya-bhatt-receivables",
+   "statement": "Divya Bhatt: customer rows sum to the engineer total outstanding",
+   "left": 2832,
+   "right": 2832,
+   "pass": true
+  },
+  {
+   "id": "divya-bhatt-receivables-vertical",
+   "statement": "Divya Bhatt: engineer receivables equal the vertical's engineer subtotal",
+   "left": 2391,
+   "right": 2391,
+   "pass": true
+  },
+  {
+   "id": "divya-bhatt-contribution",
+   "statement": "Divya Bhatt: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 431,
+   "right": 431,
+   "pass": true
+  },
+  {
+   "id": "divya-bhatt-bridge",
+   "statement": "Divya Bhatt: unbilled bridge reconciles",
+   "left": 684,
+   "right": 684,
+   "pass": true
+  },
+  {
+   "id": "karim-mansour-sales",
+   "statement": "Karim Mansour: engineer file YTD revenue equals the vertical sheet row",
+   "left": 3578,
+   "right": 3578,
+   "pass": true
+  },
+  {
+   "id": "karim-mansour-monthly",
+   "statement": "Karim Mansour: monthly actuals sum to YTD revenue",
+   "left": 3578,
+   "right": 3578,
+   "pass": true
+  },
+  {
+   "id": "karim-mansour-receivables",
+   "statement": "Karim Mansour: customer rows sum to the engineer total outstanding",
+   "left": 630,
+   "right": 630,
+   "pass": true
+  },
+  {
+   "id": "karim-mansour-receivables-vertical",
+   "statement": "Karim Mansour: engineer receivables equal the vertical's engineer subtotal",
+   "left": 552,
+   "right": 552,
+   "pass": true
+  },
+  {
+   "id": "karim-mansour-contribution",
+   "statement": "Karim Mansour: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 768,
+   "right": 768,
+   "pass": true
+  },
+  {
+   "id": "karim-mansour-bridge",
+   "statement": "Karim Mansour: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "ananya-kapoor-sales",
+   "statement": "Ananya Kapoor: engineer file YTD revenue equals the vertical sheet row",
+   "left": 3628,
+   "right": 3628,
+   "pass": true
+  },
+  {
+   "id": "ananya-kapoor-monthly",
+   "statement": "Ananya Kapoor: monthly actuals sum to YTD revenue",
+   "left": 3628,
+   "right": 3628,
+   "pass": true
+  },
+  {
+   "id": "ananya-kapoor-receivables",
+   "statement": "Ananya Kapoor: customer rows sum to the engineer total outstanding",
+   "left": 1508,
+   "right": 1508,
+   "pass": true
+  },
+  {
+   "id": "ananya-kapoor-receivables-vertical",
+   "statement": "Ananya Kapoor: engineer receivables equal the vertical's engineer subtotal",
+   "left": 1508,
+   "right": 1508,
+   "pass": true
+  },
+  {
+   "id": "ananya-kapoor-contribution",
+   "statement": "Ananya Kapoor: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 701,
+   "right": 701,
+   "pass": true
+  },
+  {
+   "id": "ananya-kapoor-bridge",
+   "statement": "Ananya Kapoor: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "nadia-zaki-sales",
+   "statement": "Nadia Zaki: engineer file YTD revenue equals the vertical sheet row",
+   "left": 2883,
+   "right": 2883,
+   "pass": true
+  },
+  {
+   "id": "nadia-zaki-monthly",
+   "statement": "Nadia Zaki: monthly actuals sum to YTD revenue",
+   "left": 2883,
+   "right": 2883,
+   "pass": true
+  },
+  {
+   "id": "nadia-zaki-receivables",
+   "statement": "Nadia Zaki: customer rows sum to the engineer total outstanding",
+   "left": 2001,
+   "right": 2001,
+   "pass": true
+  },
+  {
+   "id": "nadia-zaki-receivables-vertical",
+   "statement": "Nadia Zaki: engineer receivables equal the vertical's engineer subtotal",
+   "left": 1941,
+   "right": 1941,
+   "pass": true
+  },
+  {
+   "id": "nadia-zaki-contribution",
+   "statement": "Nadia Zaki: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 462,
+   "right": 462,
+   "pass": true
+  },
+  {
+   "id": "nadia-zaki-bridge",
+   "statement": "Nadia Zaki: unbilled bridge reconciles",
+   "left": 388,
+   "right": 388,
+   "pass": true
+  },
+  {
+   "id": "vikram-fernandes-sales",
+   "statement": "Vikram Fernandes: engineer file YTD revenue equals the vertical sheet row",
+   "left": 3948,
+   "right": 3948,
+   "pass": true
+  },
+  {
+   "id": "vikram-fernandes-monthly",
+   "statement": "Vikram Fernandes: monthly actuals sum to YTD revenue",
+   "left": 3948,
+   "right": 3948,
+   "pass": true
+  },
+  {
+   "id": "vikram-fernandes-receivables",
+   "statement": "Vikram Fernandes: customer rows sum to the engineer total outstanding",
+   "left": 592,
+   "right": 592,
+   "pass": true
+  },
+  {
+   "id": "vikram-fernandes-receivables-vertical",
+   "statement": "Vikram Fernandes: engineer receivables equal the vertical's engineer subtotal",
+   "left": 342,
+   "right": 342,
+   "pass": true
+  },
+  {
+   "id": "vikram-fernandes-contribution",
+   "statement": "Vikram Fernandes: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 787,
+   "right": 787,
+   "pass": true
+  },
+  {
+   "id": "vikram-fernandes-bridge",
+   "statement": "Vikram Fernandes: unbilled bridge reconciles",
+   "left": 368,
+   "right": 368,
+   "pass": true
+  },
+  {
+   "id": "rami-aziz-sales",
+   "statement": "Rami Aziz: engineer file YTD revenue equals the vertical sheet row",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "rami-aziz-monthly",
+   "statement": "Rami Aziz: monthly actuals sum to YTD revenue",
+   "left": 4061,
+   "right": 4061,
+   "pass": true
+  },
+  {
+   "id": "rami-aziz-receivables",
+   "statement": "Rami Aziz: customer rows sum to the engineer total outstanding",
+   "left": 520,
+   "right": 520,
+   "pass": true
+  },
+  {
+   "id": "rami-aziz-receivables-vertical",
+   "statement": "Rami Aziz: engineer receivables equal the vertical's engineer subtotal",
+   "left": 482,
+   "right": 482,
+   "pass": true
+  },
+  {
+   "id": "rami-aziz-contribution",
+   "statement": "Rami Aziz: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 491,
+   "right": 491,
+   "pass": true
+  },
+  {
+   "id": "rami-aziz-bridge",
+   "statement": "Rami Aziz: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "faisal-reyes-sales",
+   "statement": "Faisal Reyes: engineer file YTD revenue equals the vertical sheet row",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "faisal-reyes-monthly",
+   "statement": "Faisal Reyes: monthly actuals sum to YTD revenue",
+   "left": 3508,
+   "right": 3508,
+   "pass": true
+  },
+  {
+   "id": "faisal-reyes-receivables",
+   "statement": "Faisal Reyes: customer rows sum to the engineer total outstanding",
+   "left": 676,
+   "right": 676,
+   "pass": true
+  },
+  {
+   "id": "faisal-reyes-receivables-vertical",
+   "statement": "Faisal Reyes: engineer receivables equal the vertical's engineer subtotal",
+   "left": 590,
+   "right": 590,
+   "pass": true
+  },
+  {
+   "id": "faisal-reyes-contribution",
+   "statement": "Faisal Reyes: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 322,
+   "right": 322,
+   "pass": true
+  },
+  {
+   "id": "faisal-reyes-bridge",
+   "statement": "Faisal Reyes: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "ziad-abdel-rahman-sales",
+   "statement": "Ziad Abdel-Rahman: engineer file YTD revenue equals the vertical sheet row",
+   "left": 1963,
+   "right": 1963,
+   "pass": true
+  },
+  {
+   "id": "ziad-abdel-rahman-monthly",
+   "statement": "Ziad Abdel-Rahman: monthly actuals sum to YTD revenue",
+   "left": 1963,
+   "right": 1963,
+   "pass": true
+  },
+  {
+   "id": "ziad-abdel-rahman-receivables",
+   "statement": "Ziad Abdel-Rahman: customer rows sum to the engineer total outstanding",
+   "left": 321,
+   "right": 321,
+   "pass": true
+  },
+  {
+   "id": "ziad-abdel-rahman-receivables-vertical",
+   "statement": "Ziad Abdel-Rahman: engineer receivables equal the vertical's engineer subtotal",
+   "left": 321,
+   "right": 321,
+   "pass": true
+  },
+  {
+   "id": "ziad-abdel-rahman-contribution",
+   "statement": "Ziad Abdel-Rahman: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 295,
+   "right": 295,
+   "pass": true
+  },
+  {
+   "id": "ziad-abdel-rahman-bridge",
+   "statement": "Ziad Abdel-Rahman: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "priya-kulkarni-sales",
+   "statement": "Priya Kulkarni: engineer file YTD revenue equals the vertical sheet row",
+   "left": 2839,
+   "right": 2839,
+   "pass": true
+  },
+  {
+   "id": "priya-kulkarni-monthly",
+   "statement": "Priya Kulkarni: monthly actuals sum to YTD revenue",
+   "left": 2839,
+   "right": 2839,
+   "pass": true
+  },
+  {
+   "id": "priya-kulkarni-receivables",
+   "statement": "Priya Kulkarni: customer rows sum to the engineer total outstanding",
+   "left": 883,
+   "right": 883,
+   "pass": true
+  },
+  {
+   "id": "priya-kulkarni-receivables-vertical",
+   "statement": "Priya Kulkarni: engineer receivables equal the vertical's engineer subtotal",
+   "left": 883,
+   "right": 883,
+   "pass": true
+  },
+  {
+   "id": "priya-kulkarni-contribution",
+   "statement": "Priya Kulkarni: direct contribution equals YTD gross margin less YTD cost to employ",
+   "left": 657,
+   "right": 657,
+   "pass": true
+  },
+  {
+   "id": "priya-kulkarni-bridge",
+   "statement": "Priya Kulkarni: unbilled bridge reconciles",
+   "left": 0,
+   "right": 0,
+   "pass": true
+  },
+  {
+   "id": "engineer-split-total",
+   "statement": "Engineer split rows sum to the netted division YTD revenue",
+   "left": 134995,
+   "right": 134995,
+   "pass": true
+  }
+ ],
+ "passed": 527,
+ "failed": 0
+}

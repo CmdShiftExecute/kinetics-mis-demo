@@ -1,11 +1,12 @@
 /**
- * Captures the demo at desktop and phone widths with a real Chromium.
+ * Captures every route at desktop, laptop and phone widths with a real Chromium.
  *
- * Run:  bun scripts/screenshots.ts [--base http://127.0.0.1:4173] [--out <dir>] [--tag <label>]
+ * Run:  bun scripts/screenshots.ts [--base http://127.0.0.1:4180] [--out <dir>] [--tag <label>] [--insecure] [--widths 1440,1024,390]
  * Default output: ./screenshots (gitignored).
  *
  * Reduced motion is requested so the capture shows the settled page, not a
- * frame mid-animation. Fonts are awaited before every capture.
+ * frame mid-animation. Fonts are awaited before every capture. Console errors
+ * fail the run.
  */
 
 import { mkdirSync } from 'node:fs';
@@ -19,32 +20,36 @@ const arg = (name: string, fallback: string) => {
 };
 const base = arg('base', 'http://127.0.0.1:4180').replace(/\/$/, '');
 const out = arg('out', join(process.cwd(), 'screenshots'));
-/** Accept the tailnet's self-signed certificate when pointed at node-ss. */
 const insecure = args.includes('--insecure');
 const tag = arg('tag', 'halvard-mis');
+const widths = arg('widths', '1440,1024,390').split(',').map((w) => Number(w));
 
 const pages = [
-  { path: '/', name: 'front' },
+  { path: '/', name: 'overview' },
+  { path: '/sales', name: 'sales' },
+  { path: '/delivery', name: 'delivery' },
+  { path: '/net-profit', name: 'net-profit' },
+  { path: '/receivables', name: 'receivables' },
+  { path: '/working-capital', name: 'working-capital' },
+  { path: '/data-basis', name: 'data-basis' },
   { path: '/v/mechanical-systems', name: 'vertical-mechanical-systems' },
-  { path: '/v/mechanical-systems/overdue', name: 'overdue-mechanical-systems' },
+  { path: '/v/fabrication', name: 'vertical-fabrication' },
+  { path: '/v/mechanical-systems/receivables', name: 'customers-mechanical-systems' },
   { path: '/v/mechanical-systems/e/bassem-farouk', name: 'engineer-bassem-farouk' },
-];
-const viewports = [
-  { width: 1440, height: 900, name: '1440' },
-  { width: 390, height: 844, name: '390', mobile: true },
 ];
 
 mkdirSync(out, { recursive: true });
 const browser = await chromium.launch();
 try {
-  for (const vp of viewports) {
+  for (const width of widths) {
+    const mobile = width < 700;
     const context = await browser.newContext({
-      viewport: { width: vp.width, height: vp.height },
+      viewport: { width, height: mobile ? 844 : 900 },
       deviceScaleFactor: 2,
       reducedMotion: 'reduce',
       ignoreHTTPSErrors: insecure,
-      isMobile: vp.mobile ?? false,
-      hasTouch: vp.mobile ?? false,
+      isMobile: mobile,
+      hasTouch: mobile,
     });
     const page = await context.newPage();
     const errors: string[] = [];
@@ -55,19 +60,25 @@ try {
     for (const p of pages) {
       await page.goto(`${base}${p.path}`, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
-      await page.waitForSelector('table.mis', { timeout: 15000 });
+      await page.waitForSelector('h1', { timeout: 15000 });
+      await page.waitForSelector('section.sec', { timeout: 15000 });
       await page.waitForTimeout(400);
-      const file = join(out, `${tag} ${p.name} ${vp.name}.png`);
-      await page.screenshot({ path: file, fullPage: true });
-      console.log(`wrote ${file}`);
+      const docW = await page.evaluate(() => document.documentElement.scrollWidth);
+      if (docW > width) {
+        console.error(`Document width ${docW}px exceeds viewport ${width}px on ${p.path}`);
+        process.exitCode = 1;
+      }
+      await page.screenshot({ path: join(out, `${tag} ${p.name} ${width}.png`), fullPage: false });
+      await page.screenshot({ path: join(out, `${tag} ${p.name} ${width} full.png`), fullPage: true });
+      console.log(`wrote ${p.name} at ${width}`);
     }
     await context.close();
     if (errors.length) {
-      console.error(`Console errors at ${vp.name}:`);
+      console.error(`Console errors at ${width}:`);
       for (const e of errors) console.error('  ' + e);
       process.exitCode = 1;
     } else {
-      console.log(`No console errors at ${vp.name}.`);
+      console.log(`No console errors at ${width}.`);
     }
   }
 } finally {

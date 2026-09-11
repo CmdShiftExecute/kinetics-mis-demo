@@ -2,59 +2,106 @@
 
 ## What this is
 
-This is a zero-backend management information system demo built for a fictional engineering group, Halvard Engineering Group, Building Technologies Division. It is a static Vite and React page sitting on top of finished JSON tables. Nothing is computed in the browser beyond sorting, filtering and formatting. All data is synthetic and generated from one seed. No real company, person or figure appears anywhere in this repository.
+This is a zero-backend management information system demo built for a fictional engineering group, Halvard Engineering Group, Building Technologies Division. It is a static Vite and React application sitting on top of finished JSON tables. Nothing is computed in the browser beyond sorting, filtering and formatting. All data is synthetic, generated from one seed. No real company, person or figure appears anywhere in this repository.
 
 ## Routes
 
-The app has three routes, plus a not-found page for anything else.
+| Route | Description |
+|---|---|
+| `/` | Overview: the division headline, the data-as-of stamp, and summary blocks for sales, delivery, profit, receivables and working capital. |
+| `/sales` | Sales: YTD revenue and gross margin by vertical against budget, with the netting explanation. |
+| `/delivery` | Delivery: revenue forecast by vertical against budget and against prior year. |
+| `/net-profit` | Net profit: the profit and loss ladder from revenue down to BU-level net profit, by vertical group. |
+| `/receivables` | Receivables: net to collect, past due and aging by vertical, with the largest balances by reason. |
+| `/working-capital` | Working capital: receivables, unbilled and inventory tied up by vertical. |
+| `/data-basis` | Data basis: sources, definitions, the precision policy, the assumptions, and the reconciliation result. |
+| `/v/:slug` | One vertical's sheet: headline, sales by engineer, profit and loss, targets, inventory, unbilled projects, and, for the factory vertical only, production. |
+| `/v/:slug/receivables` | The full customer aging table for one vertical, by engineer and customer. |
+| `/v/:slug/e/:eng` | One sales engineer: product lines, monthly run, targets, unbilled projects, receivables by customer. |
+| `*` | Not found. |
 
-| Route | Page | Content |
-|---|---|---|
-| `/` | Front page | Division masthead, a data-as-of stamp, the Readout, and five sections |
-| `/v/<slug>` | Vertical page | One vertical, broken into six blocks |
-| `/v/<slug>/overdue` | Overdue page | The customer aging table for that vertical |
-| `/v/<slug>/e/<engineer>` | Engineer page | One sales engineer: product lines, monthly run, targets, unbilled projects, overdue by customer |
+An engineer URL opened under the wrong vertical, an engineer slug that does not belong to that vertical, redirects to the engineer's own canonical `/v/:slug/e/:eng` route.
 
-Engineer slugs are the engineer's name in kebab case (for example `bassem-farouk`) and are unique across the company. The ten vertical slugs are electrical-distribution, cooling, mechanical-systems, pumps-and-water, vertical-transport, metering, automation, fabrication, trading and services.
+The ten vertical slugs are electrical-distribution, cooling, mechanical-systems, pumps-and-water, vertical-transport, metering, automation, fabrication, trading and services.
 
 ## Run it
 
-Install dependencies with `bun install`, then generate the data with `bun run data` (writes `public/data/rollup.json`, `index.json`, `verticals/<slug>.json` and `engineers/<slug>.json`) before the first run. `bun run dev` starts the development server. For a production build, run `bun run build`, then `bun run preview` to serve the built site.
+1. `bun install` installs dependencies.
+2. `bun run data` runs the generator, `scripts/generate_demo_data.ts`, and writes `public/data/rollup.json`, `index.json`, `verticals/<slug>.json` and `engineers/<slug>.json`.
+3. `bun run reconcile` re-reads the written files and asserts every cross-table equality, then writes `public/data/reconciliation.json`. This is the check shown on the Data basis page.
+4. `bun run typecheck` runs the TypeScript compiler in strict mode with no emitted output.
+5. `bun run lint` runs oxlint.
+6. `bun run build` runs the typecheck and then the Vite production build.
+7. `bun run preview` serves the built site at `127.0.0.1:4180`.
+8. `bun run contrast` measures the WCAG contrast of every text and surface pair the stylesheet defines.
+9. `bun run interactions --base <origin> [--insecure]` runs the interaction, keyboard, structure and resilience gate against a served build. `--insecure` skips certificate checks when the origin is self-signed.
+10. `bun run screenshots` captures every route at desktop, laptop and phone widths.
+11. `bun run check` chains `data`, `reconcile`, `typecheck`, `lint`, `build` and `contrast`, in that order.
 
-`bun run contrast` measures the contrast ratio of every text and surface pair on the page. `bun run screenshots` uses Playwright to capture the app at 1440 and 390 pixels wide, and needs `bunx playwright install chromium` once before its first run. `bun run check` runs the data generator, the build and the contrast check together, in that order.
+`bun x playwright install chromium` installs the Chromium build that the interaction gate, the screenshot script and the performance probe all drive. Run it once before the first use of any of the three. `scripts/perf_probe.ts` is run directly with `bun scripts/perf_probe.ts [--base <origin>] [--path <route>]`, not through a package script.
 
 ## Data schema
 
-`data/schema.ts` is the one contract every screen reads from. It defines two top-level shapes.
+`data/schema.ts` is the one contract every screen reads from.
 
-`Meta` carries the company name, division, fiscal year, period label, the near-month and rest-of-year forecast labels, a data-as-of timestamp, a revision tag, currency, unit and seed. Both `Rollup` and `VerticalData` embed a `Meta` object.
+`Meta` carries the company name, division, fiscal year, the period label, months elapsed, the current and previous month labels, the near-month and rest-of-year forecast labels, a data-as-of timestamp and label, a revision tag, currency, unit and seed. `Rollup`, `VerticalData` and `EngineerData` each embed a `Meta` object.
 
-`Rollup` is the front page data. It groups nine tables: `sales`, `engineerSplit`, `forecast`, `pl`, `profitability`, `overdue`, `monthly`, `readout` and `netting`.
+`Rollup` is the front-page data. It carries `sources`, `definitions`, `precisionPolicy` and `assumptions`, then the tables: `overview`, `sales` with `engineerSplit`, `forecast`, `pl`, `profitability`, `receivables`, `unbilled`, `inventory`, `workingCapital` and `monthly`.
 
-`VerticalData` is one vertical's sheet. It carries a `headline`, `sales` (engineer rows with product sub-rows underneath each engineer), `pl`, `targets`, `inventory`, `unbilled` (with its month bridge), `overdue` (row detail, a per-engineer roll-up, a running total and a reason breakdown), and `monthly`.
+`VerticalData` is one vertical's sheet: a `headline`, `sales` with engineer rows carrying product sub-rows, a sheet total and an attributed total, `pl`, `targets`, `inventory`, `unbilled` with its month bridge, `production`, present only for the vertical that runs a factory, `receivables` with customer rows, a per-engineer roll-up, a total and a reason split, and `monthly`.
 
-Every money value in both shapes is in AED thousands unless the field name says otherwise. Percentages are plain numbers, so 21.4 means 21.4 percent, not a fraction. Every timestamp is GST, Asia/Dubai, with a real plus-four-hours offset. None of them are UTC.
+`EngineerData` is one sales engineer: a `headline`, one `sales` row with its product lines, `monthly`, `targets`, `unbilled`, `receivables`, and a list of `peers` in the same vertical.
+
+`VerticalIndexEntry` lists a vertical's slug, name, file and its engineers, for `index.json`. `Reconciliation` is the shape `reconcile.ts` writes: a checked-at timestamp, the policy lines, and the list of assertions with each one's pass or fail state.
+
+Units: every money value is an integer in AED thousands. Percentages are plain numbers to one decimal, so 21.4 means 21.4 percent. Every timestamp is GST, Asia/Dubai, with a real plus-four-hours offset. None of them are UTC.
 
 ## The rules the generator encodes
 
-The netting rule: some product lines are sold by one vertical's own engineers but also belong to another vertical's category, so they show up on that other vertical's sheet too. Revenue from a shared line counts once, in its home vertical. The Fabrication row on the front page shows only work sold by the Fabrication team, not the shared ductwork and pipe-support lines that other verticals' engineers sell. Each vertical file carries both a sheet total, covering every row shown on that sheet, and an attributed total, covering that vertical's own engineers only.
+The netting rule. Fabricated ductwork and fabricated pipe supports are sold by Cooling and Mechanical Systems engineers but also belong to the Fabrication vertical's own sheet. Revenue from a shared line counts once, in its home vertical. Each vertical file carries a sheet total, covering every row shown on that sheet, and an attributed total, covering that vertical's own engineers only. Every division summary uses the attributed figures, so the Fabrication row on the front page shows only work sold by the Fabrication team.
 
-The unbilled month bridge must reconcile. Previous month plus new projects, less cleared projects, plus ongoing changes, must equal the current month exactly. The generator throws an error and refuses to write any output files if a single vertical's bridge does not balance.
+The precision policy. Every money value is an integer in AED thousands, rounded once at the lowest level the generator produces, one product line in one month. Every higher total is a sum of those integers, so sales, forecast, profit and loss, monthly series, vertical files and engineer files tie exactly with no display rounding. Gross margin is rounded once per product line and column, and margins above that are sums. Percentages are rounded to one decimal from the integer sums, never from other percentages. Revenue shares are allocated to one decimal by largest remainder so the ten rows sum to exactly 100.0.
 
-Overdue is everything beyond the 0 to 30 day bucket. A customer's total outstanding balance, minus whatever falls in the current 0 to 30 day window, is what counts as overdue.
+The receivables due-date model. Each customer balance is modelled as invoices with an age and the customer's payment terms. Past due is age beyond terms, from invoice date plus terms. Aging buckets are age since the invoice, regardless of terms, so a balance can sit in the 31-to-90-day bucket and still be within terms. Net to collect is total outstanding less the provision. It is the balance the business still expects to collect, not a dated cash forecast. Every balance carries one reason: internal group companies, follow-up with no response, or disputes and not yet due, and the third is shown split into disputed balances and balances with nothing past due. The reasons are derived from one underlying state, so the dispute flag, the reason and the remark always agree, and the reasons always sum to total outstanding. The provision is half of the balance aged 1 to 2 years, all of the balance aged over 2 years, and a quarter of a disputed balance aged 91 to 365 days.
 
-Provisions follow two separate rules. On the overdue side, provision is half of the 1 to 2 year bucket, all of the over 2 year bucket, and a quarter of the 91 to 365 day bucket when the balance is disputed. On the inventory side, provision is half of stock aged 2 to 3 years and all of stock aged over 3 years.
+The unbilled bridge and aging. Each vertical's unbilled month bridge must reconcile exactly: previous month plus new projects, less cleared projects, plus ongoing changes, equals the current month. The generator throws and refuses to write output if a single vertical's bridge does not balance. Unbilled aging is reported in eight bands from 60 days or under out to over 730 days, and the amount aged over 60 days is called out on the summary row.
 
-The Readout's verdict thresholds live as data, in `rollup.json` under `readout.thresholds`, not hardcoded inside a component. Each of the five scorecard lines, selling, delivering, keeping, earning and collecting, carries its own on-track, watch and behind cutoffs there.
+Inventory bands and the provision rule. Stock is reported by age since receipt in four bands, under 1 year, 1 to 2, 2 to 3, and over 3 years, and the bands sum to total stock. The provision is half of the stock aged 2 to 3 years plus all of the stock aged over 3 years. Free stock is total stock less whatever is mapped to a purchase order.
+
+Targets and budget to date. Each product line's target equals its approved full-year budget. Achievement is compared against budget to date, the target phased by month and summed for the elapsed months, not against the full-year target.
+
+Production. Only the Fabrication vertical runs a factory. Its `production` block reports quantity delivered, invoiced value, and material and labour cost by month, and the value ties to that vertical's monthly revenue.
+
+The round-thousand guard. A division-level total that lands on an exact round thousand would read as a placeholder rather than a real figure, so the generator throws if any headline total is an exact multiple of 1,000, forcing a change to the seed or the noise rather than shipping a number that looks like a placeholder.
+
+Profit is compared full year to full year. No approved profit budget exists for the elapsed months, so every profit and loss column compares YTD actual, full-year forecast and full-year budget, and no year-to-date profit attainment figure is shown anywhere.
+
+## Gates
+
+`bun run reconcile` re-reads the written JSON files, independently of the generator's own in-memory checks, and asserts that every figure published in more than one place ties exactly. This is the machine's own check, and its result, the pass and fail counts plus the policy lines, is what renders on the Data basis page.
+
+`bun run typecheck` runs the TypeScript compiler across the project in strict mode and fails on any type error.
+
+`bun run lint` runs oxlint across the source.
+
+`bun run contrast` reads the color tokens directly out of `src/styles/index.css`, so it cannot drift from the stylesheet, and fails if any text pair falls below a 4.5 to 1 contrast ratio or any non-text mark falls below 3 to 1.
+
+`bun run interactions` drives a real, served build with Playwright and checks structure, keyboard behaviour and resilience. Every check prints pass or fail with its evidence. The column alignment check carries a negative control: the gate removes a cell from a table in browser memory and confirms the alignment check reports the break, so a check that has never been seen to fail is not trusted blind. The gate also performs a real keyboard traversal of the interface, not a click simulation, to confirm the pages are usable without a mouse.
+
+`bun run screenshots` captures every route at desktop, laptop and phone widths with a real Chromium, waits for fonts to load and for animation to settle, and fails the run on any console error.
+
+`scripts/perf_probe.ts` scrolls the longest page for four seconds in a real Chromium and records requestAnimationFrame interval timing: median, 95th percentile, maximum, and the count of intervals above 25 milliseconds. Its numbers are observer-dependent, so they are only meaningful when comparing before and after a change, on the same machine, against the same origin.
 
 ## Regenerating
 
-To build a different but still internally coherent business, change `SEED` near the top of `scripts/generate_demo_data.ts` and run `bun run data` again. To change vertical names, budgets, performance factors or the engineer roster, edit the `VERTICALS` array in the same file, then regenerate. If a figure on screen is wrong, the fix belongs in the generator or in `data/schema.ts`. It never belongs in a component.
+To build a different but still internally coherent business, change `SEED` near the top of `scripts/generate_demo_data.ts` and rerun `bun run data`, then `bun run reconcile`. To change vertical names, budgets, performance factors, product lines or the engineer roster, edit the `VERTICALS` array in the same file, then regenerate the same way.
+
+If a figure on screen is wrong, the fix belongs in the generator or in `data/schema.ts`. It never belongs in a component. A component only sorts, filters and formats what the generator has already computed.
 
 ## Stack
 
-Vite 8, React 19, TypeScript in strict mode, Tailwind v4 through its Vite plugin, Motion, d3-scale, d3-shape and d3-array, React Router, and Bun as the runtime and package manager. Fonts are self-hosted through Fontsource, Archivo Black and JetBrains Mono.
+Vite 8, React 19, TypeScript in strict mode, Tailwind v4 through its Vite plugin, Motion, d3-scale, d3-shape and d3-array, React Router, and Bun as the runtime and package manager. Fonts are self-hosted through Fontsource: Archivo Black and JetBrains Mono.
 
 ## Deploying
 
-The build output is a static `dist/` folder. Any static host that falls back to `index.html` for unknown paths works, since the app is a single-page application.
+The build output is a static `dist` folder. Any static host that falls back to `index.html` for unknown paths works, since the app is a single-page application.

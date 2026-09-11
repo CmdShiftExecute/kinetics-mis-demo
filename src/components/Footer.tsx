@@ -1,12 +1,15 @@
 import type { Meta } from '../../data/schema';
+import { Link } from 'react-router';
 
 export function Footer({ meta }: { meta: Meta }) {
   return (
     <footer className="foot">
       <span>
-        Source: {meta.company}, {meta.division} net profit MIS, FY{meta.fiscalYear}, revision {meta.revision}
+        {meta.company}, {meta.division}. Net profit MIS FY{meta.fiscalYear}, revision {meta.revision}. Data as of {meta.dataAsOfLabel}.
       </span>
-      <span>Data as of {meta.dataAsOfLabel}. Synthetic demonstration data.</span>
+      <span>
+        Synthetic demonstration data. <Link to="/data-basis">Sources, definitions and reconciliation</Link>
+      </span>
     </footer>
   );
 }

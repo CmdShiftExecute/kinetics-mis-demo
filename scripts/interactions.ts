@@ -1,21 +1,17 @@
 /**
- * Interaction and keyboard gate, run against a served build.
+ * Interaction, keyboard, structure and resilience gate, run against a served build.
  *
- * Run:  bun scripts/interactions.ts [--base http://127.0.0.1:4180] [--out <dir>]
+ * Run:  bun scripts/interactions.ts [--base http://127.0.0.1:4180] [--out <dir>] [--insecure]
  *
- * Checks, each with a screenshot as evidence:
- *  1. Hovering a vertical row on the front page opens the engineer split.
- *  2. Hovering a P&L rung updates the definition rail.
- *  3. Clicking a vertical row reaches its drill page, and the overdue link reaches the aging table.
- *  4. Every link, button, rung and the chart are reachable by Tab and show a visible focus ring.
- *  5. Arrow keys move the chart crosshair.
- *  6. No console errors anywhere along the way.
- * Exit code 1 on any failure.
+ * Every check prints PASS or FAIL with its evidence. Exit code 1 on any failure.
+ * The alignment gate is proven with a negative control: a cell is removed in
+ * browser memory and the gate must report it.
  */
 
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
+import type { Page } from 'playwright';
 
 const args = process.argv.slice(2);
 const arg = (name: string, fallback: string) => {
@@ -24,136 +20,302 @@ const arg = (name: string, fallback: string) => {
 };
 const base = arg('base', 'http://127.0.0.1:4180').replace(/\/$/, '');
 const out = arg('out', join(process.cwd(), 'screenshots'));
-/** Accept the tailnet's self-signed certificate when pointed at node-ss. */
 const insecure = args.includes('--insecure');
 mkdirSync(out, { recursive: true });
 
-const failures: string[] = [];
+const results: { ok: boolean; what: string }[] = [];
 const check = (ok: boolean, what: string) => {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${what}`);
-  if (!ok) failures.push(what);
+  results.push({ ok, what });
 };
 
+/** Every logical column of a table must have a cell under it, and spanning cells must end where their last header ends. */
+const ALIGN_FN = `(sel) => {
+  const table = document.querySelector(sel);
+  if (!table) return { out: ['no table'], rows: 0, cols: 0 };
+  const ths = Array.from(table.querySelectorAll('thead tr:last-child th, thead tr:last-child td'));
+  const rows = Array.from(table.querySelectorAll('tbody tr'));
+  const out = [];
+  for (const row of rows) {
+    const cells = Array.from(row.children);
+    let col = 0;
+    for (const cell of cells) {
+      const span = cell.colSpan || 1;
+      const first = ths[col];
+      const last = ths[col + span - 1];
+      if (!first || !last) { out.push('row ' + rows.indexOf(row) + ' overflows headers at col ' + col); break; }
+      const a = first.getBoundingClientRect();
+      const z = last.getBoundingClientRect();
+      const b = cell.getBoundingClientRect();
+      if (Math.abs(a.left - b.left) > 0.5) out.push('row ' + rows.indexOf(row) + ' col ' + col + ' left off by ' + (b.left - a.left).toFixed(1));
+      if (Math.abs(z.right - b.right) > 0.5) out.push('row ' + rows.indexOf(row) + ' col ' + col + ' right off by ' + (b.right - z.right).toFixed(1));
+      col += span;
+    }
+    if (col !== ths.length) out.push('row ' + rows.indexOf(row) + ' covers ' + col + ' of ' + ths.length + ' columns');
+  }
+  return { out, rows: rows.length, cols: ths.length };
+}`;
+
+async function alignment(page: Page, sel: string) {
+  return page.evaluate(`(${ALIGN_FN})(${JSON.stringify(sel)})`) as Promise<{ out: string[]; rows: number; cols: number }>;
+}
+
 const browser = await chromium.launch();
-const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, ignoreHTTPSErrors: insecure });
-const page = await context.newPage();
 const errors: string[] = [];
-page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
-page.on('pageerror', (e) => errors.push(String(e)));
+async function newPage(width: number, reducedMotion: 'reduce' | 'no-preference' = 'no-preference') {
+  const context = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 1, ignoreHTTPSErrors: insecure, reducedMotion });
+  const page = await context.newPage();
+  page.on('console', (m) => m.type() === 'error' && errors.push(`[${width}] ${m.text()}`));
+  page.on('pageerror', (e) => errors.push(`[${width}] ${String(e)}`));
+  return { context, page };
+}
 
 try {
+  /* ---------- overview at 1440 ---------- */
+  const { context, page } = await newPage(1440);
   await page.goto(`${base}/`, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForSelector('#sales table.mis');
-  await page.waitForTimeout(1800); // let the load choreography finish
+  await page.waitForTimeout(1200);
 
-  // 1. hover expansion on the second vertical row
-  const row = page.locator('#sales tbody.hov').nth(1);
-  const expand = row.locator('.expand > div');
-  const closedH = await expand.evaluate((el) => el.getBoundingClientRect().height);
-  await row.locator('tr.main').hover();
+  // 1. document width never exceeds the viewport
+  for (const w of [1440, 1024, 390]) {
+    const { context: c2, page: p2 } = await newPage(w);
+    await p2.goto(`${base}/`, { waitUntil: 'networkidle' });
+    await p2.waitForSelector('#sales table.mis');
+    const docW = await p2.evaluate(() => document.documentElement.scrollWidth);
+    check(docW <= w, `Overview document width at ${w}px is ${docW}px`);
+    await c2.close();
+  }
+
+  // 2. sorting: the variance column is the default sort, largest shortfall first; clicking flips it
+  const firstBefore = (await page.locator('#sales tbody tr').first().locator('td').first().innerText()).trim();
+  const variances = await page.locator('#sales tbody tr:not(.total) td:nth-child(4)').allInnerTexts();
+  const parsed = variances.map((v) => Number(v.replace(/[^\d.-]/g, '').replace('−', '-')) * (v.includes('−') ? -1 : 1));
+  const ascending = parsed.every((v, i) => i === 0 || v >= parsed[i - 1]!);
+  check(ascending, `Overview sales rows sort by variance with the largest shortfall first (first row ${firstBefore})`);
+  await page.locator('#sales th[aria-sort] button', { hasText: 'Variance' }).click();
   await page.waitForTimeout(500);
-  const openH = await expand.evaluate((el) => el.getBoundingClientRect().height);
-  check(closedH === 0 && openH > 40, `Hover opens the engineer split (closed ${closedH}px, open ${Math.round(openH)}px)`);
-  await row.screenshot({ path: join(out, 'gate hover engineer split.png') });
+  const firstAfter = (await page.locator('#sales tbody tr').first().locator('td').first().innerText()).trim();
+  const sortAttr = await page.locator('#sales th[aria-sort="descending"]').count();
+  check(firstAfter !== firstBefore && sortAttr === 1, `Clicking the header flips the sort and sets aria-sort (first row now ${firstAfter})`);
+  await page.locator('#sales th[aria-sort] button', { hasText: 'Variance' }).click();
+  await page.waitForTimeout(300);
 
-  // 2. P&L rail follows hover
-  const railBefore = await page.locator('#pl-rail').innerText();
-  await page.locator('#pl tr.rung').nth(7).hover();
-  await page.waitForTimeout(200);
-  const railAfter = await page.locator('#pl-rail').innerText();
-  check(railBefore !== railAfter && /BU profitability/i.test(railAfter), 'P&L rail updates on hover with the rung definition');
-  await page.locator('#pl .pl').screenshot({ path: join(out, 'gate pl rail.png') });
+  // 3. netting disclosure opens with the keyboard and is fully visible
+  const summary = page.locator('#netting summary');
+  await summary.focus();
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(300);
+  const nettingOpen = await page.locator('#netting').evaluate((el) => (el as HTMLDetailsElement).open);
+  const box = await page.locator('#netting .netting-box').boundingBox();
+  const clipped = await page.locator('#netting .netting-box').evaluate((el) => {
+    let n: HTMLElement | null = el.parentElement;
+    while (n) {
+      const o = getComputedStyle(n).overflowX + getComputedStyle(n).overflowY;
+      if (/hidden|auto|scroll/.test(o) && n !== document.body && n !== document.documentElement) {
+        const r = n.getBoundingClientRect();
+        const b = el.getBoundingClientRect();
+        if (b.bottom > r.bottom + 0.5 || b.right > r.right + 0.5) return true;
+      }
+      n = n.parentElement;
+    }
+    return false;
+  });
+  check(nettingOpen && box != null && box.height > 40 && !clipped, `Netting calculation opens by keyboard and is not clipped (${Math.round(box?.height ?? 0)}px tall)`);
+  await page.screenshot({ path: join(out, 'gate netting disclosure.png'), clip: box ? { x: Math.max(0, box.x - 8), y: Math.max(0, box.y - 60), width: Math.min(1440, box.width + 16), height: box.height + 80 } : undefined });
 
-  // 5. chart keyboard
-  const chart = page.locator('#forecast svg.chart');
+  // 4. chart keyboard and exact values without hover
+  const chart = page.locator('#delivery svg.chart').first();
   await chart.focus();
   await page.keyboard.press('ArrowLeft');
   await page.waitForTimeout(100);
   const readbox = (await chart.locator('.readbox text').first().evaluate((el) => el.textContent)) ?? '';
   check(/JUL 2026/.test(readbox), `Chart crosshair moves with arrow keys (read "${readbox}")`);
-  await chart.screenshot({ path: join(out, 'gate chart crosshair.png') });
+  const valueRows = await page.locator('#ov-values tbody tr').count();
+  const valuesSummary = page.locator('#ov-values summary');
+  await valuesSummary.focus();
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(200);
+  const valuesOpen = await page.locator('#ov-values').evaluate((el) => (el as HTMLDetailsElement).open);
+  check(valueRows === 12 && valuesOpen, `Exact monthly values are in a table with ${valueRows} rows, opened by keyboard`);
+  const axisNote = await page.locator('#delivery .chart-axis-note').first().innerText();
+  check(/starts at .* not zero/i.test(axisNote), `Truncated revenue axis is labelled ("${axisNote.slice(0, 60)}")`);
 
-  // 4. keyboard reach: count focusable elements and confirm a visible outline on the first vertical link
-  const focusables = await page.evaluate(() => {
-    const els = Array.from(document.querySelectorAll<HTMLElement>('a[href], button, [tabindex="0"], svg[tabindex="0"], summary'));
-    return els.filter((el) => el.offsetParent !== null || el instanceof SVGElement).length;
+  // 5. real keyboard traversal: tab through the page and record the sequence
+  await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+  await page.waitForSelector('#sales table.mis');
+  await page.waitForTimeout(800);
+  const seq: string[] = [];
+  for (let i = 0; i < 90; i++) {
+    await page.keyboard.press('Tab');
+    const desc = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement | null;
+      if (!el || el === document.body) return 'body';
+      const label = (el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 30);
+      return `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}:${label}`;
+    });
+    seq.push(desc);
+  }
+  const has = (re: RegExp) => seq.some((s) => re.test(s));
+  const order = [seq.findIndex((s) => /^a:Sales$/.test(s)), seq.findIndex((s) => /button:Sort by Vertical/.test(s)), seq.findIndex((s) => /button:Sort by Variance/.test(s)), seq.findIndex((s) => /^a:.*(Mechanical|Vertical Transport|Electrical)/.test(s)), seq.findIndex((s) => /summary:Netting/.test(s)), seq.findIndex((s) => /^svg/.test(s))];
+  const inOrder = order.every((v, i) => v >= 0 && (i === 0 || v > order[i - 1]!));
+  check(inOrder && has(/summary:Definitions/), `Tab reaches nav, sort buttons, vertical links, the netting disclosure and the chart in reading order (${seq.filter((s) => s !== 'body').length} stops)`);
+  writeFileSync(join(out, 'tab-sequence.json'), JSON.stringify(seq, null, 1));
+  const ring = await page.evaluate(() => {
+    const a = document.querySelector('#sales a.vlink') as HTMLElement;
+    a.focus();
+    const cs = getComputedStyle(a);
+    return `${cs.outlineStyle} ${cs.outlineWidth}`;
   });
-  check(focusables >= 40, `Interactive elements are in the tab order (${focusables} found)`);
-  const firstLink = page.locator('#sales a.vlink').first();
-  await firstLink.focus();
-  await page.waitForTimeout(600); // the grid-template-rows transition is 360ms
-  const outline = await firstLink.evaluate((el) => getComputedStyle(el).outlineStyle + ' ' + getComputedStyle(el).outlineWidth);
-  check(/solid/.test(outline) && !/0px/.test(outline), `Focus ring is visible on links (${outline})`);
-  const focusOpensSplit = await page.locator('#sales tbody.hov').first().locator('.expand > div').evaluate((el) => el.getBoundingClientRect().height);
-  check(focusOpensSplit > 40, `Keyboard focus opens the engineer split as hover does (${Math.round(focusOpensSplit)}px)`);
+  check(/solid/.test(ring) && !/0px/.test(ring), `Focus ring is visible on links (${ring})`);
 
-  // 3. drill by click, then the overdue link (blur first so no expansion is mid-transition under the pointer)
-  await firstLink.evaluate((el) => (el as HTMLElement).blur());
-  await page.mouse.move(5, 5);
-  await page.waitForTimeout(600);
-  await page.locator('#sales a.vlink', { hasText: 'Cooling' }).click();
-  await page.waitForURL(/\/v\/cooling$/, { waitUntil: 'commit' });
-  await page.locator('h1', { hasText: /cooling/i }).waitFor({ timeout: 10000 });
-  const h1 = await page.locator('h1').last().innerText();
-  check(/COOLING/i.test(h1), `Vertical drill page opens by click (h1 "${h1}")`);
-  await page.waitForTimeout(900);
-  await page.screenshot({ path: join(out, 'gate drill cooling.png'), fullPage: false });
-  await page.locator('a.drill-link').click();
-  await page.waitForURL(/\/v\/cooling\/overdue$/, { waitUntil: 'commit' });
-  await page.waitForSelector('#aging table.mis');
-  const rows = await page.locator('#aging tr.indent').count();
-  check(rows > 0, `Overdue drill lists customer rows (${rows} rows)`);
-  await page.locator('a.back').click();
-  await page.waitForURL(/\/v\/cooling$/, { waitUntil: 'commit' });
-  await page.locator('#engineers table.mis tr.prod').first().waitFor();
+  // 6. drill: overview -> vertical -> engineer -> customer table, with return paths
+  await page.locator('#sales a.vlink', { hasText: 'Mechanical Systems' }).click();
+  await page.waitForURL(/\/v\/mechanical-systems$/, { waitUntil: 'commit' });
+  await page.locator('h1', { hasText: /mechanical systems/i }).waitFor({ timeout: 10000 });
+  await page.waitForSelector('#engineers table.mis tr.prod');
+  const crumbs = await page.locator('.crumbs').innerText();
+  check(/overview/i.test(crumbs) && /mechanical systems/i.test(crumbs), `Vertical page opens with a breadcrumb ("${crumbs.replace(/\n/g, ' / ')}")`);
+  const sections = await page.locator('section.sec').count();
+  check(sections === 6, `Vertical page shows six blocks (${sections})`);
 
-  // 7. product sub-rows are real rows of the same table: every cell edge equals its header edge
-  const misaligned = await page.evaluate(() => {
-    const table = document.querySelector('#engineers table.mis')!;
-    const ths = Array.from(table.querySelectorAll('thead tr:last-child th'));
-    const rows = Array.from(table.querySelectorAll('tbody tr.prod'));
-    const out: string[] = [];
-    for (const row of rows) {
-      const tds = Array.from(row.querySelectorAll('td'));
-      for (let i = 0; i < Math.min(ths.length, tds.length); i++) {
-        const a = ths[i]!.getBoundingClientRect();
-        const b = tds[i]!.getBoundingClientRect();
-        const spans = (tds[i]!.colSpan ?? 1) > 1; // a spanning cell shares only its left edge with the header
-        if (Math.abs(a.left - b.left) > 0.5 || (!spans && Math.abs(a.right - b.right) > 0.5)) out.push(`row ${rows.indexOf(row)} col ${i}: ${(b.left - a.left).toFixed(1)}px`);
+  // 7. alignment with logical coverage and spanning right edges, at 1440 and 1024
+  for (const w of [1440, 1024]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    await page.waitForTimeout(300);
+    const a = await alignment(page, '#engineers > .scroll-x > table.mis.dense');
+    check(a.out.length === 0 && a.rows > 0, `Sales grid cells cover every logical column and spanning edges match at ${w}px (${a.rows} rows, ${a.cols} columns${a.out.length ? '; ' + a.out.slice(0, 3).join('; ') : ''})`);
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.locator('#engineers > .scroll-x > table.mis.dense').screenshot({ path: join(out, 'gate sales grid aligned.png') });
+
+  // 8. negative control: remove the last cell of a product row in memory; the gate must report it
+  const negative = await page.evaluate(`(() => {
+    const row = document.querySelector('#engineers > .scroll-x > table.mis.dense tbody tr.prod');
+    const removed = row.lastElementChild;
+    removed.remove();
+    const res = (${ALIGN_FN})('#engineers > .scroll-x > table.mis.dense');
+    row.appendChild(removed);
+    return res;
+  })()`) as { out: string[] };
+  check(negative.out.length > 0, `Alignment gate reports a removed cell (negative control: ${negative.out[0] ?? 'nothing reported'})`);
+  const after = await alignment(page, '#engineers > .scroll-x > table.mis.dense');
+  check(after.out.length === 0, 'Alignment gate passes again once the cell is restored');
+
+  // 9. header association: every data cell in the sales grid names existing header ids
+  const assoc = await page.evaluate(() => {
+    const table = document.querySelector('#engineers > .scroll-x > table.mis.dense')!;
+    const cells = Array.from(table.querySelectorAll('tbody td, tbody th'));
+    let missing = 0;
+    for (const c of cells) {
+      const h = c.getAttribute('headers');
+      if (!h) {
+        missing++;
+        continue;
       }
+      for (const id of h.split(' ')) if (!document.getElementById(id)) missing++;
     }
-    return { out, rows: rows.length, cols: ths.length };
+    const groups = table.querySelectorAll('thead th[scope="colgroup"]').length;
+    return { cells: cells.length, missing, groups };
   });
-  check(misaligned.out.length === 0 && misaligned.rows > 0, `Product sub-row cells align with the header (${misaligned.rows} rows, ${misaligned.cols} columns${misaligned.out.length ? '; off: ' + misaligned.out.slice(0, 4).join(', ') : ''})`);
-  await page.locator('#engineers table.mis').screenshot({ path: join(out, 'gate product rows aligned.png') });
+  check(assoc.missing === 0 && assoc.groups === 7, `Every sales grid cell names its headers and the group headers carry scope="colgroup" (${assoc.cells} cells, ${assoc.groups} groups)`);
 
-  // 8. the engineer's name opens the engineer page
+  // 10. row identity stays visible during horizontal scroll
+  const sticky = await page.evaluate(async () => {
+    const box = document.querySelector('#engineers .scroll-x') as HTMLElement;
+    const first = box.querySelector('tbody th[scope="row"]') as HTMLElement;
+    const before = first.getBoundingClientRect().left;
+    box.scrollLeft = 600;
+    await new Promise((r) => setTimeout(r, 100));
+    const after = first.getBoundingClientRect().left;
+    const scrolled = box.scrollLeft;
+    box.scrollLeft = 0;
+    return { before, after, scrolled };
+  });
+  check(sticky.scrolled > 0 && Math.abs(sticky.before - sticky.after) < 1, `Engineer name stays in place while the grid scrolls ${sticky.scrolled}px horizontally`);
+
+  // 11. engineer page, then the wrong-vertical URL redirects
   const engName = (await page.locator('#engineers a.vlink').first().innerText()).trim();
   await page.locator('#engineers a.vlink').first().click();
-  await page.waitForURL(/\/v\/cooling\/e\//, { waitUntil: 'commit' });
+  await page.waitForURL(/\/v\/mechanical-systems\/e\//, { waitUntil: 'commit' });
   await page.locator('h1', { hasText: new RegExp(engName.split(' ')[0]!, 'i') }).waitFor({ timeout: 10000 });
-  const engH1 = await page.locator('h1').last().innerText();
   const engSections = await page.locator('section.sec').count();
-  check(new RegExp(engName, 'i').test(engH1) && engSections === 4, `Engineer page opens from the name (h1 "${engH1}", ${engSections} sections)`);
-  await page.waitForTimeout(900);
-  await page.screenshot({ path: join(out, 'gate engineer page.png'), fullPage: false });
-  await page.locator('a.back').click();
-  await page.waitForURL(/\/v\/cooling$/, { waitUntil: 'commit' });
-  await page.waitForTimeout(600);
-  await page.locator('a.back').click();
-  await page.waitForURL(/\/$/, { waitUntil: 'commit' });
-  check(true, 'Back links return from engineer to vertical to front page');
+  check(engSections === 4, `Engineer page opens from the name (h1 "${engName}", ${engSections} sections)`);
+  const engUrl = new URL(page.url());
+  const engSlug = engUrl.pathname.split('/').pop()!;
+  await page.goto(`${base}/v/fabrication/e/${engSlug}`, { waitUntil: 'networkidle' });
+  await page.waitForURL(/\/v\/mechanical-systems\/e\//, { timeout: 10000 });
+  check(/\/v\/mechanical-systems\/e\//.test(page.url()), `An engineer URL under the wrong vertical redirects to the canonical route (${new URL(page.url()).pathname})`);
+  const crumbsE = await page.locator('.crumbs').innerText();
+  check(/mechanical systems/i.test(crumbsE), `Engineer breadcrumb names the owning vertical ("${crumbsE.replace(/\n/g, ' / ')}")`);
 
-  // 6. console errors
+  // 12. customer table from the vertical, then back
+  await page.locator('.crumbs a', { hasText: 'Mechanical Systems' }).click();
+  await page.waitForURL(/\/v\/mechanical-systems$/, { waitUntil: 'commit' });
+  await page.locator('a.drill-link').waitFor();
+  await page.locator('a.drill-link').click();
+  await page.waitForURL(/\/v\/mechanical-systems\/receivables$/, { waitUntil: 'commit' });
+  await page.waitForSelector('#aging table.mis');
+  const customers = await page.locator('#aging tr.indent').count();
+  const remarks = await page.locator('#aging tr.indent td.remark').count();
+  check(customers > 0 && remarks === customers * 2, `Customer table lists ${customers} customers, each with both remarks`);
+  const termsOk = await page.evaluate(() => Array.from(document.querySelectorAll('#aging tr.indent td:nth-child(2)')).every((td) => (td.textContent || '').trim().length > 0));
+  check(termsOk, 'Every customer row shows its payment terms');
+  await page.locator('.crumbs a', { hasText: 'Overview' }).click();
+  await page.waitForURL(/\/$/, { waitUntil: 'commit' });
+  check(true, 'Breadcrumb returns from the customer table to the overview');
+
+  // 13. every report route renders its heading
+  for (const [path, h] of [
+    ['/sales', 'Sales'],
+    ['/delivery', 'Delivery'],
+    ['/net-profit', 'Net profit'],
+    ['/receivables', 'Receivables'],
+    ['/working-capital', 'Working capital'],
+    ['/data-basis', 'Data basis'],
+  ] as const) {
+    await page.goto(`${base}${path}`, { waitUntil: 'networkidle' });
+    const title = (await page.locator('h1').first().innerText()).trim();
+    check(new RegExp(`^${h}$`, 'i').test(title), `${path} renders (h1 "${title}")`);
+  }
+  const recText = await page.locator('#reconciliation').innerText();
+  check(/all pass/i.test(recText), `Data basis page shows the reconciliation result ("${(recText.match(/\d+ of \d+ assertions pass/) ?? [''])[0]}")`);
+
+  // 14. invalid route, missing data, malformed data
+  await page.goto(`${base}/no/such/page`, { waitUntil: 'networkidle' });
+  const nf = (await page.locator('h1').first().innerText()).trim();
+  check(/nothing here/i.test(nf), `Invalid route shows the not-found page (h1 "${nf}")`);
+  await page.goto(`${base}/v/no-such-vertical`, { waitUntil: 'networkidle' });
+  const missing = await page.locator('.errbox').innerText();
+  check(/no such vertical/i.test(missing) && /not found|HTTP|valid JSON/i.test(missing), `Missing vertical data shows a readable error ("${missing.replace(/\n/g, ' ').slice(0, 90)}")`);
+  await page.route('**/data/rollup.json', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '{"meta": {}}' }));
+  await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+  const malformed = await page.locator('.errbox').innerText();
+  check(/expected shape/i.test(malformed), `Malformed data shows a readable shape error ("${malformed.replace(/\n/g, ' ').slice(0, 110)}")`);
+  await page.unroute('**/data/rollup.json');
+  await context.close();
+
+  // 15. reduced motion: nothing animates and the page is complete
+  const { context: rc, page: rp } = await newPage(1440, 'reduce');
+  await rp.goto(`${base}/`, { waitUntil: 'networkidle' });
+  await rp.waitForSelector('#sales table.mis');
+  await rp.waitForTimeout(400);
+  const anims = await rp.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
+  const opacityOk = await rp.evaluate(() => Array.from(document.querySelectorAll('section.sec, tr')).every((el) => getComputedStyle(el).opacity === '1'));
+  check(anims === 0 && opacityOk, `Under reduced motion nothing is animating and every section and row is fully visible (${anims} running animations)`);
+  await rc.close();
+
+  // 16. console errors
   check(errors.length === 0, `No console errors (${errors.length})`);
   for (const e of errors) console.log('   ' + e);
 } finally {
   await browser.close();
 }
 
-if (failures.length) {
-  console.error(`\n${failures.length} check(s) failed.`);
+const failed = results.filter((r) => !r.ok);
+if (failed.length) {
+  console.error(`\n${failed.length} check(s) failed.`);
   process.exit(1);
 }
-console.log('\nAll interaction checks pass.');
+console.log(`\nAll ${results.length} interaction checks pass.`);

@@ -1,21 +1,20 @@
-import { k } from '../lib/format';
-import { cx } from '../lib/format';
+import { cx, k } from '../lib/format';
 
 interface Props {
   v: number;
   /** Formatter, defaults to AED thousands. */
   f?: (n: number) => string;
-  /** Provenance text shown on hover. */
-  tip?: string;
-  /** Render in hazard red: negative variance, overdue risk, an alert. Never decoration. */
+  /** Render in hazard red: negative variance, past due, an alert. Never decoration. */
   bad?: boolean;
   className?: string;
+  /** Space-separated header ids for assistive technology on grouped tables. */
+  headers?: string;
 }
 
-/** A typeset figure in a table cell, with its source on hover. */
-export function Num({ v, f = k, tip, bad, className }: Props) {
+/** A typeset figure in a table cell. */
+export function Num({ v, f = k, bad, className, headers }: Props) {
   return (
-    <td className={cx('num', bad && 'bad', className)} data-tip={tip}>
+    <td className={cx('num', bad && 'bad', className)} headers={headers}>
       {f(v)}
     </td>
   );
