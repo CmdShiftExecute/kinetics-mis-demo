@@ -1,0 +1,912 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:35:35+04:00"
+ },
+ "slug": "mechanical-systems",
+ "name": "Mechanical Systems",
+ "isLargest": false,
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 15390,
+  "budgetRevenue": 17152,
+  "ytdGmPct": 19.6,
+  "fyForecast": 24715,
+  "fyBudget": 26799,
+  "overdue": 10834
+ },
+ "sales": {
+  "engineers": [
+   {
+    "engineer": "Bassem Farouk",
+    "fromOtherVertical": null,
+    "openOrders": 1505,
+    "expectedOrders": 606,
+    "ytdRevenue": 4683,
+    "ytdGm": 898,
+    "ytdBudgetRevenue": 5251,
+    "ytdBudgetGm": 1016,
+    "nearMonthForecast": 687,
+    "restOfYearForecast": 2169,
+    "fyForecastRevenue": 7538,
+    "fyForecastGm": 1451,
+    "fyBudgetRevenue": 8204,
+    "fyBudgetGm": 1589,
+    "priorYearRevenue": 7773,
+    "priorYearGm": 1422,
+    "ytdGmPct": 19.2,
+    "budgetGmPct": 19.3,
+    "roiPriorYear": 5.6,
+    "roiYtd": 5.1,
+    "roiBudget": 6,
+    "roiForecast": 5.5,
+    "products": [
+     {
+      "product": "Fire dampers",
+      "alsoReportedOn": null,
+      "openOrders": 428,
+      "expectedOrders": 127,
+      "ytdRevenue": 1499,
+      "ytdGm": 261,
+      "ytdGmPct": 17.4,
+      "ytdBudgetRevenue": 1693,
+      "ytdBudgetGm": 316,
+      "budgetGmPct": 18.7,
+      "nearMonthForecast": 226,
+      "restOfYearForecast": 707,
+      "fyForecastRevenue": 2431,
+      "fyForecastGm": 436,
+      "fyBudgetRevenue": 2645,
+      "fyBudgetGm": 494,
+      "priorYearRevenue": 2534,
+      "priorYearGm": 444
+     },
+     {
+      "product": "Insulation",
+      "alsoReportedOn": null,
+      "openOrders": 863,
+      "expectedOrders": 358,
+      "ytdRevenue": 2497,
+      "ytdGm": 502,
+      "ytdGmPct": 20.1,
+      "ytdBudgetRevenue": 2791,
+      "ytdBudgetGm": 538,
+      "budgetGmPct": 19.3,
+      "nearMonthForecast": 362,
+      "restOfYearForecast": 1147,
+      "fyForecastRevenue": 4006,
+      "fyForecastGm": 792,
+      "fyBudgetRevenue": 4361,
+      "fyBudgetGm": 841,
+      "priorYearRevenue": 4135,
+      "priorYearGm": 762
+     },
+     {
+      "product": "Fabricated ductwork",
+      "alsoReportedOn": "fabrication",
+      "openOrders": 214,
+      "expectedOrders": 121,
+      "ytdRevenue": 687,
+      "ytdGm": 135,
+      "ytdGmPct": 19.6,
+      "ytdBudgetRevenue": 767,
+      "ytdBudgetGm": 162,
+      "budgetGmPct": 21.2,
+      "nearMonthForecast": 99,
+      "restOfYearForecast": 315,
+      "fyForecastRevenue": 1101,
+      "fyForecastGm": 223,
+      "fyBudgetRevenue": 1198,
+      "fyBudgetGm": 254,
+      "priorYearRevenue": 1104,
+      "priorYearGm": 216
+     }
+    ]
+   },
+   {
+    "engineer": "Sneha Menon",
+    "fromOtherVertical": null,
+    "openOrders": 1507,
+    "expectedOrders": 693,
+    "ytdRevenue": 4575,
+    "ytdGm": 982,
+    "ytdBudgetRevenue": 5095,
+    "ytdBudgetGm": 1095,
+    "nearMonthForecast": 665,
+    "restOfYearForecast": 2097,
+    "fyForecastRevenue": 7336,
+    "fyForecastGm": 1576,
+    "fyBudgetRevenue": 7961,
+    "fyBudgetGm": 1712,
+    "priorYearRevenue": 7644,
+    "priorYearGm": 1581,
+    "ytdGmPct": 21.5,
+    "budgetGmPct": 21.5,
+    "roiPriorYear": 7.3,
+    "roiYtd": 6.5,
+    "roiBudget": 7.5,
+    "roiForecast": 6.9,
+    "products": [
+     {
+      "product": "Insulation",
+      "alsoReportedOn": null,
+      "openOrders": 355,
+      "expectedOrders": 67,
+      "ytdRevenue": 1062,
+      "ytdGm": 213,
+      "ytdGmPct": 20,
+      "ytdBudgetRevenue": 1227,
+      "ytdBudgetGm": 250,
+      "budgetGmPct": 20.4,
+      "nearMonthForecast": 161,
+      "restOfYearForecast": 498,
+      "fyForecastRevenue": 1721,
+      "fyForecastGm": 347,
+      "fyBudgetRevenue": 1917,
+      "fyBudgetGm": 391,
+      "priorYearRevenue": 1881,
+      "priorYearGm": 364
+     },
+     {
+      "product": "Valves and actuators",
+      "alsoReportedOn": null,
+      "openOrders": 459,
+      "expectedOrders": 353,
+      "ytdRevenue": 1839,
+      "ytdGm": 405,
+      "ytdGmPct": 22,
+      "ytdBudgetRevenue": 2034,
+      "ytdBudgetGm": 449,
+      "budgetGmPct": 22.1,
+      "nearMonthForecast": 265,
+      "restOfYearForecast": 852,
+      "fyForecastRevenue": 2955,
+      "fyForecastGm": 652,
+      "fyBudgetRevenue": 3178,
+      "fyBudgetGm": 702,
+      "priorYearRevenue": 3082,
+      "priorYearGm": 658
+     },
+     {
+      "product": "Fire dampers",
+      "alsoReportedOn": null,
+      "openOrders": 693,
+      "expectedOrders": 273,
+      "ytdRevenue": 1674,
+      "ytdGm": 364,
+      "ytdGmPct": 21.7,
+      "ytdBudgetRevenue": 1834,
+      "ytdBudgetGm": 396,
+      "budgetGmPct": 21.6,
+      "nearMonthForecast": 239,
+      "restOfYearForecast": 747,
+      "fyForecastRevenue": 2660,
+      "fyForecastGm": 577,
+      "fyBudgetRevenue": 2866,
+      "fyBudgetGm": 619,
+      "priorYearRevenue": 2681,
+      "priorYearGm": 559
+     }
+    ]
+   },
+   {
+    "engineer": "Tarek Hamdan",
+    "fromOtherVertical": null,
+    "openOrders": 2261,
+    "expectedOrders": 961,
+    "ytdRevenue": 6132,
+    "ytdGm": 1140,
+    "ytdBudgetRevenue": 6806,
+    "ytdBudgetGm": 1252,
+    "nearMonthForecast": 891,
+    "restOfYearForecast": 2816,
+    "fyForecastRevenue": 9841,
+    "fyForecastGm": 1823,
+    "fyBudgetRevenue": 10634,
+    "fyBudgetGm": 1958,
+    "priorYearRevenue": 10147,
+    "priorYearGm": 1790,
+    "ytdGmPct": 18.6,
+    "budgetGmPct": 18.4,
+    "roiPriorYear": 4.9,
+    "roiYtd": 4.4,
+    "roiBudget": 5.1,
+    "roiForecast": 4.7,
+    "products": [
+     {
+      "product": "Valves and actuators",
+      "alsoReportedOn": null,
+      "openOrders": 351,
+      "expectedOrders": 166,
+      "ytdRevenue": 1112,
+      "ytdGm": 204,
+      "ytdGmPct": 18.4,
+      "ytdBudgetRevenue": 1185,
+      "ytdBudgetGm": 229,
+      "budgetGmPct": 19.3,
+      "nearMonthForecast": 158,
+      "restOfYearForecast": 477,
+      "fyForecastRevenue": 1748,
+      "fyForecastGm": 328,
+      "fyBudgetRevenue": 1852,
+      "fyBudgetGm": 358,
+      "priorYearRevenue": 1819,
+      "priorYearGm": 340
+     },
+     {
+      "product": "Fire dampers",
+      "alsoReportedOn": null,
+      "openOrders": 740,
+      "expectedOrders": 231,
+      "ytdRevenue": 1699,
+      "ytdGm": 277,
+      "ytdGmPct": 16.3,
+      "ytdBudgetRevenue": 1794,
+      "ytdBudgetGm": 323,
+      "budgetGmPct": 18,
+      "nearMonthForecast": 237,
+      "restOfYearForecast": 753,
+      "fyForecastRevenue": 2690,
+      "fyForecastGm": 457,
+      "fyBudgetRevenue": 2802,
+      "fyBudgetGm": 505,
+      "priorYearRevenue": 2568,
+      "priorYearGm": 423
+     },
+     {
+      "product": "Insulation",
+      "alsoReportedOn": null,
+      "openOrders": 864,
+      "expectedOrders": 409,
+      "ytdRevenue": 2278,
+      "ytdGm": 453,
+      "ytdGmPct": 19.9,
+      "ytdBudgetRevenue": 2653,
+      "ytdBudgetGm": 487,
+      "budgetGmPct": 18.4,
+      "nearMonthForecast": 349,
+      "restOfYearForecast": 1109,
+      "fyForecastRevenue": 3736,
+      "fyForecastGm": 720,
+      "fyBudgetRevenue": 4146,
+      "fyBudgetGm": 762,
+      "priorYearRevenue": 4074,
+      "priorYearGm": 720
+     },
+     {
+      "product": "Fabricated pipe supports",
+      "alsoReportedOn": "fabrication",
+      "openOrders": 306,
+      "expectedOrders": 155,
+      "ytdRevenue": 1043,
+      "ytdGm": 206,
+      "ytdGmPct": 19.7,
+      "ytdBudgetRevenue": 1174,
+      "ytdBudgetGm": 213,
+      "budgetGmPct": 18.2,
+      "nearMonthForecast": 147,
+      "restOfYearForecast": 477,
+      "fyForecastRevenue": 1667,
+      "fyForecastGm": 318,
+      "fyBudgetRevenue": 1834,
+      "fyBudgetGm": 333,
+      "priorYearRevenue": 1686,
+      "priorYearGm": 307
+     }
+    ]
+   }
+  ],
+  "sheetTotal": {
+   "engineer": "Sheet total",
+   "fromOtherVertical": null,
+   "openOrders": 5273,
+   "expectedOrders": 2260,
+   "ytdRevenue": 15390,
+   "ytdGm": 3020,
+   "ytdBudgetRevenue": 17152,
+   "ytdBudgetGm": 3363,
+   "nearMonthForecast": 2243,
+   "restOfYearForecast": 7082,
+   "fyForecastRevenue": 24715,
+   "fyForecastGm": 4850,
+   "fyBudgetRevenue": 26799,
+   "fyBudgetGm": 5259,
+   "priorYearRevenue": 25564,
+   "priorYearGm": 4793,
+   "ytdGmPct": 19.6,
+   "budgetGmPct": 19.6,
+   "roiPriorYear": 5.7,
+   "roiYtd": 5.1,
+   "roiBudget": 6,
+   "roiForecast": 5.5,
+   "products": []
+  },
+  "attributedTotal": {
+   "engineer": "Attributed total",
+   "fromOtherVertical": null,
+   "openOrders": 5273,
+   "expectedOrders": 2260,
+   "ytdRevenue": 15390,
+   "ytdGm": 3020,
+   "ytdBudgetRevenue": 17152,
+   "ytdBudgetGm": 3363,
+   "nearMonthForecast": 2243,
+   "restOfYearForecast": 7082,
+   "fyForecastRevenue": 24715,
+   "fyForecastGm": 4850,
+   "fyBudgetRevenue": 26799,
+   "fyBudgetGm": 5259,
+   "priorYearRevenue": 25564,
+   "priorYearGm": 4793,
+   "ytdGmPct": 19.6,
+   "budgetGmPct": 19.6,
+   "roiPriorYear": 5.7,
+   "roiYtd": 5.1,
+   "roiBudget": 6,
+   "roiForecast": 5.5,
+   "products": []
+  }
+ },
+ "pl": [
+  {
+   "key": "revenue",
+   "label": "Revenue",
+   "definition": "Invoiced sales for the period, counted once per product line.",
+   "feeds": "Sales performance, engineer rows",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 15391,
+   "forecast": 24715,
+   "budget": 26800
+  },
+  {
+   "key": "grossMargin",
+   "label": "Gross margin",
+   "definition": "Revenue less the cost of goods sold, before any operating cost.",
+   "feeds": "Sales performance, engineer rows",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 3019,
+   "forecast": 4850,
+   "budget": 5259
+  },
+  {
+   "key": "gmPct",
+   "label": "GM percent",
+   "definition": "Gross margin as a share of revenue.",
+   "feeds": "Derived from the two rungs above",
+   "subtotal": false,
+   "isPercent": true,
+   "ytd": 19.6,
+   "forecast": 19.6,
+   "budget": 19.6
+  },
+  {
+   "key": "salaryCtc",
+   "label": "Salary cost to company",
+   "definition": "Full employment cost of the vertical: engineers, support staff, benefits and end of service.",
+   "feeds": "Finance cost extract, monthly static value",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 793,
+   "forecast": 1189,
+   "budget": 1166
+  },
+  {
+   "key": "warehouseCost",
+   "label": "Warehouse cost",
+   "definition": "Rent, handling and freight for stock held by this vertical.",
+   "feeds": "Finance cost extract, monthly static value",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 257,
+   "forecast": 386,
+   "budget": 417
+  },
+  {
+   "key": "warehouseSalaries",
+   "label": "Warehouse salaries",
+   "definition": "Storekeepers and logistics staff allocated by stock share.",
+   "feeds": "Finance cost extract, monthly static value",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 274,
+   "forecast": 411,
+   "budget": 444
+  },
+  {
+   "key": "commonAdmin",
+   "label": "Common admin, selling and depreciation",
+   "definition": "Shared division costs allocated by revenue share.",
+   "feeds": "Finance cost extract, allocation key",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 581,
+   "forecast": 871,
+   "budget": 941
+  },
+  {
+   "key": "buProfitability",
+   "label": "BU profitability",
+   "definition": "Gross margin less the four operating cost lines above. The vertical head is judged on this rung.",
+   "feeds": "Derived",
+   "subtotal": true,
+   "isPercent": false,
+   "ytd": 1115,
+   "forecast": 1993,
+   "budget": 2291
+  },
+  {
+   "key": "provisionsInterCo",
+   "label": "Provisions and inter-company interest",
+   "definition": "Bad debt and stock provisions booked this period, plus interest on group funding.",
+   "feeds": "Finance cost extract and the overdue provision column",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 94,
+   "forecast": 140,
+   "budget": 125
+  },
+  {
+   "key": "corporateOverhead",
+   "label": "Corporate overhead",
+   "definition": "Group head office charge allocated to the division.",
+   "feeds": "Group allocation",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 428,
+   "forecast": 642,
+   "budget": 716
+  },
+  {
+   "key": "buNetProfit",
+   "label": "BU-level net profit",
+   "definition": "What the vertical keeps after every cost it carries, including group charges.",
+   "feeds": "Derived",
+   "subtotal": true,
+   "isPercent": false,
+   "ytd": 593,
+   "forecast": 1210,
+   "budget": 1450
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Fire dampers",
+   "target": 8313,
+   "aspiration": 9450,
+   "achieved": 4872,
+   "achievedPct": 58.6
+  },
+  {
+   "productLine": "Insulation",
+   "target": 10424,
+   "aspiration": 12182,
+   "achieved": 5837,
+   "achievedPct": 56
+  },
+  {
+   "productLine": "Valves and actuators",
+   "target": 5030,
+   "aspiration": 5841,
+   "achieved": 2951,
+   "achievedPct": 58.7
+  }
+ ],
+ "inventory": {
+  "totalStock": 4625,
+  "underOneYear": 2953,
+  "overOneYear": 803,
+  "overTwoYears": 511,
+  "overThreeYears": 357,
+  "provision": 613,
+  "mappedToPurchaseOrders": 1627,
+  "freeStock": 2998,
+  "freeStockOverOneYear": 1287,
+  "inTransit": [
+   {
+    "item": "Spares consignment",
+    "value": 432,
+    "expectedArrival": "2026-11-05"
+   }
+  ]
+ },
+ "unbilled": {
+  "projects": [
+   {
+    "ref": "UB-MEC-1041",
+    "project": "Mall escalator replacement",
+    "engineer": "Tarek Hamdan",
+    "customer": "Ironline MEP Contracting",
+    "trend": [
+     0,
+     0,
+     436
+    ],
+    "provision": 23,
+    "remark": "New this month, delivery complete, awaiting client certification"
+   },
+   {
+    "ref": "UB-MEC-1048",
+    "project": "Logistics park fire dampers",
+    "engineer": "Bassem Farouk",
+    "customer": "Falcon Ridge Estates",
+    "trend": [
+     1094,
+     995,
+     0
+    ],
+    "provision": 0,
+    "remark": "Invoiced 28 Aug 2026 after certification"
+   },
+   {
+    "ref": "UB-MEC-1058",
+    "project": "Hospital air handling replacement",
+    "engineer": "Bassem Farouk",
+    "customer": "Meridian Contracting",
+    "trend": [
+     1197,
+     1279,
+     1353
+    ],
+    "provision": 0,
+    "remark": "Client holding pending variation approval"
+   },
+   {
+    "ref": "UB-MEC-1065",
+    "project": "Tower 3 chilled water plant",
+    "engineer": "Tarek Hamdan",
+    "customer": "Westgate Industrial Park",
+    "trend": [
+     643,
+     718,
+     707
+    ],
+    "provision": 0,
+    "remark": "Client holding pending variation approval"
+   }
+  ],
+  "bridge": {
+   "previousMonth": 2992,
+   "newProjects": 436,
+   "clearedProjects": 995,
+   "ongoingChanges": 63,
+   "currentMonth": 2496
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Sneha Menon",
+    "customer": "Amberfield Schools",
+    "terms": "30 days from invoice",
+    "bucket0to30": 2291,
+    "bucket31to90": 846,
+    "bucket91to365": 740,
+    "bucket1to2y": 1019,
+    "bucketOver2y": 863,
+    "totalOutstanding": 5759,
+    "provision": 1373,
+    "netToCollect": 4386,
+    "overdue": 3468,
+    "dispute": false,
+    "previousMonthOverdue": 3614,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Awaiting consultant certification of payment certificate 7",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Tarek Hamdan",
+    "customer": "Falcon Ridge Estates",
+    "terms": "45 days, post-dated cheque",
+    "bucket0to30": 1013,
+    "bucket31to90": 1469,
+    "bucket91to365": 1253,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 3735,
+    "provision": 0,
+    "netToCollect": 3735,
+    "overdue": 2722,
+    "dispute": false,
+    "previousMonthOverdue": 2733,
+    "previousRemark": "Promised in August, not received",
+    "currentRemark": "Client disputes variation on order 4412",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Bassem Farouk",
+    "customer": "Harbourline Aviation Services",
+    "terms": "30 days from invoice",
+    "bucket0to30": 801,
+    "bucket31to90": 782,
+    "bucket91to365": 115,
+    "bucket1to2y": 318,
+    "bucketOver2y": 335,
+    "totalOutstanding": 2351,
+    "provision": 495,
+    "netToCollect": 1856,
+    "overdue": 1550,
+    "dispute": false,
+    "previousMonthOverdue": 1247,
+    "previousRemark": "Follow-up call made 12 Aug 2026",
+    "currentRemark": "Legal notice issued 02 Sep 2026",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Sneha Menon",
+    "customer": "Greenway Districts",
+    "terms": "60 days from invoice",
+    "bucket0to30": 340,
+    "bucket31to90": 489,
+    "bucket91to365": 311,
+    "bucket1to2y": 460,
+    "bucketOver2y": 239,
+    "totalOutstanding": 1839,
+    "provision": 469,
+    "netToCollect": 1370,
+    "overdue": 1499,
+    "dispute": false,
+    "previousMonthOverdue": 1247,
+    "previousRemark": "Under review by client audit",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Sneha Menon",
+    "customer": "Northshore Facilities",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 875,
+    "bucket31to90": 546,
+    "bucket91to365": 235,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 1656,
+    "provision": 59,
+    "netToCollect": 1597,
+    "overdue": 781,
+    "dispute": true,
+    "previousMonthOverdue": 727,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Client disputes variation on order 4147",
+    "reason": "disputesAndNotDue"
+   },
+   {
+    "engineer": "Tarek Hamdan",
+    "customer": "Ironline MEP Contracting",
+    "terms": "60 days from invoice",
+    "bucket0to30": 467,
+    "bucket31to90": 178,
+    "bucket91to365": 253,
+    "bucket1to2y": 244,
+    "bucketOver2y": 139,
+    "totalOutstanding": 1281,
+    "provision": 324,
+    "netToCollect": 957,
+    "overdue": 814,
+    "dispute": true,
+    "previousMonthOverdue": 666,
+    "previousRemark": "Under review by client audit",
+    "currentRemark": "Client disputes variation on order 4724",
+    "reason": "disputesAndNotDue"
+   }
+  ],
+  "byEngineer": [
+   {
+    "engineer": "Bassem Farouk",
+    "customers": 1,
+    "bucket0to30": 801,
+    "bucket31to90": 782,
+    "bucket91to365": 115,
+    "bucket1to2y": 318,
+    "bucketOver2y": 335,
+    "totalOutstanding": 2351,
+    "provision": 495,
+    "netToCollect": 1856,
+    "overdue": 1550,
+    "previousMonthOverdue": 1247,
+    "change": 303,
+    "disputed": 0
+   },
+   {
+    "engineer": "Sneha Menon",
+    "customers": 3,
+    "bucket0to30": 3506,
+    "bucket31to90": 1881,
+    "bucket91to365": 1286,
+    "bucket1to2y": 1479,
+    "bucketOver2y": 1102,
+    "totalOutstanding": 9254,
+    "provision": 1901,
+    "netToCollect": 7353,
+    "overdue": 5748,
+    "previousMonthOverdue": 5588,
+    "change": 160,
+    "disputed": 781
+   },
+   {
+    "engineer": "Tarek Hamdan",
+    "customers": 2,
+    "bucket0to30": 1480,
+    "bucket31to90": 1647,
+    "bucket91to365": 1506,
+    "bucket1to2y": 244,
+    "bucketOver2y": 139,
+    "totalOutstanding": 5016,
+    "provision": 324,
+    "netToCollect": 4692,
+    "overdue": 3536,
+    "previousMonthOverdue": 3399,
+    "change": 137,
+    "disputed": 814
+   }
+  ],
+  "total": {
+   "customers": 6,
+   "bucket0to30": 5787,
+   "bucket31to90": 4310,
+   "bucket91to365": 2907,
+   "bucket1to2y": 2041,
+   "bucketOver2y": 1576,
+   "totalOutstanding": 16621,
+   "provision": 2720,
+   "netToCollect": 13901,
+   "overdue": 10834,
+   "previousMonthOverdue": 10234,
+   "change": 600,
+   "disputed": 1595
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 9239,
+   "disputesAndNotDue": 1595
+  }
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 1699,
+   "forecast": null,
+   "budget": 1876
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 1833,
+   "forecast": null,
+   "budget": 2010
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 2057,
+   "forecast": null,
+   "budget": 2358
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 1937,
+   "forecast": null,
+   "budget": 2198
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 2039,
+   "forecast": null,
+   "budget": 2251
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 1935,
+   "forecast": null,
+   "budget": 2144
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 1894,
+   "forecast": null,
+   "budget": 2090
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 1997,
+   "forecast": null,
+   "budget": 2224
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 2242,
+   "budget": 2305
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 2293,
+   "budget": 2412
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 2401,
+   "budget": 2466
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 2387,
+   "budget": 2466
+  }
+ ]
+}

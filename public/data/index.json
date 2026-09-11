@@ -1,0 +1,52 @@
+[
+ {
+  "slug": "electrical-distribution",
+  "name": "Electrical Distribution",
+  "file": "verticals/electrical-distribution.json"
+ },
+ {
+  "slug": "cooling",
+  "name": "Cooling",
+  "file": "verticals/cooling.json"
+ },
+ {
+  "slug": "mechanical-systems",
+  "name": "Mechanical Systems",
+  "file": "verticals/mechanical-systems.json"
+ },
+ {
+  "slug": "pumps-and-water",
+  "name": "Pumps and Water",
+  "file": "verticals/pumps-and-water.json"
+ },
+ {
+  "slug": "vertical-transport",
+  "name": "Vertical Transport",
+  "file": "verticals/vertical-transport.json"
+ },
+ {
+  "slug": "metering",
+  "name": "Metering",
+  "file": "verticals/metering.json"
+ },
+ {
+  "slug": "automation",
+  "name": "Automation",
+  "file": "verticals/automation.json"
+ },
+ {
+  "slug": "fabrication",
+  "name": "Fabrication",
+  "file": "verticals/fabrication.json"
+ },
+ {
+  "slug": "trading",
+  "name": "Trading",
+  "file": "verticals/trading.json"
+ },
+ {
+  "slug": "services",
+  "name": "Services",
+  "file": "verticals/services.json"
+ }
+]

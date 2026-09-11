@@ -1,0 +1,572 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:35:35+04:00"
+ },
+ "slug": "trading",
+ "name": "Trading",
+ "isLargest": false,
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 3507,
+  "budgetRevenue": 3776,
+  "ytdGmPct": 12.8,
+  "fyForecast": 5562,
+  "fyBudget": 5900,
+  "overdue": 159
+ },
+ "sales": {
+  "engineers": [
+   {
+    "engineer": "Faisal Reyes",
+    "fromOtherVertical": null,
+    "openOrders": 1108,
+    "expectedOrders": 697,
+    "ytdRevenue": 3507,
+    "ytdGm": 449,
+    "ytdBudgetRevenue": 3776,
+    "ytdBudgetGm": 493,
+    "nearMonthForecast": 493,
+    "restOfYearForecast": 1562,
+    "fyForecastRevenue": 5562,
+    "fyForecastGm": 717,
+    "fyBudgetRevenue": 5900,
+    "fyBudgetGm": 770,
+    "priorYearRevenue": 5641,
+    "priorYearGm": 695,
+    "ytdGmPct": 12.8,
+    "budgetGmPct": 13.1,
+    "roiPriorYear": 3.9,
+    "roiYtd": 3.5,
+    "roiBudget": 4.1,
+    "roiForecast": 3.8,
+    "products": [
+     {
+      "product": "Cables",
+      "alsoReportedOn": null,
+      "openOrders": 287,
+      "expectedOrders": 159,
+      "ytdRevenue": 815,
+      "ytdGm": 87,
+      "ytdGmPct": 10.7,
+      "ytdBudgetRevenue": 853,
+      "ytdBudgetGm": 106,
+      "budgetGmPct": 12.5,
+      "nearMonthForecast": 112,
+      "restOfYearForecast": 355,
+      "fyForecastRevenue": 1282,
+      "fyForecastGm": 146,
+      "fyBudgetRevenue": 1333,
+      "fyBudgetGm": 166,
+      "priorYearRevenue": 1293,
+      "priorYearGm": 139
+     },
+     {
+      "product": "Lighting",
+      "alsoReportedOn": null,
+      "openOrders": 162,
+      "expectedOrders": 156,
+      "ytdRevenue": 682,
+      "ytdGm": 114,
+      "ytdGmPct": 16.8,
+      "ytdBudgetRevenue": 750,
+      "ytdBudgetGm": 116,
+      "budgetGmPct": 15.5,
+      "nearMonthForecast": 96,
+      "restOfYearForecast": 313,
+      "fyForecastRevenue": 1091,
+      "fyForecastGm": 177,
+      "fyBudgetRevenue": 1171,
+      "fyBudgetGm": 181,
+      "priorYearRevenue": 1160,
+      "priorYearGm": 162
+     },
+     {
+      "product": "Consumables",
+      "alsoReportedOn": null,
+      "openOrders": 357,
+      "expectedOrders": 143,
+      "ytdRevenue": 972,
+      "ytdGm": 124,
+      "ytdGmPct": 12.7,
+      "ytdBudgetRevenue": 1058,
+      "ytdBudgetGm": 118,
+      "budgetGmPct": 11.1,
+      "nearMonthForecast": 140,
+      "restOfYearForecast": 431,
+      "fyForecastRevenue": 1543,
+      "fyForecastGm": 186,
+      "fyBudgetRevenue": 1654,
+      "fyBudgetGm": 184,
+      "priorYearRevenue": 1570,
+      "priorYearGm": 174
+     },
+     {
+      "product": "Tools",
+      "alsoReportedOn": null,
+      "openOrders": 302,
+      "expectedOrders": 239,
+      "ytdRevenue": 1038,
+      "ytdGm": 124,
+      "ytdGmPct": 11.9,
+      "ytdBudgetRevenue": 1115,
+      "ytdBudgetGm": 153,
+      "budgetGmPct": 13.7,
+      "nearMonthForecast": 145,
+      "restOfYearForecast": 463,
+      "fyForecastRevenue": 1646,
+      "fyForecastGm": 208,
+      "fyBudgetRevenue": 1742,
+      "fyBudgetGm": 239,
+      "priorYearRevenue": 1618,
+      "priorYearGm": 220
+     }
+    ]
+   }
+  ],
+  "sheetTotal": {
+   "engineer": "Sheet total",
+   "fromOtherVertical": null,
+   "openOrders": 1108,
+   "expectedOrders": 697,
+   "ytdRevenue": 3507,
+   "ytdGm": 449,
+   "ytdBudgetRevenue": 3776,
+   "ytdBudgetGm": 493,
+   "nearMonthForecast": 493,
+   "restOfYearForecast": 1562,
+   "fyForecastRevenue": 5562,
+   "fyForecastGm": 717,
+   "fyBudgetRevenue": 5900,
+   "fyBudgetGm": 770,
+   "priorYearRevenue": 5641,
+   "priorYearGm": 695,
+   "ytdGmPct": 12.8,
+   "budgetGmPct": 13.1,
+   "roiPriorYear": 3.9,
+   "roiYtd": 3.5,
+   "roiBudget": 4.1,
+   "roiForecast": 3.8,
+   "products": []
+  },
+  "attributedTotal": {
+   "engineer": "Attributed total",
+   "fromOtherVertical": null,
+   "openOrders": 1108,
+   "expectedOrders": 697,
+   "ytdRevenue": 3507,
+   "ytdGm": 449,
+   "ytdBudgetRevenue": 3776,
+   "ytdBudgetGm": 493,
+   "nearMonthForecast": 493,
+   "restOfYearForecast": 1562,
+   "fyForecastRevenue": 5562,
+   "fyForecastGm": 717,
+   "fyBudgetRevenue": 5900,
+   "fyBudgetGm": 770,
+   "priorYearRevenue": 5641,
+   "priorYearGm": 695,
+   "ytdGmPct": 12.8,
+   "budgetGmPct": 13.1,
+   "roiPriorYear": 3.9,
+   "roiYtd": 3.5,
+   "roiBudget": 4.1,
+   "roiForecast": 3.8,
+   "products": []
+  }
+ },
+ "pl": [
+  {
+   "key": "revenue",
+   "label": "Revenue",
+   "definition": "Invoiced sales for the period, counted once per product line.",
+   "feeds": "Sales performance, engineer rows",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 3507,
+   "forecast": 5562,
+   "budget": 5900
+  },
+  {
+   "key": "grossMargin",
+   "label": "Gross margin",
+   "definition": "Revenue less the cost of goods sold, before any operating cost.",
+   "feeds": "Sales performance, engineer rows",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 449,
+   "forecast": 718,
+   "budget": 771
+  },
+  {
+   "key": "gmPct",
+   "label": "GM percent",
+   "definition": "Gross margin as a share of revenue.",
+   "feeds": "Derived from the two rungs above",
+   "subtotal": false,
+   "isPercent": true,
+   "ytd": 12.8,
+   "forecast": 12.9,
+   "budget": 13.1
+  },
+  {
+   "key": "salaryCtc",
+   "label": "Salary cost to company",
+   "definition": "Full employment cost of the vertical: engineers, support staff, benefits and end of service.",
+   "feeds": "Finance cost extract, monthly static value",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 171,
+   "forecast": 257,
+   "budget": 251
+  },
+  {
+   "key": "warehouseCost",
+   "label": "Warehouse cost",
+   "definition": "Rent, handling and freight for stock held by this vertical.",
+   "feeds": "Finance cost extract, monthly static value",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 58,
+   "forecast": 87,
+   "budget": 91
+  },
+  {
+   "key": "warehouseSalaries",
+   "label": "Warehouse salaries",
+   "definition": "Storekeepers and logistics staff allocated by stock share.",
+   "feeds": "Finance cost extract, monthly static value",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 51,
+   "forecast": 76,
+   "budget": 79
+  },
+  {
+   "key": "commonAdmin",
+   "label": "Common admin, selling and depreciation",
+   "definition": "Shared division costs allocated by revenue share.",
+   "feeds": "Finance cost extract, allocation key",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 174,
+   "forecast": 261,
+   "budget": 273
+  },
+  {
+   "key": "buProfitability",
+   "label": "BU profitability",
+   "definition": "Gross margin less the four operating cost lines above. The vertical head is judged on this rung.",
+   "feeds": "Derived",
+   "subtotal": true,
+   "isPercent": false,
+   "ytd": -5,
+   "forecast": 37,
+   "budget": 76
+  },
+  {
+   "key": "provisionsInterCo",
+   "label": "Provisions and inter-company interest",
+   "definition": "Bad debt and stock provisions booked this period, plus interest on group funding.",
+   "feeds": "Finance cost extract and the overdue provision column",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 28,
+   "forecast": 42,
+   "budget": 36
+  },
+  {
+   "key": "corporateOverhead",
+   "label": "Corporate overhead",
+   "definition": "Group head office charge allocated to the division.",
+   "feeds": "Group allocation",
+   "subtotal": false,
+   "isPercent": false,
+   "ytd": 76,
+   "forecast": 114,
+   "budget": 123
+  },
+  {
+   "key": "buNetProfit",
+   "label": "BU-level net profit",
+   "definition": "What the vertical keeps after every cost it carries, including group charges.",
+   "feeds": "Derived",
+   "subtotal": true,
+   "isPercent": false,
+   "ytd": -109,
+   "forecast": -119,
+   "budget": -83
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Cables",
+   "target": 1333,
+   "aspiration": 1637,
+   "achieved": 815,
+   "achievedPct": 61.1
+  },
+  {
+   "productLine": "Lighting",
+   "target": 1171,
+   "aspiration": 1355,
+   "achieved": 682,
+   "achievedPct": 58.2
+  },
+  {
+   "productLine": "Consumables",
+   "target": 1654,
+   "aspiration": 1854,
+   "achieved": 972,
+   "achievedPct": 58.8
+  },
+  {
+   "productLine": "Tools",
+   "target": 1742,
+   "aspiration": 2085,
+   "achieved": 1038,
+   "achievedPct": 59.6
+  }
+ ],
+ "inventory": {
+  "totalStock": 553,
+  "underOneYear": 425,
+  "overOneYear": 73,
+  "overTwoYears": 28,
+  "overThreeYears": 27,
+  "provision": 41,
+  "mappedToPurchaseOrders": 210,
+  "freeStock": 343,
+  "freeStockOverOneYear": 94,
+  "inTransit": [
+   {
+    "item": "Sub-meter batch, 1,200 units",
+    "value": 53,
+    "expectedArrival": "2026-11-19"
+   },
+   {
+    "item": "Chiller module, two units",
+    "value": 113,
+    "expectedArrival": "2026-11-04"
+   }
+  ]
+ },
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Faisal Reyes",
+    "customer": "Corniche Medical Centre",
+    "terms": "Against delivery",
+    "bucket0to30": 222,
+    "bucket31to90": 50,
+    "bucket91to365": 109,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 381,
+    "provision": 0,
+    "netToCollect": 381,
+    "overdue": 159,
+    "dispute": false,
+    "previousMonthOverdue": 148,
+    "previousRemark": "Reminder sent 05 Aug 2026",
+    "currentRemark": "No response to three reminders",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "byEngineer": [
+   {
+    "engineer": "Faisal Reyes",
+    "customers": 1,
+    "bucket0to30": 222,
+    "bucket31to90": 50,
+    "bucket91to365": 109,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 381,
+    "provision": 0,
+    "netToCollect": 381,
+    "overdue": 159,
+    "previousMonthOverdue": 148,
+    "change": 11,
+    "disputed": 0
+   }
+  ],
+  "total": {
+   "customers": 1,
+   "bucket0to30": 222,
+   "bucket31to90": 50,
+   "bucket91to365": 109,
+   "bucket1to2y": 0,
+   "bucketOver2y": 0,
+   "totalOutstanding": 381,
+   "provision": 0,
+   "netToCollect": 381,
+   "overdue": 159,
+   "previousMonthOverdue": 148,
+   "change": 11,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 159,
+   "disputesAndNotDue": 0
+  }
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 391,
+   "forecast": null,
+   "budget": 413
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 410,
+   "forecast": null,
+   "budget": 443
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 489,
+   "forecast": null,
+   "budget": 519
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 452,
+   "forecast": null,
+   "budget": 484
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 464,
+   "forecast": null,
+   "budget": 496
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 435,
+   "forecast": null,
+   "budget": 472
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 428,
+   "forecast": null,
+   "budget": 460
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 439,
+   "forecast": null,
+   "budget": 490
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 492,
+   "budget": 507
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 519,
+   "budget": 531
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 526,
+   "budget": 543
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 517,
+   "budget": 543
+  }
+ ]
+}

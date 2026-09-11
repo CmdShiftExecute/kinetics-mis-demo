@@ -1,0 +1,1450 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:35:35+04:00"
+ },
+ "readout": {
+  "headline": {
+   "valueMillions": 6.2,
+   "label": "BU-level net profit, year to date",
+   "sub": "74% of the year-to-date budget"
+  },
+  "lines": [
+   "Revenue is 2.1% behind budget at 8 months, and the full-year forecast lands 1.6% below the AED 215.4M budget.",
+   "Gross margin is holding at 21.0% against a 21.0% budget; BU net profit is 74% of budget, with Vertical Transport, Fabrication and Trading below break-even after group charges.",
+   "AED 62.2M is overdue, up AED 3.5M on the month; 59% of it sits with customers with no payment timeline or no response."
+  ],
+  "scorecard": [
+   {
+    "key": "selling",
+    "question": "How are we selling?",
+    "label": "Selling",
+    "verdict": "WATCH",
+    "figure": "97.9% of YTD budget",
+    "note": "Revenue AED 135.0M against AED 137.9M budgeted for 8 months."
+   },
+   {
+    "key": "delivering",
+    "question": "What will we deliver this year?",
+    "label": "Delivering",
+    "verdict": "ON TRACK",
+    "figure": "98.4% of FY budget",
+    "note": "Full-year forecast AED 211.9M against a budget of AED 215.4M."
+   },
+   {
+    "key": "keeping",
+    "question": "What do we keep as margin?",
+    "label": "Keeping",
+    "verdict": "ON TRACK",
+    "figure": "21.0% gross margin",
+    "note": "Exactly on the 21.0% budget."
+   },
+   {
+    "key": "earning",
+    "question": "What do we keep as profit?",
+    "label": "Earning",
+    "verdict": "BEHIND",
+    "figure": "74% of YTD budget",
+    "note": "BU net profit AED 6.2M against AED 8.4M budgeted to date."
+   },
+   {
+    "key": "collecting",
+    "question": "Where is the cash stuck?",
+    "label": "Collecting",
+    "verdict": "BEHIND",
+    "figure": "AED 62.2M overdue",
+    "note": "Up 5.9% on the month; 26% of it is older than a year."
+   }
+  ],
+  "thresholds": {
+   "selling": "ON TRACK at 98% of YTD budget or better; WATCH at 92%; BEHIND below",
+   "delivering": "ON TRACK at 98% of FY budget or better; WATCH at 92%; BEHIND below",
+   "keeping": "ON TRACK within 0.75 points of budget GM%; WATCH within 2 points; BEHIND beyond",
+   "earning": "ON TRACK at 95% of YTD budget NP or better; WATCH at 80%; BEHIND below",
+   "collecting": "ON TRACK if overdue fell and under 15% is older than a year; WATCH if up under 5% and under 25% is older than a year; BEHIND otherwise. A vertical is flagged red at the same 15% line"
+  }
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  }
+ },
+ "sales": {
+  "rows": [
+   {
+    "slug": "electrical-distribution",
+    "name": "Electrical Distribution",
+    "openOrders": 15069,
+    "expectedOrders": 7359,
+    "ytdRevenue": 49144,
+    "ytdGm": 9164,
+    "ytdGmPct": 18.6,
+    "budgetRevenue": 50241,
+    "budgetGm": 9374,
+    "budgetGmPct": 18.7,
+    "dRevenue": -1097,
+    "dGm": -210,
+    "dGmPts": -0.1
+   },
+   {
+    "slug": "cooling",
+    "name": "Cooling",
+    "openOrders": 7731,
+    "expectedOrders": 3452,
+    "ytdRevenue": 22814,
+    "ytdGm": 5045,
+    "ytdGmPct": 22.1,
+    "budgetRevenue": 21887,
+    "budgetGm": 4982,
+    "budgetGmPct": 22.8,
+    "dRevenue": 927,
+    "dGm": 63,
+    "dGmPts": -0.7
+   },
+   {
+    "slug": "mechanical-systems",
+    "name": "Mechanical Systems",
+    "openOrders": 5273,
+    "expectedOrders": 2260,
+    "ytdRevenue": 15390,
+    "ytdGm": 3020,
+    "ytdGmPct": 19.6,
+    "budgetRevenue": 17152,
+    "budgetGm": 3363,
+    "budgetGmPct": 19.6,
+    "dRevenue": -1762,
+    "dGm": -343,
+    "dGmPts": 0
+   },
+   {
+    "slug": "pumps-and-water",
+    "name": "Pumps and Water",
+    "openOrders": 3428,
+    "expectedOrders": 1921,
+    "ytdRevenue": 11849,
+    "ytdGm": 3142,
+    "ytdGmPct": 26.5,
+    "budgetRevenue": 11776,
+    "budgetGm": 3072,
+    "budgetGmPct": 26.1,
+    "dRevenue": 73,
+    "dGm": 70,
+    "dGmPts": 0.4
+   },
+   {
+    "slug": "vertical-transport",
+    "name": "Vertical Transport",
+    "openOrders": 3073,
+    "expectedOrders": 1168,
+    "ytdRevenue": 9396,
+    "ytdGm": 1750,
+    "ytdGmPct": 18.6,
+    "budgetRevenue": 10815,
+    "budgetGm": 1996,
+    "budgetGmPct": 18.5,
+    "dRevenue": -1419,
+    "dGm": -246,
+    "dGmPts": 0.1
+   },
+   {
+    "slug": "metering",
+    "name": "Metering",
+    "openOrders": 2192,
+    "expectedOrders": 718,
+    "ytdRevenue": 7211,
+    "ytdGm": 1881,
+    "ytdGmPct": 26.1,
+    "budgetRevenue": 6271,
+    "budgetGm": 1623,
+    "budgetGmPct": 25.9,
+    "dRevenue": 940,
+    "dGm": 258,
+    "dGmPts": 0.2
+   },
+   {
+    "slug": "automation",
+    "name": "Automation",
+    "openOrders": 1779,
+    "expectedOrders": 933,
+    "ytdRevenue": 6830,
+    "ytdGm": 1755,
+    "ytdGmPct": 25.7,
+    "budgetRevenue": 7232,
+    "budgetGm": 1962,
+    "budgetGmPct": 27.1,
+    "dRevenue": -402,
+    "dGm": -207,
+    "dGmPts": -1.4
+   },
+   {
+    "slug": "fabrication",
+    "name": "Fabrication",
+    "openOrders": 1141,
+    "expectedOrders": 538,
+    "ytdRevenue": 4063,
+    "ytdGm": 730,
+    "ytdGmPct": 18,
+    "budgetRevenue": 4096,
+    "budgetGm": 716,
+    "budgetGmPct": 17.5,
+    "dRevenue": -33,
+    "dGm": 14,
+    "dGmPts": 0.5
+   },
+   {
+    "slug": "trading",
+    "name": "Trading",
+    "openOrders": 1108,
+    "expectedOrders": 697,
+    "ytdRevenue": 3507,
+    "ytdGm": 449,
+    "ytdGmPct": 12.8,
+    "budgetRevenue": 3776,
+    "budgetGm": 493,
+    "budgetGmPct": 13.1,
+    "dRevenue": -269,
+    "dGm": -44,
+    "dGmPts": -0.3
+   },
+   {
+    "slug": "services",
+    "name": "Services",
+    "openOrders": 1689,
+    "expectedOrders": 701,
+    "ytdRevenue": 4801,
+    "ytdGm": 1388,
+    "ytdGmPct": 28.9,
+    "budgetRevenue": 4609,
+    "budgetGm": 1363,
+    "budgetGmPct": 29.6,
+    "dRevenue": 192,
+    "dGm": 25,
+    "dGmPts": -0.7
+   }
+  ],
+  "total": {
+   "slug": "total",
+   "name": "All verticals, netted",
+   "openOrders": 42483,
+   "expectedOrders": 19747,
+   "ytdRevenue": 135005,
+   "ytdGm": 28324,
+   "ytdGmPct": 21,
+   "budgetRevenue": 137855,
+   "budgetGm": 28944,
+   "budgetGmPct": 21,
+   "dRevenue": -2850,
+   "dGm": -620,
+   "dGmPts": 0
+  },
+  "netting": {
+   "grossSumYtd": 139206,
+   "doubleCountedYtd": 4201,
+   "nettedYtd": 135005,
+   "grossSumFy": 218446,
+   "doubleCountedFy": 6549,
+   "nettedFy": 211897,
+   "explanation": "Fabricated ductwork and pipe supports sold by Mechanical Systems and Cooling engineers are reported on their home sheet and again on the Fabrication sheet. Adding the sheet totals would count that revenue twice. Every total on this page counts each product line once, in its home vertical, and the Fabrication row shows only work sold by its own team.",
+   "items": [
+    {
+     "product": "Fabricated ductwork",
+     "homeVertical": "cooling",
+     "categoryVertical": "fabrication",
+     "engineer": "Joseph Villanueva",
+     "ytdRevenue": 2471,
+     "fyForecastRevenue": 3781
+    },
+    {
+     "product": "Fabricated ductwork",
+     "homeVertical": "mechanical-systems",
+     "categoryVertical": "fabrication",
+     "engineer": "Bassem Farouk",
+     "ytdRevenue": 687,
+     "fyForecastRevenue": 1101
+    },
+    {
+     "product": "Fabricated pipe supports",
+     "homeVertical": "mechanical-systems",
+     "categoryVertical": "fabrication",
+     "engineer": "Tarek Hamdan",
+     "ytdRevenue": 1043,
+     "fyForecastRevenue": 1667
+    }
+   ]
+  }
+ },
+ "engineerSplit": {
+  "electrical-distribution": [
+   {
+    "name": "Rohan Pillai",
+    "ytdRevenue": 9651,
+    "ytdGm": 2041,
+    "ytdGmPct": 21.1,
+    "budgetRevenue": 10085,
+    "dRevenue": -434
+   },
+   {
+    "name": "Farah Haddad",
+    "ytdRevenue": 10393,
+    "ytdGm": 2119,
+    "ytdGmPct": 20.4,
+    "budgetRevenue": 10454,
+    "dRevenue": -61
+   },
+   {
+    "name": "Dinesh Iyer",
+    "ytdRevenue": 10164,
+    "ytdGm": 1622,
+    "ytdGmPct": 16,
+    "budgetRevenue": 10640,
+    "dRevenue": -476
+   },
+   {
+    "name": "Marwan Saleh",
+    "ytdRevenue": 6883,
+    "ytdGm": 1416,
+    "ytdGmPct": 20.6,
+    "budgetRevenue": 7006,
+    "dRevenue": -123
+   },
+   {
+    "name": "Kavya Nair",
+    "ytdRevenue": 12053,
+    "ytdGm": 1966,
+    "ytdGmPct": 16.3,
+    "budgetRevenue": 12056,
+    "dRevenue": -3
+   }
+  ],
+  "cooling": [
+   {
+    "name": "Joseph Villanueva",
+    "ytdRevenue": 6158,
+    "ytdGm": 1333,
+    "ytdGmPct": 21.6,
+    "budgetRevenue": 5829,
+    "dRevenue": 329
+   },
+   {
+    "name": "Lina Khoury",
+    "ytdRevenue": 9263,
+    "ytdGm": 2052,
+    "ytdGmPct": 22.2,
+    "budgetRevenue": 8682,
+    "dRevenue": 581
+   },
+   {
+    "name": "Arjun Sethi",
+    "ytdRevenue": 7393,
+    "ytdGm": 1660,
+    "ytdGmPct": 22.5,
+    "budgetRevenue": 7376,
+    "dRevenue": 17
+   }
+  ],
+  "mechanical-systems": [
+   {
+    "name": "Bassem Farouk",
+    "ytdRevenue": 4683,
+    "ytdGm": 898,
+    "ytdGmPct": 19.2,
+    "budgetRevenue": 5251,
+    "dRevenue": -568
+   },
+   {
+    "name": "Sneha Menon",
+    "ytdRevenue": 4575,
+    "ytdGm": 982,
+    "ytdGmPct": 21.5,
+    "budgetRevenue": 5095,
+    "dRevenue": -520
+   },
+   {
+    "name": "Tarek Hamdan",
+    "ytdRevenue": 6132,
+    "ytdGm": 1140,
+    "ytdGmPct": 18.6,
+    "budgetRevenue": 6806,
+    "dRevenue": -674
+   }
+  ],
+  "pumps-and-water": [
+   {
+    "name": "Omar Nasser",
+    "ytdRevenue": 6194,
+    "ytdGm": 1640,
+    "ytdGmPct": 26.5,
+    "budgetRevenue": 6049,
+    "dRevenue": 145
+   },
+   {
+    "name": "Meera Dsouza",
+    "ytdRevenue": 5655,
+    "ytdGm": 1502,
+    "ytdGmPct": 26.6,
+    "budgetRevenue": 5727,
+    "dRevenue": -72
+   }
+  ],
+  "vertical-transport": [
+   {
+    "name": "Hana Qureshi",
+    "ytdRevenue": 2675,
+    "ytdGm": 522,
+    "ytdGmPct": 19.5,
+    "budgetRevenue": 2991,
+    "dRevenue": -316
+   },
+   {
+    "name": "Yusuf Rahman",
+    "ytdRevenue": 3415,
+    "ytdGm": 602,
+    "ytdGmPct": 17.6,
+    "budgetRevenue": 4035,
+    "dRevenue": -620
+   },
+   {
+    "name": "Divya Bhatt",
+    "ytdRevenue": 3306,
+    "ytdGm": 626,
+    "ytdGmPct": 18.9,
+    "budgetRevenue": 3789,
+    "dRevenue": -483
+   }
+  ],
+  "metering": [
+   {
+    "name": "Karim Mansour",
+    "ytdRevenue": 3581,
+    "ytdGm": 941,
+    "ytdGmPct": 26.3,
+    "budgetRevenue": 3187,
+    "dRevenue": 394
+   },
+   {
+    "name": "Ananya Kapoor",
+    "ytdRevenue": 3630,
+    "ytdGm": 940,
+    "ytdGmPct": 25.9,
+    "budgetRevenue": 3084,
+    "dRevenue": 546
+   }
+  ],
+  "automation": [
+   {
+    "name": "Nadia Zaki",
+    "ytdRevenue": 2883,
+    "ytdGm": 742,
+    "ytdGmPct": 25.7,
+    "budgetRevenue": 3012,
+    "dRevenue": -129
+   },
+   {
+    "name": "Vikram Fernandes",
+    "ytdRevenue": 3947,
+    "ytdGm": 1013,
+    "ytdGmPct": 25.7,
+    "budgetRevenue": 4220,
+    "dRevenue": -273
+   }
+  ],
+  "fabrication": [
+   {
+    "name": "Rami Aziz",
+    "ytdRevenue": 4063,
+    "ytdGm": 730,
+    "ytdGmPct": 18,
+    "budgetRevenue": 4096,
+    "dRevenue": -33
+   }
+  ],
+  "trading": [
+   {
+    "name": "Faisal Reyes",
+    "ytdRevenue": 3507,
+    "ytdGm": 449,
+    "ytdGmPct": 12.8,
+    "budgetRevenue": 3776,
+    "dRevenue": -269
+   }
+  ],
+  "services": [
+   {
+    "name": "Ziad Abdel-Rahman",
+    "ytdRevenue": 1963,
+    "ytdGm": 570,
+    "ytdGmPct": 29,
+    "budgetRevenue": 1922,
+    "dRevenue": 41
+   },
+   {
+    "name": "Priya Kulkarni",
+    "ytdRevenue": 2838,
+    "ytdGm": 818,
+    "ytdGmPct": 28.8,
+    "budgetRevenue": 2687,
+    "dRevenue": 151
+   }
+  ]
+ },
+ "forecast": {
+  "rows": [
+   {
+    "slug": "electrical-distribution",
+    "name": "Electrical Distribution",
+    "priorYearRevenue": 70381,
+    "ytdRevenue": 49144,
+    "nearMonthForecast": 6673,
+    "restOfYearForecast": 21287,
+    "fyForecast": 77106,
+    "fyBudget": 78500,
+    "fcVsBudgetPct": -1.8,
+    "yoyPct": 9.6
+   },
+   {
+    "slug": "cooling",
+    "name": "Cooling",
+    "priorYearRevenue": 31541,
+    "ytdRevenue": 22814,
+    "nearMonthForecast": 3015,
+    "restOfYearForecast": 9552,
+    "fyForecast": 35382,
+    "fyBudget": 34200,
+    "fcVsBudgetPct": 3.5,
+    "yoyPct": 12.2
+   },
+   {
+    "slug": "mechanical-systems",
+    "name": "Mechanical Systems",
+    "priorYearRevenue": 25564,
+    "ytdRevenue": 15390,
+    "nearMonthForecast": 2243,
+    "restOfYearForecast": 7082,
+    "fyForecast": 24715,
+    "fyBudget": 26799,
+    "fcVsBudgetPct": -7.8,
+    "yoyPct": -3.3
+   },
+   {
+    "slug": "pumps-and-water",
+    "name": "Pumps and Water",
+    "priorYearRevenue": 17100,
+    "ytdRevenue": 11849,
+    "nearMonthForecast": 1587,
+    "restOfYearForecast": 5084,
+    "fyForecast": 18520,
+    "fyBudget": 18400,
+    "fcVsBudgetPct": 0.7,
+    "yoyPct": 8.3
+   },
+   {
+    "slug": "vertical-transport",
+    "name": "Vertical Transport",
+    "priorYearRevenue": 14700,
+    "ytdRevenue": 9396,
+    "nearMonthForecast": 1373,
+    "restOfYearForecast": 4325,
+    "fyForecast": 15095,
+    "fyBudget": 16899,
+    "fcVsBudgetPct": -10.7,
+    "yoyPct": 2.7
+   },
+   {
+    "slug": "metering",
+    "name": "Metering",
+    "priorYearRevenue": 8221,
+    "ytdRevenue": 7211,
+    "nearMonthForecast": 890,
+    "restOfYearForecast": 2796,
+    "fyForecast": 10895,
+    "fyBudget": 9800,
+    "fcVsBudgetPct": 11.2,
+    "yoyPct": 32.5
+   },
+   {
+    "slug": "automation",
+    "name": "Automation",
+    "priorYearRevenue": 10073,
+    "ytdRevenue": 6830,
+    "nearMonthForecast": 938,
+    "restOfYearForecast": 3047,
+    "fyForecast": 10815,
+    "fyBudget": 11301,
+    "fcVsBudgetPct": -4.3,
+    "yoyPct": 7.4
+   },
+   {
+    "slug": "fabrication",
+    "name": "Fabrication",
+    "priorYearRevenue": 6148,
+    "ytdRevenue": 4063,
+    "nearMonthForecast": 556,
+    "restOfYearForecast": 1764,
+    "fyForecast": 6383,
+    "fyBudget": 6400,
+    "fcVsBudgetPct": -0.3,
+    "yoyPct": 3.8
+   },
+   {
+    "slug": "trading",
+    "name": "Trading",
+    "priorYearRevenue": 5641,
+    "ytdRevenue": 3507,
+    "nearMonthForecast": 493,
+    "restOfYearForecast": 1562,
+    "fyForecast": 5562,
+    "fyBudget": 5900,
+    "fcVsBudgetPct": -5.7,
+    "yoyPct": -1.4
+   },
+   {
+    "slug": "services",
+    "name": "Services",
+    "priorYearRevenue": 6631,
+    "ytdRevenue": 4801,
+    "nearMonthForecast": 622,
+    "restOfYearForecast": 1999,
+    "fyForecast": 7424,
+    "fyBudget": 7199,
+    "fcVsBudgetPct": 3.1,
+    "yoyPct": 12
+   }
+  ],
+  "total": {
+   "slug": "total",
+   "name": "All verticals, netted",
+   "priorYearRevenue": 196000,
+   "ytdRevenue": 135005,
+   "nearMonthForecast": 18390,
+   "restOfYearForecast": 58498,
+   "fyForecast": 211897,
+   "fyBudget": 215398,
+   "fcVsBudgetPct": -1.6,
+   "yoyPct": 8.1
+  }
+ },
+ "pl": [
+  {
+   "key": "excludingLargest",
+   "label": "Excluding Electrical Distribution",
+   "rungs": [
+    {
+     "key": "revenue",
+     "label": "Revenue",
+     "definition": "Invoiced sales for the period, counted once per product line.",
+     "feeds": "Sales performance, engineer rows",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 85862,
+     "forecast": 134789,
+     "budget": 136900
+    },
+    {
+     "key": "grossMargin",
+     "label": "Gross margin",
+     "definition": "Revenue less the cost of goods sold, before any operating cost.",
+     "feeds": "Sales performance, engineer rows",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 19160,
+     "forecast": 30133,
+     "budget": 30581
+    },
+    {
+     "key": "gmPct",
+     "label": "GM percent",
+     "definition": "Gross margin as a share of revenue.",
+     "feeds": "Derived from the two rungs above",
+     "subtotal": false,
+     "isPercent": true,
+     "ytd": 22.3,
+     "forecast": 22.4,
+     "budget": 22.3
+    },
+    {
+     "key": "salaryCtc",
+     "label": "Salary cost to company",
+     "definition": "Full employment cost of the vertical: engineers, support staff, benefits and end of service.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 5451,
+     "forecast": 8177,
+     "budget": 8013
+    },
+    {
+     "key": "warehouseCost",
+     "label": "Warehouse cost",
+     "definition": "Rent, handling and freight for stock held by this vertical.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 1496,
+     "forecast": 2245,
+     "budget": 2222
+    },
+    {
+     "key": "warehouseSalaries",
+     "label": "Warehouse salaries",
+     "definition": "Storekeepers and logistics staff allocated by stock share.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 1343,
+     "forecast": 2015,
+     "budget": 1994
+    },
+    {
+     "key": "commonAdmin",
+     "label": "Common admin, selling and depreciation",
+     "definition": "Shared division costs allocated by revenue share.",
+     "feeds": "Finance cost extract, allocation key",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 4004,
+     "forecast": 6005,
+     "budget": 5944
+    },
+    {
+     "key": "buProfitability",
+     "label": "BU profitability",
+     "definition": "Gross margin less the four operating cost lines above. The vertical head is judged on this rung.",
+     "feeds": "Derived",
+     "subtotal": true,
+     "isPercent": false,
+     "ytd": 6866,
+     "forecast": 11692,
+     "budget": 12408
+    },
+    {
+     "key": "provisionsInterCo",
+     "label": "Provisions and inter-company interest",
+     "definition": "Bad debt and stock provisions booked this period, plus interest on group funding.",
+     "feeds": "Finance cost extract and the overdue provision column",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 610,
+     "forecast": 914,
+     "budget": 746
+    },
+    {
+     "key": "corporateOverhead",
+     "label": "Corporate overhead",
+     "definition": "Group head office charge allocated to the division.",
+     "feeds": "Group allocation",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 2301,
+     "forecast": 3452,
+     "budget": 3522
+    },
+    {
+     "key": "buNetProfit",
+     "label": "BU-level net profit",
+     "definition": "What the vertical keeps after every cost it carries, including group charges.",
+     "feeds": "Derived",
+     "subtotal": true,
+     "isPercent": false,
+     "ytd": 3955,
+     "forecast": 7325,
+     "budget": 8139
+    }
+   ]
+  },
+  {
+   "key": "largest",
+   "label": "Electrical Distribution",
+   "rungs": [
+    {
+     "key": "revenue",
+     "label": "Revenue",
+     "definition": "Invoiced sales for the period, counted once per product line.",
+     "feeds": "Sales performance, engineer rows",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 49145,
+     "forecast": 77108,
+     "budget": 78500
+    },
+    {
+     "key": "grossMargin",
+     "label": "Gross margin",
+     "definition": "Revenue less the cost of goods sold, before any operating cost.",
+     "feeds": "Sales performance, engineer rows",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 9164,
+     "forecast": 14383,
+     "budget": 14648
+    },
+    {
+     "key": "gmPct",
+     "label": "GM percent",
+     "definition": "Gross margin as a share of revenue.",
+     "feeds": "Derived from the two rungs above",
+     "subtotal": false,
+     "isPercent": true,
+     "ytd": 18.6,
+     "forecast": 18.7,
+     "budget": 18.7
+    },
+    {
+     "key": "salaryCtc",
+     "label": "Salary cost to company",
+     "definition": "Full employment cost of the vertical: engineers, support staff, benefits and end of service.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 1409,
+     "forecast": 2114,
+     "budget": 2072
+    },
+    {
+     "key": "warehouseCost",
+     "label": "Warehouse cost",
+     "definition": "Rent, handling and freight for stock held by this vertical.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 731,
+     "forecast": 1096,
+     "budget": 1087
+    },
+    {
+     "key": "warehouseSalaries",
+     "label": "Warehouse salaries",
+     "definition": "Storekeepers and logistics staff allocated by stock share.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 654,
+     "forecast": 982,
+     "budget": 973
+    },
+    {
+     "key": "commonAdmin",
+     "label": "Common admin, selling and depreciation",
+     "definition": "Shared division costs allocated by revenue share.",
+     "feeds": "Finance cost extract, allocation key",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 2280,
+     "forecast": 3420,
+     "budget": 3391
+    },
+    {
+     "key": "buProfitability",
+     "label": "BU profitability",
+     "definition": "Gross margin less the four operating cost lines above. The vertical head is judged on this rung.",
+     "feeds": "Derived",
+     "subtotal": true,
+     "isPercent": false,
+     "ytd": 4090,
+     "forecast": 6771,
+     "budget": 7124
+    },
+    {
+     "key": "provisionsInterCo",
+     "label": "Provisions and inter-company interest",
+     "definition": "Bad debt and stock provisions booked this period, plus interest on group funding.",
+     "feeds": "Finance cost extract and the overdue provision column",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 389,
+     "forecast": 584,
+     "budget": 477
+    },
+    {
+     "key": "corporateOverhead",
+     "label": "Corporate overhead",
+     "definition": "Group head office charge allocated to the division.",
+     "feeds": "Group allocation",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 1455,
+     "forecast": 2183,
+     "budget": 2232
+    },
+    {
+     "key": "buNetProfit",
+     "label": "BU-level net profit",
+     "definition": "What the vertical keeps after every cost it carries, including group charges.",
+     "feeds": "Derived",
+     "subtotal": true,
+     "isPercent": false,
+     "ytd": 2245,
+     "forecast": 4004,
+     "budget": 4415
+    }
+   ]
+  },
+  {
+   "key": "total",
+   "label": "Division total",
+   "rungs": [
+    {
+     "key": "revenue",
+     "label": "Revenue",
+     "definition": "Invoiced sales for the period, counted once per product line.",
+     "feeds": "Sales performance, engineer rows",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 135007,
+     "forecast": 211897,
+     "budget": 215400
+    },
+    {
+     "key": "grossMargin",
+     "label": "Gross margin",
+     "definition": "Revenue less the cost of goods sold, before any operating cost.",
+     "feeds": "Sales performance, engineer rows",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 28325,
+     "forecast": 44517,
+     "budget": 45230
+    },
+    {
+     "key": "gmPct",
+     "label": "GM percent",
+     "definition": "Gross margin as a share of revenue.",
+     "feeds": "Derived from the two rungs above",
+     "subtotal": false,
+     "isPercent": true,
+     "ytd": 21,
+     "forecast": 21,
+     "budget": 21
+    },
+    {
+     "key": "salaryCtc",
+     "label": "Salary cost to company",
+     "definition": "Full employment cost of the vertical: engineers, support staff, benefits and end of service.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 6861,
+     "forecast": 10291,
+     "budget": 10085
+    },
+    {
+     "key": "warehouseCost",
+     "label": "Warehouse cost",
+     "definition": "Rent, handling and freight for stock held by this vertical.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 2227,
+     "forecast": 3341,
+     "budget": 3309
+    },
+    {
+     "key": "warehouseSalaries",
+     "label": "Warehouse salaries",
+     "definition": "Storekeepers and logistics staff allocated by stock share.",
+     "feeds": "Finance cost extract, monthly static value",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 1998,
+     "forecast": 2996,
+     "budget": 2968
+    },
+    {
+     "key": "commonAdmin",
+     "label": "Common admin, selling and depreciation",
+     "definition": "Shared division costs allocated by revenue share.",
+     "feeds": "Finance cost extract, allocation key",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 6284,
+     "forecast": 9426,
+     "budget": 9336
+    },
+    {
+     "key": "buProfitability",
+     "label": "BU profitability",
+     "definition": "Gross margin less the four operating cost lines above. The vertical head is judged on this rung.",
+     "feeds": "Derived",
+     "subtotal": true,
+     "isPercent": false,
+     "ytd": 10955,
+     "forecast": 18463,
+     "budget": 19532
+    },
+    {
+     "key": "provisionsInterCo",
+     "label": "Provisions and inter-company interest",
+     "definition": "Bad debt and stock provisions booked this period, plus interest on group funding.",
+     "feeds": "Finance cost extract and the overdue provision column",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 999,
+     "forecast": 1498,
+     "budget": 1224
+    },
+    {
+     "key": "corporateOverhead",
+     "label": "Corporate overhead",
+     "definition": "Group head office charge allocated to the division.",
+     "feeds": "Group allocation",
+     "subtotal": false,
+     "isPercent": false,
+     "ytd": 3757,
+     "forecast": 5635,
+     "budget": 5754
+    },
+    {
+     "key": "buNetProfit",
+     "label": "BU-level net profit",
+     "definition": "What the vertical keeps after every cost it carries, including group charges.",
+     "feeds": "Derived",
+     "subtotal": true,
+     "isPercent": false,
+     "ytd": 6200,
+     "forecast": 11330,
+     "budget": 12554
+    }
+   ]
+  }
+ ],
+ "largestVertical": {
+  "slug": "electrical-distribution",
+  "name": "Electrical Distribution"
+ },
+ "profitability": {
+  "rows": [
+   {
+    "slug": "electrical-distribution",
+    "name": "Electrical Distribution",
+    "fyRevenue": 77106,
+    "fyGm": 14382,
+    "fyNp": 4004,
+    "gmPct": 18.7,
+    "npPct": 5.2,
+    "revenueShare": 36.4
+   },
+   {
+    "slug": "cooling",
+    "name": "Cooling",
+    "fyRevenue": 35382,
+    "fyGm": 7914,
+    "fyNp": 2910,
+    "gmPct": 22.4,
+    "npPct": 8.2,
+    "revenueShare": 16.7
+   },
+   {
+    "slug": "mechanical-systems",
+    "name": "Mechanical Systems",
+    "fyRevenue": 24715,
+    "fyGm": 4850,
+    "fyNp": 1210,
+    "gmPct": 19.6,
+    "npPct": 4.9,
+    "revenueShare": 11.7
+   },
+   {
+    "slug": "pumps-and-water",
+    "name": "Pumps and Water",
+    "fyRevenue": 18520,
+    "fyGm": 4878,
+    "fyNp": 1813,
+    "gmPct": 26.3,
+    "npPct": 9.8,
+    "revenueShare": 8.7
+   },
+   {
+    "slug": "vertical-transport",
+    "name": "Vertical Transport",
+    "fyRevenue": 15095,
+    "fyGm": 2801,
+    "fyNp": -173,
+    "gmPct": 18.6,
+    "npPct": -1.1,
+    "revenueShare": 7.1
+   },
+   {
+    "slug": "metering",
+    "name": "Metering",
+    "fyRevenue": 10895,
+    "fyGm": 2831,
+    "fyNp": 740,
+    "gmPct": 26,
+    "npPct": 6.8,
+    "revenueShare": 5.1
+   },
+   {
+    "slug": "automation",
+    "name": "Automation",
+    "fyRevenue": 10815,
+    "fyGm": 2842,
+    "fyNp": 542,
+    "gmPct": 26.3,
+    "npPct": 5,
+    "revenueShare": 5.1
+   },
+   {
+    "slug": "fabrication",
+    "name": "Fabrication",
+    "fyRevenue": 6383,
+    "fyGm": 1133,
+    "fyNp": -53,
+    "gmPct": 17.8,
+    "npPct": -0.8,
+    "revenueShare": 3
+   },
+   {
+    "slug": "trading",
+    "name": "Trading",
+    "fyRevenue": 5562,
+    "fyGm": 717,
+    "fyNp": -119,
+    "gmPct": 12.9,
+    "npPct": -2.1,
+    "revenueShare": 2.6
+   },
+   {
+    "slug": "services",
+    "name": "Services",
+    "fyRevenue": 7424,
+    "fyGm": 2166,
+    "fyNp": 454,
+    "gmPct": 29.2,
+    "npPct": 6.1,
+    "revenueShare": 3.5
+   }
+  ],
+  "total": {
+   "slug": "total",
+   "name": "Division total, netted",
+   "fyRevenue": 211897,
+   "fyGm": 44517,
+   "fyNp": 11330,
+   "gmPct": 21,
+   "npPct": 5.3,
+   "revenueShare": 99.9
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "slug": "electrical-distribution",
+    "name": "Electrical Distribution",
+    "previousMonth": 23147,
+    "currentMonth": 24762,
+    "change": 1615,
+    "reasons": {
+     "internalGroup": 0,
+     "noTimelineOrResponse": 11533,
+     "disputesAndNotDue": 13229
+    },
+    "topRemark": "Oryx Cold Chain: Held pending site handover sign-off",
+    "overOneYear": 6129,
+    "overOneYearPct": 24.8,
+    "agingFlag": true
+   },
+   {
+    "slug": "cooling",
+    "name": "Cooling",
+    "previousMonth": 12109,
+    "currentMonth": 12799,
+    "change": 690,
+    "reasons": {
+     "internalGroup": 0,
+     "noTimelineOrResponse": 10800,
+     "disputesAndNotDue": 1999
+    },
+    "topRemark": "Redsand Logistics: No response to three reminders",
+    "overOneYear": 2323,
+    "overOneYearPct": 18.1,
+    "agingFlag": true
+   },
+   {
+    "slug": "mechanical-systems",
+    "name": "Mechanical Systems",
+    "previousMonth": 10234,
+    "currentMonth": 10834,
+    "change": 600,
+    "reasons": {
+     "internalGroup": 0,
+     "noTimelineOrResponse": 9239,
+     "disputesAndNotDue": 1595
+    },
+    "topRemark": "Amberfield Schools: Awaiting consultant certification of payment certificate 7",
+    "overOneYear": 3617,
+    "overOneYearPct": 33.4,
+    "agingFlag": true
+   },
+   {
+    "slug": "pumps-and-water",
+    "name": "Pumps and Water",
+    "previousMonth": 2449,
+    "currentMonth": 2690,
+    "change": 241,
+    "reasons": {
+     "internalGroup": 713,
+     "noTimelineOrResponse": 1977,
+     "disputesAndNotDue": 0
+    },
+    "topRemark": "Oryx Cold Chain: No response to three reminders",
+    "overOneYear": 948,
+    "overOneYearPct": 35.2,
+    "agingFlag": true
+   },
+   {
+    "slug": "vertical-transport",
+    "name": "Vertical Transport",
+    "previousMonth": 6241,
+    "currentMonth": 6420,
+    "change": 179,
+    "reasons": {
+     "internalGroup": 2382,
+     "noTimelineOrResponse": 1597,
+     "disputesAndNotDue": 2441
+    },
+    "topRemark": "Halvard Facilities Management (group): Group settlement scheduled for Q4",
+    "overOneYear": 2616,
+    "overOneYearPct": 40.7,
+    "agingFlag": true
+   },
+   {
+    "slug": "metering",
+    "name": "Metering",
+    "previousMonth": 2265,
+    "currentMonth": 2336,
+    "change": 71,
+    "reasons": {
+     "internalGroup": 0,
+     "noTimelineOrResponse": 1050,
+     "disputesAndNotDue": 1286
+    },
+    "topRemark": "Crescent Bay Builders: No response to three reminders",
+    "overOneYear": 58,
+    "overOneYearPct": 2.5,
+    "agingFlag": false
+   },
+   {
+    "slug": "automation",
+    "name": "Automation",
+    "previousMonth": 556,
+    "currentMonth": 563,
+    "change": 7,
+    "reasons": {
+     "internalGroup": 372,
+     "noTimelineOrResponse": 68,
+     "disputesAndNotDue": 123
+    },
+    "topRemark": "Halvard Facilities Management (group): Group settlement scheduled for Q4",
+    "overOneYear": 7,
+    "overOneYearPct": 1.2,
+    "agingFlag": false
+   },
+   {
+    "slug": "fabrication",
+    "name": "Fabrication",
+    "previousMonth": 818,
+    "currentMonth": 838,
+    "change": 20,
+    "reasons": {
+     "internalGroup": 612,
+     "noTimelineOrResponse": 226,
+     "disputesAndNotDue": 0
+    },
+    "topRemark": "Halvard Contracting (group): Group settlement scheduled for Q4",
+    "overOneYear": 264,
+    "overOneYearPct": 31.5,
+    "agingFlag": true
+   },
+   {
+    "slug": "trading",
+    "name": "Trading",
+    "previousMonth": 148,
+    "currentMonth": 159,
+    "change": 11,
+    "reasons": {
+     "internalGroup": 0,
+     "noTimelineOrResponse": 159,
+     "disputesAndNotDue": 0
+    },
+    "topRemark": "Corniche Medical Centre: No response to three reminders",
+    "overOneYear": 0,
+    "overOneYearPct": 0,
+    "agingFlag": false
+   },
+   {
+    "slug": "services",
+    "name": "Services",
+    "previousMonth": 784,
+    "currentMonth": 816,
+    "change": 32,
+    "reasons": {
+     "internalGroup": 384,
+     "noTimelineOrResponse": 294,
+     "disputesAndNotDue": 138
+    },
+    "topRemark": "Halvard Facilities Management (group): Group settlement scheduled for Q4",
+    "overOneYear": 30,
+    "overOneYearPct": 3.7,
+    "agingFlag": false
+   }
+  ],
+  "total": {
+   "slug": "total",
+   "name": "All verticals",
+   "previousMonth": 58751,
+   "currentMonth": 62217,
+   "change": 3466,
+   "reasons": {
+    "internalGroup": 4463,
+    "noTimelineOrResponse": 36943,
+    "disputesAndNotDue": 20811
+   },
+   "topRemark": "",
+   "overOneYear": 15992,
+   "overOneYearPct": 25.7,
+   "agingFlag": true
+  }
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 14812,
+   "forecast": null,
+   "budget": 15078
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 15937,
+   "forecast": null,
+   "budget": 16155
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 18442,
+   "forecast": null,
+   "budget": 18955
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 17261,
+   "forecast": null,
+   "budget": 17663
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 17790,
+   "forecast": null,
+   "budget": 18094
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 16827,
+   "forecast": null,
+   "budget": 17232
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 16446,
+   "forecast": null,
+   "budget": 16801
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 17491,
+   "forecast": null,
+   "budget": 17878
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 18392,
+   "budget": 18524
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 19164,
+   "budget": 19386
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 19676,
+   "budget": 19817
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 19658,
+   "budget": 19817
+  }
+ ]
+}
