@@ -13,7 +13,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:35:35+04:00"
+  "generatedAt": "2026-09-11T19:59:46+04:00"
  },
  "slug": "trading",
  "name": "Trading",
@@ -66,6 +66,22 @@
   "vertical.overdue": {
    "key": "vertical.overdue",
    "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
   }
  },
  "headline": {
@@ -80,6 +96,8 @@
   "engineers": [
    {
     "engineer": "Faisal Reyes",
+    "slug": "faisal-reyes",
+    "homeVertical": "trading",
     "fromOtherVertical": null,
     "openOrders": 1108,
     "expectedOrders": 697,
@@ -187,6 +205,8 @@
   ],
   "sheetTotal": {
    "engineer": "Sheet total",
+   "slug": "sheet-total",
+   "homeVertical": "trading",
    "fromOtherVertical": null,
    "openOrders": 1108,
    "expectedOrders": 697,
@@ -212,6 +232,8 @@
   },
   "attributedTotal": {
    "engineer": "Attributed total",
+   "slug": "attributed-total",
+   "homeVertical": "trading",
    "fromOtherVertical": null,
    "openOrders": 1108,
    "expectedOrders": 697,
@@ -447,6 +469,7 @@
   "byEngineer": [
    {
     "engineer": "Faisal Reyes",
+    "slug": "faisal-reyes",
     "customers": 1,
     "bucket0to30": 222,
     "bucket31to90": 50,

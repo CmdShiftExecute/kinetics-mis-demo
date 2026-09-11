@@ -1,0 +1,368 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "priya-kulkarni",
+ "name": "Priya Kulkarni",
+ "vertical": {
+  "slug": "services",
+  "name": "Services"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 2838,
+  "budgetRevenue": 2687,
+  "ytdGmPct": 28.8,
+  "fyForecast": 4359,
+  "fyBudget": 4197,
+  "roiYtd": 5.1,
+  "roiBudget": 5.2,
+  "overdue": 604,
+  "overdueChange": 39
+ },
+ "sales": {
+  "engineer": "Priya Kulkarni",
+  "slug": "priya-kulkarni",
+  "homeVertical": "services",
+  "fromOtherVertical": null,
+  "openOrders": 865,
+  "expectedOrders": 488,
+  "ytdRevenue": 2838,
+  "ytdGm": 818,
+  "ytdBudgetRevenue": 2687,
+  "ytdBudgetGm": 799,
+  "nearMonthForecast": 359,
+  "restOfYearForecast": 1160,
+  "fyForecastRevenue": 4359,
+  "fyForecastGm": 1272,
+  "fyBudgetRevenue": 4197,
+  "fyBudgetGm": 1248,
+  "priorYearRevenue": 3840,
+  "priorYearGm": 1120,
+  "ytdGmPct": 28.8,
+  "budgetGmPct": 29.7,
+  "roiPriorYear": 4.9,
+  "roiYtd": 5.1,
+  "roiBudget": 5.2,
+  "roiForecast": 5.3,
+  "products": [
+   {
+    "product": "Spares",
+    "alsoReportedOn": null,
+    "openOrders": 344,
+    "expectedOrders": 208,
+    "ytdRevenue": 1263,
+    "ytdGm": 374,
+    "ytdGmPct": 29.6,
+    "ytdBudgetRevenue": 1212,
+    "ytdBudgetGm": 371,
+    "budgetGmPct": 30.6,
+    "nearMonthForecast": 164,
+    "restOfYearForecast": 526,
+    "fyForecastRevenue": 1954,
+    "fyForecastGm": 586,
+    "fyBudgetRevenue": 1893,
+    "fyBudgetGm": 579,
+    "priorYearRevenue": 1761,
+    "priorYearGm": 512
+   },
+   {
+    "product": "Commissioning",
+    "alsoReportedOn": null,
+    "openOrders": 521,
+    "expectedOrders": 280,
+    "ytdRevenue": 1575,
+    "ytdGm": 444,
+    "ytdGmPct": 28.2,
+    "ytdBudgetRevenue": 1475,
+    "ytdBudgetGm": 428,
+    "budgetGmPct": 29,
+    "nearMonthForecast": 195,
+    "restOfYearForecast": 634,
+    "fyForecastRevenue": 2405,
+    "fyForecastGm": 686,
+    "fyBudgetRevenue": 2304,
+    "fyBudgetGm": 669,
+    "priorYearRevenue": 2079,
+    "priorYearGm": 608
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 309,
+   "forecast": null,
+   "budget": 294
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 337,
+   "forecast": null,
+   "budget": 315
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 389,
+   "forecast": null,
+   "budget": 369
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 369,
+   "forecast": null,
+   "budget": 344
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 373,
+   "forecast": null,
+   "budget": 353
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 339,
+   "forecast": null,
+   "budget": 336
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 343,
+   "forecast": null,
+   "budget": 327
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 380,
+   "forecast": null,
+   "budget": 348
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 360,
+   "budget": 361
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 389,
+   "budget": 378
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 392,
+   "budget": 386
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 380,
+   "budget": 386
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Spares",
+   "target": 1893,
+   "aspiration": 2230,
+   "achieved": 1263,
+   "achievedPct": 66.7
+  },
+  {
+   "productLine": "Commissioning",
+   "target": 2304,
+   "aspiration": 2673,
+   "achieved": 1575,
+   "achievedPct": 68.4
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Priya Kulkarni",
+    "customer": "Halvard Facilities Management (group)",
+    "terms": "90 days from invoice",
+    "bucket0to30": 316,
+    "bucket31to90": 231,
+    "bucket91to365": 153,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 700,
+    "provision": 0,
+    "netToCollect": 700,
+    "overdue": 384,
+    "dispute": false,
+    "previousMonthOverdue": 357,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "internalGroup"
+   },
+   {
+    "engineer": "Priya Kulkarni",
+    "customer": "Silverstone Data Centres",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 216,
+    "bucket31to90": 55,
+    "bucket91to365": 83,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 354,
+    "provision": 21,
+    "netToCollect": 333,
+    "overdue": 138,
+    "dispute": true,
+    "previousMonthOverdue": 122,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Client disputes variation on order 4344",
+    "reason": "disputesAndNotDue"
+   },
+   {
+    "engineer": "Priya Kulkarni",
+    "customer": "Amberfield Schools",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 107,
+    "bucket31to90": 36,
+    "bucket91to365": 16,
+    "bucket1to2y": 30,
+    "bucketOver2y": 0,
+    "totalOutstanding": 189,
+    "provision": 15,
+    "netToCollect": 174,
+    "overdue": 82,
+    "dispute": false,
+    "previousMonthOverdue": 86,
+    "previousRemark": "Statement of account sent",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 3,
+   "bucket0to30": 639,
+   "bucket31to90": 322,
+   "bucket91to365": 252,
+   "bucket1to2y": 30,
+   "bucketOver2y": 0,
+   "totalOutstanding": 1243,
+   "provision": 36,
+   "netToCollect": 1207,
+   "overdue": 604,
+   "previousMonthOverdue": 565,
+   "change": 39,
+   "disputed": 138
+  },
+  "reasons": {
+   "internalGroup": 384,
+   "noTimelineOrResponse": 82,
+   "disputesAndNotDue": 138
+  }
+ },
+ "peers": [
+  {
+   "slug": "ziad-abdel-rahman",
+   "name": "Ziad Abdel-Rahman"
+  }
+ ]
+}

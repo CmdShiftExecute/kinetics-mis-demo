@@ -41,6 +41,7 @@ import type {
   Slug,
   Source,
   TargetRow,
+  UnbilledBridge,
   UnbilledProject,
   Verdict,
   VerticalData,
@@ -65,6 +66,7 @@ const between = (lo: number, hi: number) => lo + rnd() * (hi - lo);
 const noise = (spread: number) => 1 + between(-spread, spread);
 const pick = <T,>(arr: readonly T[]): T => arr[Math.floor(rnd() * arr.length)]!;
 const r0 = (n: number) => Math.round(n);
+const slugify = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const r1 = (n: number) => Math.round(n * 10) / 10;
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
 
@@ -504,6 +506,8 @@ function engineerRow(name: string, rows: ProductRow[], fromOtherVertical: Slug |
   const ctcYtd = meta.ctc * (MONTHS_ELAPSED / 12);
   return {
     engineer: name,
+    slug: slugify(name),
+    homeVertical: meta.home,
     fromOtherVertical,
     ...agg,
     roiPriorYear: r1(agg.priorYearGm / (meta.ctc * 0.95)),
@@ -520,6 +524,8 @@ function totalRow(label: string, engineers: EngineerRow[]): EngineerRow {
   const ctcYtd = ctc * (MONTHS_ELAPSED / 12);
   return {
     engineer: label,
+    slug: slugify(label),
+    homeVertical: engineers[0]?.homeVertical ?? '',
     fromOtherVertical: null,
     ...agg,
     roiPriorYear: ctc ? r1(agg.priorYearGm / (ctc * 0.95)) : 0,
@@ -753,6 +759,11 @@ function unbilledFor(v: VerticalConfig): { projects: UnbilledProject[]; bridge: 
       remark,
     });
   }
+  return { projects, bridge: bridgeFor(projects, v.slug) };
+}
+
+/** The month bridge for any set of unbilled projects; throws if it does not reconcile. */
+function bridgeFor(projects: UnbilledProject[], label: string): UnbilledBridge {
   const previousMonth = sum(projects.map((p) => p.trend[1]));
   const currentMonth = sum(projects.map((p) => p.trend[2]));
   const newProjects = sum(projects.filter((p) => p.trend[1] === 0 && p.trend[2] > 0).map((p) => p.trend[2]));
@@ -760,9 +771,9 @@ function unbilledFor(v: VerticalConfig): { projects: UnbilledProject[]; bridge: 
   const ongoingChanges = currentMonth - previousMonth - newProjects + clearedProjects;
   const bridge = { previousMonth, newProjects, clearedProjects, ongoingChanges, currentMonth };
   if (bridge.previousMonth + bridge.newProjects - bridge.clearedProjects + bridge.ongoingChanges !== bridge.currentMonth) {
-    throw new Error(`Unbilled bridge does not reconcile for ${v.slug}`);
+    throw new Error(`Unbilled bridge does not reconcile for ${label}`);
   }
-  return { projects, bridge };
+  return bridge;
 }
 
 function inventoryFor(v: VerticalConfig): Inventory {
@@ -831,12 +842,17 @@ const SOURCES: Record<string, Source> = {
   'vertical.inventory': { key: 'vertical.inventory', label: 'Inventory outlook' },
   'vertical.unbilled': { key: 'vertical.unbilled', label: 'Unbilled projects and month bridge' },
   'vertical.overdue': { key: 'vertical.overdue', label: 'Overdue by engineer and customer' },
+  'engineer.sales': { key: 'engineer.sales', label: 'Sales performance by product line, one engineer' },
+  'engineer.targets': { key: 'engineer.targets', label: 'Business targets by product line, one engineer' },
+  'engineer.unbilled': { key: 'engineer.unbilled', label: 'Unbilled projects against one engineer' },
+  'engineer.overdue': { key: 'engineer.overdue', label: 'Overdue by customer, one engineer' },
 };
 
 const largest = VERTICALS.reduce((a, b) => (a.fyBudget > b.fyBudget ? a : b));
 const allHomeLeaves = leaves; // every leaf exactly once, attribution basis
 
 const verticalFiles: VerticalData[] = [];
+const engineerFiles: EngineerData[] = [];
 const salesRows: SalesRow[] = [];
 const forecastRows: ForecastRow[] = [];
 const profRows: ProfitabilityRow[] = [];
@@ -861,10 +877,54 @@ for (const v of VERTICALS) {
   const od = overdueRows(v);
   const odReasons = reasonBuckets(od);
   const odTotal = overdueSubtotal(od);
-  const byEngineer: EngineerOverdue[] = v.engineers.map((eng) => ({ engineer: eng, ...overdueSubtotal(od.filter((r) => r.engineer === eng)) }));
+  const byEngineer: EngineerOverdue[] = v.engineers.map((eng) => ({ engineer: eng, slug: slugify(eng), ...overdueSubtotal(od.filter((r) => r.engineer === eng)) }));
   const unbilled = unbilledFor(v);
   const monthly = monthlySeries(own);
   const s = attributedTotal;
+  const verticalTargets = targetsFor(v);
+
+  // one file per engineer: the engineer's own rows, including lines also reported on another sheet
+  for (const row of ownEngineers) {
+    const engLeaves = own.filter((l) => l.engineer === row.engineer);
+    const engOd = od.filter((r) => r.engineer === row.engineer);
+    const engProjects = unbilled.projects.filter((p) => p.engineer === row.engineer);
+    const engTotal = overdueSubtotal(engOd);
+    const targets: TargetRow[] = row.products.map((p) => {
+      const vt = verticalTargets.find((t) => t.productLine === p.product);
+      const ratio = vt && vt.target ? vt.aspiration / vt.target : 1.15;
+      return {
+        productLine: p.product,
+        target: p.fyBudgetRevenue,
+        aspiration: r0(p.fyBudgetRevenue * ratio),
+        achieved: p.ytdRevenue,
+        achievedPct: p.fyBudgetRevenue ? r1((p.ytdRevenue / p.fyBudgetRevenue) * 100) : 0,
+      };
+    });
+    engineerFiles.push({
+      meta: META,
+      slug: row.slug,
+      name: row.engineer,
+      vertical: { slug: v.slug, name: v.name },
+      sources: SOURCES,
+      headline: {
+        ytdRevenue: row.ytdRevenue,
+        budgetRevenue: row.ytdBudgetRevenue,
+        ytdGmPct: row.ytdGmPct,
+        fyForecast: row.fyForecastRevenue,
+        fyBudget: row.fyBudgetRevenue,
+        roiYtd: row.roiYtd,
+        roiBudget: row.roiBudget,
+        overdue: engTotal.overdue,
+        overdueChange: engTotal.change,
+      },
+      sales: row,
+      monthly: monthlySeries(engLeaves),
+      targets,
+      unbilled: { projects: engProjects, bridge: bridgeFor(engProjects, `${v.slug}/${row.slug}`) },
+      overdue: { rows: engOd, total: engTotal, reasons: reasonBuckets(engOd) },
+      peers: ownEngineers.filter((e) => e.slug !== row.slug).map((e) => ({ slug: e.slug, name: e.engineer })),
+    });
+  }
 
   verticalFiles.push({
     meta: META,
@@ -882,7 +942,7 @@ for (const v of VERTICALS) {
     },
     sales: { engineers: [...ownEngineers, ...sharedEngineers], sheetTotal, attributedTotal },
     pl,
-    targets: targetsFor(v),
+    targets: verticalTargets,
     inventory: inventoryFor(v),
     unbilled,
     overdue: { rows: od, byEngineer, total: odTotal, reasons: odReasons },
@@ -906,6 +966,7 @@ for (const v of VERTICALS) {
   });
   engineerSplit[v.slug] = ownEngineers.map((e) => ({
     name: e.engineer,
+    slug: e.slug,
     ytdRevenue: e.ytdRevenue,
     ytdGm: e.ytdGm,
     ytdGmPct: e.ytdGmPct,
@@ -1196,8 +1257,17 @@ writeFileSync(join(outDir, 'rollup.json'), JSON.stringify(rollup, null, 1));
 const index: VerticalIndexEntry[] = verticalFiles.map((v) => ({ slug: v.slug, name: v.name, file: `verticals/${v.slug}.json` }));
 writeFileSync(join(outDir, 'index.json'), JSON.stringify(index, null, 1));
 for (const v of verticalFiles) writeFileSync(join(outDir, 'verticals', `${v.slug}.json`), JSON.stringify(v, null, 1));
+mkdirSync(join(outDir, 'engineers'), { recursive: true });
+{
+  const slugs = new Set<string>();
+  for (const e of engineerFiles) {
+    if (slugs.has(e.slug)) throw new Error(`Duplicate engineer slug ${e.slug}`);
+    slugs.add(e.slug);
+    writeFileSync(join(outDir, 'engineers', `${e.slug}.json`), JSON.stringify(e, null, 1));
+  }
+}
 
-console.log(`Generated ${verticalFiles.length} vertical files and rollup.json at ${META.generatedAt}`);
+console.log(`Generated ${verticalFiles.length} vertical files, ${engineerFiles.length} engineer files and rollup.json at ${META.generatedAt}`);
 console.log(`Netted YTD revenue AED ${fmtM(salesTotal.ytdRevenue)}M (gross ${fmtM(netting.grossSumYtd)}M, double counted ${fmtM(doubleYtd)}M)`);
 console.log(`Scorecard: ${scorecard.map((s) => `${s.label} ${s.verdict}`).join(' | ')}`);
 console.log(`Headline: AED ${readout.headline.valueMillions}M BU net profit YTD, ${readout.headline.sub}`);

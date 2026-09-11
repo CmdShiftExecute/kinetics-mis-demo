@@ -1,0 +1,349 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "meera-dsouza",
+ "name": "Meera Dsouza",
+ "vertical": {
+  "slug": "pumps-and-water",
+  "name": "Pumps and Water"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 5655,
+  "budgetRevenue": 5727,
+  "ytdGmPct": 26.6,
+  "fyForecast": 8866,
+  "fyBudget": 8949,
+  "roiYtd": 6,
+  "roiBudget": 6.4,
+  "overdue": 1031,
+  "overdueChange": -14
+ },
+ "sales": {
+  "engineer": "Meera Dsouza",
+  "slug": "meera-dsouza",
+  "homeVertical": "pumps-and-water",
+  "fromOtherVertical": null,
+  "openOrders": 1123,
+  "expectedOrders": 1083,
+  "ytdRevenue": 5655,
+  "ytdGm": 1502,
+  "ytdBudgetRevenue": 5727,
+  "ytdBudgetGm": 1537,
+  "nearMonthForecast": 764,
+  "restOfYearForecast": 2447,
+  "fyForecastRevenue": 8866,
+  "fyForecastGm": 2364,
+  "fyBudgetRevenue": 8949,
+  "fyBudgetGm": 2401,
+  "priorYearRevenue": 8381,
+  "priorYearGm": 2197,
+  "ytdGmPct": 26.6,
+  "budgetGmPct": 26.8,
+  "roiPriorYear": 6.2,
+  "roiYtd": 6,
+  "roiBudget": 6.4,
+  "roiForecast": 6.3,
+  "products": [
+   {
+    "product": "Booster sets",
+    "alsoReportedOn": null,
+    "openOrders": 456,
+    "expectedOrders": 538,
+    "ytdRevenue": 2383,
+    "ytdGm": 618,
+    "ytdGmPct": 25.9,
+    "ytdBudgetRevenue": 2339,
+    "ytdBudgetGm": 620,
+    "budgetGmPct": 26.5,
+    "nearMonthForecast": 313,
+    "restOfYearForecast": 998,
+    "fyForecastRevenue": 3694,
+    "fyForecastGm": 966,
+    "fyBudgetRevenue": 3654,
+    "fyBudgetGm": 969,
+    "priorYearRevenue": 3325,
+    "priorYearGm": 856
+   },
+   {
+    "product": "Water treatment",
+    "alsoReportedOn": null,
+    "openOrders": 667,
+    "expectedOrders": 545,
+    "ytdRevenue": 3272,
+    "ytdGm": 884,
+    "ytdGmPct": 27,
+    "ytdBudgetRevenue": 3388,
+    "ytdBudgetGm": 917,
+    "budgetGmPct": 27.1,
+    "nearMonthForecast": 451,
+    "restOfYearForecast": 1449,
+    "fyForecastRevenue": 5172,
+    "fyForecastGm": 1398,
+    "fyBudgetRevenue": 5295,
+    "fyBudgetGm": 1432,
+    "priorYearRevenue": 5056,
+    "priorYearGm": 1341
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 628,
+   "forecast": null,
+   "budget": 626
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 679,
+   "forecast": null,
+   "budget": 671
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 754,
+   "forecast": null,
+   "budget": 788
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 745,
+   "forecast": null,
+   "budget": 734
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 743,
+   "forecast": null,
+   "budget": 752
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 705,
+   "forecast": null,
+   "budget": 716
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 665,
+   "forecast": null,
+   "budget": 698
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 736,
+   "forecast": null,
+   "budget": 743
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 765,
+   "budget": 770
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 809,
+   "budget": 805
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 833,
+   "budget": 823
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 806,
+   "budget": 823
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Booster sets",
+   "target": 3654,
+   "aspiration": 4324,
+   "achieved": 2383,
+   "achievedPct": 65.2
+  },
+  {
+   "productLine": "Water treatment",
+   "target": 5295,
+   "aspiration": 6447,
+   "achieved": 3272,
+   "achievedPct": 61.8
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Meera Dsouza",
+    "customer": "Amberfield Schools",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 702,
+    "bucket31to90": 265,
+    "bucket91to365": 204,
+    "bucket1to2y": 385,
+    "bucketOver2y": 0,
+    "totalOutstanding": 1556,
+    "provision": 192,
+    "netToCollect": 1364,
+    "overdue": 854,
+    "dispute": false,
+    "previousMonthOverdue": 906,
+    "previousRemark": "Under review by client audit",
+    "currentRemark": "Payment promised by 15 Sep 2026",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Meera Dsouza",
+    "customer": "Westgate Industrial Park",
+    "terms": "60 days from invoice",
+    "bucket0to30": 218,
+    "bucket31to90": 89,
+    "bucket91to365": 75,
+    "bucket1to2y": 13,
+    "bucketOver2y": 0,
+    "totalOutstanding": 395,
+    "provision": 6,
+    "netToCollect": 389,
+    "overdue": 177,
+    "dispute": false,
+    "previousMonthOverdue": 139,
+    "previousRemark": "Escalated to client finance head",
+    "currentRemark": "Client finance head confirmed release this month",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 2,
+   "bucket0to30": 920,
+   "bucket31to90": 354,
+   "bucket91to365": 279,
+   "bucket1to2y": 398,
+   "bucketOver2y": 0,
+   "totalOutstanding": 1951,
+   "provision": 198,
+   "netToCollect": 1753,
+   "overdue": 1031,
+   "previousMonthOverdue": 1045,
+   "change": -14,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 1031,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": [
+  {
+   "slug": "omar-nasser",
+   "name": "Omar Nasser"
+  }
+ ]
+}

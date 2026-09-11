@@ -13,7 +13,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:35:35+04:00"
+  "generatedAt": "2026-09-11T19:59:46+04:00"
  },
  "slug": "pumps-and-water",
  "name": "Pumps and Water",
@@ -66,6 +66,22 @@
   "vertical.overdue": {
    "key": "vertical.overdue",
    "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
   }
  },
  "headline": {
@@ -80,6 +96,8 @@
   "engineers": [
    {
     "engineer": "Omar Nasser",
+    "slug": "omar-nasser",
+    "homeVertical": "pumps-and-water",
     "fromOtherVertical": null,
     "openOrders": 2305,
     "expectedOrders": 838,
@@ -146,6 +164,8 @@
    },
    {
     "engineer": "Meera Dsouza",
+    "slug": "meera-dsouza",
+    "homeVertical": "pumps-and-water",
     "fromOtherVertical": null,
     "openOrders": 1123,
     "expectedOrders": 1083,
@@ -213,6 +233,8 @@
   ],
   "sheetTotal": {
    "engineer": "Sheet total",
+   "slug": "sheet-total",
+   "homeVertical": "pumps-and-water",
    "fromOtherVertical": null,
    "openOrders": 3428,
    "expectedOrders": 1921,
@@ -238,6 +260,8 @@
   },
   "attributedTotal": {
    "engineer": "Attributed total",
+   "slug": "attributed-total",
+   "homeVertical": "pumps-and-water",
    "fromOtherVertical": null,
    "openOrders": 3428,
    "expectedOrders": 1921,
@@ -523,6 +547,7 @@
   "byEngineer": [
    {
     "engineer": "Omar Nasser",
+    "slug": "omar-nasser",
     "customers": 2,
     "bucket0to30": 1088,
     "bucket31to90": 666,
@@ -539,6 +564,7 @@
    },
    {
     "engineer": "Meera Dsouza",
+    "slug": "meera-dsouza",
     "customers": 2,
     "bucket0to30": 920,
     "bucket31to90": 354,

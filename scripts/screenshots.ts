@@ -27,6 +27,7 @@ const pages = [
   { path: '/', name: 'front' },
   { path: '/v/mechanical-systems', name: 'vertical-mechanical-systems' },
   { path: '/v/mechanical-systems/overdue', name: 'overdue-mechanical-systems' },
+  { path: '/v/mechanical-systems/e/bassem-farouk', name: 'engineer-bassem-farouk' },
 ];
 const viewports = [
   { width: 1440, height: 900, name: '1440' },

@@ -124,7 +124,11 @@ export default function FrontPage() {
                             <tbody>
                               {(engineerSplit[r.slug] ?? []).map((e) => (
                                 <tr key={e.name}>
-                                  <td>{e.name}</td>
+                                  <td>
+                                    <Link to={`/v/${r.slug}/e/${e.slug}`} className="elink press">
+                                      {e.name}
+                                    </Link>
+                                  </td>
                                   <Num v={e.ytdRevenue} />
                                   <Num v={e.budgetRevenue} />
                                   <Num v={e.dRevenue} f={signedK} bad={e.dRevenue < 0} />

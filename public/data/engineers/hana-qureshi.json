@@ -1,0 +1,353 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "hana-qureshi",
+ "name": "Hana Qureshi",
+ "vertical": {
+  "slug": "vertical-transport",
+  "name": "Vertical Transport"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 2675,
+  "budgetRevenue": 2991,
+  "ytdGmPct": 19.5,
+  "fyForecast": 4250,
+  "fyBudget": 4673,
+  "roiYtd": 2,
+  "roiBudget": 2.2,
+  "overdue": 3380,
+  "overdueChange": 159
+ },
+ "sales": {
+  "engineer": "Hana Qureshi",
+  "slug": "hana-qureshi",
+  "homeVertical": "vertical-transport",
+  "fromOtherVertical": null,
+  "openOrders": 619,
+  "expectedOrders": 376,
+  "ytdRevenue": 2675,
+  "ytdGm": 522,
+  "ytdBudgetRevenue": 2991,
+  "ytdBudgetGm": 545,
+  "nearMonthForecast": 378,
+  "restOfYearForecast": 1197,
+  "fyForecastRevenue": 4250,
+  "fyForecastGm": 808,
+  "fyBudgetRevenue": 4673,
+  "fyBudgetGm": 851,
+  "priorYearRevenue": 3949,
+  "priorYearGm": 713,
+  "ytdGmPct": 19.5,
+  "budgetGmPct": 18.2,
+  "roiPriorYear": 1.9,
+  "roiYtd": 2,
+  "roiBudget": 2.2,
+  "roiForecast": 2,
+  "products": [
+   {
+    "product": "Passenger lifts",
+    "alsoReportedOn": null,
+    "openOrders": 341,
+    "expectedOrders": 76,
+    "ytdRevenue": 1115,
+    "ytdGm": 218,
+    "ytdGmPct": 19.6,
+    "ytdBudgetRevenue": 1290,
+    "ytdBudgetGm": 234,
+    "budgetGmPct": 18.1,
+    "nearMonthForecast": 163,
+    "restOfYearForecast": 518,
+    "fyForecastRevenue": 1796,
+    "fyForecastGm": 341,
+    "fyBudgetRevenue": 2016,
+    "fyBudgetGm": 365,
+    "priorYearRevenue": 1727,
+    "priorYearGm": 310
+   },
+   {
+    "product": "Escalators",
+    "alsoReportedOn": null,
+    "openOrders": 278,
+    "expectedOrders": 300,
+    "ytdRevenue": 1560,
+    "ytdGm": 304,
+    "ytdGmPct": 19.5,
+    "ytdBudgetRevenue": 1701,
+    "ytdBudgetGm": 311,
+    "budgetGmPct": 18.3,
+    "nearMonthForecast": 215,
+    "restOfYearForecast": 679,
+    "fyForecastRevenue": 2454,
+    "fyForecastGm": 467,
+    "fyBudgetRevenue": 2657,
+    "fyBudgetGm": 486,
+    "priorYearRevenue": 2222,
+    "priorYearGm": 403
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 289,
+   "forecast": null,
+   "budget": 327
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 318,
+   "forecast": null,
+   "budget": 351
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 354,
+   "forecast": null,
+   "budget": 411
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 344,
+   "forecast": null,
+   "budget": 383
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 360,
+   "forecast": null,
+   "budget": 393
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 340,
+   "forecast": null,
+   "budget": 374
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 328,
+   "forecast": null,
+   "budget": 365
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 341,
+   "forecast": null,
+   "budget": 388
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 378,
+   "budget": 402
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 390,
+   "budget": 421
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 406,
+   "budget": 430
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 401,
+   "budget": 430
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Passenger lifts",
+   "target": 2016,
+   "aspiration": 2242,
+   "achieved": 1115,
+   "achievedPct": 55.3
+  },
+  {
+   "productLine": "Escalators",
+   "target": 2657,
+   "aspiration": 3311,
+   "achieved": 1560,
+   "achievedPct": 58.7
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Hana Qureshi",
+    "customer": "Oryx Cold Chain",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 1388,
+    "bucket31to90": 439,
+    "bucket91to365": 719,
+    "bucket1to2y": 689,
+    "bucketOver2y": 310,
+    "totalOutstanding": 3545,
+    "provision": 835,
+    "netToCollect": 2710,
+    "overdue": 2157,
+    "dispute": true,
+    "previousMonthOverdue": 2286,
+    "previousRemark": "Reminder sent 05 Aug 2026",
+    "currentRemark": "Client disputes variation on order 4028",
+    "reason": "disputesAndNotDue"
+   },
+   {
+    "engineer": "Hana Qureshi",
+    "customer": "Meridian Contracting",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 392,
+    "bucket31to90": 439,
+    "bucket91to365": 197,
+    "bucket1to2y": 356,
+    "bucketOver2y": 231,
+    "totalOutstanding": 1615,
+    "provision": 409,
+    "netToCollect": 1206,
+    "overdue": 1223,
+    "dispute": false,
+    "previousMonthOverdue": 935,
+    "previousRemark": "Follow-up call made 12 Aug 2026",
+    "currentRemark": "Invoice re-issued after purchase order mismatch",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 2,
+   "bucket0to30": 1780,
+   "bucket31to90": 878,
+   "bucket91to365": 916,
+   "bucket1to2y": 1045,
+   "bucketOver2y": 541,
+   "totalOutstanding": 5160,
+   "provision": 1244,
+   "netToCollect": 3916,
+   "overdue": 3380,
+   "previousMonthOverdue": 3221,
+   "change": 159,
+   "disputed": 2157
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 1223,
+   "disputesAndNotDue": 2157
+  }
+ },
+ "peers": [
+  {
+   "slug": "yusuf-rahman",
+   "name": "Yusuf Rahman"
+  },
+  {
+   "slug": "divya-bhatt",
+   "name": "Divya Bhatt"
+  }
+ ]
+}

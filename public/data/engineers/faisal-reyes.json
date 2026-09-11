@@ -1,0 +1,379 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "faisal-reyes",
+ "name": "Faisal Reyes",
+ "vertical": {
+  "slug": "trading",
+  "name": "Trading"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 3507,
+  "budgetRevenue": 3776,
+  "ytdGmPct": 12.8,
+  "fyForecast": 5562,
+  "fyBudget": 5900,
+  "roiYtd": 3.5,
+  "roiBudget": 4.1,
+  "overdue": 159,
+  "overdueChange": 11
+ },
+ "sales": {
+  "engineer": "Faisal Reyes",
+  "slug": "faisal-reyes",
+  "homeVertical": "trading",
+  "fromOtherVertical": null,
+  "openOrders": 1108,
+  "expectedOrders": 697,
+  "ytdRevenue": 3507,
+  "ytdGm": 449,
+  "ytdBudgetRevenue": 3776,
+  "ytdBudgetGm": 493,
+  "nearMonthForecast": 493,
+  "restOfYearForecast": 1562,
+  "fyForecastRevenue": 5562,
+  "fyForecastGm": 717,
+  "fyBudgetRevenue": 5900,
+  "fyBudgetGm": 770,
+  "priorYearRevenue": 5641,
+  "priorYearGm": 695,
+  "ytdGmPct": 12.8,
+  "budgetGmPct": 13.1,
+  "roiPriorYear": 3.9,
+  "roiYtd": 3.5,
+  "roiBudget": 4.1,
+  "roiForecast": 3.8,
+  "products": [
+   {
+    "product": "Cables",
+    "alsoReportedOn": null,
+    "openOrders": 287,
+    "expectedOrders": 159,
+    "ytdRevenue": 815,
+    "ytdGm": 87,
+    "ytdGmPct": 10.7,
+    "ytdBudgetRevenue": 853,
+    "ytdBudgetGm": 106,
+    "budgetGmPct": 12.5,
+    "nearMonthForecast": 112,
+    "restOfYearForecast": 355,
+    "fyForecastRevenue": 1282,
+    "fyForecastGm": 146,
+    "fyBudgetRevenue": 1333,
+    "fyBudgetGm": 166,
+    "priorYearRevenue": 1293,
+    "priorYearGm": 139
+   },
+   {
+    "product": "Lighting",
+    "alsoReportedOn": null,
+    "openOrders": 162,
+    "expectedOrders": 156,
+    "ytdRevenue": 682,
+    "ytdGm": 114,
+    "ytdGmPct": 16.8,
+    "ytdBudgetRevenue": 750,
+    "ytdBudgetGm": 116,
+    "budgetGmPct": 15.5,
+    "nearMonthForecast": 96,
+    "restOfYearForecast": 313,
+    "fyForecastRevenue": 1091,
+    "fyForecastGm": 177,
+    "fyBudgetRevenue": 1171,
+    "fyBudgetGm": 181,
+    "priorYearRevenue": 1160,
+    "priorYearGm": 162
+   },
+   {
+    "product": "Consumables",
+    "alsoReportedOn": null,
+    "openOrders": 357,
+    "expectedOrders": 143,
+    "ytdRevenue": 972,
+    "ytdGm": 124,
+    "ytdGmPct": 12.7,
+    "ytdBudgetRevenue": 1058,
+    "ytdBudgetGm": 118,
+    "budgetGmPct": 11.1,
+    "nearMonthForecast": 140,
+    "restOfYearForecast": 431,
+    "fyForecastRevenue": 1543,
+    "fyForecastGm": 186,
+    "fyBudgetRevenue": 1654,
+    "fyBudgetGm": 184,
+    "priorYearRevenue": 1570,
+    "priorYearGm": 174
+   },
+   {
+    "product": "Tools",
+    "alsoReportedOn": null,
+    "openOrders": 302,
+    "expectedOrders": 239,
+    "ytdRevenue": 1038,
+    "ytdGm": 124,
+    "ytdGmPct": 11.9,
+    "ytdBudgetRevenue": 1115,
+    "ytdBudgetGm": 153,
+    "budgetGmPct": 13.7,
+    "nearMonthForecast": 145,
+    "restOfYearForecast": 463,
+    "fyForecastRevenue": 1646,
+    "fyForecastGm": 208,
+    "fyBudgetRevenue": 1742,
+    "fyBudgetGm": 239,
+    "priorYearRevenue": 1618,
+    "priorYearGm": 220
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 391,
+   "forecast": null,
+   "budget": 413
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 410,
+   "forecast": null,
+   "budget": 443
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 489,
+   "forecast": null,
+   "budget": 519
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 452,
+   "forecast": null,
+   "budget": 484
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 464,
+   "forecast": null,
+   "budget": 496
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 435,
+   "forecast": null,
+   "budget": 472
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 428,
+   "forecast": null,
+   "budget": 460
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 439,
+   "forecast": null,
+   "budget": 490
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 492,
+   "budget": 507
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 519,
+   "budget": 531
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 526,
+   "budget": 543
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 517,
+   "budget": 543
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Cables",
+   "target": 1333,
+   "aspiration": 1637,
+   "achieved": 815,
+   "achievedPct": 61.1
+  },
+  {
+   "productLine": "Lighting",
+   "target": 1171,
+   "aspiration": 1355,
+   "achieved": 682,
+   "achievedPct": 58.2
+  },
+  {
+   "productLine": "Consumables",
+   "target": 1654,
+   "aspiration": 1854,
+   "achieved": 972,
+   "achievedPct": 58.8
+  },
+  {
+   "productLine": "Tools",
+   "target": 1742,
+   "aspiration": 2085,
+   "achieved": 1038,
+   "achievedPct": 59.6
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Faisal Reyes",
+    "customer": "Corniche Medical Centre",
+    "terms": "Against delivery",
+    "bucket0to30": 222,
+    "bucket31to90": 50,
+    "bucket91to365": 109,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 381,
+    "provision": 0,
+    "netToCollect": 381,
+    "overdue": 159,
+    "dispute": false,
+    "previousMonthOverdue": 148,
+    "previousRemark": "Reminder sent 05 Aug 2026",
+    "currentRemark": "No response to three reminders",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 1,
+   "bucket0to30": 222,
+   "bucket31to90": 50,
+   "bucket91to365": 109,
+   "bucket1to2y": 0,
+   "bucketOver2y": 0,
+   "totalOutstanding": 381,
+   "provision": 0,
+   "netToCollect": 381,
+   "overdue": 159,
+   "previousMonthOverdue": 148,
+   "change": 11,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 159,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": []
+}

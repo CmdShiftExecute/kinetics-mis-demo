@@ -1,0 +1,388 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "bassem-farouk",
+ "name": "Bassem Farouk",
+ "vertical": {
+  "slug": "mechanical-systems",
+  "name": "Mechanical Systems"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 4683,
+  "budgetRevenue": 5251,
+  "ytdGmPct": 19.2,
+  "fyForecast": 7538,
+  "fyBudget": 8204,
+  "roiYtd": 5.1,
+  "roiBudget": 6,
+  "overdue": 1550,
+  "overdueChange": 303
+ },
+ "sales": {
+  "engineer": "Bassem Farouk",
+  "slug": "bassem-farouk",
+  "homeVertical": "mechanical-systems",
+  "fromOtherVertical": null,
+  "openOrders": 1505,
+  "expectedOrders": 606,
+  "ytdRevenue": 4683,
+  "ytdGm": 898,
+  "ytdBudgetRevenue": 5251,
+  "ytdBudgetGm": 1016,
+  "nearMonthForecast": 687,
+  "restOfYearForecast": 2169,
+  "fyForecastRevenue": 7538,
+  "fyForecastGm": 1451,
+  "fyBudgetRevenue": 8204,
+  "fyBudgetGm": 1589,
+  "priorYearRevenue": 7773,
+  "priorYearGm": 1422,
+  "ytdGmPct": 19.2,
+  "budgetGmPct": 19.3,
+  "roiPriorYear": 5.6,
+  "roiYtd": 5.1,
+  "roiBudget": 6,
+  "roiForecast": 5.5,
+  "products": [
+   {
+    "product": "Fire dampers",
+    "alsoReportedOn": null,
+    "openOrders": 428,
+    "expectedOrders": 127,
+    "ytdRevenue": 1499,
+    "ytdGm": 261,
+    "ytdGmPct": 17.4,
+    "ytdBudgetRevenue": 1693,
+    "ytdBudgetGm": 316,
+    "budgetGmPct": 18.7,
+    "nearMonthForecast": 226,
+    "restOfYearForecast": 707,
+    "fyForecastRevenue": 2431,
+    "fyForecastGm": 436,
+    "fyBudgetRevenue": 2645,
+    "fyBudgetGm": 494,
+    "priorYearRevenue": 2534,
+    "priorYearGm": 444
+   },
+   {
+    "product": "Insulation",
+    "alsoReportedOn": null,
+    "openOrders": 863,
+    "expectedOrders": 358,
+    "ytdRevenue": 2497,
+    "ytdGm": 502,
+    "ytdGmPct": 20.1,
+    "ytdBudgetRevenue": 2791,
+    "ytdBudgetGm": 538,
+    "budgetGmPct": 19.3,
+    "nearMonthForecast": 362,
+    "restOfYearForecast": 1147,
+    "fyForecastRevenue": 4006,
+    "fyForecastGm": 792,
+    "fyBudgetRevenue": 4361,
+    "fyBudgetGm": 841,
+    "priorYearRevenue": 4135,
+    "priorYearGm": 762
+   },
+   {
+    "product": "Fabricated ductwork",
+    "alsoReportedOn": "fabrication",
+    "openOrders": 214,
+    "expectedOrders": 121,
+    "ytdRevenue": 687,
+    "ytdGm": 135,
+    "ytdGmPct": 19.6,
+    "ytdBudgetRevenue": 767,
+    "ytdBudgetGm": 162,
+    "budgetGmPct": 21.2,
+    "nearMonthForecast": 99,
+    "restOfYearForecast": 315,
+    "fyForecastRevenue": 1101,
+    "fyForecastGm": 223,
+    "fyBudgetRevenue": 1198,
+    "fyBudgetGm": 254,
+    "priorYearRevenue": 1104,
+    "priorYearGm": 216
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 523,
+   "forecast": null,
+   "budget": 574
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 545,
+   "forecast": null,
+   "budget": 615
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 616,
+   "forecast": null,
+   "budget": 722
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 598,
+   "forecast": null,
+   "budget": 673
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 615,
+   "forecast": null,
+   "budget": 689
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 599,
+   "forecast": null,
+   "budget": 656
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 594,
+   "forecast": null,
+   "budget": 640
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 593,
+   "forecast": null,
+   "budget": 681
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 686,
+   "budget": 706
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 702,
+   "budget": 738
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 729,
+   "budget": 755
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 737,
+   "budget": 755
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Fire dampers",
+   "target": 2645,
+   "aspiration": 3007,
+   "achieved": 1499,
+   "achievedPct": 56.7
+  },
+  {
+   "productLine": "Insulation",
+   "target": 4361,
+   "aspiration": 5096,
+   "achieved": 2497,
+   "achievedPct": 57.3
+  },
+  {
+   "productLine": "Fabricated ductwork",
+   "target": 1198,
+   "aspiration": 1378,
+   "achieved": 687,
+   "achievedPct": 57.3
+  }
+ ],
+ "unbilled": {
+  "projects": [
+   {
+    "ref": "UB-MEC-1048",
+    "project": "Logistics park fire dampers",
+    "engineer": "Bassem Farouk",
+    "customer": "Falcon Ridge Estates",
+    "trend": [
+     1094,
+     995,
+     0
+    ],
+    "provision": 0,
+    "remark": "Invoiced 28 Aug 2026 after certification"
+   },
+   {
+    "ref": "UB-MEC-1058",
+    "project": "Hospital air handling replacement",
+    "engineer": "Bassem Farouk",
+    "customer": "Meridian Contracting",
+    "trend": [
+     1197,
+     1279,
+     1353
+    ],
+    "provision": 0,
+    "remark": "Client holding pending variation approval"
+   }
+  ],
+  "bridge": {
+   "previousMonth": 2274,
+   "newProjects": 0,
+   "clearedProjects": 995,
+   "ongoingChanges": 74,
+   "currentMonth": 1353
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Bassem Farouk",
+    "customer": "Harbourline Aviation Services",
+    "terms": "30 days from invoice",
+    "bucket0to30": 801,
+    "bucket31to90": 782,
+    "bucket91to365": 115,
+    "bucket1to2y": 318,
+    "bucketOver2y": 335,
+    "totalOutstanding": 2351,
+    "provision": 495,
+    "netToCollect": 1856,
+    "overdue": 1550,
+    "dispute": false,
+    "previousMonthOverdue": 1247,
+    "previousRemark": "Follow-up call made 12 Aug 2026",
+    "currentRemark": "Legal notice issued 02 Sep 2026",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 1,
+   "bucket0to30": 801,
+   "bucket31to90": 782,
+   "bucket91to365": 115,
+   "bucket1to2y": 318,
+   "bucketOver2y": 335,
+   "totalOutstanding": 2351,
+   "provision": 495,
+   "netToCollect": 1856,
+   "overdue": 1550,
+   "previousMonthOverdue": 1247,
+   "change": 303,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 1550,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": [
+  {
+   "slug": "sneha-menon",
+   "name": "Sneha Menon"
+  },
+  {
+   "slug": "tarek-hamdan",
+   "name": "Tarek Hamdan"
+  }
+ ]
+}

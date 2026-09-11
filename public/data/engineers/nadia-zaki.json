@@ -1,0 +1,363 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "nadia-zaki",
+ "name": "Nadia Zaki",
+ "vertical": {
+  "slug": "automation",
+  "name": "Automation"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 2883,
+  "budgetRevenue": 3012,
+  "ytdGmPct": 25.7,
+  "fyForecast": 4536,
+  "fyBudget": 4707,
+  "roiYtd": 2.7,
+  "roiBudget": 3.1,
+  "overdue": 495,
+  "overdueChange": 12
+ },
+ "sales": {
+  "engineer": "Nadia Zaki",
+  "slug": "nadia-zaki",
+  "homeVertical": "automation",
+  "fromOtherVertical": null,
+  "openOrders": 793,
+  "expectedOrders": 303,
+  "ytdRevenue": 2883,
+  "ytdGm": 742,
+  "ytdBudgetRevenue": 3012,
+  "ytdBudgetGm": 839,
+  "nearMonthForecast": 390,
+  "restOfYearForecast": 1264,
+  "fyForecastRevenue": 4536,
+  "fyForecastGm": 1206,
+  "fyBudgetRevenue": 4707,
+  "fyBudgetGm": 1312,
+  "priorYearRevenue": 4320,
+  "priorYearGm": 1135,
+  "ytdGmPct": 25.7,
+  "budgetGmPct": 27.9,
+  "roiPriorYear": 2.8,
+  "roiYtd": 2.7,
+  "roiBudget": 3.1,
+  "roiForecast": 2.9,
+  "products": [
+   {
+    "product": "Building controllers",
+    "alsoReportedOn": null,
+    "openOrders": 431,
+    "expectedOrders": 178,
+    "ytdRevenue": 1210,
+    "ytdGm": 300,
+    "ytdGmPct": 24.8,
+    "ytdBudgetRevenue": 1233,
+    "ytdBudgetGm": 332,
+    "budgetGmPct": 26.9,
+    "nearMonthForecast": 161,
+    "restOfYearForecast": 511,
+    "fyForecastRevenue": 1881,
+    "fyForecastGm": 483,
+    "fyBudgetRevenue": 1927,
+    "fyBudgetGm": 519,
+    "priorYearRevenue": 1744,
+    "priorYearGm": 440
+   },
+   {
+    "product": "Field devices",
+    "alsoReportedOn": null,
+    "openOrders": 362,
+    "expectedOrders": 125,
+    "ytdRevenue": 1673,
+    "ytdGm": 442,
+    "ytdGmPct": 26.4,
+    "ytdBudgetRevenue": 1779,
+    "ytdBudgetGm": 507,
+    "budgetGmPct": 28.5,
+    "nearMonthForecast": 229,
+    "restOfYearForecast": 753,
+    "fyForecastRevenue": 2655,
+    "fyForecastGm": 723,
+    "fyBudgetRevenue": 2780,
+    "fyBudgetGm": 793,
+    "priorYearRevenue": 2576,
+    "priorYearGm": 695
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 312,
+   "forecast": null,
+   "budget": 329
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 332,
+   "forecast": null,
+   "budget": 353
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 395,
+   "forecast": null,
+   "budget": 414
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 372,
+   "forecast": null,
+   "budget": 386
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 375,
+   "forecast": null,
+   "budget": 395
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 359,
+   "forecast": null,
+   "budget": 377
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 359,
+   "forecast": null,
+   "budget": 367
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 381,
+   "forecast": null,
+   "budget": 391
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 390,
+   "budget": 405
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 426,
+   "budget": 424
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 428,
+   "budget": 433
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 410,
+   "budget": 433
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Building controllers",
+   "target": 1927,
+   "aspiration": 2336,
+   "achieved": 1210,
+   "achievedPct": 62.8
+  },
+  {
+   "productLine": "Field devices",
+   "target": 2780,
+   "aspiration": 3154,
+   "achieved": 1673,
+   "achievedPct": 60.2
+  }
+ ],
+ "unbilled": {
+  "projects": [
+   {
+    "ref": "UB-AUT-1050",
+    "project": "School campus building controls",
+    "engineer": "Nadia Zaki",
+    "customer": "Westgate Industrial Park",
+    "trend": [
+     0,
+     0,
+     211
+    ],
+    "provision": 33,
+    "remark": "New this month, delivery complete, awaiting client certification"
+   }
+  ],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 211,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 211
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Nadia Zaki",
+    "customer": "Halvard Facilities Management (group)",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 181,
+    "bucket31to90": 269,
+    "bucket91to365": 103,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 553,
+    "provision": 0,
+    "netToCollect": 553,
+    "overdue": 372,
+    "dispute": false,
+    "previousMonthOverdue": 369,
+    "previousRemark": "Statement of account sent",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "internalGroup"
+   },
+   {
+    "engineer": "Nadia Zaki",
+    "customer": "Dunelight Hospitality",
+    "terms": "Against delivery",
+    "bucket0to30": 73,
+    "bucket31to90": 105,
+    "bucket91to365": 11,
+    "bucket1to2y": 7,
+    "bucketOver2y": 0,
+    "totalOutstanding": 196,
+    "provision": 4,
+    "netToCollect": 192,
+    "overdue": 123,
+    "dispute": false,
+    "previousMonthOverdue": 114,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Partial payment received 28 Aug 2026",
+    "reason": "disputesAndNotDue"
+   }
+  ],
+  "total": {
+   "customers": 2,
+   "bucket0to30": 254,
+   "bucket31to90": 374,
+   "bucket91to365": 114,
+   "bucket1to2y": 7,
+   "bucketOver2y": 0,
+   "totalOutstanding": 749,
+   "provision": 4,
+   "netToCollect": 745,
+   "overdue": 495,
+   "previousMonthOverdue": 483,
+   "change": 12,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 372,
+   "noTimelineOrResponse": 0,
+   "disputesAndNotDue": 123
+  }
+ },
+ "peers": [
+  {
+   "slug": "vikram-fernandes",
+   "name": "Vikram Fernandes"
+  }
+ ]
+}

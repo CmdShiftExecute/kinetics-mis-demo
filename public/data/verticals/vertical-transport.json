@@ -13,7 +13,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:35:35+04:00"
+  "generatedAt": "2026-09-11T19:59:46+04:00"
  },
  "slug": "vertical-transport",
  "name": "Vertical Transport",
@@ -66,6 +66,22 @@
   "vertical.overdue": {
    "key": "vertical.overdue",
    "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
   }
  },
  "headline": {
@@ -80,6 +96,8 @@
   "engineers": [
    {
     "engineer": "Hana Qureshi",
+    "slug": "hana-qureshi",
+    "homeVertical": "vertical-transport",
     "fromOtherVertical": null,
     "openOrders": 619,
     "expectedOrders": 376,
@@ -146,6 +164,8 @@
    },
    {
     "engineer": "Yusuf Rahman",
+    "slug": "yusuf-rahman",
+    "homeVertical": "vertical-transport",
     "fromOtherVertical": null,
     "openOrders": 1153,
     "expectedOrders": 395,
@@ -232,6 +252,8 @@
    },
    {
     "engineer": "Divya Bhatt",
+    "slug": "divya-bhatt",
+    "homeVertical": "vertical-transport",
     "fromOtherVertical": null,
     "openOrders": 1301,
     "expectedOrders": 397,
@@ -299,6 +321,8 @@
   ],
   "sheetTotal": {
    "engineer": "Sheet total",
+   "slug": "sheet-total",
+   "homeVertical": "vertical-transport",
    "fromOtherVertical": null,
    "openOrders": 3073,
    "expectedOrders": 1168,
@@ -324,6 +348,8 @@
   },
   "attributedTotal": {
    "engineer": "Attributed total",
+   "slug": "attributed-total",
+   "homeVertical": "vertical-transport",
    "fromOtherVertical": null,
    "openOrders": 3073,
    "expectedOrders": 1168,
@@ -670,6 +696,7 @@
   "byEngineer": [
    {
     "engineer": "Hana Qureshi",
+    "slug": "hana-qureshi",
     "customers": 2,
     "bucket0to30": 1780,
     "bucket31to90": 878,
@@ -686,6 +713,7 @@
    },
    {
     "engineer": "Yusuf Rahman",
+    "slug": "yusuf-rahman",
     "customers": 1,
     "bucket0to30": 166,
     "bucket31to90": 50,
@@ -702,6 +730,7 @@
    },
    {
     "engineer": "Divya Bhatt",
+    "slug": "divya-bhatt",
     "customers": 2,
     "bucket0to30": 1496,
     "bucket31to90": 1342,

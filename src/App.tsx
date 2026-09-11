@@ -4,6 +4,7 @@ import { Grain } from './components/Grain';
 import FrontPage from './pages/FrontPage';
 import VerticalPage from './pages/VerticalPage';
 import OverduePage from './pages/OverduePage';
+import EngineerPage from './pages/EngineerPage';
 import NotFound from './pages/NotFound';
 
 function Pages() {
@@ -19,6 +20,7 @@ function Pages() {
           <Route path="/" element={<FrontPage />} />
           <Route path="/v/:slug" element={<VerticalPage />} />
           <Route path="/v/:slug/overdue" element={<OverduePage />} />
+          <Route path="/v/:slug/e/:eng" element={<EngineerPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.main>

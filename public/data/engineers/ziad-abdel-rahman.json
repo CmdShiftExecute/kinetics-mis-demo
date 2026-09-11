@@ -1,0 +1,330 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "ziad-abdel-rahman",
+ "name": "Ziad Abdel-Rahman",
+ "vertical": {
+  "slug": "services",
+  "name": "Services"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 1963,
+  "budgetRevenue": 1922,
+  "ytdGmPct": 29,
+  "fyForecast": 3065,
+  "fyBudget": 3002,
+  "roiYtd": 2.1,
+  "roiBudget": 2.1,
+  "overdue": 212,
+  "overdueChange": -7
+ },
+ "sales": {
+  "engineer": "Ziad Abdel-Rahman",
+  "slug": "ziad-abdel-rahman",
+  "homeVertical": "services",
+  "fromOtherVertical": null,
+  "openOrders": 824,
+  "expectedOrders": 213,
+  "ytdRevenue": 1963,
+  "ytdGm": 570,
+  "ytdBudgetRevenue": 1922,
+  "ytdBudgetGm": 564,
+  "nearMonthForecast": 263,
+  "restOfYearForecast": 839,
+  "fyForecastRevenue": 3065,
+  "fyForecastGm": 894,
+  "fyBudgetRevenue": 3002,
+  "fyBudgetGm": 881,
+  "priorYearRevenue": 2791,
+  "priorYearGm": 819,
+  "ytdGmPct": 29,
+  "budgetGmPct": 29.3,
+  "roiPriorYear": 2.1,
+  "roiYtd": 2.1,
+  "roiBudget": 2.1,
+  "roiForecast": 2.2,
+  "products": [
+   {
+    "product": "Annual maintenance contracts",
+    "alsoReportedOn": null,
+    "openOrders": 362,
+    "expectedOrders": 80,
+    "ytdRevenue": 906,
+    "ytdGm": 270,
+    "ytdGmPct": 29.8,
+    "ytdBudgetRevenue": 875,
+    "ytdBudgetGm": 251,
+    "budgetGmPct": 28.6,
+    "nearMonthForecast": 123,
+    "restOfYearForecast": 382,
+    "fyForecastRevenue": 1411,
+    "fyForecastGm": 414,
+    "fyBudgetRevenue": 1367,
+    "fyBudgetGm": 392,
+    "priorYearRevenue": 1237,
+    "priorYearGm": 354
+   },
+   {
+    "product": "Spares",
+    "alsoReportedOn": null,
+    "openOrders": 462,
+    "expectedOrders": 133,
+    "ytdRevenue": 1057,
+    "ytdGm": 300,
+    "ytdGmPct": 28.4,
+    "ytdBudgetRevenue": 1047,
+    "ytdBudgetGm": 313,
+    "budgetGmPct": 29.9,
+    "nearMonthForecast": 140,
+    "restOfYearForecast": 457,
+    "fyForecastRevenue": 1654,
+    "fyForecastGm": 480,
+    "fyBudgetRevenue": 1635,
+    "fyBudgetGm": 489,
+    "priorYearRevenue": 1554,
+    "priorYearGm": 465
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 208,
+   "forecast": null,
+   "budget": 210
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 224,
+   "forecast": null,
+   "budget": 225
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 280,
+   "forecast": null,
+   "budget": 264
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 254,
+   "forecast": null,
+   "budget": 246
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 257,
+   "forecast": null,
+   "budget": 252
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 243,
+   "forecast": null,
+   "budget": 240
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 240,
+   "forecast": null,
+   "budget": 234
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 257,
+   "forecast": null,
+   "budget": 249
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 264,
+   "budget": 258
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 276,
+   "budget": 270
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 287,
+   "budget": 276
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 276,
+   "budget": 276
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Annual maintenance contracts",
+   "target": 1367,
+   "aspiration": 1551,
+   "achieved": 906,
+   "achievedPct": 66.3
+  },
+  {
+   "productLine": "Spares",
+   "target": 1635,
+   "aspiration": 1926,
+   "achieved": 1057,
+   "achievedPct": 64.6
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Ziad Abdel-Rahman",
+    "customer": "Northshore Facilities",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 164,
+    "bucket31to90": 135,
+    "bucket91to365": 77,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 376,
+    "provision": 0,
+    "netToCollect": 376,
+    "overdue": 212,
+    "dispute": false,
+    "previousMonthOverdue": 219,
+    "previousRemark": "Follow-up call made 12 Aug 2026",
+    "currentRemark": "Held pending site handover sign-off",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 1,
+   "bucket0to30": 164,
+   "bucket31to90": 135,
+   "bucket91to365": 77,
+   "bucket1to2y": 0,
+   "bucketOver2y": 0,
+   "totalOutstanding": 376,
+   "provision": 0,
+   "netToCollect": 376,
+   "overdue": 212,
+   "previousMonthOverdue": 219,
+   "change": -7,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 212,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": [
+  {
+   "slug": "priya-kulkarni",
+   "name": "Priya Kulkarni"
+  }
+ ]
+}

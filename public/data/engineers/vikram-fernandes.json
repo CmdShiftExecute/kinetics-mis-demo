@@ -1,0 +1,371 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "vikram-fernandes",
+ "name": "Vikram Fernandes",
+ "vertical": {
+  "slug": "automation",
+  "name": "Automation"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 3947,
+  "budgetRevenue": 4220,
+  "ytdGmPct": 25.7,
+  "fyForecast": 6279,
+  "fyBudget": 6594,
+  "roiYtd": 4.5,
+  "roiBudget": 5.2,
+  "overdue": 68,
+  "overdueChange": -5
+ },
+ "sales": {
+  "engineer": "Vikram Fernandes",
+  "slug": "vikram-fernandes",
+  "homeVertical": "automation",
+  "fromOtherVertical": null,
+  "openOrders": 986,
+  "expectedOrders": 630,
+  "ytdRevenue": 3947,
+  "ytdGm": 1013,
+  "ytdBudgetRevenue": 4220,
+  "ytdBudgetGm": 1123,
+  "nearMonthForecast": 548,
+  "restOfYearForecast": 1783,
+  "fyForecastRevenue": 6279,
+  "fyForecastGm": 1636,
+  "fyBudgetRevenue": 6594,
+  "fyBudgetGm": 1754,
+  "priorYearRevenue": 5753,
+  "priorYearGm": 1485,
+  "ytdGmPct": 25.7,
+  "budgetGmPct": 26.6,
+  "roiPriorYear": 4.6,
+  "roiYtd": 4.5,
+  "roiBudget": 5.2,
+  "roiForecast": 4.8,
+  "products": [
+   {
+    "product": "Field devices",
+    "alsoReportedOn": null,
+    "openOrders": 277,
+    "expectedOrders": 154,
+    "ytdRevenue": 1413,
+    "ytdGm": 336,
+    "ytdGmPct": 23.8,
+    "ytdBudgetRevenue": 1554,
+    "ytdBudgetGm": 394,
+    "budgetGmPct": 25.4,
+    "nearMonthForecast": 196,
+    "restOfYearForecast": 658,
+    "fyForecastRevenue": 2267,
+    "fyForecastGm": 554,
+    "fyBudgetRevenue": 2428,
+    "fyBudgetGm": 616,
+    "priorYearRevenue": 2183,
+    "priorYearGm": 540
+   },
+   {
+    "product": "Motor control",
+    "alsoReportedOn": null,
+    "openOrders": 263,
+    "expectedOrders": 124,
+    "ytdRevenue": 772,
+    "ytdGm": 194,
+    "ytdGmPct": 25.2,
+    "ytdBudgetRevenue": 859,
+    "ytdBudgetGm": 215,
+    "budgetGmPct": 25,
+    "nearMonthForecast": 111,
+    "restOfYearForecast": 366,
+    "fyForecastRevenue": 1249,
+    "fyForecastGm": 314,
+    "fyBudgetRevenue": 1343,
+    "fyBudgetGm": 336,
+    "priorYearRevenue": 1155,
+    "priorYearGm": 273
+   },
+   {
+    "product": "Software licences",
+    "alsoReportedOn": null,
+    "openOrders": 446,
+    "expectedOrders": 352,
+    "ytdRevenue": 1762,
+    "ytdGm": 483,
+    "ytdGmPct": 27.4,
+    "ytdBudgetRevenue": 1807,
+    "ytdBudgetGm": 514,
+    "budgetGmPct": 28.4,
+    "nearMonthForecast": 241,
+    "restOfYearForecast": 759,
+    "fyForecastRevenue": 2763,
+    "fyForecastGm": 768,
+    "fyBudgetRevenue": 2823,
+    "fyBudgetGm": 802,
+    "priorYearRevenue": 2415,
+    "priorYearGm": 672
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 423,
+   "forecast": null,
+   "budget": 462
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 459,
+   "forecast": null,
+   "budget": 495
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 544,
+   "forecast": null,
+   "budget": 580
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 502,
+   "forecast": null,
+   "budget": 541
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 523,
+   "forecast": null,
+   "budget": 554
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 493,
+   "forecast": null,
+   "budget": 527
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 475,
+   "forecast": null,
+   "budget": 514
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 529,
+   "forecast": null,
+   "budget": 547
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 549,
+   "budget": 567
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 593,
+   "budget": 593
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 579,
+   "budget": 607
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 611,
+   "budget": 607
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Field devices",
+   "target": 2428,
+   "aspiration": 2755,
+   "achieved": 1413,
+   "achievedPct": 58.2
+  },
+  {
+   "productLine": "Motor control",
+   "target": 1343,
+   "aspiration": 1578,
+   "achieved": 772,
+   "achievedPct": 57.5
+  },
+  {
+   "productLine": "Software licences",
+   "target": 2823,
+   "aspiration": 3364,
+   "achieved": 1762,
+   "achievedPct": 62.4
+  }
+ ],
+ "unbilled": {
+  "projects": [
+   {
+    "ref": "UB-AUT-1041",
+    "project": "District cooling substation",
+    "engineer": "Vikram Fernandes",
+    "customer": "Blue Harbour Marine Works",
+    "trend": [
+     288,
+     256,
+     293
+    ],
+    "provision": 0,
+    "remark": "Partial certification received, balance in review"
+   }
+  ],
+  "bridge": {
+   "previousMonth": 256,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 37,
+   "currentMonth": 293
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Vikram Fernandes",
+    "customer": "Crescent Bay Builders",
+    "terms": "Against delivery",
+    "bucket0to30": 105,
+    "bucket31to90": 61,
+    "bucket91to365": 7,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 173,
+    "provision": 0,
+    "netToCollect": 173,
+    "overdue": 68,
+    "dispute": false,
+    "previousMonthOverdue": 73,
+    "previousRemark": "Escalated to client finance head",
+    "currentRemark": "Post-dated cheque received, dated 24 Sep 2026",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 1,
+   "bucket0to30": 105,
+   "bucket31to90": 61,
+   "bucket91to365": 7,
+   "bucket1to2y": 0,
+   "bucketOver2y": 0,
+   "totalOutstanding": 173,
+   "provision": 0,
+   "netToCollect": 173,
+   "overdue": 68,
+   "previousMonthOverdue": 73,
+   "change": -5,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 68,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": [
+  {
+   "slug": "nadia-zaki",
+   "name": "Nadia Zaki"
+  }
+ ]
+}

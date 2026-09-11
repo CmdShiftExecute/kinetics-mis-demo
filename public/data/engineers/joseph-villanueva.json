@@ -1,0 +1,413 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "joseph-villanueva",
+ "name": "Joseph Villanueva",
+ "vertical": {
+  "slug": "cooling",
+  "name": "Cooling"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 6158,
+  "budgetRevenue": 5829,
+  "ytdGmPct": 21.6,
+  "fyForecast": 9489,
+  "fyBudget": 9109,
+  "roiYtd": 5.9,
+  "roiBudget": 6.2,
+  "overdue": 5938,
+  "overdueChange": 294
+ },
+ "sales": {
+  "engineer": "Joseph Villanueva",
+  "slug": "joseph-villanueva",
+  "homeVertical": "cooling",
+  "fromOtherVertical": null,
+  "openOrders": 1884,
+  "expectedOrders": 1021,
+  "ytdRevenue": 6158,
+  "ytdGm": 1333,
+  "ytdBudgetRevenue": 5829,
+  "ytdBudgetGm": 1350,
+  "nearMonthForecast": 804,
+  "restOfYearForecast": 2527,
+  "fyForecastRevenue": 9489,
+  "fyForecastGm": 2110,
+  "fyBudgetRevenue": 9109,
+  "fyBudgetGm": 2109,
+  "priorYearRevenue": 8253,
+  "priorYearGm": 1865,
+  "ytdGmPct": 21.6,
+  "budgetGmPct": 23.2,
+  "roiPriorYear": 5.8,
+  "roiYtd": 5.9,
+  "roiBudget": 6.2,
+  "roiForecast": 6.2,
+  "products": [
+   {
+    "product": "Chillers",
+    "alsoReportedOn": null,
+    "openOrders": 668,
+    "expectedOrders": 421,
+    "ytdRevenue": 2220,
+    "ytdGm": 530,
+    "ytdGmPct": 23.9,
+    "ytdBudgetRevenue": 2079,
+    "ytdBudgetGm": 521,
+    "budgetGmPct": 25.1,
+    "nearMonthForecast": 296,
+    "restOfYearForecast": 891,
+    "fyForecastRevenue": 3407,
+    "fyForecastGm": 829,
+    "fyBudgetRevenue": 3248,
+    "fyBudgetGm": 814,
+    "priorYearRevenue": 2884,
+    "priorYearGm": 709
+   },
+   {
+    "product": "Air handling units",
+    "alsoReportedOn": null,
+    "openOrders": 445,
+    "expectedOrders": 159,
+    "ytdRevenue": 1467,
+    "ytdGm": 350,
+    "ytdGmPct": 23.8,
+    "ytdBudgetRevenue": 1474,
+    "ytdBudgetGm": 364,
+    "budgetGmPct": 24.7,
+    "nearMonthForecast": 203,
+    "restOfYearForecast": 631,
+    "fyForecastRevenue": 2301,
+    "fyForecastGm": 556,
+    "fyBudgetRevenue": 2304,
+    "fyBudgetGm": 569,
+    "priorYearRevenue": 2050,
+    "priorYearGm": 478
+   },
+   {
+    "product": "Fabricated ductwork",
+    "alsoReportedOn": "fabrication",
+    "openOrders": 771,
+    "expectedOrders": 441,
+    "ytdRevenue": 2471,
+    "ytdGm": 453,
+    "ytdGmPct": 18.3,
+    "ytdBudgetRevenue": 2276,
+    "ytdBudgetGm": 465,
+    "budgetGmPct": 20.4,
+    "nearMonthForecast": 305,
+    "restOfYearForecast": 1005,
+    "fyForecastRevenue": 3781,
+    "fyForecastGm": 725,
+    "fyBudgetRevenue": 3557,
+    "fyBudgetGm": 726,
+    "priorYearRevenue": 3319,
+    "priorYearGm": 678
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 671,
+   "forecast": null,
+   "budget": 638
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 733,
+   "forecast": null,
+   "budget": 683
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 841,
+   "forecast": null,
+   "budget": 802
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 761,
+   "forecast": null,
+   "budget": 747
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 803,
+   "forecast": null,
+   "budget": 765
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 797,
+   "forecast": null,
+   "budget": 729
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 767,
+   "forecast": null,
+   "budget": 710
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 787,
+   "forecast": null,
+   "budget": 756
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 804,
+   "budget": 783
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 810,
+   "budget": 820
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 851,
+   "budget": 838
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 865,
+   "budget": 838
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Chillers",
+   "target": 3248,
+   "aspiration": 4004,
+   "achieved": 2220,
+   "achievedPct": 68.3
+  },
+  {
+   "productLine": "Air handling units",
+   "target": 2304,
+   "aspiration": 2701,
+   "achieved": 1467,
+   "achievedPct": 63.7
+  },
+  {
+   "productLine": "Fabricated ductwork",
+   "target": 3557,
+   "aspiration": 4091,
+   "achieved": 2471,
+   "achievedPct": 69.5
+  }
+ ],
+ "unbilled": {
+  "projects": [
+   {
+    "ref": "UB-COO-1040",
+    "project": "Marina pump station",
+    "engineer": "Joseph Villanueva",
+    "customer": "Falcon Ridge Estates",
+    "trend": [
+     0,
+     0,
+     725
+    ],
+    "provision": 0,
+    "remark": "New this month, delivery complete, awaiting client certification"
+   }
+  ],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 725,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 725
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Joseph Villanueva",
+    "customer": "Redsand Logistics",
+    "terms": "Against delivery",
+    "bucket0to30": 1874,
+    "bucket31to90": 1247,
+    "bucket91to365": 764,
+    "bucket1to2y": 875,
+    "bucketOver2y": 0,
+    "totalOutstanding": 4760,
+    "provision": 438,
+    "netToCollect": 4322,
+    "overdue": 2886,
+    "dispute": false,
+    "previousMonthOverdue": 2844,
+    "previousRemark": "Promised in August, not received",
+    "currentRemark": "No response to three reminders",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Joseph Villanueva",
+    "customer": "Corniche Medical Centre",
+    "terms": "Against delivery",
+    "bucket0to30": 1186,
+    "bucket31to90": 563,
+    "bucket91to365": 285,
+    "bucket1to2y": 742,
+    "bucketOver2y": 504,
+    "totalOutstanding": 3280,
+    "provision": 875,
+    "netToCollect": 2405,
+    "overdue": 2094,
+    "dispute": false,
+    "previousMonthOverdue": 1907,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Partial payment received 28 Aug 2026",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Joseph Villanueva",
+    "customer": "Al Rawabi Developments",
+    "terms": "90 days from invoice",
+    "bucket0to30": 1123,
+    "bucket31to90": 721,
+    "bucket91to365": 237,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 2081,
+    "provision": 0,
+    "netToCollect": 2081,
+    "overdue": 958,
+    "dispute": false,
+    "previousMonthOverdue": 893,
+    "previousRemark": "Reminder sent 05 Aug 2026",
+    "currentRemark": "Client finance head confirmed release this month",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 3,
+   "bucket0to30": 4183,
+   "bucket31to90": 2531,
+   "bucket91to365": 1286,
+   "bucket1to2y": 1617,
+   "bucketOver2y": 504,
+   "totalOutstanding": 10121,
+   "provision": 1313,
+   "netToCollect": 8808,
+   "overdue": 5938,
+   "previousMonthOverdue": 5644,
+   "change": 294,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 5938,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": [
+  {
+   "slug": "lina-khoury",
+   "name": "Lina Khoury"
+  },
+  {
+   "slug": "arjun-sethi",
+   "name": "Arjun Sethi"
+  }
+ ]
+}

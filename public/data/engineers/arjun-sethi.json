@@ -1,0 +1,380 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "arjun-sethi",
+ "name": "Arjun Sethi",
+ "vertical": {
+  "slug": "cooling",
+  "name": "Cooling"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 7393,
+  "budgetRevenue": 7376,
+  "ytdGmPct": 22.5,
+  "fyForecast": 11653,
+  "fyBudget": 11526,
+  "roiYtd": 9,
+  "roiBudget": 9.6,
+  "overdue": 3271,
+  "overdueChange": 34
+ },
+ "sales": {
+  "engineer": "Arjun Sethi",
+  "slug": "arjun-sethi",
+  "homeVertical": "cooling",
+  "fromOtherVertical": null,
+  "openOrders": 3081,
+  "expectedOrders": 1465,
+  "ytdRevenue": 7393,
+  "ytdGm": 1660,
+  "ytdBudgetRevenue": 7376,
+  "ytdBudgetGm": 1696,
+  "nearMonthForecast": 1020,
+  "restOfYearForecast": 3239,
+  "fyForecastRevenue": 11653,
+  "fyForecastGm": 2641,
+  "fyBudgetRevenue": 11526,
+  "fyBudgetGm": 2649,
+  "priorYearRevenue": 10739,
+  "priorYearGm": 2444,
+  "ytdGmPct": 22.5,
+  "budgetGmPct": 23,
+  "roiPriorYear": 9.3,
+  "roiYtd": 9,
+  "roiBudget": 9.6,
+  "roiForecast": 9.6,
+  "products": [
+   {
+    "product": "Fan coil units",
+    "alsoReportedOn": null,
+    "openOrders": 796,
+    "expectedOrders": 473,
+    "ytdRevenue": 2185,
+    "ytdGm": 478,
+    "ytdGmPct": 21.9,
+    "ytdBudgetRevenue": 2159,
+    "ytdBudgetGm": 482,
+    "budgetGmPct": 22.3,
+    "nearMonthForecast": 295,
+    "restOfYearForecast": 942,
+    "fyForecastRevenue": 3422,
+    "fyForecastGm": 754,
+    "fyBudgetRevenue": 3374,
+    "fyBudgetGm": 753,
+    "priorYearRevenue": 3165,
+    "priorYearGm": 710
+   },
+   {
+    "product": "Cooling towers",
+    "alsoReportedOn": null,
+    "openOrders": 2285,
+    "expectedOrders": 992,
+    "ytdRevenue": 5208,
+    "ytdGm": 1182,
+    "ytdGmPct": 22.7,
+    "ytdBudgetRevenue": 5217,
+    "ytdBudgetGm": 1214,
+    "budgetGmPct": 23.3,
+    "nearMonthForecast": 725,
+    "restOfYearForecast": 2297,
+    "fyForecastRevenue": 8231,
+    "fyForecastGm": 1887,
+    "fyBudgetRevenue": 8152,
+    "fyBudgetGm": 1896,
+    "priorYearRevenue": 7574,
+    "priorYearGm": 1734
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 819,
+   "forecast": null,
+   "budget": 807
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 850,
+   "forecast": null,
+   "budget": 864
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 1040,
+   "forecast": null,
+   "budget": 1014
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 921,
+   "forecast": null,
+   "budget": 945
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 976,
+   "forecast": null,
+   "budget": 968
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 906,
+   "forecast": null,
+   "budget": 922
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 919,
+   "forecast": null,
+   "budget": 899
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 964,
+   "forecast": null,
+   "budget": 957
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 1020,
+   "budget": 991
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 1071,
+   "budget": 1037
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 1077,
+   "budget": 1060
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 1092,
+   "budget": 1060
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Fan coil units",
+   "target": 3374,
+   "aspiration": 3858,
+   "achieved": 2185,
+   "achievedPct": 64.8
+  },
+  {
+   "productLine": "Cooling towers",
+   "target": 8152,
+   "aspiration": 9170,
+   "achieved": 5208,
+   "achievedPct": 63.9
+  }
+ ],
+ "unbilled": {
+  "projects": [
+   {
+    "ref": "UB-COO-1048",
+    "project": "Mall escalator replacement",
+    "engineer": "Arjun Sethi",
+    "customer": "Al Rawabi Developments",
+    "trend": [
+     0,
+     0,
+     1415
+    ],
+    "provision": 0,
+    "remark": "New this month, delivery complete, awaiting client certification"
+   },
+   {
+    "ref": "UB-COO-1058",
+    "project": "Residential block ductwork",
+    "engineer": "Arjun Sethi",
+    "customer": "Corniche Medical Centre",
+    "trend": [
+     1039,
+     944,
+     0
+    ],
+    "provision": 0,
+    "remark": "Invoiced 28 Aug 2026 after certification"
+   }
+  ],
+  "bridge": {
+   "previousMonth": 944,
+   "newProjects": 1415,
+   "clearedProjects": 944,
+   "ongoingChanges": 0,
+   "currentMonth": 1415
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Arjun Sethi",
+    "customer": "Sable Ridge Properties",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 1811,
+    "bucket31to90": 1460,
+    "bucket91to365": 407,
+    "bucket1to2y": 132,
+    "bucketOver2y": 0,
+    "totalOutstanding": 3810,
+    "provision": 168,
+    "netToCollect": 3642,
+    "overdue": 1999,
+    "dispute": true,
+    "previousMonthOverdue": 1988,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Client disputes variation on order 4018",
+    "reason": "disputesAndNotDue"
+   },
+   {
+    "engineer": "Arjun Sethi",
+    "customer": "Tamarind Retail Holdings",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 1265,
+    "bucket31to90": 844,
+    "bucket91to365": 428,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 2537,
+    "provision": 0,
+    "netToCollect": 2537,
+    "overdue": 1272,
+    "dispute": false,
+    "previousMonthOverdue": 1249,
+    "previousRemark": "Statement of account sent",
+    "currentRemark": "Held pending site handover sign-off",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 2,
+   "bucket0to30": 3076,
+   "bucket31to90": 2304,
+   "bucket91to365": 835,
+   "bucket1to2y": 132,
+   "bucketOver2y": 0,
+   "totalOutstanding": 6347,
+   "provision": 168,
+   "netToCollect": 6179,
+   "overdue": 3271,
+   "previousMonthOverdue": 3237,
+   "change": 34,
+   "disputed": 1999
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 1272,
+   "disputesAndNotDue": 1999
+  }
+ },
+ "peers": [
+  {
+   "slug": "joseph-villanueva",
+   "name": "Joseph Villanueva"
+  },
+  {
+   "slug": "lina-khoury",
+   "name": "Lina Khoury"
+  }
+ ]
+}

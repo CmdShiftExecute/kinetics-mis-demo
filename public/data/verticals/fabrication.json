@@ -13,7 +13,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:35:35+04:00"
+  "generatedAt": "2026-09-11T19:59:46+04:00"
  },
  "slug": "fabrication",
  "name": "Fabrication",
@@ -66,6 +66,22 @@
   "vertical.overdue": {
    "key": "vertical.overdue",
    "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
   }
  },
  "headline": {
@@ -80,6 +96,8 @@
   "engineers": [
    {
     "engineer": "Rami Aziz",
+    "slug": "rami-aziz",
+    "homeVertical": "fabrication",
     "fromOtherVertical": null,
     "openOrders": 1141,
     "expectedOrders": 538,
@@ -166,6 +184,8 @@
    },
    {
     "engineer": "Joseph Villanueva",
+    "slug": "joseph-villanueva",
+    "homeVertical": "cooling",
     "fromOtherVertical": "cooling",
     "openOrders": 771,
     "expectedOrders": 441,
@@ -212,6 +232,8 @@
    },
    {
     "engineer": "Bassem Farouk",
+    "slug": "bassem-farouk",
+    "homeVertical": "mechanical-systems",
     "fromOtherVertical": "mechanical-systems",
     "openOrders": 214,
     "expectedOrders": 121,
@@ -258,6 +280,8 @@
    },
    {
     "engineer": "Tarek Hamdan",
+    "slug": "tarek-hamdan",
+    "homeVertical": "mechanical-systems",
     "fromOtherVertical": "mechanical-systems",
     "openOrders": 306,
     "expectedOrders": 155,
@@ -305,6 +329,8 @@
   ],
   "sheetTotal": {
    "engineer": "Sheet total",
+   "slug": "sheet-total",
+   "homeVertical": "fabrication",
    "fromOtherVertical": null,
    "openOrders": 2432,
    "expectedOrders": 1255,
@@ -330,6 +356,8 @@
   },
   "attributedTotal": {
    "engineer": "Attributed total",
+   "slug": "attributed-total",
+   "homeVertical": "fabrication",
    "fromOtherVertical": null,
    "openOrders": 1141,
    "expectedOrders": 538,
@@ -591,6 +619,7 @@
   "byEngineer": [
    {
     "engineer": "Rami Aziz",
+    "slug": "rami-aziz",
     "customers": 3,
     "bucket0to30": 417,
     "bucket31to90": 455,

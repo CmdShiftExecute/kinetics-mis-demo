@@ -119,7 +119,11 @@ export default function OverduePage() {
             {overdue.byEngineer.map((e) => (
               <tbody key={e.engineer}>
                 <tr className="sub">
-                  <td colSpan={2}>{e.engineer}</td>
+                  <td colSpan={2}>
+                    <Link to={`/v/${slug}/e/${e.slug}`} className="elink press">
+                      {e.engineer}
+                    </Link>
+                  </td>
                   <Num v={e.bucket0to30} />
                   <Num v={e.bucket31to90} />
                   <Num v={e.bucket91to365} />

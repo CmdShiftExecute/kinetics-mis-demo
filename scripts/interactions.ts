@@ -106,10 +106,44 @@ try {
   check(rows > 0, `Overdue drill lists customer rows (${rows} rows)`);
   await page.locator('a.back').click();
   await page.waitForURL(/\/v\/cooling$/, { waitUntil: 'commit' });
+  await page.locator('#engineers table.mis tr.prod').first().waitFor();
+
+  // 7. product sub-rows are real rows of the same table: every cell edge equals its header edge
+  const misaligned = await page.evaluate(() => {
+    const table = document.querySelector('#engineers table.mis')!;
+    const ths = Array.from(table.querySelectorAll('thead tr:last-child th'));
+    const rows = Array.from(table.querySelectorAll('tbody tr.prod'));
+    const out: string[] = [];
+    for (const row of rows) {
+      const tds = Array.from(row.querySelectorAll('td'));
+      for (let i = 0; i < Math.min(ths.length, tds.length); i++) {
+        const a = ths[i]!.getBoundingClientRect();
+        const b = tds[i]!.getBoundingClientRect();
+        const spans = (tds[i]!.colSpan ?? 1) > 1; // a spanning cell shares only its left edge with the header
+        if (Math.abs(a.left - b.left) > 0.5 || (!spans && Math.abs(a.right - b.right) > 0.5)) out.push(`row ${rows.indexOf(row)} col ${i}: ${(b.left - a.left).toFixed(1)}px`);
+      }
+    }
+    return { out, rows: rows.length, cols: ths.length };
+  });
+  check(misaligned.out.length === 0 && misaligned.rows > 0, `Product sub-row cells align with the header (${misaligned.rows} rows, ${misaligned.cols} columns${misaligned.out.length ? '; off: ' + misaligned.out.slice(0, 4).join(', ') : ''})`);
+  await page.locator('#engineers table.mis').screenshot({ path: join(out, 'gate product rows aligned.png') });
+
+  // 8. the engineer's name opens the engineer page
+  const engName = (await page.locator('#engineers a.vlink').first().innerText()).trim();
+  await page.locator('#engineers a.vlink').first().click();
+  await page.waitForURL(/\/v\/cooling\/e\//, { waitUntil: 'commit' });
+  await page.locator('h1', { hasText: new RegExp(engName.split(' ')[0]!, 'i') }).waitFor({ timeout: 10000 });
+  const engH1 = await page.locator('h1').last().innerText();
+  const engSections = await page.locator('section.sec').count();
+  check(new RegExp(engName, 'i').test(engH1) && engSections === 4, `Engineer page opens from the name (h1 "${engH1}", ${engSections} sections)`);
+  await page.waitForTimeout(900);
+  await page.screenshot({ path: join(out, 'gate engineer page.png'), fullPage: false });
+  await page.locator('a.back').click();
+  await page.waitForURL(/\/v\/cooling$/, { waitUntil: 'commit' });
   await page.waitForTimeout(600);
   await page.locator('a.back').click();
   await page.waitForURL(/\/$/, { waitUntil: 'commit' });
-  check(true, 'Back links return to the vertical and then to the front page');
+  check(true, 'Back links return from engineer to vertical to front page');
 
   // 6. console errors
   check(errors.length === 0, `No console errors (${errors.length})`);

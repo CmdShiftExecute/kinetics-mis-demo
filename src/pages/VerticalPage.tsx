@@ -1,53 +1,21 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Link, useParams } from 'react-router';
-import type { EngineerRow, ProductRow, VerticalData, VerticalIndexEntry } from '../../data/schema';
+import type { VerticalData, VerticalIndexEntry } from '../../data/schema';
 import { useJson } from '../lib/data';
-import { cx, dateLabel, k, mult, pct, signedK, signedPct } from '../lib/format';
+import { cx, dateLabel, k, pct, signedK, signedPct } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { MonthlyLine } from '../components/MonthlyLine';
 import { PlLadder } from '../components/PlLadder';
 import { ReasonGrid } from '../components/ReasonGrid';
+import { SalesHead } from '../components/SalesHead';
+import { NumericCells, ROI_TIP_TEXT, RoiCells } from '../components/SalesCells';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
 import { EASE, useReveal, useRowReveal } from '../components/Reveal';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-function NumericCells({ r, tip }: { r: ProductRow | EngineerRow; tip: string }) {
-  return (
-    <>
-      <Num v={r.openOrders} tip={tip} />
-      <Num v={r.expectedOrders} tip={tip} />
-      <Num v={r.ytdRevenue} tip={tip} />
-      <Num v={r.ytdGm} tip={tip} />
-      <Num v={r.ytdGmPct} f={pct} tip={tip} />
-      <Num v={r.ytdBudgetRevenue} tip={tip} />
-      <Num v={r.ytdBudgetGm} tip={tip} />
-      <Num v={r.budgetGmPct} f={pct} tip={tip} />
-      <Num v={r.nearMonthForecast} tip={tip} />
-      <Num v={r.restOfYearForecast} tip={tip} />
-      <Num v={r.fyForecastRevenue} tip={tip} />
-      <Num v={r.fyForecastGm} tip={tip} />
-      <Num v={r.fyBudgetRevenue} tip={tip} />
-      <Num v={r.fyBudgetGm} tip={tip} />
-      <Num v={r.priorYearRevenue} tip={tip} />
-      <Num v={r.priorYearGm} tip={tip} />
-    </>
-  );
-}
-
-function RoiCells({ r, tip }: { r: EngineerRow; tip: string }) {
-  return (
-    <>
-      <Num v={r.roiPriorYear} f={mult} tip={tip} />
-      <Num v={r.roiYtd} f={mult} bad={r.roiYtd < r.roiBudget * 0.85} tip={tip} />
-      <Num v={r.roiBudget} f={mult} tip={tip} />
-      <Num v={r.roiForecast} f={mult} bad={r.roiForecast < r.roiBudget * 0.85} tip={tip} />
-    </>
-  );
-}
 
 export default function VerticalPage() {
   const { slug = '' } = useParams();
@@ -84,7 +52,8 @@ export default function VerticalPage() {
   const dRev = headline.ytdRevenue - headline.budgetRevenue;
   const dFy = headline.fyForecast - headline.fyBudget;
   const rise = reduce ? {} : { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: 0.2, ease: EASE } };
-  const roiTip = tip('vertical.sales', 'ROI is gross margin divided by the engineer’s cost to employ for the same period.');
+  const roiTip = tip('vertical.sales', ROI_TIP_TEXT);
+  const restLabel = `${MONTHS[meta.monthsElapsed + 1]} to Dec`;
 
   return (
     <div className="wrap">
@@ -146,66 +115,20 @@ export default function VerticalPage() {
       </div>
 
       {/* Block 1: sales performance by engineer with product sub-rows */}
-      <Section id="engineers" title="Sales performance by sales engineer" note={`AED thousands, ${meta.periodLabel}`} source={sources['vertical.sales']} asOf={asOf} delay={0.35}>
+      <Section id="engineers" title="Sales performance by sales engineer" note={`AED thousands, ${meta.periodLabel}. Product lines under each engineer; the name opens the engineer's page`} source={sources['vertical.sales']} asOf={asOf} delay={0.35}>
         <MonthlyLine points={monthly} year={meta.fiscalYear} height={220} label={`Monthly revenue for ${data.name}, actual then forecast, against budget`} />
         <div className="scroll-x">
           <table className="mis dense">
-            <thead>
-              <tr>
-                <th />
-                <th className="group" colSpan={2}>
-                  Orders
-                </th>
-                <th className="group" colSpan={3}>
-                  YTD actual
-                </th>
-                <th className="group" colSpan={3}>
-                  YTD budget
-                </th>
-                <th className="group" colSpan={4}>
-                  Forecast
-                </th>
-                <th className="group" colSpan={2}>
-                  FY budget
-                </th>
-                <th className="group" colSpan={2}>
-                  Prior year
-                </th>
-                <th className="group" colSpan={4}>
-                  ROI
-                </th>
-              </tr>
-              <tr>
-                <th>Engineer and product</th>
-                <th>Open</th>
-                <th>Expected</th>
-                <th>Revenue</th>
-                <th>GM</th>
-                <th>GM %</th>
-                <th>Revenue</th>
-                <th>GM</th>
-                <th>GM %</th>
-                <th>{nearMonth}</th>
-                <th>{MONTHS[meta.monthsElapsed + 1]} to Dec</th>
-                <th>FY revenue</th>
-                <th>FY GM</th>
-                <th>Revenue</th>
-                <th>GM</th>
-                <th>Revenue</th>
-                <th>GM</th>
-                <th>Prior yr</th>
-                <th>YTD</th>
-                <th>Budget</th>
-                <th>Forecast</th>
-              </tr>
-            </thead>
+            <SalesHead firstLabel="Engineer and product" nearMonth={nearMonth} restLabel={restLabel} />
             {sales.engineers.map((e, i) => (
-              <tbody key={e.engineer} className="hov">
-                <motion.tr className="main" {...rowReveal(i)}>
+              <tbody key={e.slug} className="hov">
+                <motion.tr className="main eng" {...rowReveal(i)}>
                   <td>
-                    <button type="button" className="vlink press" aria-expanded="false" aria-controls={`prod-${i}`} style={{ textAlign: 'left' }}>
-                      {e.engineer}
-                    </button>
+                    <Link to={`/v/${e.homeVertical}/e/${e.slug}`} className="vlink press">
+                      <motion.span layoutId={`ename-${e.slug}`} className="vname">
+                        {e.engineer}
+                      </motion.span>
+                    </Link>
                     {e.fromOtherVertical && (
                       <>
                         {' '}
@@ -216,38 +139,21 @@ export default function VerticalPage() {
                   <NumericCells r={e} tip={tip('vertical.sales')} />
                   <RoiCells r={e} tip={roiTip} />
                 </motion.tr>
-                <tr className="xrow">
-                  <td colSpan={21}>
-                    <div className="expand" id={`prod-${i}`}>
-                      <div>
-                        <div className="expand-inner">
-                          <p className="label">Product lines sold by {e.engineer}</p>
-                          <table className="mis compact">
-                            <tbody>
-                              {e.products.map((p) => (
-                                <tr key={p.product}>
-                                  <td style={{ minWidth: 220 }}>
-                                    {p.product}
-                                    {p.alsoReportedOn && (
-                                      <>
-                                        {' '}
-                                        <span className="tag">also on {p.alsoReportedOn}</span>
-                                      </>
-                                    )}
-                                  </td>
-                                  <NumericCells r={p} tip={tip('vertical.sales', 'Product sub-row.')} />
-                                  <td colSpan={4} className="muted">
-                                    ROI is per engineer
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                {e.products.map((p) => (
+                  <tr className="prod" key={p.product}>
+                    <td>
+                      {p.product}
+                      {p.alsoReportedOn && (
+                        <>
+                          {' '}
+                          <span className="tag">also on {p.alsoReportedOn.replace(/-/g, ' ')}</span>
+                        </>
+                      )}
+                    </td>
+                    <NumericCells r={p} tip={tip('vertical.sales', 'Product sub-row.')} />
+                    <td colSpan={4} />
+                  </tr>
+                ))}
               </tbody>
             ))}
             <tbody>
@@ -477,7 +383,11 @@ export default function VerticalPage() {
             <tbody>
               {overdue.byEngineer.map((e, i) => (
                 <motion.tr key={e.engineer} {...rowReveal(i)}>
-                  <td>{e.engineer}</td>
+                  <td>
+                    <Link to={`/v/${slug}/e/${e.slug}`} className="elink press">
+                      {e.engineer}
+                    </Link>
+                  </td>
                   <Num v={e.customers} f={(n) => String(n)} />
                   <Num v={e.bucket0to30} tip={tip('vertical.overdue')} />
                   <Num v={e.bucket31to90} tip={tip('vertical.overdue')} />

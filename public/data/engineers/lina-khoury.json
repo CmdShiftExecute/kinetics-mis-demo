@@ -1,0 +1,399 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "lina-khoury",
+ "name": "Lina Khoury",
+ "vertical": {
+  "slug": "cooling",
+  "name": "Cooling"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 9263,
+  "budgetRevenue": 8682,
+  "ytdGmPct": 22.2,
+  "fyForecast": 14240,
+  "fyBudget": 13565,
+  "roiYtd": 15.9,
+  "roiBudget": 15.6,
+  "overdue": 3590,
+  "overdueChange": 362
+ },
+ "sales": {
+  "engineer": "Lina Khoury",
+  "slug": "lina-khoury",
+  "homeVertical": "cooling",
+  "fromOtherVertical": null,
+  "openOrders": 2766,
+  "expectedOrders": 966,
+  "ytdRevenue": 9263,
+  "ytdGm": 2052,
+  "ytdBudgetRevenue": 8682,
+  "ytdBudgetGm": 1936,
+  "nearMonthForecast": 1191,
+  "restOfYearForecast": 3786,
+  "fyForecastRevenue": 14240,
+  "fyForecastGm": 3163,
+  "fyBudgetRevenue": 13565,
+  "fyBudgetGm": 3026,
+  "priorYearRevenue": 12549,
+  "priorYearGm": 2638,
+  "ytdGmPct": 22.2,
+  "budgetGmPct": 22.3,
+  "roiPriorYear": 14.3,
+  "roiYtd": 15.9,
+  "roiBudget": 15.6,
+  "roiForecast": 16.3,
+  "products": [
+   {
+    "product": "Air handling units",
+    "alsoReportedOn": null,
+    "openOrders": 971,
+    "expectedOrders": 489,
+    "ytdRevenue": 2481,
+    "ytdGm": 521,
+    "ytdGmPct": 21,
+    "ytdBudgetRevenue": 2547,
+    "ytdBudgetGm": 579,
+    "budgetGmPct": 22.7,
+    "nearMonthForecast": 350,
+    "restOfYearForecast": 1122,
+    "fyForecastRevenue": 3953,
+    "fyForecastGm": 858,
+    "fyBudgetRevenue": 3980,
+    "fyBudgetGm": 905,
+    "priorYearRevenue": 3619,
+    "priorYearGm": 766
+   },
+   {
+    "product": "Fan coil units",
+    "alsoReportedOn": null,
+    "openOrders": 861,
+    "expectedOrders": 317,
+    "ytdRevenue": 3645,
+    "ytdGm": 841,
+    "ytdGmPct": 23.1,
+    "ytdBudgetRevenue": 3242,
+    "ytdBudgetGm": 739,
+    "budgetGmPct": 22.8,
+    "nearMonthForecast": 458,
+    "restOfYearForecast": 1414,
+    "fyForecastRevenue": 5517,
+    "fyForecastGm": 1267,
+    "fyBudgetRevenue": 5065,
+    "fyBudgetGm": 1155,
+    "priorYearRevenue": 4904,
+    "priorYearGm": 1056
+   },
+   {
+    "product": "Cooling towers",
+    "alsoReportedOn": null,
+    "openOrders": 934,
+    "expectedOrders": 160,
+    "ytdRevenue": 3137,
+    "ytdGm": 690,
+    "ytdGmPct": 22,
+    "ytdBudgetRevenue": 2893,
+    "ytdBudgetGm": 618,
+    "budgetGmPct": 21.4,
+    "nearMonthForecast": 383,
+    "restOfYearForecast": 1250,
+    "fyForecastRevenue": 4770,
+    "fyForecastGm": 1038,
+    "fyBudgetRevenue": 4520,
+    "fyBudgetGm": 966,
+    "priorYearRevenue": 4026,
+    "priorYearGm": 816
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 999,
+   "forecast": null,
+   "budget": 950
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 1077,
+   "forecast": null,
+   "budget": 1017
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 1256,
+   "forecast": null,
+   "budget": 1194
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 1211,
+   "forecast": null,
+   "budget": 1112
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 1273,
+   "forecast": null,
+   "budget": 1140
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 1167,
+   "forecast": null,
+   "budget": 1085
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 1094,
+   "forecast": null,
+   "budget": 1058
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 1186,
+   "forecast": null,
+   "budget": 1126
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 1191,
+   "budget": 1167
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 1218,
+   "budget": 1221
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 1284,
+   "budget": 1248
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 1284,
+   "budget": 1248
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Air handling units",
+   "target": 3980,
+   "aspiration": 4665,
+   "achieved": 2481,
+   "achievedPct": 62.3
+  },
+  {
+   "productLine": "Fan coil units",
+   "target": 5065,
+   "aspiration": 5791,
+   "achieved": 3645,
+   "achievedPct": 72
+  },
+  {
+   "productLine": "Cooling towers",
+   "target": 4520,
+   "aspiration": 5085,
+   "achieved": 3137,
+   "achievedPct": 69.4
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Lina Khoury",
+    "customer": "Meridian Contracting",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 1684,
+    "bucket31to90": 897,
+    "bucket91to365": 975,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 3556,
+    "provision": 0,
+    "netToCollect": 3556,
+    "overdue": 1872,
+    "dispute": false,
+    "previousMonthOverdue": 1594,
+    "previousRemark": "Escalated to client finance head",
+    "currentRemark": "Legal notice issued 02 Sep 2026",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Lina Khoury",
+    "customer": "Oryx Cold Chain",
+    "terms": "90 days from invoice",
+    "bucket0to30": 1051,
+    "bucket31to90": 645,
+    "bucket91to365": 401,
+    "bucket1to2y": 70,
+    "bucketOver2y": 0,
+    "totalOutstanding": 2167,
+    "provision": 35,
+    "netToCollect": 2132,
+    "overdue": 1116,
+    "dispute": false,
+    "previousMonthOverdue": 1145,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Retention due after defects period, Nov 2026",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Lina Khoury",
+    "customer": "Ironline MEP Contracting",
+    "terms": "60 days from invoice",
+    "bucket0to30": 396,
+    "bucket31to90": 350,
+    "bucket91to365": 252,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 998,
+    "provision": 0,
+    "netToCollect": 998,
+    "overdue": 602,
+    "dispute": false,
+    "previousMonthOverdue": 489,
+    "previousRemark": "Reminder sent 05 Aug 2026",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 3,
+   "bucket0to30": 3131,
+   "bucket31to90": 1892,
+   "bucket91to365": 1628,
+   "bucket1to2y": 70,
+   "bucketOver2y": 0,
+   "totalOutstanding": 6721,
+   "provision": 35,
+   "netToCollect": 6686,
+   "overdue": 3590,
+   "previousMonthOverdue": 3228,
+   "change": 362,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 3590,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": [
+  {
+   "slug": "joseph-villanueva",
+   "name": "Joseph Villanueva"
+  },
+  {
+   "slug": "arjun-sethi",
+   "name": "Arjun Sethi"
+  }
+ ]
+}

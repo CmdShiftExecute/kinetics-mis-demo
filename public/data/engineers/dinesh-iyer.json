@@ -1,0 +1,380 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "dinesh-iyer",
+ "name": "Dinesh Iyer",
+ "vertical": {
+  "slug": "electrical-distribution",
+  "name": "Electrical Distribution"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 10164,
+  "budgetRevenue": 10640,
+  "ytdGmPct": 16,
+  "fyForecast": 16021,
+  "fyBudget": 16626,
+  "roiYtd": 5.9,
+  "roiBudget": 6.9,
+  "overdue": 8287,
+  "overdueChange": 554
+ },
+ "sales": {
+  "engineer": "Dinesh Iyer",
+  "slug": "dinesh-iyer",
+  "homeVertical": "electrical-distribution",
+  "fromOtherVertical": null,
+  "openOrders": 2610,
+  "expectedOrders": 1422,
+  "ytdRevenue": 10164,
+  "ytdGm": 1622,
+  "ytdBudgetRevenue": 10640,
+  "ytdBudgetGm": 1822,
+  "nearMonthForecast": 1407,
+  "restOfYearForecast": 4450,
+  "fyForecastRevenue": 16021,
+  "fyForecastGm": 2631,
+  "fyBudgetRevenue": 16626,
+  "fyBudgetGm": 2847,
+  "priorYearRevenue": 15206,
+  "priorYearGm": 2495,
+  "ytdGmPct": 16,
+  "budgetGmPct": 17.1,
+  "roiPriorYear": 6.4,
+  "roiYtd": 5.9,
+  "roiBudget": 6.9,
+  "roiForecast": 6.4,
+  "products": [
+   {
+    "product": "Distribution boards",
+    "alsoReportedOn": null,
+    "openOrders": 1277,
+    "expectedOrders": 901,
+    "ytdRevenue": 5256,
+    "ytdGm": 825,
+    "ytdGmPct": 15.7,
+    "ytdBudgetRevenue": 5471,
+    "ytdBudgetGm": 974,
+    "budgetGmPct": 17.8,
+    "nearMonthForecast": 704,
+    "restOfYearForecast": 2305,
+    "fyForecastRevenue": 8265,
+    "fyForecastGm": 1367,
+    "fyBudgetRevenue": 8549,
+    "fyBudgetGm": 1522,
+    "priorYearRevenue": 7762,
+    "priorYearGm": 1336
+   },
+   {
+    "product": "Power factor correction",
+    "alsoReportedOn": null,
+    "openOrders": 1333,
+    "expectedOrders": 521,
+    "ytdRevenue": 4908,
+    "ytdGm": 797,
+    "ytdGmPct": 16.2,
+    "ytdBudgetRevenue": 5169,
+    "ytdBudgetGm": 848,
+    "budgetGmPct": 16.4,
+    "nearMonthForecast": 703,
+    "restOfYearForecast": 2145,
+    "fyForecastRevenue": 7756,
+    "fyForecastGm": 1264,
+    "fyBudgetRevenue": 8077,
+    "fyBudgetGm": 1325,
+    "priorYearRevenue": 7444,
+    "priorYearGm": 1159
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 1133,
+   "forecast": null,
+   "budget": 1164
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 1216,
+   "forecast": null,
+   "budget": 1247
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 1370,
+   "forecast": null,
+   "budget": 1463
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 1296,
+   "forecast": null,
+   "budget": 1363
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 1345,
+   "forecast": null,
+   "budget": 1397
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 1322,
+   "forecast": null,
+   "budget": 1330
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 1208,
+   "forecast": null,
+   "budget": 1297
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 1275,
+   "forecast": null,
+   "budget": 1380
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 1407,
+   "budget": 1430
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 1477,
+   "budget": 1496
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 1485,
+   "budget": 1530
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 1489,
+   "budget": 1530
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Distribution boards",
+   "target": 8549,
+   "aspiration": 9864,
+   "achieved": 5256,
+   "achievedPct": 61.5
+  },
+  {
+   "productLine": "Power factor correction",
+   "target": 8077,
+   "aspiration": 9155,
+   "achieved": 4908,
+   "achievedPct": 60.8
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Dinesh Iyer",
+    "customer": "Meridian Contracting",
+    "terms": "30 days from invoice",
+    "bucket0to30": 4132,
+    "bucket31to90": 1217,
+    "bucket91to365": 1690,
+    "bucket1to2y": 400,
+    "bucketOver2y": 0,
+    "totalOutstanding": 7439,
+    "provision": 622,
+    "netToCollect": 6817,
+    "overdue": 3307,
+    "dispute": true,
+    "previousMonthOverdue": 3153,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Client disputes variation on order 4553",
+    "reason": "disputesAndNotDue"
+   },
+   {
+    "engineer": "Dinesh Iyer",
+    "customer": "Blue Harbour Marine Works",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 2372,
+    "bucket31to90": 1950,
+    "bucket91to365": 1050,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 5372,
+    "provision": 0,
+    "netToCollect": 5372,
+    "overdue": 3000,
+    "dispute": false,
+    "previousMonthOverdue": 2834,
+    "previousRemark": "Escalated to client finance head",
+    "currentRemark": "Legal notice issued 02 Sep 2026",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Dinesh Iyer",
+    "customer": "Westgate Industrial Park",
+    "terms": "30 days from invoice",
+    "bucket0to30": 994,
+    "bucket31to90": 982,
+    "bucket91to365": 671,
+    "bucket1to2y": 327,
+    "bucketOver2y": 0,
+    "totalOutstanding": 2974,
+    "provision": 163,
+    "netToCollect": 2811,
+    "overdue": 1980,
+    "dispute": false,
+    "previousMonthOverdue": 1746,
+    "previousRemark": "Follow-up call made 12 Aug 2026",
+    "currentRemark": "No response to three reminders",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 3,
+   "bucket0to30": 7498,
+   "bucket31to90": 4149,
+   "bucket91to365": 3411,
+   "bucket1to2y": 727,
+   "bucketOver2y": 0,
+   "totalOutstanding": 15785,
+   "provision": 785,
+   "netToCollect": 15000,
+   "overdue": 8287,
+   "previousMonthOverdue": 7733,
+   "change": 554,
+   "disputed": 3307
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 4980,
+   "disputesAndNotDue": 3307
+  }
+ },
+ "peers": [
+  {
+   "slug": "rohan-pillai",
+   "name": "Rohan Pillai"
+  },
+  {
+   "slug": "farah-haddad",
+   "name": "Farah Haddad"
+  },
+  {
+   "slug": "marwan-saleh",
+   "name": "Marwan Saleh"
+  },
+  {
+   "slug": "kavya-nair",
+   "name": "Kavya Nair"
+  }
+ ]
+}

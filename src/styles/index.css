@@ -428,8 +428,30 @@ table.mis tr.clickable {
   cursor: pointer;
 }
 table.mis tbody.hov:hover > tr.main td,
-table.mis tbody.hov:focus-within > tr.main td {
+table.mis tbody.hov:focus-within > tr.main td,
+table.mis tbody.hov:hover > tr.prod td,
+table.mis tbody.hov:focus-within > tr.prod td {
   background: var(--paper-2);
+}
+table.mis tr.eng td {
+  font-weight: 600;
+}
+table.mis tr.prod td {
+  color: var(--ink-2);
+  font-weight: 400;
+  border-bottom: 1px solid var(--paper-3);
+}
+table.mis tr.prod td:first-child {
+  padding-left: var(--s-xl);
+}
+table.mis tbody.hov > tr.prod:last-child td {
+  border-bottom: 1px solid var(--rule);
+}
+.elink {
+  border-bottom: 1px solid var(--rule);
+}
+.elink:hover {
+  border-bottom-color: var(--ink);
 }
 table.mis.compact td,
 table.mis.compact th {

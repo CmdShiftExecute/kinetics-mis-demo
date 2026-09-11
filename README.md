@@ -13,12 +13,13 @@ The app has three routes, plus a not-found page for anything else.
 | `/` | Front page | Division masthead, a data-as-of stamp, the Readout, and five sections |
 | `/v/<slug>` | Vertical page | One vertical, broken into six blocks |
 | `/v/<slug>/overdue` | Overdue page | The customer aging table for that vertical |
+| `/v/<slug>/e/<engineer>` | Engineer page | One sales engineer: product lines, monthly run, targets, unbilled projects, overdue by customer |
 
-The ten vertical slugs are electrical-distribution, cooling, mechanical-systems, pumps-and-water, vertical-transport, metering, automation, fabrication, trading and services.
+Engineer slugs are the engineer's name in kebab case (for example `bassem-farouk`) and are unique across the company. The ten vertical slugs are electrical-distribution, cooling, mechanical-systems, pumps-and-water, vertical-transport, metering, automation, fabrication, trading and services.
 
 ## Run it
 
-Install dependencies with `bun install`, then generate the data with `bun run data` before the first run. `bun run dev` starts the development server. For a production build, run `bun run build`, then `bun run preview` to serve the built site.
+Install dependencies with `bun install`, then generate the data with `bun run data` (writes `public/data/rollup.json`, `index.json`, `verticals/<slug>.json` and `engineers/<slug>.json`) before the first run. `bun run dev` starts the development server. For a production build, run `bun run build`, then `bun run preview` to serve the built site.
 
 `bun run contrast` measures the contrast ratio of every text and surface pair on the page. `bun run screenshots` uses Playwright to capture the app at 1440 and 390 pixels wide, and needs `bunx playwright install chromium` once before its first run. `bun run check` runs the data generator, the build and the contrast check together, in that order.
 

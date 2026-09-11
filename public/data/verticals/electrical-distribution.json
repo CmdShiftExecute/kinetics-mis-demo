@@ -13,7 +13,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:35:35+04:00"
+  "generatedAt": "2026-09-11T19:59:46+04:00"
  },
  "slug": "electrical-distribution",
  "name": "Electrical Distribution",
@@ -66,6 +66,22 @@
   "vertical.overdue": {
    "key": "vertical.overdue",
    "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
   }
  },
  "headline": {
@@ -80,6 +96,8 @@
   "engineers": [
    {
     "engineer": "Rohan Pillai",
+    "slug": "rohan-pillai",
+    "homeVertical": "electrical-distribution",
     "fromOtherVertical": null,
     "openOrders": 2941,
     "expectedOrders": 1420,
@@ -166,6 +184,8 @@
    },
    {
     "engineer": "Farah Haddad",
+    "slug": "farah-haddad",
+    "homeVertical": "electrical-distribution",
     "fromOtherVertical": null,
     "openOrders": 3242,
     "expectedOrders": 1342,
@@ -252,6 +272,8 @@
    },
    {
     "engineer": "Dinesh Iyer",
+    "slug": "dinesh-iyer",
+    "homeVertical": "electrical-distribution",
     "fromOtherVertical": null,
     "openOrders": 2610,
     "expectedOrders": 1422,
@@ -318,6 +340,8 @@
    },
    {
     "engineer": "Marwan Saleh",
+    "slug": "marwan-saleh",
+    "homeVertical": "electrical-distribution",
     "fromOtherVertical": null,
     "openOrders": 2305,
     "expectedOrders": 1009,
@@ -404,6 +428,8 @@
    },
    {
     "engineer": "Kavya Nair",
+    "slug": "kavya-nair",
+    "homeVertical": "electrical-distribution",
     "fromOtherVertical": null,
     "openOrders": 3971,
     "expectedOrders": 2166,
@@ -491,6 +517,8 @@
   ],
   "sheetTotal": {
    "engineer": "Sheet total",
+   "slug": "sheet-total",
+   "homeVertical": "electrical-distribution",
    "fromOtherVertical": null,
    "openOrders": 15069,
    "expectedOrders": 7359,
@@ -516,6 +544,8 @@
   },
   "attributedTotal": {
    "engineer": "Attributed total",
+   "slug": "attributed-total",
+   "homeVertical": "electrical-distribution",
    "fromOtherVertical": null,
    "openOrders": 15069,
    "expectedOrders": 7359,
@@ -891,6 +921,7 @@
   "byEngineer": [
    {
     "engineer": "Rohan Pillai",
+    "slug": "rohan-pillai",
     "customers": 1,
     "bucket0to30": 1637,
     "bucket31to90": 1852,
@@ -907,6 +938,7 @@
    },
    {
     "engineer": "Farah Haddad",
+    "slug": "farah-haddad",
     "customers": 1,
     "bucket0to30": 2296,
     "bucket31to90": 1072,
@@ -923,6 +955,7 @@
    },
    {
     "engineer": "Dinesh Iyer",
+    "slug": "dinesh-iyer",
     "customers": 3,
     "bucket0to30": 7498,
     "bucket31to90": 4149,
@@ -939,6 +972,7 @@
    },
    {
     "engineer": "Marwan Saleh",
+    "slug": "marwan-saleh",
     "customers": 2,
     "bucket0to30": 5745,
     "bucket31to90": 3208,
@@ -955,6 +989,7 @@
    },
    {
     "engineer": "Kavya Nair",
+    "slug": "kavya-nair",
     "customers": 1,
     "bucket0to30": 2241,
     "bucket31to90": 631,

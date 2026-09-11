@@ -68,6 +68,8 @@ export interface SalesRow {
 
 export interface EngineerSummary {
   name: string;
+  /** Route segment for the engineer's own page. */
+  slug: string;
   ytdRevenue: number;
   ytdGm: number;
   ytdGmPct: number;
@@ -254,6 +256,10 @@ export interface ProductRow {
 
 export interface EngineerRow extends Omit<ProductRow, 'product' | 'alsoReportedOn'> {
   engineer: string;
+  /** Route segment for the engineer's own page, unique across the company. */
+  slug: string;
+  /** The vertical the engineer belongs to; the engineer page lives under it. */
+  homeVertical: Slug;
   /** True when this engineer belongs to another vertical and appears here only for a shared product line. */
   fromOtherVertical: Slug | null;
   roiPriorYear: number;
@@ -333,6 +339,7 @@ export interface OverdueDetailRow {
 
 export interface EngineerOverdue {
   engineer: string;
+  slug: string;
   customers: number;
   bucket0to30: number;
   bucket31to90: number;
@@ -382,6 +389,35 @@ export interface VerticalData {
     reasons: ReasonBuckets;
   };
   monthly: MonthPoint[];
+}
+
+/* ---------- Engineer page ---------- */
+
+export interface EngineerData {
+  meta: Meta;
+  slug: string;
+  name: string;
+  vertical: { slug: Slug; name: string };
+  sources: Record<string, Source>;
+  headline: {
+    ytdRevenue: number;
+    budgetRevenue: number;
+    ytdGmPct: number;
+    fyForecast: number;
+    fyBudget: number;
+    roiYtd: number;
+    roiBudget: number;
+    overdue: number;
+    overdueChange: number;
+  };
+  /** The engineer's row with product sub-rows, including lines also reported on another vertical's sheet. */
+  sales: EngineerRow;
+  monthly: MonthPoint[];
+  targets: TargetRow[];
+  unbilled: { projects: UnbilledProject[]; bridge: UnbilledBridge };
+  overdue: { rows: OverdueDetailRow[]; total: OverdueTotals; reasons: ReasonBuckets };
+  /** The other engineers of the same vertical, for navigation. */
+  peers: { slug: string; name: string }[];
 }
 
 export interface VerticalIndexEntry {

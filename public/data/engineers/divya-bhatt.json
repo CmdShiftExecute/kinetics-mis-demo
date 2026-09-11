@@ -1,0 +1,367 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "divya-bhatt",
+ "name": "Divya Bhatt",
+ "vertical": {
+  "slug": "vertical-transport",
+  "name": "Vertical Transport"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 3306,
+  "budgetRevenue": 3789,
+  "ytdGmPct": 18.9,
+  "fyForecast": 5313,
+  "fyBudget": 5921,
+  "roiYtd": 3.2,
+  "roiBudget": 3.8,
+  "overdue": 2666,
+  "overdueChange": -40
+ },
+ "sales": {
+  "engineer": "Divya Bhatt",
+  "slug": "divya-bhatt",
+  "homeVertical": "vertical-transport",
+  "fromOtherVertical": null,
+  "openOrders": 1301,
+  "expectedOrders": 397,
+  "ytdRevenue": 3306,
+  "ytdGm": 626,
+  "ytdBudgetRevenue": 3789,
+  "ytdBudgetGm": 705,
+  "nearMonthForecast": 485,
+  "restOfYearForecast": 1522,
+  "fyForecastRevenue": 5313,
+  "fyForecastGm": 999,
+  "fyBudgetRevenue": 5921,
+  "fyBudgetGm": 1102,
+  "priorYearRevenue": 5278,
+  "priorYearGm": 934,
+  "ytdGmPct": 18.9,
+  "budgetGmPct": 18.6,
+  "roiPriorYear": 3.4,
+  "roiYtd": 3.2,
+  "roiBudget": 3.8,
+  "roiForecast": 3.4,
+  "products": [
+   {
+    "product": "Modernisation",
+    "alsoReportedOn": null,
+    "openOrders": 336,
+    "expectedOrders": 239,
+    "ytdRevenue": 1050,
+    "ytdGm": 222,
+    "ytdGmPct": 21.1,
+    "ytdBudgetRevenue": 1149,
+    "ytdBudgetGm": 238,
+    "budgetGmPct": 20.7,
+    "nearMonthForecast": 142,
+    "restOfYearForecast": 464,
+    "fyForecastRevenue": 1656,
+    "fyForecastGm": 347,
+    "fyBudgetRevenue": 1796,
+    "fyBudgetGm": 373,
+    "priorYearRevenue": 1619,
+    "priorYearGm": 333
+   },
+   {
+    "product": "Maintenance contracts",
+    "alsoReportedOn": null,
+    "openOrders": 965,
+    "expectedOrders": 158,
+    "ytdRevenue": 2256,
+    "ytdGm": 404,
+    "ytdGmPct": 17.9,
+    "ytdBudgetRevenue": 2640,
+    "ytdBudgetGm": 467,
+    "budgetGmPct": 17.7,
+    "nearMonthForecast": 343,
+    "restOfYearForecast": 1058,
+    "fyForecastRevenue": 3657,
+    "fyForecastGm": 652,
+    "fyBudgetRevenue": 4125,
+    "fyBudgetGm": 729,
+    "priorYearRevenue": 3659,
+    "priorYearGm": 601
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 357,
+   "forecast": null,
+   "budget": 414
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 393,
+   "forecast": null,
+   "budget": 444
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 448,
+   "forecast": null,
+   "budget": 521
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 413,
+   "forecast": null,
+   "budget": 486
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 421,
+   "forecast": null,
+   "budget": 497
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 415,
+   "forecast": null,
+   "budget": 474
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 421,
+   "forecast": null,
+   "budget": 462
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 438,
+   "forecast": null,
+   "budget": 491
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 485,
+   "budget": 509
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 493,
+   "budget": 533
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 528,
+   "budget": 545
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 501,
+   "budget": 545
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Modernisation",
+   "target": 1796,
+   "aspiration": 2049,
+   "achieved": 1050,
+   "achievedPct": 58.5
+  },
+  {
+   "productLine": "Maintenance contracts",
+   "target": 4125,
+   "aspiration": 4889,
+   "achieved": 2256,
+   "achievedPct": 54.7
+  }
+ ],
+ "unbilled": {
+  "projects": [
+   {
+    "ref": "UB-VER-1041",
+    "project": "School campus building controls",
+    "engineer": "Divya Bhatt",
+    "customer": "Al Rawabi Developments",
+    "trend": [
+     0,
+     0,
+     866
+    ],
+    "provision": 0,
+    "remark": "New this month, delivery complete, awaiting client certification"
+   }
+  ],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 866,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 866
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Divya Bhatt",
+    "customer": "Halvard Facilities Management (group)",
+    "terms": "Against delivery",
+    "bucket0to30": 1320,
+    "bucket31to90": 1136,
+    "bucket91to365": 488,
+    "bucket1to2y": 513,
+    "bucketOver2y": 245,
+    "totalOutstanding": 3702,
+    "provision": 502,
+    "netToCollect": 3200,
+    "overdue": 2382,
+    "dispute": false,
+    "previousMonthOverdue": 2437,
+    "previousRemark": "Under review by client audit",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "internalGroup"
+   },
+   {
+    "engineer": "Divya Bhatt",
+    "customer": "Blue Harbour Marine Works",
+    "terms": "45 days, post-dated cheque",
+    "bucket0to30": 176,
+    "bucket31to90": 206,
+    "bucket91to365": 64,
+    "bucket1to2y": 14,
+    "bucketOver2y": 0,
+    "totalOutstanding": 460,
+    "provision": 23,
+    "netToCollect": 437,
+    "overdue": 284,
+    "dispute": true,
+    "previousMonthOverdue": 269,
+    "previousRemark": "Statement of account sent",
+    "currentRemark": "Client disputes variation on order 4693",
+    "reason": "disputesAndNotDue"
+   }
+  ],
+  "total": {
+   "customers": 2,
+   "bucket0to30": 1496,
+   "bucket31to90": 1342,
+   "bucket91to365": 552,
+   "bucket1to2y": 527,
+   "bucketOver2y": 245,
+   "totalOutstanding": 4162,
+   "provision": 525,
+   "netToCollect": 3637,
+   "overdue": 2666,
+   "previousMonthOverdue": 2706,
+   "change": -40,
+   "disputed": 284
+  },
+  "reasons": {
+   "internalGroup": 2382,
+   "noTimelineOrResponse": 0,
+   "disputesAndNotDue": 284
+  }
+ },
+ "peers": [
+  {
+   "slug": "hana-qureshi",
+   "name": "Hana Qureshi"
+  },
+  {
+   "slug": "yusuf-rahman",
+   "name": "Yusuf Rahman"
+  }
+ ]
+}

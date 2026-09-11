@@ -1,0 +1,368 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "ananya-kapoor",
+ "name": "Ananya Kapoor",
+ "vertical": {
+  "slug": "metering",
+  "name": "Metering"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 3630,
+  "budgetRevenue": 3084,
+  "ytdGmPct": 25.9,
+  "fyForecast": 5439,
+  "fyBudget": 4820,
+  "roiYtd": 4,
+  "roiBudget": 3.4,
+  "overdue": 977,
+  "overdueChange": 75
+ },
+ "sales": {
+  "engineer": "Ananya Kapoor",
+  "slug": "ananya-kapoor",
+  "homeVertical": "metering",
+  "fromOtherVertical": null,
+  "openOrders": 1017,
+  "expectedOrders": 338,
+  "ytdRevenue": 3630,
+  "ytdGm": 940,
+  "ytdBudgetRevenue": 3084,
+  "ytdBudgetGm": 772,
+  "nearMonthForecast": 442,
+  "restOfYearForecast": 1368,
+  "fyForecastRevenue": 5439,
+  "fyForecastGm": 1389,
+  "fyBudgetRevenue": 4820,
+  "fyBudgetGm": 1206,
+  "priorYearRevenue": 4027,
+  "priorYearGm": 972,
+  "ytdGmPct": 25.9,
+  "budgetGmPct": 25,
+  "roiPriorYear": 2.9,
+  "roiYtd": 4,
+  "roiBudget": 3.4,
+  "roiForecast": 3.9,
+  "products": [
+   {
+    "product": "Sub-metering",
+    "alsoReportedOn": null,
+    "openOrders": 349,
+    "expectedOrders": 239,
+    "ytdRevenue": 1741,
+    "ytdGm": 418,
+    "ytdGmPct": 24,
+    "ytdBudgetRevenue": 1468,
+    "ytdBudgetGm": 343,
+    "budgetGmPct": 23.4,
+    "nearMonthForecast": 212,
+    "restOfYearForecast": 660,
+    "fyForecastRevenue": 2613,
+    "fyForecastGm": 621,
+    "fyBudgetRevenue": 2294,
+    "fyBudgetGm": 536,
+    "priorYearRevenue": 1969,
+    "priorYearGm": 432
+   },
+   {
+    "product": "Meter data platform",
+    "alsoReportedOn": null,
+    "openOrders": 668,
+    "expectedOrders": 99,
+    "ytdRevenue": 1889,
+    "ytdGm": 522,
+    "ytdGmPct": 27.6,
+    "ytdBudgetRevenue": 1616,
+    "ytdBudgetGm": 429,
+    "budgetGmPct": 26.5,
+    "nearMonthForecast": 230,
+    "restOfYearForecast": 708,
+    "fyForecastRevenue": 2826,
+    "fyForecastGm": 768,
+    "fyBudgetRevenue": 2526,
+    "fyBudgetGm": 670,
+    "priorYearRevenue": 2058,
+    "priorYearGm": 540
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 386,
+   "forecast": null,
+   "budget": 337
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 439,
+   "forecast": null,
+   "budget": 361
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 491,
+   "forecast": null,
+   "budget": 424
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 451,
+   "forecast": null,
+   "budget": 395
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 480,
+   "forecast": null,
+   "budget": 405
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 461,
+   "forecast": null,
+   "budget": 386
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 432,
+   "forecast": null,
+   "budget": 376
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 487,
+   "forecast": null,
+   "budget": 400
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 442,
+   "budget": 414
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 454,
+   "budget": 434
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 461,
+   "budget": 443
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 453,
+   "budget": 443
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Sub-metering",
+   "target": 2294,
+   "aspiration": 2611,
+   "achieved": 1741,
+   "achievedPct": 75.9
+  },
+  {
+   "productLine": "Meter data platform",
+   "target": 2526,
+   "aspiration": 2914,
+   "achieved": 1889,
+   "achievedPct": 74.8
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Ananya Kapoor",
+    "customer": "Corniche Medical Centre",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 314,
+    "bucket31to90": 284,
+    "bucket91to365": 90,
+    "bucket1to2y": 50,
+    "bucketOver2y": 0,
+    "totalOutstanding": 738,
+    "provision": 25,
+    "netToCollect": 713,
+    "overdue": 424,
+    "dispute": false,
+    "previousMonthOverdue": 356,
+    "previousRemark": "Escalated to client finance head",
+    "currentRemark": "Client finance head confirmed release this month",
+    "reason": "disputesAndNotDue"
+   },
+   {
+    "engineer": "Ananya Kapoor",
+    "customer": "Tamarind Retail Holdings",
+    "terms": "Against delivery",
+    "bucket0to30": 210,
+    "bucket31to90": 259,
+    "bucket91to365": 115,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 584,
+    "provision": 0,
+    "netToCollect": 584,
+    "overdue": 374,
+    "dispute": false,
+    "previousMonthOverdue": 396,
+    "previousRemark": "Under review by client audit",
+    "currentRemark": "Held pending site handover sign-off",
+    "reason": "disputesAndNotDue"
+   },
+   {
+    "engineer": "Ananya Kapoor",
+    "customer": "Northshore Facilities",
+    "terms": "45 days, post-dated cheque",
+    "bucket0to30": 254,
+    "bucket31to90": 54,
+    "bucket91to365": 117,
+    "bucket1to2y": 8,
+    "bucketOver2y": 0,
+    "totalOutstanding": 433,
+    "provision": 33,
+    "netToCollect": 400,
+    "overdue": 179,
+    "dispute": true,
+    "previousMonthOverdue": 150,
+    "previousRemark": "Statement of account sent",
+    "currentRemark": "Client disputes variation on order 4446",
+    "reason": "disputesAndNotDue"
+   }
+  ],
+  "total": {
+   "customers": 3,
+   "bucket0to30": 778,
+   "bucket31to90": 597,
+   "bucket91to365": 322,
+   "bucket1to2y": 58,
+   "bucketOver2y": 0,
+   "totalOutstanding": 1755,
+   "provision": 58,
+   "netToCollect": 1697,
+   "overdue": 977,
+   "previousMonthOverdue": 902,
+   "change": 75,
+   "disputed": 179
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 0,
+   "disputesAndNotDue": 977
+  }
+ },
+ "peers": [
+  {
+   "slug": "karim-mansour",
+   "name": "Karim Mansour"
+  }
+ ]
+}

@@ -1,0 +1,388 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "yusuf-rahman",
+ "name": "Yusuf Rahman",
+ "vertical": {
+  "slug": "vertical-transport",
+  "name": "Vertical Transport"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 3415,
+  "budgetRevenue": 4035,
+  "ytdGmPct": 17.6,
+  "fyForecast": 5532,
+  "fyBudget": 6305,
+  "roiYtd": 2.4,
+  "roiBudget": 3.2,
+  "overdue": 374,
+  "overdueChange": 60
+ },
+ "sales": {
+  "engineer": "Yusuf Rahman",
+  "slug": "yusuf-rahman",
+  "homeVertical": "vertical-transport",
+  "fromOtherVertical": null,
+  "openOrders": 1153,
+  "expectedOrders": 395,
+  "ytdRevenue": 3415,
+  "ytdGm": 602,
+  "ytdBudgetRevenue": 4035,
+  "ytdBudgetGm": 746,
+  "nearMonthForecast": 510,
+  "restOfYearForecast": 1606,
+  "fyForecastRevenue": 5532,
+  "fyForecastGm": 994,
+  "fyBudgetRevenue": 6305,
+  "fyBudgetGm": 1166,
+  "priorYearRevenue": 5473,
+  "priorYearGm": 949,
+  "ytdGmPct": 17.6,
+  "budgetGmPct": 18.5,
+  "roiPriorYear": 2.7,
+  "roiYtd": 2.4,
+  "roiBudget": 3.2,
+  "roiForecast": 2.7,
+  "products": [
+   {
+    "product": "Escalators",
+    "alsoReportedOn": null,
+    "openOrders": 261,
+    "expectedOrders": 66,
+    "ytdRevenue": 880,
+    "ytdGm": 153,
+    "ytdGmPct": 17.4,
+    "ytdBudgetRevenue": 1018,
+    "ytdBudgetGm": 178,
+    "budgetGmPct": 17.5,
+    "nearMonthForecast": 131,
+    "restOfYearForecast": 406,
+    "fyForecastRevenue": 1417,
+    "fyForecastGm": 247,
+    "fyBudgetRevenue": 1591,
+    "fyBudgetGm": 278,
+    "priorYearRevenue": 1426,
+    "priorYearGm": 238
+   },
+   {
+    "product": "Modernisation",
+    "alsoReportedOn": null,
+    "openOrders": 358,
+    "expectedOrders": 83,
+    "ytdRevenue": 985,
+    "ytdGm": 169,
+    "ytdGmPct": 17.2,
+    "ytdBudgetRevenue": 1188,
+    "ytdBudgetGm": 220,
+    "budgetGmPct": 18.5,
+    "nearMonthForecast": 148,
+    "restOfYearForecast": 472,
+    "fyForecastRevenue": 1605,
+    "fyForecastGm": 284,
+    "fyBudgetRevenue": 1856,
+    "fyBudgetGm": 344,
+    "priorYearRevenue": 1585,
+    "priorYearGm": 283
+   },
+   {
+    "product": "Maintenance contracts",
+    "alsoReportedOn": null,
+    "openOrders": 534,
+    "expectedOrders": 246,
+    "ytdRevenue": 1550,
+    "ytdGm": 280,
+    "ytdGmPct": 18,
+    "ytdBudgetRevenue": 1829,
+    "ytdBudgetGm": 348,
+    "budgetGmPct": 19,
+    "nearMonthForecast": 231,
+    "restOfYearForecast": 728,
+    "fyForecastRevenue": 2510,
+    "fyForecastGm": 463,
+    "fyBudgetRevenue": 2858,
+    "fyBudgetGm": 544,
+    "priorYearRevenue": 2462,
+    "priorYearGm": 428
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 370,
+   "forecast": null,
+   "budget": 441
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 387,
+   "forecast": null,
+   "budget": 473
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 472,
+   "forecast": null,
+   "budget": 555
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 451,
+   "forecast": null,
+   "budget": 517
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 434,
+   "forecast": null,
+   "budget": 530
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 423,
+   "forecast": null,
+   "budget": 504
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 430,
+   "forecast": null,
+   "budget": 492
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 446,
+   "forecast": null,
+   "budget": 523
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 510,
+   "budget": 542
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 540,
+   "budget": 568
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 534,
+   "budget": 580
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 532,
+   "budget": 580
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Escalators",
+   "target": 1591,
+   "aspiration": 1983,
+   "achieved": 880,
+   "achievedPct": 55.3
+  },
+  {
+   "productLine": "Modernisation",
+   "target": 1856,
+   "aspiration": 2117,
+   "achieved": 985,
+   "achievedPct": 53.1
+  },
+  {
+   "productLine": "Maintenance contracts",
+   "target": 2858,
+   "aspiration": 3387,
+   "achieved": 1550,
+   "achievedPct": 54.2
+  }
+ ],
+ "unbilled": {
+  "projects": [
+   {
+    "ref": "UB-VER-1050",
+    "project": "Hospital air handling replacement",
+    "engineer": "Yusuf Rahman",
+    "customer": "Northshore Facilities",
+    "trend": [
+     428,
+     421,
+     494
+    ],
+    "provision": 54,
+    "remark": "Certification pending with consultant"
+   },
+   {
+    "ref": "UB-VER-1057",
+    "project": "Tower 3 chilled water plant",
+    "engineer": "Yusuf Rahman",
+    "customer": "Falcon Ridge Estates",
+    "trend": [
+     508,
+     462,
+     0
+    ],
+    "provision": 0,
+    "remark": "Invoiced 28 Aug 2026 after certification"
+   }
+  ],
+  "bridge": {
+   "previousMonth": 883,
+   "newProjects": 0,
+   "clearedProjects": 462,
+   "ongoingChanges": 73,
+   "currentMonth": 494
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Yusuf Rahman",
+    "customer": "Tamarind Retail Holdings",
+    "terms": "45 days, post-dated cheque",
+    "bucket0to30": 166,
+    "bucket31to90": 50,
+    "bucket91to365": 66,
+    "bucket1to2y": 147,
+    "bucketOver2y": 111,
+    "totalOutstanding": 540,
+    "provision": 185,
+    "netToCollect": 355,
+    "overdue": 374,
+    "dispute": false,
+    "previousMonthOverdue": 314,
+    "previousRemark": "Escalated to client finance head",
+    "currentRemark": "Post-dated cheque received, dated 24 Sep 2026",
+    "reason": "noTimelineOrResponse"
+   }
+  ],
+  "total": {
+   "customers": 1,
+   "bucket0to30": 166,
+   "bucket31to90": 50,
+   "bucket91to365": 66,
+   "bucket1to2y": 147,
+   "bucketOver2y": 111,
+   "totalOutstanding": 540,
+   "provision": 185,
+   "netToCollect": 355,
+   "overdue": 374,
+   "previousMonthOverdue": 314,
+   "change": 60,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 374,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": [
+  {
+   "slug": "hana-qureshi",
+   "name": "Hana Qureshi"
+  },
+  {
+   "slug": "divya-bhatt",
+   "name": "Divya Bhatt"
+  }
+ ]
+}

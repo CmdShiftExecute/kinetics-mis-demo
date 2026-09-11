@@ -1,0 +1,369 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "kavya-nair",
+ "name": "Kavya Nair",
+ "vertical": {
+  "slug": "electrical-distribution",
+  "name": "Electrical Distribution"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 12053,
+  "budgetRevenue": 12056,
+  "ytdGmPct": 16.3,
+  "fyForecast": 18797,
+  "fyBudget": 18837,
+  "roiYtd": 8.5,
+  "roiBudget": 9.3,
+  "overdue": 2417,
+  "overdueChange": -241
+ },
+ "sales": {
+  "engineer": "Kavya Nair",
+  "slug": "kavya-nair",
+  "homeVertical": "electrical-distribution",
+  "fromOtherVertical": null,
+  "openOrders": 3971,
+  "expectedOrders": 2166,
+  "ytdRevenue": 12053,
+  "ytdGm": 1966,
+  "ytdBudgetRevenue": 12056,
+  "ytdBudgetGm": 2067,
+  "nearMonthForecast": 1584,
+  "restOfYearForecast": 5159,
+  "fyForecastRevenue": 18797,
+  "fyForecastGm": 3129,
+  "fyBudgetRevenue": 18837,
+  "fyBudgetGm": 3230,
+  "priorYearRevenue": 16890,
+  "priorYearGm": 2723,
+  "ytdGmPct": 16.3,
+  "budgetGmPct": 17.1,
+  "roiPriorYear": 8.3,
+  "roiYtd": 8.5,
+  "roiBudget": 9.3,
+  "roiForecast": 9,
+  "products": [
+   {
+    "product": "Cable management",
+    "alsoReportedOn": null,
+    "openOrders": 1525,
+    "expectedOrders": 722,
+    "ytdRevenue": 3388,
+    "ytdGm": 519,
+    "ytdGmPct": 15.3,
+    "ytdBudgetRevenue": 3591,
+    "ytdBudgetGm": 603,
+    "budgetGmPct": 16.8,
+    "nearMonthForecast": 474,
+    "restOfYearForecast": 1539,
+    "fyForecastRevenue": 5401,
+    "fyForecastGm": 859,
+    "fyBudgetRevenue": 5611,
+    "fyBudgetGm": 943,
+    "priorYearRevenue": 5196,
+    "priorYearGm": 812
+   },
+   {
+    "product": "LV switchgear",
+    "alsoReportedOn": null,
+    "openOrders": 605,
+    "expectedOrders": 858,
+    "ytdRevenue": 3739,
+    "ytdGm": 647,
+    "ytdGmPct": 17.3,
+    "ytdBudgetRevenue": 3828,
+    "ytdBudgetGm": 693,
+    "budgetGmPct": 18.1,
+    "nearMonthForecast": 510,
+    "restOfYearForecast": 1653,
+    "fyForecastRevenue": 5902,
+    "fyForecastGm": 1041,
+    "fyBudgetRevenue": 5981,
+    "fyBudgetGm": 1083,
+    "priorYearRevenue": 5427,
+    "priorYearGm": 962
+   },
+   {
+    "product": "Busway systems",
+    "alsoReportedOn": null,
+    "openOrders": 1841,
+    "expectedOrders": 586,
+    "ytdRevenue": 4926,
+    "ytdGm": 800,
+    "ytdGmPct": 16.2,
+    "ytdBudgetRevenue": 4637,
+    "ytdBudgetGm": 771,
+    "budgetGmPct": 16.6,
+    "nearMonthForecast": 600,
+    "restOfYearForecast": 1967,
+    "fyForecastRevenue": 7494,
+    "fyForecastGm": 1229,
+    "fyBudgetRevenue": 7245,
+    "fyBudgetGm": 1204,
+    "priorYearRevenue": 6267,
+    "priorYearGm": 949
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 1344,
+   "forecast": null,
+   "budget": 1319
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 1392,
+   "forecast": null,
+   "budget": 1413
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 1682,
+   "forecast": null,
+   "budget": 1658
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 1552,
+   "forecast": null,
+   "budget": 1545
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 1568,
+   "forecast": null,
+   "budget": 1582
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 1456,
+   "forecast": null,
+   "budget": 1507
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 1495,
+   "forecast": null,
+   "budget": 1469
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 1566,
+   "forecast": null,
+   "budget": 1563
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 1584,
+   "budget": 1620
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 1670,
+   "budget": 1695
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 1732,
+   "budget": 1733
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 1757,
+   "budget": 1733
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Cable management",
+   "target": 5611,
+   "aspiration": 6229,
+   "achieved": 3388,
+   "achievedPct": 60.4
+  },
+  {
+   "productLine": "LV switchgear",
+   "target": 5981,
+   "aspiration": 7175,
+   "achieved": 3739,
+   "achievedPct": 62.5
+  },
+  {
+   "productLine": "Busway systems",
+   "target": 7245,
+   "aspiration": 8626,
+   "achieved": 4926,
+   "achievedPct": 68
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Kavya Nair",
+    "customer": "Corniche Medical Centre",
+    "terms": "30 days from invoice",
+    "bucket0to30": 2241,
+    "bucket31to90": 631,
+    "bucket91to365": 294,
+    "bucket1to2y": 1492,
+    "bucketOver2y": 0,
+    "totalOutstanding": 4658,
+    "provision": 820,
+    "netToCollect": 3838,
+    "overdue": 2417,
+    "dispute": true,
+    "previousMonthOverdue": 2658,
+    "previousRemark": "Under review by client audit",
+    "currentRemark": "Client disputes variation on order 4403",
+    "reason": "disputesAndNotDue"
+   }
+  ],
+  "total": {
+   "customers": 1,
+   "bucket0to30": 2241,
+   "bucket31to90": 631,
+   "bucket91to365": 294,
+   "bucket1to2y": 1492,
+   "bucketOver2y": 0,
+   "totalOutstanding": 4658,
+   "provision": 820,
+   "netToCollect": 3838,
+   "overdue": 2417,
+   "previousMonthOverdue": 2658,
+   "change": -241,
+   "disputed": 2417
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 0,
+   "disputesAndNotDue": 2417
+  }
+ },
+ "peers": [
+  {
+   "slug": "rohan-pillai",
+   "name": "Rohan Pillai"
+  },
+  {
+   "slug": "farah-haddad",
+   "name": "Farah Haddad"
+  },
+  {
+   "slug": "dinesh-iyer",
+   "name": "Dinesh Iyer"
+  },
+  {
+   "slug": "marwan-saleh",
+   "name": "Marwan Saleh"
+  }
+ ]
+}

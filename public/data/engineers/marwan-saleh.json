@@ -1,0 +1,388 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "marwan-saleh",
+ "name": "Marwan Saleh",
+ "vertical": {
+  "slug": "electrical-distribution",
+  "name": "Electrical Distribution"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 6883,
+  "budgetRevenue": 7006,
+  "ytdGmPct": 20.6,
+  "fyForecast": 10823,
+  "fyBudget": 10946,
+  "roiYtd": 8.9,
+  "roiBudget": 9.2,
+  "overdue": 7505,
+  "overdueChange": 570
+ },
+ "sales": {
+  "engineer": "Marwan Saleh",
+  "slug": "marwan-saleh",
+  "homeVertical": "electrical-distribution",
+  "fromOtherVertical": null,
+  "openOrders": 2305,
+  "expectedOrders": 1009,
+  "ytdRevenue": 6883,
+  "ytdGm": 1416,
+  "ytdBudgetRevenue": 7006,
+  "ytdBudgetGm": 1396,
+  "nearMonthForecast": 918,
+  "restOfYearForecast": 3023,
+  "fyForecastRevenue": 10823,
+  "fyForecastGm": 2199,
+  "fyBudgetRevenue": 10946,
+  "fyBudgetGm": 2182,
+  "priorYearRevenue": 9694,
+  "priorYearGm": 1865,
+  "ytdGmPct": 20.6,
+  "budgetGmPct": 19.9,
+  "roiPriorYear": 8.2,
+  "roiYtd": 8.9,
+  "roiBudget": 9.2,
+  "roiForecast": 9.2,
+  "products": [
+   {
+    "product": "Power factor correction",
+    "alsoReportedOn": null,
+    "openOrders": 496,
+    "expectedOrders": 344,
+    "ytdRevenue": 2690,
+    "ytdGm": 519,
+    "ytdGmPct": 19.3,
+    "ytdBudgetRevenue": 2649,
+    "ytdBudgetGm": 480,
+    "budgetGmPct": 18.1,
+    "nearMonthForecast": 341,
+    "restOfYearForecast": 1125,
+    "fyForecastRevenue": 4155,
+    "fyForecastGm": 782,
+    "fyBudgetRevenue": 4139,
+    "fyBudgetGm": 750,
+    "priorYearRevenue": 3661,
+    "priorYearGm": 659
+   },
+   {
+    "product": "Cable management",
+    "alsoReportedOn": null,
+    "openOrders": 562,
+    "expectedOrders": 274,
+    "ytdRevenue": 1290,
+    "ytdGm": 270,
+    "ytdGmPct": 20.9,
+    "ytdBudgetRevenue": 1367,
+    "ytdBudgetGm": 271,
+    "budgetGmPct": 19.8,
+    "nearMonthForecast": 185,
+    "restOfYearForecast": 599,
+    "fyForecastRevenue": 2074,
+    "fyForecastGm": 425,
+    "fyBudgetRevenue": 2135,
+    "fyBudgetGm": 424,
+    "priorYearRevenue": 1990,
+    "priorYearGm": 387
+   },
+   {
+    "product": "LV switchgear",
+    "alsoReportedOn": null,
+    "openOrders": 1247,
+    "expectedOrders": 391,
+    "ytdRevenue": 2903,
+    "ytdGm": 627,
+    "ytdGmPct": 21.6,
+    "ytdBudgetRevenue": 2990,
+    "ytdBudgetGm": 645,
+    "budgetGmPct": 21.6,
+    "nearMonthForecast": 392,
+    "restOfYearForecast": 1299,
+    "fyForecastRevenue": 4594,
+    "fyForecastGm": 992,
+    "fyBudgetRevenue": 4672,
+    "fyBudgetGm": 1008,
+    "priorYearRevenue": 4043,
+    "priorYearGm": 819
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 762,
+   "forecast": null,
+   "budget": 766
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 816,
+   "forecast": null,
+   "budget": 821
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 938,
+   "forecast": null,
+   "budget": 963
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 873,
+   "forecast": null,
+   "budget": 898
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 885,
+   "forecast": null,
+   "budget": 919
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 841,
+   "forecast": null,
+   "budget": 876
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 861,
+   "forecast": null,
+   "budget": 854
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 905,
+   "forecast": null,
+   "budget": 909
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 918,
+   "budget": 941
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 990,
+   "budget": 985
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 1015,
+   "budget": 1007
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 1019,
+   "budget": 1007
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Power factor correction",
+   "target": 4139,
+   "aspiration": 4691,
+   "achieved": 2690,
+   "achievedPct": 65
+  },
+  {
+   "productLine": "Cable management",
+   "target": 2135,
+   "aspiration": 2370,
+   "achieved": 1290,
+   "achievedPct": 60.4
+  },
+  {
+   "productLine": "LV switchgear",
+   "target": 4672,
+   "aspiration": 5605,
+   "achieved": 2903,
+   "achievedPct": 62.1
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Marwan Saleh",
+    "customer": "Dunelight Hospitality",
+    "terms": "60 days from invoice",
+    "bucket0to30": 3894,
+    "bucket31to90": 2431,
+    "bucket91to365": 1943,
+    "bucket1to2y": 241,
+    "bucketOver2y": 0,
+    "totalOutstanding": 8509,
+    "provision": 606,
+    "netToCollect": 7903,
+    "overdue": 4615,
+    "dispute": true,
+    "previousMonthOverdue": 4643,
+    "previousRemark": "Under review by client audit",
+    "currentRemark": "Client disputes variation on order 4650",
+    "reason": "disputesAndNotDue"
+   },
+   {
+    "engineer": "Marwan Saleh",
+    "customer": "Kalima Facilities",
+    "terms": "45 days, post-dated cheque",
+    "bucket0to30": 1851,
+    "bucket31to90": 777,
+    "bucket91to365": 601,
+    "bucket1to2y": 810,
+    "bucketOver2y": 702,
+    "totalOutstanding": 4741,
+    "provision": 1107,
+    "netToCollect": 3634,
+    "overdue": 2890,
+    "dispute": false,
+    "previousMonthOverdue": 2292,
+    "previousRemark": "Reminder sent 05 Aug 2026",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "disputesAndNotDue"
+   }
+  ],
+  "total": {
+   "customers": 2,
+   "bucket0to30": 5745,
+   "bucket31to90": 3208,
+   "bucket91to365": 2544,
+   "bucket1to2y": 1051,
+   "bucketOver2y": 702,
+   "totalOutstanding": 13250,
+   "provision": 1713,
+   "netToCollect": 11537,
+   "overdue": 7505,
+   "previousMonthOverdue": 6935,
+   "change": 570,
+   "disputed": 4615
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 0,
+   "disputesAndNotDue": 7505
+  }
+ },
+ "peers": [
+  {
+   "slug": "rohan-pillai",
+   "name": "Rohan Pillai"
+  },
+  {
+   "slug": "farah-haddad",
+   "name": "Farah Haddad"
+  },
+  {
+   "slug": "dinesh-iyer",
+   "name": "Dinesh Iyer"
+  },
+  {
+   "slug": "kavya-nair",
+   "name": "Kavya Nair"
+  }
+ ]
+}

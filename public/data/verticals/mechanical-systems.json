@@ -13,7 +13,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:35:35+04:00"
+  "generatedAt": "2026-09-11T19:59:46+04:00"
  },
  "slug": "mechanical-systems",
  "name": "Mechanical Systems",
@@ -66,6 +66,22 @@
   "vertical.overdue": {
    "key": "vertical.overdue",
    "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
   }
  },
  "headline": {
@@ -80,6 +96,8 @@
   "engineers": [
    {
     "engineer": "Bassem Farouk",
+    "slug": "bassem-farouk",
+    "homeVertical": "mechanical-systems",
     "fromOtherVertical": null,
     "openOrders": 1505,
     "expectedOrders": 606,
@@ -166,6 +184,8 @@
    },
    {
     "engineer": "Sneha Menon",
+    "slug": "sneha-menon",
+    "homeVertical": "mechanical-systems",
     "fromOtherVertical": null,
     "openOrders": 1507,
     "expectedOrders": 693,
@@ -252,6 +272,8 @@
    },
    {
     "engineer": "Tarek Hamdan",
+    "slug": "tarek-hamdan",
+    "homeVertical": "mechanical-systems",
     "fromOtherVertical": null,
     "openOrders": 2261,
     "expectedOrders": 961,
@@ -359,6 +381,8 @@
   ],
   "sheetTotal": {
    "engineer": "Sheet total",
+   "slug": "sheet-total",
+   "homeVertical": "mechanical-systems",
    "fromOtherVertical": null,
    "openOrders": 5273,
    "expectedOrders": 2260,
@@ -384,6 +408,8 @@
   },
   "attributedTotal": {
    "engineer": "Attributed total",
+   "slug": "attributed-total",
+   "homeVertical": "mechanical-systems",
    "fromOtherVertical": null,
    "openOrders": 5273,
    "expectedOrders": 2260,
@@ -755,6 +781,7 @@
   "byEngineer": [
    {
     "engineer": "Bassem Farouk",
+    "slug": "bassem-farouk",
     "customers": 1,
     "bucket0to30": 801,
     "bucket31to90": 782,
@@ -771,6 +798,7 @@
    },
    {
     "engineer": "Sneha Menon",
+    "slug": "sneha-menon",
     "customers": 3,
     "bucket0to30": 3506,
     "bucket31to90": 1881,
@@ -787,6 +815,7 @@
    },
    {
     "engineer": "Tarek Hamdan",
+    "slug": "tarek-hamdan",
     "customers": 2,
     "bucket0to30": 1480,
     "bucket31to90": 1647,

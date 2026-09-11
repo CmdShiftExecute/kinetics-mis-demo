@@ -1,0 +1,390 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "rami-aziz",
+ "name": "Rami Aziz",
+ "vertical": {
+  "slug": "fabrication",
+  "name": "Fabrication"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 4063,
+  "budgetRevenue": 4096,
+  "ytdGmPct": 18,
+  "fyForecast": 6383,
+  "fyBudget": 6400,
+  "roiYtd": 3.1,
+  "roiBudget": 3.1,
+  "overdue": 838,
+  "overdueChange": 20
+ },
+ "sales": {
+  "engineer": "Rami Aziz",
+  "slug": "rami-aziz",
+  "homeVertical": "fabrication",
+  "fromOtherVertical": null,
+  "openOrders": 1141,
+  "expectedOrders": 538,
+  "ytdRevenue": 4063,
+  "ytdGm": 730,
+  "ytdBudgetRevenue": 4096,
+  "ytdBudgetGm": 716,
+  "nearMonthForecast": 556,
+  "restOfYearForecast": 1764,
+  "fyForecastRevenue": 6383,
+  "fyForecastGm": 1133,
+  "fyBudgetRevenue": 6400,
+  "fyBudgetGm": 1119,
+  "priorYearRevenue": 6148,
+  "priorYearGm": 1027,
+  "ytdGmPct": 18,
+  "budgetGmPct": 17.5,
+  "roiPriorYear": 3,
+  "roiYtd": 3.1,
+  "roiBudget": 3.1,
+  "roiForecast": 3.2,
+  "products": [
+   {
+    "product": "Sheet metal enclosures",
+    "alsoReportedOn": null,
+    "openOrders": 295,
+    "expectedOrders": 218,
+    "ytdRevenue": 1223,
+    "ytdGm": 180,
+    "ytdGmPct": 14.7,
+    "ytdBudgetRevenue": 1281,
+    "ytdBudgetGm": 186,
+    "budgetGmPct": 14.5,
+    "nearMonthForecast": 177,
+    "restOfYearForecast": 555,
+    "fyForecastRevenue": 1955,
+    "fyForecastGm": 286,
+    "fyBudgetRevenue": 2002,
+    "fyBudgetGm": 290,
+    "priorYearRevenue": 1968,
+    "priorYearGm": 265
+   },
+   {
+    "product": "Structural brackets",
+    "alsoReportedOn": null,
+    "openOrders": 600,
+    "expectedOrders": 144,
+    "ytdRevenue": 1526,
+    "ytdGm": 279,
+    "ytdGmPct": 18.3,
+    "ytdBudgetRevenue": 1586,
+    "ytdBudgetGm": 297,
+    "budgetGmPct": 18.7,
+    "nearMonthForecast": 220,
+    "restOfYearForecast": 682,
+    "fyForecastRevenue": 2428,
+    "fyForecastGm": 448,
+    "fyBudgetRevenue": 2478,
+    "fyBudgetGm": 464,
+    "priorYearRevenue": 2347,
+    "priorYearGm": 435
+   },
+   {
+    "product": "Site fabrication",
+    "alsoReportedOn": null,
+    "openOrders": 246,
+    "expectedOrders": 176,
+    "ytdRevenue": 1314,
+    "ytdGm": 271,
+    "ytdGmPct": 20.6,
+    "ytdBudgetRevenue": 1229,
+    "ytdBudgetGm": 233,
+    "budgetGmPct": 19,
+    "nearMonthForecast": 159,
+    "restOfYearForecast": 527,
+    "fyForecastRevenue": 2000,
+    "fyForecastGm": 399,
+    "fyBudgetRevenue": 1920,
+    "fyBudgetGm": 365,
+    "priorYearRevenue": 1833,
+    "priorYearGm": 327
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 464,
+   "forecast": null,
+   "budget": 448
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 468,
+   "forecast": null,
+   "budget": 480
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 540,
+   "forecast": null,
+   "budget": 563
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 511,
+   "forecast": null,
+   "budget": 525
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 528,
+   "forecast": null,
+   "budget": 538
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 522,
+   "forecast": null,
+   "budget": 512
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 499,
+   "forecast": null,
+   "budget": 499
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 533,
+   "forecast": null,
+   "budget": 531
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 556,
+   "budget": 550
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 572,
+   "budget": 576
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 591,
+   "budget": 589
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 600,
+   "budget": 589
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Sheet metal enclosures",
+   "target": 2002,
+   "aspiration": 2497,
+   "achieved": 1223,
+   "achievedPct": 61.1
+  },
+  {
+   "productLine": "Structural brackets",
+   "target": 2478,
+   "aspiration": 2772,
+   "achieved": 1526,
+   "achievedPct": 61.6
+  },
+  {
+   "productLine": "Site fabrication",
+   "target": 1920,
+   "aspiration": 2192,
+   "achieved": 1314,
+   "achievedPct": 68.4
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Rami Aziz",
+    "customer": "Halvard Contracting (group)",
+    "terms": "30 days from invoice",
+    "bucket0to30": 173,
+    "bucket31to90": 129,
+    "bucket91to365": 32,
+    "bucket1to2y": 133,
+    "bucketOver2y": 111,
+    "totalOutstanding": 578,
+    "provision": 177,
+    "netToCollect": 401,
+    "overdue": 405,
+    "dispute": false,
+    "previousMonthOverdue": 381,
+    "previousRemark": "Statement of account sent",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "internalGroup"
+   },
+   {
+    "engineer": "Rami Aziz",
+    "customer": "Harbourline Aviation Services",
+    "terms": "45 days, post-dated cheque",
+    "bucket0to30": 146,
+    "bucket31to90": 161,
+    "bucket91to365": 45,
+    "bucket1to2y": 20,
+    "bucketOver2y": 0,
+    "totalOutstanding": 372,
+    "provision": 10,
+    "netToCollect": 362,
+    "overdue": 226,
+    "dispute": false,
+    "previousMonthOverdue": 237,
+    "previousRemark": "Escalated to client finance head",
+    "currentRemark": "Payment promised by 15 Sep 2026",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Rami Aziz",
+    "customer": "Halvard Facilities Management (group)",
+    "terms": "30 days from invoice",
+    "bucket0to30": 98,
+    "bucket31to90": 165,
+    "bucket91to365": 42,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 305,
+    "provision": 0,
+    "netToCollect": 305,
+    "overdue": 207,
+    "dispute": false,
+    "previousMonthOverdue": 200,
+    "previousRemark": "Escalated to client finance head",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "internalGroup"
+   }
+  ],
+  "total": {
+   "customers": 3,
+   "bucket0to30": 417,
+   "bucket31to90": 455,
+   "bucket91to365": 119,
+   "bucket1to2y": 153,
+   "bucketOver2y": 111,
+   "totalOutstanding": 1255,
+   "provision": 187,
+   "netToCollect": 1068,
+   "overdue": 838,
+   "previousMonthOverdue": 818,
+   "change": 20,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 612,
+   "noTimelineOrResponse": 226,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": []
+}

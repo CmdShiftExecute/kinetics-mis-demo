@@ -1,0 +1,399 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "sneha-menon",
+ "name": "Sneha Menon",
+ "vertical": {
+  "slug": "mechanical-systems",
+  "name": "Mechanical Systems"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 4575,
+  "budgetRevenue": 5095,
+  "ytdGmPct": 21.5,
+  "fyForecast": 7336,
+  "fyBudget": 7961,
+  "roiYtd": 6.5,
+  "roiBudget": 7.5,
+  "overdue": 5748,
+  "overdueChange": 160
+ },
+ "sales": {
+  "engineer": "Sneha Menon",
+  "slug": "sneha-menon",
+  "homeVertical": "mechanical-systems",
+  "fromOtherVertical": null,
+  "openOrders": 1507,
+  "expectedOrders": 693,
+  "ytdRevenue": 4575,
+  "ytdGm": 982,
+  "ytdBudgetRevenue": 5095,
+  "ytdBudgetGm": 1095,
+  "nearMonthForecast": 665,
+  "restOfYearForecast": 2097,
+  "fyForecastRevenue": 7336,
+  "fyForecastGm": 1576,
+  "fyBudgetRevenue": 7961,
+  "fyBudgetGm": 1712,
+  "priorYearRevenue": 7644,
+  "priorYearGm": 1581,
+  "ytdGmPct": 21.5,
+  "budgetGmPct": 21.5,
+  "roiPriorYear": 7.3,
+  "roiYtd": 6.5,
+  "roiBudget": 7.5,
+  "roiForecast": 6.9,
+  "products": [
+   {
+    "product": "Insulation",
+    "alsoReportedOn": null,
+    "openOrders": 355,
+    "expectedOrders": 67,
+    "ytdRevenue": 1062,
+    "ytdGm": 213,
+    "ytdGmPct": 20,
+    "ytdBudgetRevenue": 1227,
+    "ytdBudgetGm": 250,
+    "budgetGmPct": 20.4,
+    "nearMonthForecast": 161,
+    "restOfYearForecast": 498,
+    "fyForecastRevenue": 1721,
+    "fyForecastGm": 347,
+    "fyBudgetRevenue": 1917,
+    "fyBudgetGm": 391,
+    "priorYearRevenue": 1881,
+    "priorYearGm": 364
+   },
+   {
+    "product": "Valves and actuators",
+    "alsoReportedOn": null,
+    "openOrders": 459,
+    "expectedOrders": 353,
+    "ytdRevenue": 1839,
+    "ytdGm": 405,
+    "ytdGmPct": 22,
+    "ytdBudgetRevenue": 2034,
+    "ytdBudgetGm": 449,
+    "budgetGmPct": 22.1,
+    "nearMonthForecast": 265,
+    "restOfYearForecast": 852,
+    "fyForecastRevenue": 2955,
+    "fyForecastGm": 652,
+    "fyBudgetRevenue": 3178,
+    "fyBudgetGm": 702,
+    "priorYearRevenue": 3082,
+    "priorYearGm": 658
+   },
+   {
+    "product": "Fire dampers",
+    "alsoReportedOn": null,
+    "openOrders": 693,
+    "expectedOrders": 273,
+    "ytdRevenue": 1674,
+    "ytdGm": 364,
+    "ytdGmPct": 21.7,
+    "ytdBudgetRevenue": 1834,
+    "ytdBudgetGm": 396,
+    "budgetGmPct": 21.6,
+    "nearMonthForecast": 239,
+    "restOfYearForecast": 747,
+    "fyForecastRevenue": 2660,
+    "fyForecastGm": 577,
+    "fyBudgetRevenue": 2866,
+    "fyBudgetGm": 619,
+    "priorYearRevenue": 2681,
+    "priorYearGm": 559
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 509,
+   "forecast": null,
+   "budget": 557
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 555,
+   "forecast": null,
+   "budget": 597
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 609,
+   "forecast": null,
+   "budget": 701
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 570,
+   "forecast": null,
+   "budget": 653
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 595,
+   "forecast": null,
+   "budget": 669
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 581,
+   "forecast": null,
+   "budget": 637
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 552,
+   "forecast": null,
+   "budget": 621
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 605,
+   "forecast": null,
+   "budget": 661
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 665,
+   "budget": 685
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 683,
+   "budget": 716
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 713,
+   "budget": 732
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 701,
+   "budget": 732
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "Insulation",
+   "target": 1917,
+   "aspiration": 2240,
+   "achieved": 1062,
+   "achievedPct": 55.4
+  },
+  {
+   "productLine": "Valves and actuators",
+   "target": 3178,
+   "aspiration": 3690,
+   "achieved": 1839,
+   "achievedPct": 57.9
+  },
+  {
+   "productLine": "Fire dampers",
+   "target": 2866,
+   "aspiration": 3258,
+   "achieved": 1674,
+   "achievedPct": 58.4
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Sneha Menon",
+    "customer": "Amberfield Schools",
+    "terms": "30 days from invoice",
+    "bucket0to30": 2291,
+    "bucket31to90": 846,
+    "bucket91to365": 740,
+    "bucket1to2y": 1019,
+    "bucketOver2y": 863,
+    "totalOutstanding": 5759,
+    "provision": 1373,
+    "netToCollect": 4386,
+    "overdue": 3468,
+    "dispute": false,
+    "previousMonthOverdue": 3614,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Awaiting consultant certification of payment certificate 7",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Sneha Menon",
+    "customer": "Greenway Districts",
+    "terms": "60 days from invoice",
+    "bucket0to30": 340,
+    "bucket31to90": 489,
+    "bucket91to365": 311,
+    "bucket1to2y": 460,
+    "bucketOver2y": 239,
+    "totalOutstanding": 1839,
+    "provision": 469,
+    "netToCollect": 1370,
+    "overdue": 1499,
+    "dispute": false,
+    "previousMonthOverdue": 1247,
+    "previousRemark": "Under review by client audit",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Sneha Menon",
+    "customer": "Northshore Facilities",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 875,
+    "bucket31to90": 546,
+    "bucket91to365": 235,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 1656,
+    "provision": 59,
+    "netToCollect": 1597,
+    "overdue": 781,
+    "dispute": true,
+    "previousMonthOverdue": 727,
+    "previousRemark": "Awaiting payment certificate",
+    "currentRemark": "Client disputes variation on order 4147",
+    "reason": "disputesAndNotDue"
+   }
+  ],
+  "total": {
+   "customers": 3,
+   "bucket0to30": 3506,
+   "bucket31to90": 1881,
+   "bucket91to365": 1286,
+   "bucket1to2y": 1479,
+   "bucketOver2y": 1102,
+   "totalOutstanding": 9254,
+   "provision": 1901,
+   "netToCollect": 7353,
+   "overdue": 5748,
+   "previousMonthOverdue": 5588,
+   "change": 160,
+   "disputed": 781
+  },
+  "reasons": {
+   "internalGroup": 0,
+   "noTimelineOrResponse": 4967,
+   "disputesAndNotDue": 781
+  }
+ },
+ "peers": [
+  {
+   "slug": "bassem-farouk",
+   "name": "Bassem Farouk"
+  },
+  {
+   "slug": "tarek-hamdan",
+   "name": "Tarek Hamdan"
+  }
+ ]
+}

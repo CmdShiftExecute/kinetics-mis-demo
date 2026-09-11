@@ -1,0 +1,349 @@
+{
+ "meta": {
+  "company": "Halvard Engineering Group",
+  "division": "Building Technologies Division",
+  "fiscalYear": 2026,
+  "periodLabel": "January to August 2026",
+  "monthsElapsed": 8,
+  "nearMonth": "September 2026",
+  "restOfYear": "October to December 2026",
+  "dataAsOf": "2026-09-07T09:30:00+04:00",
+  "dataAsOfLabel": "07 Sep 2026 09:30 GST",
+  "revision": "R3",
+  "currency": "AED",
+  "unit": "thousand",
+  "seed": 20260911,
+  "generatedAt": "2026-09-11T19:59:46+04:00"
+ },
+ "slug": "omar-nasser",
+ "name": "Omar Nasser",
+ "vertical": {
+  "slug": "pumps-and-water",
+  "name": "Pumps and Water"
+ },
+ "sources": {
+  "rollup.sales": {
+   "key": "rollup.sales",
+   "label": "Sales performance by vertical"
+  },
+  "rollup.forecast": {
+   "key": "rollup.forecast",
+   "label": "Revenue forecast and pipeline by vertical"
+  },
+  "rollup.pl": {
+   "key": "rollup.pl",
+   "label": "Profit and loss summary"
+  },
+  "rollup.profitability": {
+   "key": "rollup.profitability",
+   "label": "Vertical profitability"
+  },
+  "rollup.overdue": {
+   "key": "rollup.overdue",
+   "label": "Overdue collections by vertical"
+  },
+  "rollup.monthly": {
+   "key": "rollup.monthly",
+   "label": "Monthly revenue, actual and forecast against budget"
+  },
+  "vertical.sales": {
+   "key": "vertical.sales",
+   "label": "Sales performance by engineer"
+  },
+  "vertical.pl": {
+   "key": "vertical.pl",
+   "label": "Vertical profit and loss"
+  },
+  "vertical.targets": {
+   "key": "vertical.targets",
+   "label": "Business targets by product line"
+  },
+  "vertical.inventory": {
+   "key": "vertical.inventory",
+   "label": "Inventory outlook"
+  },
+  "vertical.unbilled": {
+   "key": "vertical.unbilled",
+   "label": "Unbilled projects and month bridge"
+  },
+  "vertical.overdue": {
+   "key": "vertical.overdue",
+   "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
+  }
+ },
+ "headline": {
+  "ytdRevenue": 6194,
+  "budgetRevenue": 6049,
+  "ytdGmPct": 26.5,
+  "fyForecast": 9654,
+  "fyBudget": 9451,
+  "roiYtd": 6.8,
+  "roiBudget": 6.6,
+  "overdue": 1659,
+  "overdueChange": 255
+ },
+ "sales": {
+  "engineer": "Omar Nasser",
+  "slug": "omar-nasser",
+  "homeVertical": "pumps-and-water",
+  "fromOtherVertical": null,
+  "openOrders": 2305,
+  "expectedOrders": 838,
+  "ytdRevenue": 6194,
+  "ytdGm": 1640,
+  "ytdBudgetRevenue": 6049,
+  "ytdBudgetGm": 1535,
+  "nearMonthForecast": 823,
+  "restOfYearForecast": 2637,
+  "fyForecastRevenue": 9654,
+  "fyForecastGm": 2514,
+  "fyBudgetRevenue": 9451,
+  "fyBudgetGm": 2399,
+  "priorYearRevenue": 8719,
+  "priorYearGm": 2121,
+  "ytdGmPct": 26.5,
+  "budgetGmPct": 25.4,
+  "roiPriorYear": 6.2,
+  "roiYtd": 6.8,
+  "roiBudget": 6.6,
+  "roiForecast": 7,
+  "products": [
+   {
+    "product": "End suction pumps",
+    "alsoReportedOn": null,
+    "openOrders": 904,
+    "expectedOrders": 151,
+    "ytdRevenue": 2713,
+    "ytdGm": 757,
+    "ytdGmPct": 27.9,
+    "ytdBudgetRevenue": 2524,
+    "ytdBudgetGm": 659,
+    "budgetGmPct": 26.1,
+    "nearMonthForecast": 347,
+    "restOfYearForecast": 1104,
+    "fyForecastRevenue": 4164,
+    "fyForecastGm": 1133,
+    "fyBudgetRevenue": 3943,
+    "fyBudgetGm": 1030,
+    "priorYearRevenue": 3777,
+    "priorYearGm": 940
+   },
+   {
+    "product": "Booster sets",
+    "alsoReportedOn": null,
+    "openOrders": 1401,
+    "expectedOrders": 687,
+    "ytdRevenue": 3481,
+    "ytdGm": 883,
+    "ytdGmPct": 25.4,
+    "ytdBudgetRevenue": 3525,
+    "ytdBudgetGm": 876,
+    "budgetGmPct": 24.9,
+    "nearMonthForecast": 476,
+    "restOfYearForecast": 1533,
+    "fyForecastRevenue": 5490,
+    "fyForecastGm": 1381,
+    "fyBudgetRevenue": 5508,
+    "fyBudgetGm": 1369,
+    "priorYearRevenue": 4942,
+    "priorYearGm": 1181
+   }
+  ]
+ },
+ "monthly": [
+  {
+   "month": "Jan",
+   "index": 1,
+   "actual": 680,
+   "forecast": null,
+   "budget": 662
+  },
+  {
+   "month": "Feb",
+   "index": 2,
+   "actual": 748,
+   "forecast": null,
+   "budget": 709
+  },
+  {
+   "month": "Mar",
+   "index": 3,
+   "actual": 841,
+   "forecast": null,
+   "budget": 832
+  },
+  {
+   "month": "Apr",
+   "index": 4,
+   "actual": 801,
+   "forecast": null,
+   "budget": 775
+  },
+  {
+   "month": "May",
+   "index": 5,
+   "actual": 815,
+   "forecast": null,
+   "budget": 794
+  },
+  {
+   "month": "Jun",
+   "index": 6,
+   "actual": 743,
+   "forecast": null,
+   "budget": 756
+  },
+  {
+   "month": "Jul",
+   "index": 7,
+   "actual": 773,
+   "forecast": null,
+   "budget": 737
+  },
+  {
+   "month": "Aug",
+   "index": 8,
+   "actual": 792,
+   "forecast": null,
+   "budget": 784
+  },
+  {
+   "month": "Sep",
+   "index": 9,
+   "actual": null,
+   "forecast": 823,
+   "budget": 813
+  },
+  {
+   "month": "Oct",
+   "index": 10,
+   "actual": null,
+   "forecast": 867,
+   "budget": 851
+  },
+  {
+   "month": "Nov",
+   "index": 11,
+   "actual": null,
+   "forecast": 888,
+   "budget": 869
+  },
+  {
+   "month": "Dec",
+   "index": 12,
+   "actual": null,
+   "forecast": 882,
+   "budget": 869
+  }
+ ],
+ "targets": [
+  {
+   "productLine": "End suction pumps",
+   "target": 3943,
+   "aspiration": 4928,
+   "achieved": 2713,
+   "achievedPct": 68.8
+  },
+  {
+   "productLine": "Booster sets",
+   "target": 5508,
+   "aspiration": 6519,
+   "achieved": 3481,
+   "achievedPct": 63.2
+  }
+ ],
+ "unbilled": {
+  "projects": [],
+  "bridge": {
+   "previousMonth": 0,
+   "newProjects": 0,
+   "clearedProjects": 0,
+   "ongoingChanges": 0,
+   "currentMonth": 0
+  }
+ },
+ "overdue": {
+  "rows": [
+   {
+    "engineer": "Omar Nasser",
+    "customer": "Oryx Cold Chain",
+    "terms": "60 days from invoice",
+    "bucket0to30": 509,
+    "bucket31to90": 149,
+    "bucket91to365": 247,
+    "bucket1to2y": 322,
+    "bucketOver2y": 228,
+    "totalOutstanding": 1455,
+    "provision": 390,
+    "netToCollect": 1065,
+    "overdue": 946,
+    "dispute": false,
+    "previousMonthOverdue": 775,
+    "previousRemark": "Promised in August, not received",
+    "currentRemark": "No response to three reminders",
+    "reason": "noTimelineOrResponse"
+   },
+   {
+    "engineer": "Omar Nasser",
+    "customer": "Halvard Contracting (group)",
+    "terms": "30 percent advance, balance 60 days",
+    "bucket0to30": 579,
+    "bucket31to90": 517,
+    "bucket91to365": 196,
+    "bucket1to2y": 0,
+    "bucketOver2y": 0,
+    "totalOutstanding": 1292,
+    "provision": 0,
+    "netToCollect": 1292,
+    "overdue": 713,
+    "dispute": false,
+    "previousMonthOverdue": 629,
+    "previousRemark": "Follow-up call made 12 Aug 2026",
+    "currentRemark": "Group settlement scheduled for Q4",
+    "reason": "internalGroup"
+   }
+  ],
+  "total": {
+   "customers": 2,
+   "bucket0to30": 1088,
+   "bucket31to90": 666,
+   "bucket91to365": 443,
+   "bucket1to2y": 322,
+   "bucketOver2y": 228,
+   "totalOutstanding": 2747,
+   "provision": 390,
+   "netToCollect": 2357,
+   "overdue": 1659,
+   "previousMonthOverdue": 1404,
+   "change": 255,
+   "disputed": 0
+  },
+  "reasons": {
+   "internalGroup": 713,
+   "noTimelineOrResponse": 946,
+   "disputesAndNotDue": 0
+  }
+ },
+ "peers": [
+  {
+   "slug": "meera-dsouza",
+   "name": "Meera Dsouza"
+  }
+ ]
+}

@@ -13,7 +13,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:35:35+04:00"
+  "generatedAt": "2026-09-11T19:59:46+04:00"
  },
  "readout": {
   "headline": {
@@ -124,6 +124,22 @@
   "vertical.overdue": {
    "key": "vertical.overdue",
    "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
   }
  },
  "sales": {
@@ -334,6 +350,7 @@
   "electrical-distribution": [
    {
     "name": "Rohan Pillai",
+    "slug": "rohan-pillai",
     "ytdRevenue": 9651,
     "ytdGm": 2041,
     "ytdGmPct": 21.1,
@@ -342,6 +359,7 @@
    },
    {
     "name": "Farah Haddad",
+    "slug": "farah-haddad",
     "ytdRevenue": 10393,
     "ytdGm": 2119,
     "ytdGmPct": 20.4,
@@ -350,6 +368,7 @@
    },
    {
     "name": "Dinesh Iyer",
+    "slug": "dinesh-iyer",
     "ytdRevenue": 10164,
     "ytdGm": 1622,
     "ytdGmPct": 16,
@@ -358,6 +377,7 @@
    },
    {
     "name": "Marwan Saleh",
+    "slug": "marwan-saleh",
     "ytdRevenue": 6883,
     "ytdGm": 1416,
     "ytdGmPct": 20.6,
@@ -366,6 +386,7 @@
    },
    {
     "name": "Kavya Nair",
+    "slug": "kavya-nair",
     "ytdRevenue": 12053,
     "ytdGm": 1966,
     "ytdGmPct": 16.3,
@@ -376,6 +397,7 @@
   "cooling": [
    {
     "name": "Joseph Villanueva",
+    "slug": "joseph-villanueva",
     "ytdRevenue": 6158,
     "ytdGm": 1333,
     "ytdGmPct": 21.6,
@@ -384,6 +406,7 @@
    },
    {
     "name": "Lina Khoury",
+    "slug": "lina-khoury",
     "ytdRevenue": 9263,
     "ytdGm": 2052,
     "ytdGmPct": 22.2,
@@ -392,6 +415,7 @@
    },
    {
     "name": "Arjun Sethi",
+    "slug": "arjun-sethi",
     "ytdRevenue": 7393,
     "ytdGm": 1660,
     "ytdGmPct": 22.5,
@@ -402,6 +426,7 @@
   "mechanical-systems": [
    {
     "name": "Bassem Farouk",
+    "slug": "bassem-farouk",
     "ytdRevenue": 4683,
     "ytdGm": 898,
     "ytdGmPct": 19.2,
@@ -410,6 +435,7 @@
    },
    {
     "name": "Sneha Menon",
+    "slug": "sneha-menon",
     "ytdRevenue": 4575,
     "ytdGm": 982,
     "ytdGmPct": 21.5,
@@ -418,6 +444,7 @@
    },
    {
     "name": "Tarek Hamdan",
+    "slug": "tarek-hamdan",
     "ytdRevenue": 6132,
     "ytdGm": 1140,
     "ytdGmPct": 18.6,
@@ -428,6 +455,7 @@
   "pumps-and-water": [
    {
     "name": "Omar Nasser",
+    "slug": "omar-nasser",
     "ytdRevenue": 6194,
     "ytdGm": 1640,
     "ytdGmPct": 26.5,
@@ -436,6 +464,7 @@
    },
    {
     "name": "Meera Dsouza",
+    "slug": "meera-dsouza",
     "ytdRevenue": 5655,
     "ytdGm": 1502,
     "ytdGmPct": 26.6,
@@ -446,6 +475,7 @@
   "vertical-transport": [
    {
     "name": "Hana Qureshi",
+    "slug": "hana-qureshi",
     "ytdRevenue": 2675,
     "ytdGm": 522,
     "ytdGmPct": 19.5,
@@ -454,6 +484,7 @@
    },
    {
     "name": "Yusuf Rahman",
+    "slug": "yusuf-rahman",
     "ytdRevenue": 3415,
     "ytdGm": 602,
     "ytdGmPct": 17.6,
@@ -462,6 +493,7 @@
    },
    {
     "name": "Divya Bhatt",
+    "slug": "divya-bhatt",
     "ytdRevenue": 3306,
     "ytdGm": 626,
     "ytdGmPct": 18.9,
@@ -472,6 +504,7 @@
   "metering": [
    {
     "name": "Karim Mansour",
+    "slug": "karim-mansour",
     "ytdRevenue": 3581,
     "ytdGm": 941,
     "ytdGmPct": 26.3,
@@ -480,6 +513,7 @@
    },
    {
     "name": "Ananya Kapoor",
+    "slug": "ananya-kapoor",
     "ytdRevenue": 3630,
     "ytdGm": 940,
     "ytdGmPct": 25.9,
@@ -490,6 +524,7 @@
   "automation": [
    {
     "name": "Nadia Zaki",
+    "slug": "nadia-zaki",
     "ytdRevenue": 2883,
     "ytdGm": 742,
     "ytdGmPct": 25.7,
@@ -498,6 +533,7 @@
    },
    {
     "name": "Vikram Fernandes",
+    "slug": "vikram-fernandes",
     "ytdRevenue": 3947,
     "ytdGm": 1013,
     "ytdGmPct": 25.7,
@@ -508,6 +544,7 @@
   "fabrication": [
    {
     "name": "Rami Aziz",
+    "slug": "rami-aziz",
     "ytdRevenue": 4063,
     "ytdGm": 730,
     "ytdGmPct": 18,
@@ -518,6 +555,7 @@
   "trading": [
    {
     "name": "Faisal Reyes",
+    "slug": "faisal-reyes",
     "ytdRevenue": 3507,
     "ytdGm": 449,
     "ytdGmPct": 12.8,
@@ -528,6 +566,7 @@
   "services": [
    {
     "name": "Ziad Abdel-Rahman",
+    "slug": "ziad-abdel-rahman",
     "ytdRevenue": 1963,
     "ytdGm": 570,
     "ytdGmPct": 29,
@@ -536,6 +575,7 @@
    },
    {
     "name": "Priya Kulkarni",
+    "slug": "priya-kulkarni",
     "ytdRevenue": 2838,
     "ytdGm": 818,
     "ytdGmPct": 28.8,

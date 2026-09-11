@@ -13,7 +13,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-11T19:35:35+04:00"
+  "generatedAt": "2026-09-11T19:59:46+04:00"
  },
  "slug": "services",
  "name": "Services",
@@ -66,6 +66,22 @@
   "vertical.overdue": {
    "key": "vertical.overdue",
    "label": "Overdue by engineer and customer"
+  },
+  "engineer.sales": {
+   "key": "engineer.sales",
+   "label": "Sales performance by product line, one engineer"
+  },
+  "engineer.targets": {
+   "key": "engineer.targets",
+   "label": "Business targets by product line, one engineer"
+  },
+  "engineer.unbilled": {
+   "key": "engineer.unbilled",
+   "label": "Unbilled projects against one engineer"
+  },
+  "engineer.overdue": {
+   "key": "engineer.overdue",
+   "label": "Overdue by customer, one engineer"
   }
  },
  "headline": {
@@ -80,6 +96,8 @@
   "engineers": [
    {
     "engineer": "Ziad Abdel-Rahman",
+    "slug": "ziad-abdel-rahman",
+    "homeVertical": "services",
     "fromOtherVertical": null,
     "openOrders": 824,
     "expectedOrders": 213,
@@ -146,6 +164,8 @@
    },
    {
     "engineer": "Priya Kulkarni",
+    "slug": "priya-kulkarni",
+    "homeVertical": "services",
     "fromOtherVertical": null,
     "openOrders": 865,
     "expectedOrders": 488,
@@ -213,6 +233,8 @@
   ],
   "sheetTotal": {
    "engineer": "Sheet total",
+   "slug": "sheet-total",
+   "homeVertical": "services",
    "fromOtherVertical": null,
    "openOrders": 1689,
    "expectedOrders": 701,
@@ -238,6 +260,8 @@
   },
   "attributedTotal": {
    "engineer": "Attributed total",
+   "slug": "attributed-total",
+   "homeVertical": "services",
    "fromOtherVertical": null,
    "openOrders": 1689,
    "expectedOrders": 701,
@@ -528,6 +552,7 @@
   "byEngineer": [
    {
     "engineer": "Ziad Abdel-Rahman",
+    "slug": "ziad-abdel-rahman",
     "customers": 1,
     "bucket0to30": 164,
     "bucket31to90": 135,
@@ -544,6 +569,7 @@
    },
    {
     "engineer": "Priya Kulkarni",
+    "slug": "priya-kulkarni",
     "customers": 3,
     "bucket0to30": 639,
     "bucket31to90": 322,
