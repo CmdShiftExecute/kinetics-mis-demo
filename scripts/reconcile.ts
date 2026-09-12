@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gstStamp } from '../data/gst';
 import type { Assertion, EngineerData, PlRungKey, Reconciliation, Rollup, VerticalData, VerticalIndexEntry } from '../data/schema';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -20,11 +21,6 @@ const dataDir = join(here, '..', 'public', 'data');
 const read = <T,>(rel: string): T => JSON.parse(readFileSync(join(dataDir, rel), 'utf8')) as T;
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
 
-function gstStamp(d: Date = new Date()): string {
-  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).formatToParts(d);
-  const g = (t: string) => parts.find((p) => p.type === t)!.value;
-  return `${g('year')}-${g('month')}-${g('day')}T${g('hour')}:${g('minute')}:${g('second')}+04:00`;
-}
 
 const rollup = read<Rollup>('rollup.json');
 const index = read<VerticalIndexEntry[]>('index.json');

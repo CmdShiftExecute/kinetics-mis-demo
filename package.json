@@ -13,8 +13,11 @@
     "data": "bun scripts/generate_demo_data.ts",
     "screenshots": "bun scripts/screenshots.ts",
     "contrast": "bun scripts/check_contrast.ts",
-    "check": "bun run data && bun run reconcile && bun run typecheck && bun run lint && bun run build && bun run contrast",
-    "interactions": "bun scripts/interactions.ts"
+    "check": "bun run data && bun run reconcile && bun run typecheck && bun run lint && bun run ask:test && bun run build && bun run contrast",
+    "interactions": "bun scripts/interactions.ts",
+    "ask": "bun server/ask.ts",
+    "ask:test": "bun test server",
+    "ask:regression": "bun scripts/ask_regression.ts"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.3.0",

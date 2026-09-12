@@ -1,8 +1,9 @@
 import { Link, NavLink } from 'react-router';
 import type { Meta } from '../../data/schema';
 import { NAV } from '../lib/nav';
+import { AskLauncher } from './Ask';
 
-/** The masthead: wordmark, division, the reporting stamp, and the report navigation. */
+/** The masthead: wordmark, division, the reporting stamp, the Ask the MIS launcher, and the report navigation. */
 export function Masthead({ meta }: { meta: Meta }) {
   return (
     <header className="mast">
@@ -39,6 +40,7 @@ export function Masthead({ meta }: { meta: Meta }) {
             {n.label}
           </NavLink>
         ))}
+        <AskLauncher meta={meta} />
       </nav>
     </header>
   );

@@ -16,6 +16,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gstStamp } from '../data/gst';
 import type {
   BalanceTotals,
   CustomerBalanceRow,
@@ -85,23 +86,6 @@ const r1 = (n: number) => Math.round(n * 10) / 10;
 const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
 const slugify = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 const pctOf = (a: number, b: number) => (b === 0 ? 0 : r1((a / b) * 100));
-
-/* ---------- time, always GST ---------- */
-
-function gstStamp(d: Date = new Date()): string {
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Asia/Dubai',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(d);
-  const g = (t: string) => parts.find((p) => p.type === t)!.value;
-  return `${g('year')}-${g('month')}-${g('day')}T${g('hour')}:${g('minute')}:${g('second')}+04:00`;
-}
 
 /* ---------- the business ---------- */
 

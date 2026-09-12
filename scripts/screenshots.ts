@@ -72,6 +72,27 @@ try {
       await page.screenshot({ path: join(out, `${tag} ${p.name} ${width} full.png`), fullPage: true });
       console.log(`wrote ${p.name} at ${width}`);
     }
+    // Ask the MIS: the panel open on the overview, then answered, at laptop width and above.
+    if (width >= 1000) {
+      await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForSelector('#sales table.mis', { timeout: 15000 });
+      await page.locator('.ask-launch').click();
+      await page.waitForSelector('[data-testid="ask-panel"]', { timeout: 5000 });
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: join(out, `${tag} ask-panel ${width}.png`), fullPage: false });
+      console.log(`wrote ask-panel at ${width}`);
+      await page.locator('.ask-sugg').first().click();
+      await page.waitForSelector('.ask-turn[data-state="done"], .ask-turn[data-state="error"]', { timeout: 45000 });
+      const state = await page.locator('.ask-turn').first().getAttribute('data-state');
+      if (state !== 'done') {
+        console.error(`Ask the MIS did not answer at ${width} (state ${state})`);
+        process.exitCode = 1;
+      }
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: join(out, `${tag} ask-answer ${width}.png`), fullPage: false });
+      console.log(`wrote ask-answer at ${width}`);
+    }
     await context.close();
     if (errors.length) {
       console.error(`Console errors at ${width}:`);

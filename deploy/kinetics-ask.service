@@ -1,0 +1,31 @@
+# Ask the MIS answer service for the Halvard MIS demo (kinetics-mis-demo).
+# Installed by deploy/install-ask.sh into ~/.config/systemd/user/. Edit here, then re-run the installer.
+#
+# Provider switch: ASK_PROVIDER=subscription runs Claude through the claude CLI on the
+# subscription (the OAuth credential comes from the EnvironmentFile). To use a metered key
+# instead, set ASK_PROVIDER=api and add ANTHROPIC_API_KEY to the same EnvironmentFile, then
+# re-run the installer. Nothing here sets a key.
+
+[Unit]
+Description=Halvard MIS demo, Ask the MIS answer service (Unix socket, Claude on the subscription)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/sharmas0910/code/kinetics-mis-demo
+EnvironmentFile=/home/sharmas0910/.claude/.env
+Environment=TZ=Asia/Dubai
+Environment=PATH=/home/sharmas0910/.local/bin:/home/sharmas0910/.bun/bin:/usr/local/bin:/usr/bin:/bin
+Environment=ASK_PROVIDER=subscription
+Environment=ASK_MODEL=sonnet
+Environment=ASK_EFFORT=medium
+Environment=ASK_TIMEOUT_MS=40000
+Environment=ASK_MAX_INFLIGHT=3
+Environment=ASK_PER_MINUTE=12
+ExecStart=/home/sharmas0910/.bun/bin/bun server/ask.ts
+# Long-running daemon, so Restart is correct (the never-Restart rule guards Type=oneshot job units).
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

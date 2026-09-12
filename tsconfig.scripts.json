@@ -18,5 +18,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["scripts", "data"]
+  "include": ["scripts", "data", "server"],
+  "exclude": ["server/**/*.test.ts"]
 }

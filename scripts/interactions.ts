@@ -65,6 +65,9 @@ const errors: string[] = [];
 /** During the deliberate missing-data check a 404 in the console is the expected evidence, not a fault. */
 let expectMissing = false;
 let expected404 = 0;
+/** During the deliberate Ask the MIS failure checks a failed /api/ask fetch is the expected evidence. */
+let expectAskFailure = false;
+let expectedAskFailures = 0;
 async function newPage(width: number, reducedMotion: 'reduce' | 'no-preference' = 'no-preference') {
   const context = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 1, ignoreHTTPSErrors: insecure, reducedMotion });
   const page = await context.newPage();
@@ -72,6 +75,10 @@ async function newPage(width: number, reducedMotion: 'reduce' | 'no-preference' 
     if (m.type() !== 'error') return;
     if (expectMissing && /404/.test(m.text())) {
       expected404++;
+      return;
+    }
+    if (expectAskFailure && /api\/ask|Failed to load resource|502|net::ERR/.test(m.text())) {
+      expectedAskFailures++;
       return;
     }
     errors.push(`[${width}] ${m.text()}`);
@@ -321,10 +328,111 @@ try {
   const anims = await rp.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
   const opacityOk = await rp.evaluate(() => Array.from(document.querySelectorAll('section.sec, tr')).every((el) => getComputedStyle(el).opacity === '1'));
   check(anims === 0 && opacityOk, `Under reduced motion nothing is animating and every section and row is fully visible (${anims} running animations)`);
+  await rp.locator('.ask-launch').click();
+  await rp.waitForSelector('[data-testid="ask-panel"]');
+  const panelAnims = await rp.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
+  check(panelAnims === 0, `Under reduced motion the Ask the MIS panel opens without animating (${panelAnims} running animations)`);
   await rc.close();
 
-  // 16. console errors
-  check(errors.length === 0, `No console errors (${errors.length})`);
+  /* ---------- Ask the MIS panel ---------- */
+  const { context: ac, page: ap } = await newPage(1440);
+  await ap.goto(`${base}/`, { waitUntil: 'networkidle' });
+  await ap.waitForSelector('#sales table.mis');
+  await ap.waitForTimeout(400);
+
+  // 16. opens with the keyboard shortcut and focus lands in the question input
+  await ap.keyboard.press('Control+KeyK');
+  await ap.waitForSelector('[data-testid="ask-panel"]', { timeout: 5000 });
+  const focusInInput = await ap.evaluate(() => {
+    const el = document.activeElement as HTMLElement | null;
+    return !!el && el.tagName === 'INPUT' && !!el.closest('[data-testid="ask-panel"]');
+  });
+  check(focusInInput, 'Ask the MIS opens with Ctrl+K and focus lands in the question input');
+
+  // 17. focus is trapped: forty Tabs and ten Shift+Tabs never leave the panel
+  let escaped = 0;
+  for (let i = 0; i < 40; i++) {
+    await ap.keyboard.press('Tab');
+    if (!(await ap.evaluate(() => !!document.activeElement?.closest('[data-testid="ask-panel"]')))) escaped++;
+  }
+  for (let i = 0; i < 10; i++) {
+    await ap.keyboard.press('Shift+Tab');
+    if (!(await ap.evaluate(() => !!document.activeElement?.closest('[data-testid="ask-panel"]')))) escaped++;
+  }
+  check(escaped === 0, `Focus stays inside the panel across 50 Tab presses (${escaped} escapes)`);
+
+  // 18. Escape closes the panel and returns focus to the launcher
+  await ap.keyboard.press('Escape');
+  await ap.waitForTimeout(150);
+  const closed = (await ap.locator('[data-testid="ask-panel"]').count()) === 0;
+  const backOnLauncher = await ap.evaluate(() => document.activeElement?.classList.contains('ask-launch') === true);
+  check(closed && backOnLauncher, 'Escape closes the panel and focus returns to the Ask the MIS launcher');
+
+  // 19. a suggested question round-trips to an answer with a page link (a real call to /api/ask)
+  await ap.locator('.ask-launch').click();
+  await ap.waitForSelector('[data-testid="ask-panel"]');
+  const suggestion = (await ap.locator('.ask-sugg').first().innerText()).trim();
+  await ap.locator('.ask-sugg').first().click();
+  const workingShown = await ap.locator('.ask-working').count();
+  await ap.waitForSelector('.ask-turn[data-state="done"], .ask-turn[data-state="error"]', { timeout: 45000 });
+  const turnState = await ap.locator('.ask-turn').first().getAttribute('data-state');
+  const answerText = (await ap.locator('.ask-turn .ask-a, .ask-turn .ask-err').first().innerText()).trim();
+  const linkCount = await ap.locator('.ask-turn .ask-src a').count();
+  const linkHref = linkCount ? await ap.locator('.ask-turn .ask-src a').first().getAttribute('href') : null;
+  check(turnState === 'done' && workingShown === 1 && answerText.length > 20 && linkCount === 1, `"${suggestion}" round-trips to an answer with a page link (state ${turnState}, link ${linkHref ?? 'none'}, "${answerText.slice(0, 70)}")`);
+  const dashes = /[\u2014\u2013]/.test(answerText);
+  check(!dashes, 'The answer carries no em or en dash');
+
+  // 20. the page link resolves to a real page and closes the panel
+  if (linkCount) {
+    await ap.locator('.ask-turn .ask-src a').first().click();
+    await ap.waitForTimeout(600);
+    const h1 = (await ap.locator('h1').first().innerText()).trim();
+    const panelGone = (await ap.locator('[data-testid="ask-panel"]').count()) === 0;
+    check(h1.length > 0 && !/nothing here/i.test(h1) && panelGone, `The answer's page link opens a real page and closes the panel (${new URL(ap.url()).pathname}, h1 "${h1}")`);
+  } else {
+    check(false, 'The answer carried no page link to follow');
+  }
+
+  // 21. negative control: with the service unreachable the panel says so in words
+  expectAskFailure = true;
+  await ap.route('**/api/ask', (route) => route.fulfill({ status: 502, contentType: 'text/html', body: '<html>502 Bad Gateway</html>' }));
+  await ap.locator('.ask-launch').click();
+  await ap.waitForSelector('[data-testid="ask-panel"]');
+  await ap.locator('input[type="text"]').fill('Is the service up?');
+  await ap.keyboard.press('Enter');
+  await ap.waitForSelector('.ask-turn[data-state="error"]', { timeout: 10000 });
+  const unavailable = (await ap.locator('.ask-err').first().innerText()).trim();
+  check(/not available/i.test(unavailable), `With the socket absent (502) the panel shows the unavailable state ("${unavailable}")`);
+  await ap.unroute('**/api/ask');
+
+  // 22. the 30-second timeout state renders when the service never answers
+  await ap.route('**/api/ask', async (route) => {
+    await new Promise((r) => setTimeout(r, 32000));
+    await route.abort();
+  });
+  await ap.locator('input[type="text"]').fill('Will this ever answer?');
+  await ap.keyboard.press('Enter');
+  await ap.waitForSelector('.ask-turn[data-state="error"]:nth-of-type(2), .ask-turn[data-state="error"] >> nth=1', { timeout: 40000 });
+  const timedOut = (await ap.locator('.ask-err').nth(1).innerText()).trim();
+  check(/30 seconds/.test(timedOut), `After 30 seconds without a reply the panel shows the timeout state ("${timedOut}")`);
+  await ap.unroute('**/api/ask');
+  expectAskFailure = false;
+  await ac.close();
+
+  // 23. the panel does not break the phone width
+  const { context: pc, page: pp } = await newPage(390);
+  await pp.goto(`${base}/`, { waitUntil: 'networkidle' });
+  await pp.waitForSelector('#sales table.mis');
+  await pp.locator('.ask-launch').click();
+  await pp.waitForSelector('[data-testid="ask-panel"]');
+  const phoneW = await pp.evaluate(() => document.documentElement.scrollWidth);
+  const panelW = (await pp.locator('[data-testid="ask-panel"]').boundingBox())?.width ?? 0;
+  check(phoneW <= 390 && Math.round(panelW) <= 390 && panelW > 300, `At 390px the open panel keeps the document at ${phoneW}px and fills ${panelW.toFixed(2)}px`);
+  await pc.close();
+
+  // 24. console errors
+  check(errors.length === 0, `No console errors (${errors.length}; ${expectedAskFailures} expected during the deliberate service failures)`);
   for (const e of errors) console.log('   ' + e);
 } finally {
   await browser.close();
