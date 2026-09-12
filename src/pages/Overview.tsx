@@ -208,8 +208,8 @@ export default function Overview() {
             cols={3}
             items={[
               { label: `Total outstanding, ${meta.currentMonthLabel.split(' ')[0]}`, value: o.receivables.totalOutstanding, sub: `less provision ${k(o.receivables.totalOutstanding - o.receivables.currentMonth)}` },
-              { label: 'Past due, beyond terms', value: o.receivables.pastDue, sub: `${pct(o.receivables.pastDuePct, 0)} of outstanding`, bad: o.receivables.pastDue > 0 },
-              { label: 'Aged over one year', value: o.receivables.agedOverOneYear, sub: `${pct(o.receivables.agedOverOneYearPct, 0)} of outstanding`, bad: o.receivables.agedOverOneYear > 0 },
+              { label: 'Past due, beyond terms', value: o.receivables.pastDue, sub: `${pct(o.receivables.pastDuePct)} of outstanding`, bad: o.receivables.pastDue > 0 },
+              { label: 'Aged over one year', value: o.receivables.agedOverOneYear, sub: `${pct(o.receivables.agedOverOneYearPct)} of outstanding`, bad: o.receivables.agedOverOneYear > 0 },
             ]}
           />
           <div className="sec-intro" style={{ marginTop: 'var(--s-md)' }}>
@@ -222,7 +222,7 @@ export default function Overview() {
                   {i < o.receivables.concentration.names.length - 1 ? ', ' : ' '}
                 </span>
               ))}
-              hold {pct(o.receivables.concentration.share, 0)} of net to collect. Largest balances by reason are in the{' '}
+              hold {pct(o.receivables.concentration.share)} of net to collect. Largest balances by reason are in the{' '}
               <Link to="/receivables#reasons" className="vlink">
                 receivables report
               </Link>

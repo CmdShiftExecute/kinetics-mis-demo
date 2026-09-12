@@ -126,7 +126,11 @@ function hasFigure(answer: string, figure: string): boolean {
   const a = stripGroups(answer).toLowerCase();
   const f = stripGroups(figure).toLowerCase();
   if (!/\d/.test(f)) return a.includes(f);
-  return new RegExp(`(?<![\\d.])${esc(f)}(?![\\d])(?!\\.\\d)`).test(a);
+  // "21.0%" and "21%" are the same published value; accept either spelling of a whole-number percentage.
+  const forms = [f];
+  const whole = /^(\d+)\.0(%)$/.exec(f);
+  if (whole) forms.push(`${whole[1]}${whole[2]}`);
+  return forms.some((x) => new RegExp(`(?<![\\d.])${esc(x)}(?![\\d])(?!\\.\\d)`).test(a));
 }
 
 interface Reply {

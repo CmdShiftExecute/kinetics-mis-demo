@@ -34,15 +34,21 @@ export const REPORT_PAGES: readonly Page[] = [
 
 /** The exact sentence the model must use when the data does not hold the answer. */
 export const REFUSAL = 'The published data does not carry that.';
-/** What counts as a refusal when read back: the sentence, or a plain-words variant of it. */
-export const REFUSAL_RE = /published data does not (?:carry|hold|contain)/i;
+/**
+ * What counts as a refusal when read back: the sentence, or the plain-words
+ * ways the model declines (no such vertical, cannot convert, will not reveal
+ * the rules). The flag only styles the answer and labels the log; it never
+ * skips a figure check (found in review, 12 Sep 2026).
+ */
+export const REFUSAL_RE =
+  /published data does not (?:carry|hold|contain|include|provide|state|show|have|report)|(?:not|nothing) (?:in|part of|within) the published data|no published (?:figure|value|data|forecast|number)|(?:is|are) not (?:published|reported|available in the data)|there is no [a-z ]{0,40}\b(?:vertical|engineer|customer|figure|page|report)\b|does not (?:exist|appear) in the (?:data|published|mis)|(?:cannot|can(?:'|\u2019)?t|could not|unable to) (?:be )?(?:answer|convert|comput|calculat|reveal|share|disclos|provide|estimat|project|forecast|round|add|sum|total)|(?:will|can|do) not (?:reveal|share|disclose|repeat|print|show) (?:the |my |these |those )?(?:rules|prompt|instructions)|outside (?:the|this) (?:published )?data/i;
 
 /* ---------- the rules, verbatim, as the model receives them ---------- */
 
 export const SYSTEM_PROMPT = `You are the "Ask the MIS" panel of a management information system for Halvard Engineering Group, Building Technologies Division. You answer questions about the published data that follows the question, and nothing else.
 
 Rules, all binding:
-1. Quote figures exactly as they appear in the data, with their unit and period, always in digits and never in words. Money values are integers in AED thousands: write them with thousands separators followed by "AED thousand", for example 135,005 AED thousand. Percentages are plain numbers to one decimal: write 21.4% for 21.4. Never round, never convert to millions, never drop a decimal.
+1. Quote figures exactly as they appear in the data, with their unit and period, always in digits and never in words. Money values are integers in AED thousands: write them with thousands separators followed by "AED thousand", for example 135,005 AED thousand. Percentages are plain numbers to one decimal: write 21.4% for 21.4 and 21.0% for 21, exactly as the pages print them. Never round, never convert to millions, never drop a decimal.
 2. Never calculate. Do not sum, subtract, average, rank by arithmetic you performed, or extrapolate. If a question needs a figure the data does not hold as a single published value, say exactly: "${REFUSAL}" and name the nearest report page. You may quote the separate published figures that exist.
 3. Name the period and the comparator the way the data does, for example "January to August 2026 against budget" or "full-year forecast against full-year budget".
 4. Answer in two to four sentences of plain words. No bullet lists, no markdown, no headings, no tables, no em dashes. Write only the final answer: work out any comparison before the first word, and never revise, correct or contradict yourself inside the answer. Words such as "wait", "actually", "correction", "let me" or "on second thought" must never appear; an answer that contains them is discarded unread.
@@ -192,7 +198,8 @@ export function fitContext(files: ContextFiles, baseTokens = 0): BuiltContext {
       tokens += t;
     } else dropped.push(`the ${files.engineer.entry.name} page`);
   }
-  const note = dropped.length ? `This answer is based on the division roll-up only; ${dropped.join(' and ')} could not be included.` : null;
+  const included = ['the division roll-up', ...(kept.vertical ? [`the ${kept.vertical.entry.name} sheet`] : []), ...(kept.engineer ? [`the ${kept.engineer.entry.name} page`] : [])];
+  const note = dropped.length ? `${dropped.map((d) => d[0]!.toUpperCase() + d.slice(1)).join(' and ')} could not be included within the size limit; this answer draws on ${included.join(', ')}.` : null;
   return { files: kept, tokens, note };
 }
 
@@ -281,6 +288,8 @@ export interface Finished {
   selfCorrected: boolean;
   /** The Cite lines the model wrote, for the caller to check against the files. */
   citations: Citation[];
+  /** True when the page link was moved to the vertical the citations name. */
+  pageBound: boolean;
 }
 
 export const MAX_SENTENCES = 4;
@@ -586,6 +595,43 @@ export function checkCitations(answer: string, citations: Citation[], files: { r
   return { ok: problems.length === 0, problems: [...new Set(problems)] };
 }
 
+/**
+ * Binds the page link to the rows the answer actually cites. A model asked
+ * "for Automation" about a Cooling customer answered correctly and linked to
+ * Automation's customer table (found in review, 12 Sep 2026). When every
+ * cited row belongs to one vertical and the Source names a page of another,
+ * the link moves to the cited vertical, keeping the page kind.
+ */
+export function bindPage(page: Page, citations: Citation[], index: VerticalIndexEntry[]): { page: Page; bound: boolean } {
+  const verticalOf = new Map<string, VerticalIndexEntry>();
+  const engineerOf = new Map<string, { e: VerticalIndexEntry['engineers'][number]; v: VerticalIndexEntry }>();
+  for (const v of index) {
+    verticalOf.set(v.slug, v);
+    for (const e of v.engineers) engineerOf.set(e.slug, { e, v });
+  }
+  const cited = new Set<string>();
+  let citedEngineer: { e: VerticalIndexEntry['engineers'][number]; v: VerticalIndexEntry } | null = null;
+  for (const c of citations) {
+    for (const m of c.path.matchAll(/\[([^\]]+)\]/g)) {
+      const sel = m[1]!.toLowerCase();
+      if (verticalOf.has(sel)) cited.add(sel);
+      const eng = engineerOf.get(sel);
+      if (eng) {
+        cited.add(eng.v.slug);
+        citedEngineer = eng;
+      }
+    }
+  }
+  const m = /^\/v\/([^/]+)(\/receivables|\/e\/[^/]+)?$/.exec(page.to);
+  if (!m || cited.size !== 1) return { page, bound: false };
+  const target = [...cited][0]!;
+  if (m[1] === target) return { page, bound: false };
+  const v = verticalOf.get(target)!;
+  if (m[2] === '/receivables') return { page: { label: `${v.name} customers`, to: `/v/${v.slug}/receivables` }, bound: true };
+  if (m[2]?.startsWith('/e/') && citedEngineer && citedEngineer.v.slug === target) return { page: { label: citedEngineer.e.name, to: `/v/${v.slug}/e/${citedEngineer.e.slug}` }, bound: true };
+  return { page: { label: v.name, to: `/v/${v.slug}` }, bound: true };
+}
+
 /* ---------- finish ---------- */
 
 /**
@@ -615,10 +661,12 @@ export function finish(raw: string, index: VerticalIndexEntry[], published: Set<
   }
   const pageResolved = page != null;
   if (!page) page = inferredPage();
+  const bound = bindPage(page, citations, index);
+  page = bound.page;
   let answer = capLength(cleanProse(text));
   if (note) answer = `${answer} ${note}`.trim();
   const refused = REFUSAL_RE.test(answer);
   const unverified = auditFigures(answer, published);
   const selfCorrected = hasSelfCorrection(answer);
-  return { answer, page, pageResolved, refused, unverified, selfCorrected, citations };
+  return { answer, page, pageResolved, refused, unverified, selfCorrected, citations, pageBound: bound.bound };
 }

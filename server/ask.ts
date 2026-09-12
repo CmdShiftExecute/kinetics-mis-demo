@@ -143,7 +143,7 @@ async function answer(question: string, signal: AbortSignal, onCall: () => boole
   if (sel.vertical) files.vertical = { entry: sel.vertical, text: file(sel.vertical.file).text };
   if (sel.engineer) files.engineer = { entry: sel.engineer.entry, vertical: sel.engineer.vertical, text: file(`engineers/${sel.engineer.entry.slug}.json`).text };
   const ctx = fitContext(files, baseTokens);
-  const notes = [ctx.note, sel.otherVerticals.length && sel.vertical ? `This answer covers ${sel.vertical.name} only; ask about ${sel.otherVerticals.map((v) => v.name).join(' and ')} separately.` : null].filter((n): n is string => Boolean(n));
+  const notes = [ctx.note, sel.otherVerticals.length && sel.vertical ? `Sheet-level detail here is for ${sel.vertical.name}; ${sel.otherVerticals.map((v) => v.name).join(' and ')} ${sel.otherVerticals.length > 1 ? 'are' : 'is'} quoted from the division roll-up.` : null].filter((n): n is string => Boolean(n));
   const published = new Set(rollupNumbers);
   if (ctx.files.vertical) for (const n of file(ctx.files.vertical.entry.file).numbers) published.add(n);
   if (ctx.files.engineer) for (const n of file(`engineers/${ctx.files.engineer.entry.slug}.json`).numbers) published.add(n);
@@ -158,8 +158,8 @@ async function answer(question: string, signal: AbortSignal, onCall: () => boole
     const reply = CONFIG.provider === 'api' ? await askApi(req, process.env.ANTHROPIC_API_KEY!) : await askSubscription(req);
     attempts.push({ text: reply.text, costUsd: reply.costUsd ?? 0, tokens: reply.tokens });
     const finished = finish(reply.text, index, published, notes.length ? notes.join(' ') : null);
-    // A refusal quotes nothing, so it needs no citations; every other answer must trace every figure.
-    const cites = finished.refused ? { ok: true, problems: [] } : checkCitations(finished.answer, finished.citations, jsonFiles, index, question);
+    // Every figure is checked whatever the wording: a refusal that quotes a figure is still a quote (found in review, 12 Sep 2026).
+    const cites = checkCitations(finished.answer, finished.citations, jsonFiles, index, question);
     return { finished, cites };
   };
   const t0 = Date.now();
@@ -232,8 +232,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse) {
   });
   try {
     const { finished, cites, ctx, retried, costUsd, tokens, calls } = await answer(question, controller.signal, takeSlot);
-    const base = { page: finished.page, pageResolved: finished.pageResolved, provider: CONFIG.provider, elapsedMs: Date.now() - started, contextTokens: ctx.tokens, tokens, retried };
-    const meta = { tokens, costUsd, calls, retried, page: finished.page.to };
+    const base = { page: finished.page, pageResolved: finished.pageResolved, pageBound: finished.pageBound, provider: CONFIG.provider, elapsedMs: Date.now() - started, contextTokens: ctx.tokens, tokens, retried };
+    const meta = { tokens, costUsd, calls, retried, page: finished.page.to, pageBound: finished.pageBound };
     if (finished.selfCorrected) {
       done('blocked', { ...meta, reason: 'self-correction' });
       return send(res, 200, { ...base, answer: `The draft answer revised itself midway, so it was withheld. Ask again in plainer words, or open ${finished.page.label}.`, refused: true, blocked: true });

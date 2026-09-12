@@ -62,8 +62,8 @@ export default function ReceivablesReport() {
           { label: `Net to collect, ${cur}`, value: o.receivables.currentMonth, sub: `${prev} ${k(o.receivables.previousMonth)}` },
           { label: 'Change on month', value: o.receivables.change, f: signedK, sub: 'net to collect, up is worse', bad: o.receivables.change > 0 },
           { label: 'Total outstanding', value: o.receivables.totalOutstanding, sub: `provision ${k(o.receivables.totalOutstanding - o.receivables.currentMonth)}` },
-          { label: 'Past due, beyond terms', value: o.receivables.pastDue, sub: `${pct(o.receivables.pastDuePct, 0)} of outstanding`, bad: o.receivables.pastDue > 0 },
-          { label: 'Aged over one year', value: o.receivables.agedOverOneYear, sub: `${pct(o.receivables.agedOverOneYearPct, 0)} of outstanding`, bad: o.receivables.agedOverOneYear > 0 },
+          { label: 'Past due, beyond terms', value: o.receivables.pastDue, sub: `${pct(o.receivables.pastDuePct)} of outstanding`, bad: o.receivables.pastDue > 0 },
+          { label: 'Aged over one year', value: o.receivables.agedOverOneYear, sub: `${pct(o.receivables.agedOverOneYearPct)} of outstanding`, bad: o.receivables.agedOverOneYear > 0 },
         ]}
       />
 
@@ -221,9 +221,9 @@ return (
     <Num v={r.totalOutstanding} />
     <Num v={r.provision} />
     <Num v={r.pastDue} bad={r.pastDue > 0} />
-    <Num v={r.pastDuePct} f={(n) => pct(n, 0)} />
+    <Num v={r.pastDuePct} f={pct} />
     <Num v={r.agedOverOneYear} bad={r.agedOverOneYear > 0} />
-    <Num v={r.agedOverOneYearPct} f={(n) => pct(n, 0)} />
+    <Num v={r.agedOverOneYearPct} f={pct} />
     <Num v={r.disputed} bad={r.disputed > 0} />
   </tr>
 );

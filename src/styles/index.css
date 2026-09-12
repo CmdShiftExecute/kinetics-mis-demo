@@ -1301,7 +1301,8 @@ table.mis tr.rung.active th[scope='row'] {
     transition: none !important;
     animation: none !important;
   }
-  .press:active {
+  .press:active,
+  .ask-send:active:not(:disabled) {
     transform: none;
   }
 }

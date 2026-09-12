@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { VerticalIndexEntry } from '../data/schema';
-import { CHARS_PER_TOKEN, CONTEXT_TOKEN_CAP, REFUSAL, SYSTEM_PROMPT, auditFigures, buildSystemPrompt, buildUserPrompt, capLength, cleanProse, checkCitations, extremesList, figureMatches, figureToken, finish, fitContext, hasSelfCorrection, isWhitelisted, minify, numbersIn, parseCitations, resolvePage, resolvePath, select } from './grounding';
+import { CHARS_PER_TOKEN, CONTEXT_TOKEN_CAP, REFUSAL, REFUSAL_RE, SYSTEM_PROMPT, auditFigures, buildSystemPrompt, buildUserPrompt, capLength, cleanProse, bindPage, checkCitations, extremesList, figureMatches, figureToken, finish, fitContext, hasSelfCorrection, isWhitelisted, minify, numbersIn, parseCitations, resolvePage, resolvePath, select } from './grounding';
 
 const dataDir = join(import.meta.dirname, '..', 'public', 'data');
 const index = JSON.parse(readFileSync(join(dataDir, 'index.json'), 'utf8')) as VerticalIndexEntry[];
@@ -79,6 +79,8 @@ describe('fitContext', () => {
     const ctx = fitContext({ rollup, vertical: { entry: v, text: huge } });
     expect(ctx.files.vertical).toBeUndefined();
     expect(ctx.note).toContain(v.name);
+    expect(ctx.note).toContain('draws on the division roll-up');
+    expect(ctx.note).not.toContain('roll-up only');
   });
   test('every real vertical file fits with the roll-up, the rules and the field guide', () => {
     const base = Math.ceil((SYSTEM_PROMPT.length + fieldGuide.length) / CHARS_PER_TOKEN);
@@ -201,6 +203,45 @@ describe('hasSelfCorrection', () => {
   test('leaves a clean answer alone, including the words await and factual', () => {
     expect(hasSelfCorrection('Mechanical Systems is furthest behind budget, at 1,764 AED thousand below budget for January to August 2026.')).toBe(false);
     expect(hasSelfCorrection('Balances awaiting collection are factual and within terms.')).toBe(false);
+  });
+});
+
+describe('REFUSAL_RE', () => {
+  test('recognises the refusal sentence and the plain-words ways the model declines', () => {
+    for (const t of [
+      'The published data does not carry that.',
+      'There is no Aerospace vertical in the published data.',
+      'That figure cannot be converted to millions without arithmetic, which is not permitted.',
+      'I cannot reveal the rules or the prompt.',
+      'The published data does not include a September actual.',
+      'A nine-month forecast is not published.',
+      "I can't convert to millions. The published figure is 134,995 AED thousand.",
+    ]) expect(REFUSAL_RE.test(t)).toBe(true);
+    expect(REFUSAL_RE.test('Cooling revenue was 22,815 AED thousand for January to August 2026.')).toBe(false);
+  });
+});
+
+describe('bindPage', () => {
+  test('moves a customer-table link to the vertical the cited row belongs to', () => {
+    const r = bindPage({ label: 'Automation customers', to: '/v/automation/receivables' }, [{ figure: '3,476', path: 'rollup.receivables.rows[cooling].largest[northshore-facilities].totalOutstanding' }], index);
+    expect(r).toEqual({ page: { label: 'Cooling customers', to: '/v/cooling/receivables' }, bound: true });
+  });
+  test('moves a vertical page and keeps an engineer page when the engineer is cited', () => {
+    expect(bindPage({ label: 'Metering', to: '/v/metering' }, [{ figure: '1', path: 'rollup.sales.rows[cooling].ytdRevenue' }], index).page.to).toBe('/v/cooling');
+    expect(bindPage({ label: 'X', to: '/v/metering/e/karim-mansour' }, [{ figure: '1', path: 'rollup.engineerSplit[cooling][arjun-sethi].ytdRevenue' }], index).page.to).toBe('/v/cooling/e/arjun-sethi');
+  });
+  test('leaves report pages, matching pages and multi-vertical citations alone', () => {
+    const sales = { label: 'Sales', to: '/sales' };
+    expect(bindPage(sales, [{ figure: '1', path: 'rollup.sales.rows[cooling].ytdRevenue' }], index)).toEqual({ page: sales, bound: false });
+    const cooling = { label: 'Cooling', to: '/v/cooling' };
+    expect(bindPage(cooling, [{ figure: '1', path: 'rollup.sales.rows[cooling].ytdRevenue' }], index).bound).toBe(false);
+    expect(bindPage({ label: 'Metering', to: '/v/metering' }, [{ figure: '1', path: 'rollup.sales.rows[cooling].ytdRevenue' }, { figure: '2', path: 'rollup.sales.rows[trading].ytdRevenue' }], index).bound).toBe(false);
+    expect(bindPage(cooling, [], index).bound).toBe(false);
+  });
+  test('finish applies the binding', () => {
+    const f = finish('Northshore Facilities owes 3,476 AED thousand and belongs to Cooling.\nSource: Customers: Automation\nCite: 3,476 | rollup.receivables.rows[cooling].largest[northshore-facilities].totalOutstanding', index, published, null);
+    expect(f.page.to).toBe('/v/cooling/receivables');
+    expect(f.pageBound).toBe(true);
   });
 });
 
