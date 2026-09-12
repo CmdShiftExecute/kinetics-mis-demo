@@ -19,7 +19,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { EngineerData, Rollup, VerticalData, VerticalIndexEntry } from '../data/schema';
 import { gstStamp } from '../data/gst';
-import { REFUSAL, auditFigures, numbersIn } from '../server/grounding';
+import { REFUSAL, auditFigures, hasSelfCorrection, numbersIn } from '../server/grounding';
 import { ASK_SUGGESTIONS } from '../src/lib/askSuggestions';
 
 const args = process.argv.slice(2);
@@ -167,6 +167,8 @@ interface Result extends Q {
   missing: string[];
   pageOk: boolean;
   unverified: string[];
+  /** The prose changed its mind midway. Never acceptable, whatever the figures. */
+  unclean: boolean;
   pass: boolean;
 }
 
@@ -181,9 +183,10 @@ for (const q of questions) {
   const missing = q.figures.filter((f) => !hasFigure(answer, f));
   const pageOk = q.refusal ? true : q.pages.includes(page);
   const unverified = status === 200 ? auditFigures(answer, published) : [];
-  const pass = status === 200 && !blocked && (q.refusal ? refused : missing.length === 0 && pageOk) && unverified.length === 0;
-  results.push({ ...q, status, answer, page, pageLabel: body.page?.label ?? '', refused, blocked, ms, missing, pageOk, unverified, pass });
-  const why = pass ? '' : status !== 200 ? ` HTTP ${status}` : blocked ? ' withheld' : q.refusal && !refused ? ' no refusal' : [missing.length ? ` missing ${missing.join(', ')}` : '', pageOk ? '' : ` page ${page || 'none'}`, unverified.length ? ` unverified ${unverified.join(', ')}` : ''].join('');
+  const unclean = status === 200 && !blocked && hasSelfCorrection(answer);
+  const pass = status === 200 && !blocked && !unclean && (q.refusal ? refused : missing.length === 0 && pageOk) && unverified.length === 0;
+  results.push({ ...q, status, answer, page, pageLabel: body.page?.label ?? '', refused, blocked, ms, missing, pageOk, unverified, unclean, pass });
+  const why = pass ? '' : status !== 200 ? ` HTTP ${status}` : blocked ? ' withheld' : unclean ? ' revised itself midway' : q.refusal && !refused ? ' no refusal' : [missing.length ? ` missing ${missing.join(', ')}` : '', pageOk ? '' : ` page ${page || 'none'}`, unverified.length ? ` unverified ${unverified.join(', ')}` : ''].join('');
   console.log(`${pass ? 'PASS' : 'FAIL'}  ${String(q.id).padStart(2)} ${(ms / 1000).toFixed(1).padStart(5)}s  ${q.question}${why}`);
 }
 
@@ -196,6 +199,8 @@ function pass(x: Result) {
   return x.pass;
 }
 const stray = results.filter((x) => x.unverified.length).length;
+const uncleanCount = results.filter((x) => x.unclean).length;
+const withheld = results.filter((x) => x.blocked).length;
 const byKind = (kind: Q['kind']) => `${results.filter((x) => x.kind === kind && x.pass).length} of ${results.filter((x) => x.kind === kind).length}`;
 
 const summary = {
@@ -207,17 +212,19 @@ const summary = {
   byKind: { rollup: byKind('rollup'), vertical: byKind('vertical'), engineer: byKind('engineer'), unanswerable: byKind('unanswerable') },
   latencyMs: { p50, p95, max: times[times.length - 1], min: times[0] },
   answersWithUnverifiedFigures: stray,
+  answersThatRevisedThemselves: uncleanCount,
+  answersWithheld: withheld,
   results,
 };
 writeFileSync(join(out, 'ask-regression.json'), JSON.stringify(summary, null, 1));
 const md = [
   `# Ask the MIS regression`,
   ``,
-  `Origin ${base}, run ${summary.ranAt}. Passed ${passed} of ${results.length} (threshold 28). Latency p50 ${(p50 / 1000).toFixed(1)} s, p95 ${(p95 / 1000).toFixed(1)} s. Answers with a figure absent from the published data: ${stray}.`,
+  `Origin ${base}, run ${summary.ranAt}. Passed ${passed} of ${results.length} (threshold 28). Latency p50 ${(p50 / 1000).toFixed(1)} s, p95 ${(p95 / 1000).toFixed(1)} s. Answers with a figure absent from the published data: ${stray}. Answers that revised themselves midway: ${uncleanCount}. Answers withheld by the service: ${withheld}.`,
   ``,
   `| # | Kind | Question | Seconds | Page | Result | Answer |`,
   `|---|---|---|---|---|---|---|`,
-  ...results.map((x) => `| ${x.id} | ${x.kind} | ${x.question} | ${(x.ms / 1000).toFixed(1)} | ${x.pageLabel || x.page || ''} | ${x.pass ? 'pass' : 'fail'}${x.blocked ? ' (withheld)' : ''}${x.missing.length ? `, missing ${x.missing.join(', ')}` : ''}${x.unverified.length ? `, unverified ${x.unverified.join(', ')}` : ''} | ${x.answer.replace(/\|/g, '/')} |`),
+  ...results.map((x) => `| ${x.id} | ${x.kind} | ${x.question} | ${(x.ms / 1000).toFixed(1)} | ${x.pageLabel || x.page || ''} | ${x.pass ? 'pass' : 'fail'}${x.blocked ? ' (withheld)' : ''}${x.unclean ? ' (revised itself)' : ''}${x.missing.length ? `, missing ${x.missing.join(', ')}` : ''}${x.unverified.length ? `, unverified ${x.unverified.join(', ')}` : ''} | ${x.answer.replace(/\|/g, '/')} |`),
 ].join('\n');
 writeFileSync(join(out, 'ask-regression.md'), md + '\n');
 
@@ -225,6 +232,8 @@ console.log(`\nPassed ${passed} of ${results.length}: roll-up ${summary.byKind.r
 console.log(`Latency p50 ${(p50 / 1000).toFixed(1)} s, p95 ${(p95 / 1000).toFixed(1)} s, max ${(times[times.length - 1]! / 1000).toFixed(1)} s.`);
 if (p95 > 12_000) console.log(`FINDING: p95 latency ${(p95 / 1000).toFixed(1)} s is above 12 seconds.`);
 if (stray) console.log(`FINDING: ${stray} answer(s) carried a figure absent from the published data.`);
+if (uncleanCount) console.log(`FINDING: ${uncleanCount} answer(s) revised themselves midway.`);
+if (withheld) console.log(`FINDING: ${withheld} answer(s) were withheld by the service.`);
 console.log(`Transcript: ${join(out, 'ask-regression.json')} and ask-regression.md`);
 if (passed < 28) {
   console.error(`\nRegression gate FAILED: ${passed} of ${results.length} is below 28.`);

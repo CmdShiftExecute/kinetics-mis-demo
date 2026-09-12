@@ -36,10 +36,11 @@ export function AskLauncher({ meta }: { meta: Meta }) {
   const button = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    // The shortcut opens the panel; it never closes it, so typed text is not thrown away. Escape and Close do that.
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setOpen((o) => !o);
+        setOpen(true);
       }
     };
     window.addEventListener('keydown', onKey);
@@ -72,9 +73,16 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
   const [text, setText] = useState('');
   const [now, setNow] = useState(() => Date.now());
   const working = turns.some((t) => t.state === 'working');
+  /** Requests in flight, aborted when the panel closes so a billed call does not outlive its reader. */
+  const controllers = useRef(new Set<AbortController>());
 
   useEffect(() => {
     input.current?.focus();
+    const live = controllers.current;
+    return () => {
+      for (const c of live) c.abort();
+      live.clear();
+    };
   }, []);
 
   useEffect(() => {
@@ -114,7 +122,12 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
     setTurns((t) => [...t, { id, question: q, state: 'working', startedAt: Date.now() }]);
     setText('');
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), ASK_CLIENT_TIMEOUT_MS);
+    controllers.current.add(controller);
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, ASK_CLIENT_TIMEOUT_MS);
     const finish = (patch: Partial<Turn>) => setTurns((t) => t.map((x) => (x.id === id ? { ...x, ...patch, elapsedMs: Date.now() - x.startedAt } : x)));
     try {
       const res = await fetch(`${import.meta.env.BASE_URL}api/ask`, {
@@ -133,9 +146,10 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
       }
     } catch (e) {
       const aborted = e instanceof DOMException && e.name === 'AbortError';
-      finish({ state: 'error', error: aborted ? `No answer arrived within ${Math.round(ASK_CLIENT_TIMEOUT_MS / 1000)} seconds. Ask again.` : 'The answer service is not available right now.' });
+      finish({ state: 'error', error: aborted ? (timedOut ? `No answer arrived within ${Math.round(ASK_CLIENT_TIMEOUT_MS / 1000)} seconds. Ask again.` : 'The panel was closed before the answer arrived.') : 'The answer service is not available right now.' });
     } finally {
       clearTimeout(timer);
+      controllers.current.delete(controller);
     }
   };
 
@@ -205,7 +219,7 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
           Your question
         </label>
         <div className="ask-row">
-          <input id={inputId} ref={input} type="text" value={text} onChange={(e) => setText(e.target.value)} maxLength={400} autoComplete="off" spellCheck={false} disabled={working} />
+          <input id={inputId} ref={input} type="text" value={text} onChange={(e) => setText(e.target.value)} maxLength={400} autoComplete="off" spellCheck={false} readOnly={working} aria-busy={working} />
           <button type="submit" className="drill-link press ask-send" disabled={working || !text.trim()}>
             Ask
           </button>

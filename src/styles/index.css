@@ -1226,7 +1226,7 @@ table.mis tr.rung.active th[scope='row'] {
   border: 1px solid var(--ink);
   padding: 8px 10px;
 }
-.ask-row input:disabled {
+.ask-row input:read-only {
   color: var(--ink-2);
   border-color: var(--rule);
 }

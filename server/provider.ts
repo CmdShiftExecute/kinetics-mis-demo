@@ -11,6 +11,10 @@
  */
 
 import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, renameSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 export interface ModelRequest {
   system: string;
@@ -19,12 +23,21 @@ export interface ModelRequest {
   /** low, medium, high, xhigh or max. Medium: at low the model corrected itself inside the answer on a superlative question (measured 12 Sep 2026). */
   effort: string;
   timeoutMs: number;
+  /** Aborted when the browser abandons the request; the model call is killed so it stops billing. */
+  signal?: AbortSignal;
 }
 
 export interface ModelReply {
   text: string;
   tokens: { input?: number; output?: number; cacheRead?: number; cacheCreation?: number };
   costUsd?: number;
+}
+
+export class ClientGone extends Error {
+  constructor() {
+    super('the client abandoned the request');
+    this.name = 'ClientGone';
+  }
 }
 
 export class ProviderTimeout extends Error {
@@ -36,6 +49,26 @@ export class ProviderTimeout extends Error {
 
 const CLI_FLAGS = ['-p', '--output-format', 'json', '--setting-sources', '', '--tools', '', '--no-session-persistence'];
 
+/**
+ * The system prompt is far larger than one command-line argument may be (the
+ * kernel caps a single argument at 128 KB, and a roll-up plus a vertical file
+ * passed it on 12 Sep 2026 with E2BIG), so it goes to the CLI as a file. The
+ * content is the same for every question on the same context, so each distinct
+ * prompt is written once, named by its hash, and reused. It holds published
+ * data and the rules only, never a question.
+ */
+const promptDir = process.env.ASK_PROMPT_DIR ?? join(tmpdir(), 'kinetics-ask-prompts');
+export function systemPromptFile(system: string): string {
+  mkdirSync(promptDir, { recursive: true, mode: 0o700 });
+  const path = join(promptDir, `${createHash('sha256').update(system).digest('hex').slice(0, 24)}.txt`);
+  if (!existsSync(path)) {
+    const tmp = `${path}.${process.pid}.tmp`;
+    writeFileSync(tmp, system, { mode: 0o600 });
+    renameSync(tmp, path);
+  }
+  return path;
+}
+
 export function askSubscription(req: ModelRequest): Promise<ModelReply> {
   return new Promise((resolve, reject) => {
     const env: Record<string, string> = {
@@ -44,7 +77,7 @@ export function askSubscription(req: ModelRequest): Promise<ModelReply> {
       TZ: 'Asia/Dubai',
     };
     if (process.env.CLAUDE_CODE_OAUTH_TOKEN) env.CLAUDE_CODE_OAUTH_TOKEN = process.env.CLAUDE_CODE_OAUTH_TOKEN;
-    const child = spawn('claude', [...CLI_FLAGS, '--model', req.model, '--effort', req.effort, '--system-prompt', req.system], { cwd: '/tmp', env, stdio: ['pipe', 'pipe', 'pipe'] });
+    const child = spawn('claude', [...CLI_FLAGS, '--model', req.model, '--effort', req.effort, '--system-prompt-file', systemPromptFile(req.system)], { cwd: '/tmp', env, stdio: ['pipe', 'pipe', 'pipe'] });
     let out = '';
     let err = '';
     let done = false;
@@ -54,6 +87,15 @@ export function askSubscription(req: ModelRequest): Promise<ModelReply> {
       child.kill('SIGKILL');
       reject(new ProviderTimeout(req.timeoutMs));
     }, req.timeoutMs);
+    const onAbort = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      child.kill('SIGKILL');
+      reject(new ClientGone());
+    };
+    if (req.signal?.aborted) onAbort();
+    req.signal?.addEventListener('abort', onAbort, { once: true });
     child.stdout.on('data', (c: Buffer) => (out += c.toString()));
     child.stderr.on('data', (c: Buffer) => (err += c.toString()));
     child.on('error', (e) => {
@@ -66,6 +108,7 @@ export function askSubscription(req: ModelRequest): Promise<ModelReply> {
       if (done) return;
       done = true;
       clearTimeout(timer);
+      req.signal?.removeEventListener('abort', onAbort);
       if (code !== 0) return reject(new Error(`claude exited ${code}: ${err.slice(0, 300)}`));
       let parsed: { is_error?: boolean; result?: unknown; usage?: Record<string, unknown>; total_cost_usd?: number };
       try {
@@ -91,6 +134,12 @@ export function askSubscription(req: ModelRequest): Promise<ModelReply> {
 export async function askApi(req: ModelRequest, apiKey: string): Promise<ModelReply> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), req.timeoutMs);
+  let clientGone = false;
+  const onAbort = () => {
+    clientGone = true;
+    controller.abort();
+  };
+  req.signal?.addEventListener('abort', onAbort, { once: true });
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -106,9 +155,11 @@ export async function askApi(req: ModelRequest, apiKey: string): Promise<ModelRe
     const num = (k: string) => (typeof u[k] === 'number' ? (u[k] as number) : undefined);
     return { text, tokens: { input: num('input_tokens'), output: num('output_tokens'), cacheRead: num('cache_read_input_tokens'), cacheCreation: num('cache_creation_input_tokens') } };
   } catch (e) {
+    if (clientGone) throw new ClientGone();
     if (e instanceof Error && e.name === 'AbortError') throw new ProviderTimeout(req.timeoutMs);
     throw e;
   } finally {
     clearTimeout(timer);
+    req.signal?.removeEventListener('abort', onAbort);
   }
 }

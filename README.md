@@ -36,7 +36,10 @@ The ten vertical slugs are electrical-distribution, cooling, mechanical-systems,
 8. `bun run contrast` measures the WCAG contrast of every text and surface pair the stylesheet defines.
 9. `bun run interactions --base <origin> [--insecure]` runs the interaction, keyboard, structure and resilience gate against a served build. `--insecure` skips certificate checks when the origin is self-signed.
 10. `bun run screenshots` captures every route at desktop, laptop and phone widths.
-11. `bun run check` chains `data`, `reconcile`, `typecheck`, `lint`, `build` and `contrast`, in that order.
+11. `bun run ask` starts the Ask the MIS answer service on its Unix socket. `bun run preview` proxies `/api/ask` to that socket the same way the live nginx site does, so the panel works end to end against a local build.
+12. `bun run ask:test` runs the unit tests for the grounding module: context selection, the token cap, page resolution, the citation check and the figure audit.
+13. `bun run ask:regression --base <origin> [--insecure]` runs the 30-question regression gate against a served `/api/ask`, threshold 28 of 30 to pass. `--insecure` skips certificate checks when the origin is self-signed.
+14. `bun run check` chains `data`, `reconcile`, `typecheck`, `lint`, `ask:test`, `build` and `contrast`, in that order.
 
 `bun x playwright install chromium` installs the Chromium build that the interaction gate, the screenshot script and the performance probe all drive. Run it once before the first use of any of the three. `scripts/perf_probe.ts` is run directly with `bun scripts/perf_probe.ts [--base <origin>] [--path <route>]`, not through a package script.
 
@@ -91,6 +94,28 @@ Profit is compared full year to full year. No approved profit budget exists for 
 `bun run screenshots` captures every route at desktop, laptop and phone widths with a real Chromium, waits for fonts to load and for animation to settle, and fails the run on any console error.
 
 `scripts/perf_probe.ts` scrolls the longest page for four seconds in a real Chromium and records requestAnimationFrame interval timing: median, 95th percentile, maximum, and the count of intervals above 25 milliseconds. Its numbers are observer-dependent, so they are only meaningful when comparing before and after a change, on the same machine, against the same origin.
+
+`bun run ask:test` checks the grounding module in isolation: which files a question selects, the token cap, how a page link is resolved, and the figure audit that decides whether a number may be shown.
+
+`bun run ask:regression` drives the live answer service with thirty real questions and checks the reply against the published data itself, never against a stored expectation, so the gate stays true after the seed changes. It fails below 28 of 30 and prints a finding if the 95th percentile latency runs past 12 seconds.
+
+## Ask the MIS
+
+Every page carries a right-hand panel, opened with Ctrl+K on Windows and Linux or Cmd+K on a Mac, or from the "Ask the MIS" button in the corner. It answers one question at a time in plain words, and every answer ends with a link to the report page that carries the figures it quoted. Nothing typed into the panel is stored: the transcript lives only in that page view and clears the moment the reader navigates away.
+
+The panel is grounded, not free-running. Each question is matched against the division roll-up, plus at most one vertical file and one engineer file when the question names one of them by name or slug. The rules the model must follow, the wording it must use, and the page-naming convention all live in one system prompt in `server/grounding.ts`, so the behaviour is code, not a scattered set of instructions. The field guide handed to the model alongside the data is `data/schema.ts` itself: the same TypeScript interfaces the application reads from, so the model and the reader are told the same story. The whole context, rules plus field guide plus data, is held under a cap of about 60,000 tokens, estimated at 2.15 characters a token; a file that would push the total over the cap is dropped and the answer says so.
+
+The answer service, `server/ask.ts`, listens on the Unix socket `run/ask.sock`, never on a TCP port, and nginx proxies `/api/ask` to it on the live site. It allows at most 3 questions in flight at once, 12 model calls in any sixty-second window (a retry spends a slot), and gives each call up to 40 seconds before it times out. A question the browser abandons kills its model call, so nothing bills after the reader has gone. Every call is written to `run/ask.log.jsonl` with a GST timestamp, the provider, the latency and the length of the question in characters, but never the question's own text.
+
+The model is reached through a provider switch. `ASK_PROVIDER=subscription`, the default the service ships with, runs the `claude` command line on the principal's own subscription, the same pattern the CareerOps assessor uses. `ASK_PROVIDER=api` sends the same request to the Messages API using a metered key read from `ANTHROPIC_API_KEY`; that path is written and ready but has never been exercised, because no key has been supplied for it. The installed unit runs on `subscription` and carries no key at all.
+
+Every answer passes three checks before it reaches the reader, all in `server/grounding.ts`. A draft that revises itself midway (a "wait" or a "correction" inside the prose) is never shown. Every figure the model quotes must carry a Cite line naming its path in the data, such as `rollup.sales.rows[mechanical-systems].dRevenue`; the service resolves each path and the value must match exactly, the sentence carrying the figure must name that row and no other, a "which is highest" question must cite a row that is the extreme of its field across the table, and a direction word such as "ahead of budget" must agree with the sign of the value. Finally, any number in the reply must exist verbatim in the published JSON of the context it was given; years and small counts up to 31 without a unit are allowed because they read as periods and counts, not figures. A draft that fails any check is tried once more on the same cached context and, if it fails again, withheld: the panel says so plainly and offers the nearest report, rather than showing a figure nobody can trace back to its row.
+
+To install or re-install the service, run `bash deploy/install-ask.sh` on the host. It is idempotent: it creates and permissions the `run/` directory, writes the systemd user unit and restarts it, writes the nginx location block between its own markers, and reloads nginx, printing a health check at the end. It asks for `sudo` twice, once to put `run/` in the `www-data` group with the setgid bit so nginx can reach the socket, and once to edit the nginx site file. Re-run it after any change to `server/`, to the unit file, or to the nginx snippet.
+
+To run it locally: `bun run ask` starts the service, `bun run preview` proxies `/api/ask` to its socket the same way the live site's nginx does, `bun run ask:test` runs the unit tests against the grounding module, and `bun run ask:regression --base <origin> [--insecure]` runs the full 30-question gate against a served build, failing below 28 passes or flagging a 95th-percentile latency past 12 seconds.
+
+Regenerating the data with `bun run data` does not refresh what the panel can see on its own. The service reads the roll-up, the index, the field guide and every vertical and engineer file once, at start, so a data regeneration needs a service restart (`bash deploy/install-ask.sh`, or `systemctl --user restart kinetics-ask.service` on its own) before the panel will answer from the new figures.
 
 ## Regenerating
 

@@ -14,6 +14,9 @@ After=network.target
 Type=simple
 WorkingDirectory=/home/sharmas0910/code/kinetics-mis-demo
 EnvironmentFile=/home/sharmas0910/.claude/.env
+# The EnvironmentFile is the estate's shared secrets file. Only the OAuth credential is needed here;
+# the other names in that file are dropped so this network-reachable service holds nothing it does not use.
+UnsetEnvironment=APIFY_TOKEN CARDPULSE_PIN
 Environment=TZ=Asia/Dubai
 Environment=PATH=/home/sharmas0910/.local/bin:/home/sharmas0910/.bun/bin:/usr/local/bin:/usr/bin:/bin
 Environment=ASK_PROVIDER=subscription
