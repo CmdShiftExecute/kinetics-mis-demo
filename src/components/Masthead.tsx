@@ -3,7 +3,7 @@ import type { Meta } from '../../data/schema';
 import { NAV } from '../lib/nav';
 import { AskLauncher } from './Ask';
 
-/** The masthead, matched to the warehouse system's: the brand block, the system title at the page-heading size, the reporting stamp, then the navigation with the Ask the MIS launcher. */
+/** The masthead, matched to the warehouse system's: the brand block on the left, the system title at the page-heading size and the data-as-of stamp together on the right, then the navigation with the Ask the MIS launcher. */
 export function Masthead({ meta }: { meta: Meta }) {
   return (
     <header className="mast">
@@ -19,12 +19,6 @@ export function Masthead({ meta }: { meta: Meta }) {
           <div>
             <dt>Data as of</dt>
             <dd>{meta.dataAsOfLabel}</dd>
-          </div>
-          <div>
-            <dt>Revision</dt>
-            <dd>
-              {meta.revision}, {meta.currency} {meta.unit}
-            </dd>
           </div>
         </dl>
       </div>

@@ -148,11 +148,11 @@ p {
 .mast-system {
   font-size: clamp(1.6rem, 2.6vw, 2.4rem);
   margin: 0 0 2px;
-  justify-self: center;
-  text-align: center;
+  justify-self: end;
+  text-align: right;
   white-space: nowrap;
 }
-@media (max-width: 1240px) {
+@media (max-width: 980px) {
   .mast-row {
     grid-template-columns: 1fr;
     align-items: start;
