@@ -22,6 +22,8 @@
   --s-3xl: 48px;
   --s-4xl: 64px;
   --maxw: 1440px;
+  /* One size for the page heading and the masthead's system name, so the two always match. */
+  --title-size: clamp(1.6rem, 2.6vw, 2.4rem);
 }
 
 html {
@@ -150,7 +152,7 @@ p {
 }
 /* The system's name at the page-heading size, so the masthead says which system this is. */
 .mast-system {
-  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  font-size: var(--title-size);
   margin: 0 0 2px;
   justify-self: center;
   text-align: center;
@@ -269,7 +271,7 @@ p {
   flex-wrap: wrap;
 }
 .page-title {
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: var(--title-size);
   margin: 0;
 }
 .page-sub {
