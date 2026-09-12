@@ -1,14 +1,17 @@
 /**
- * Ask the MIS regression gate: thirty questions with expected figures and
- * pages, derived from the generated data so they follow the seed, run against
- * a served /api/ask.
+ * Ask the MIS regression gate: thirty-three questions with expected figures
+ * and pages, derived from the generated data so they follow the seed, run
+ * against a served /api/ask: twenty on the roll-up, three naming a vertical,
+ * two naming an engineer, five the data cannot answer, three that need a
+ * derived figure with its working.
  *
  * Run:  bun scripts/ask_regression.ts [--base https://node-ss.tail640a1e.ts.net:926] [--out <dir>] [--insecure]
  *
  * A question passes when every expected figure appears verbatim (thousands
  * separators ignored), the page link is one of the expected pages, and the
  * service did not withhold the answer. An unanswerable question passes when the
- * answer carries the refusal wording. The gate fails below 28 of 30. Latency
+ * answer carries the refusal wording; a derived question passes only when the
+ * service returned verified working. The gate fails below 31 of 33. Latency
  * p50 and p95 are reported; a p95 above 12 seconds is printed as a finding.
  * Every answer is also re-audited here against every published number, so a
  * figure the service let through is still counted.
@@ -48,7 +51,7 @@ const x = (n: number) => `${Math.abs(n).toFixed(1)}`;
 
 interface Q {
   id: number;
-  kind: 'rollup' | 'vertical' | 'engineer' | 'unanswerable';
+  kind: 'rollup' | 'vertical' | 'engineer' | 'unanswerable' | 'derived';
   question: string;
   figures: string[];
   pages: string[];
@@ -68,6 +71,9 @@ const mostAged = maxBy(r.receivables.rows, (s) => s.agedOverOneYear);
 const reasons = r.receivables.total.reasons;
 const topReason = Math.max(reasons.internalGroup, reasons.followUpNoResponse, reasons.disputesAndNotDue);
 const cooling = vertical('cooling');
+const coolingRow = r.sales.rows.find((x) => x.slug === 'cooling')!;
+const meteringRow = r.sales.rows.find((x) => x.slug === 'metering')!;
+const edRow = r.sales.rows.find((x) => x.slug === 'electrical-distribution')!;
 const mech = vertical('mechanical-systems');
 const fab = vertical('fabrication');
 const bassem = engineer('bassem-farouk');
@@ -101,14 +107,19 @@ const questions: Q[] = [
   { id: 24, kind: 'engineer', question: "What is Bassem Farouk's year to date revenue against budget?", figures: [k(bassem.headline.ytdRevenue), k(bassem.headline.budgetRevenue)], pages: [engRoute(bassem), '/v/mechanical-systems'], refusal: false },
   { id: 25, kind: 'engineer', question: "What is Rohan Pillai's ROI year to date?", figures: [x(rohan.headline.roiYtd)], pages: [engRoute(rohan), '/v/electrical-distribution'], refusal: false },
   { id: 26, kind: 'unanswerable', question: 'What was the gross margin in the third quarter of last year?', figures: [], pages: [], refusal: true },
-  { id: 27, kind: 'unanswerable', question: 'What is the combined year to date revenue of Cooling and Metering?', figures: [], pages: [], refusal: true },
+  { id: 27, kind: 'unanswerable', question: 'What was division revenue in fiscal year 2024?', figures: [], pages: [], refusal: true },
   { id: 28, kind: 'unanswerable', question: 'Who is the managing director of Halvard?', figures: [], pages: [], refusal: true },
   { id: 29, kind: 'unanswerable', question: 'What is the cash balance in the bank today?', figures: [], pages: [], refusal: true },
   { id: 30, kind: 'unanswerable', question: 'What will division revenue be next year?', figures: [], pages: [], refusal: true },
+  { id: 31, kind: 'derived', question: 'What is the combined year to date revenue of Cooling and Metering?', figures: [k(coolingRow.ytdRevenue + meteringRow.ytdRevenue)], pages: ['/', '/sales'], refusal: false },
+  { id: 32, kind: 'derived', question: "How much higher is Cooling's year to date revenue than Metering's?", figures: [k(coolingRow.ytdRevenue - meteringRow.ytdRevenue)], pages: ['/', '/sales'], refusal: false },
+  { id: 33, kind: 'derived', question: 'What share of division year to date revenue does Electrical Distribution represent?', figures: [pct((edRow.ytdRevenue / o.sales.ytdRevenue) * 100)], pages: ['/', '/sales'], refusal: false },
 ];
 
 for (const s of ASK_SUGGESTIONS) if (!questions.some((q) => q.question === s)) throw new Error(`Suggested question is not in the regression set: ${s}`);
-if (questions.length !== 30) throw new Error(`Expected 30 questions, have ${questions.length}`);
+const TOTAL = 33;
+const THRESHOLD = 31;
+if (questions.length !== TOTAL) throw new Error(`Expected ${TOTAL} questions, have ${questions.length}`);
 
 /* ---------- every published number, for the independent audit ---------- */
 
@@ -138,6 +149,7 @@ interface Reply {
   page?: { label: string; to: string };
   refused?: boolean;
   blocked?: boolean;
+  derived?: { result: string; expression: string }[];
   elapsedMs?: number;
   error?: string;
   retryAfterSeconds?: number;
@@ -188,9 +200,13 @@ for (const q of questions) {
   const pageOk = q.refusal ? true : q.pages.includes(page);
   const unverified = status === 200 ? auditFigures(answer, published) : [];
   const unclean = status === 200 && !blocked && hasSelfCorrection(answer);
-  const pass = status === 200 && !blocked && !unclean && (q.refusal ? refused : missing.length === 0 && pageOk) && unverified.length === 0;
-  results.push({ ...q, status, answer, page, pageLabel: body.page?.label ?? '', refused, blocked, ms, missing, pageOk, unverified, unclean, pass });
-  const why = pass ? '' : status !== 200 ? ` HTTP ${status}` : blocked ? ' withheld' : unclean ? ' revised itself midway' : q.refusal && !refused ? ' no refusal' : [missing.length ? ` missing ${missing.join(', ')}` : '', pageOk ? '' : ` page ${page || 'none'}`, unverified.length ? ` unverified ${unverified.join(', ')}` : ''].join('');
+  const derivedOk = q.kind !== 'derived' || (Array.isArray(body.derived) && body.derived.length > 0 && /\bderived\b/i.test(answer));
+  // A verified derived result is allowed in the answer; the service proved its working before showing it.
+  const derivedResults = (body.derived ?? []).map((d) => d.result.replace(/[,\s]/g, '').replace(/^[-+\u2212]/, ''));
+  const unverifiedNet = unverified.filter((u) => !derivedResults.includes(u.replace(/,/g, '')));
+  const pass = status === 200 && !blocked && !unclean && derivedOk && (q.refusal ? refused : missing.length === 0 && pageOk) && unverifiedNet.length === 0;
+  results.push({ ...q, status, answer, page, pageLabel: body.page?.label ?? '', refused, blocked, ms, missing, pageOk, unverified: unverifiedNet, unclean, pass });
+  const why = pass ? '' : status !== 200 ? ` HTTP ${status}` : blocked ? ' withheld' : unclean ? ' revised itself midway' : !derivedOk ? ' no verified derivation' : q.refusal && !refused ? ' no refusal' : [missing.length ? ` missing ${missing.join(', ')}` : '', pageOk ? '' : ` page ${page || 'none'}`, unverifiedNet.length ? ` unverified ${unverifiedNet.join(', ')}` : ''].join('');
   console.log(`${pass ? 'PASS' : 'FAIL'}  ${String(q.id).padStart(2)} ${(ms / 1000).toFixed(1).padStart(5)}s  ${q.question}${why}`);
 }
 
@@ -212,8 +228,8 @@ const summary = {
   ranAt: gstStamp(),
   passed,
   total: results.length,
-  threshold: 28,
-  byKind: { rollup: byKind('rollup'), vertical: byKind('vertical'), engineer: byKind('engineer'), unanswerable: byKind('unanswerable') },
+  threshold: THRESHOLD,
+  byKind: { rollup: byKind('rollup'), vertical: byKind('vertical'), engineer: byKind('engineer'), unanswerable: byKind('unanswerable'), derived: byKind('derived') },
   latencyMs: { p50, p95, max: times[times.length - 1], min: times[0] },
   answersWithUnverifiedFigures: stray,
   answersThatRevisedThemselves: uncleanCount,
@@ -224,7 +240,7 @@ writeFileSync(join(out, 'ask-regression.json'), JSON.stringify(summary, null, 1)
 const md = [
   `# Ask the MIS regression`,
   ``,
-  `Origin ${base}, run ${summary.ranAt}. Passed ${passed} of ${results.length} (threshold 28). Latency p50 ${(p50 / 1000).toFixed(1)} s, p95 ${(p95 / 1000).toFixed(1)} s. Answers with a figure absent from the published data: ${stray}. Answers that revised themselves midway: ${uncleanCount}. Answers withheld by the service: ${withheld}.`,
+  `Origin ${base}, run ${summary.ranAt}. Passed ${passed} of ${results.length} (threshold ${THRESHOLD}). Latency p50 ${(p50 / 1000).toFixed(1)} s, p95 ${(p95 / 1000).toFixed(1)} s. Answers with a figure absent from the published data: ${stray}. Answers that revised themselves midway: ${uncleanCount}. Answers withheld by the service: ${withheld}.`,
   ``,
   `| # | Kind | Question | Seconds | Page | Result | Answer |`,
   `|---|---|---|---|---|---|---|`,
@@ -232,15 +248,15 @@ const md = [
 ].join('\n');
 writeFileSync(join(out, 'ask-regression.md'), md + '\n');
 
-console.log(`\nPassed ${passed} of ${results.length}: roll-up ${summary.byKind.rollup}, vertical ${summary.byKind.vertical}, engineer ${summary.byKind.engineer}, unanswerable ${summary.byKind.unanswerable}.`);
+console.log(`\nPassed ${passed} of ${results.length}: roll-up ${summary.byKind.rollup}, vertical ${summary.byKind.vertical}, engineer ${summary.byKind.engineer}, unanswerable ${summary.byKind.unanswerable}, derived ${summary.byKind.derived}.`);
 console.log(`Latency p50 ${(p50 / 1000).toFixed(1)} s, p95 ${(p95 / 1000).toFixed(1)} s, max ${(times[times.length - 1]! / 1000).toFixed(1)} s.`);
 if (p95 > 12_000) console.log(`FINDING: p95 latency ${(p95 / 1000).toFixed(1)} s is above 12 seconds.`);
 if (stray) console.log(`FINDING: ${stray} answer(s) carried a figure absent from the published data.`);
 if (uncleanCount) console.log(`FINDING: ${uncleanCount} answer(s) revised themselves midway.`);
 if (withheld) console.log(`FINDING: ${withheld} answer(s) were withheld by the service.`);
 console.log(`Transcript: ${join(out, 'ask-regression.json')} and ask-regression.md`);
-if (passed < 28) {
-  console.error(`\nRegression gate FAILED: ${passed} of ${results.length} is below 28.`);
+if (passed < THRESHOLD) {
+  console.error(`\nRegression gate FAILED: ${passed} of ${results.length} is below ${THRESHOLD}.`);
   process.exit(1);
 }
 console.log(`\nRegression gate passed.`);

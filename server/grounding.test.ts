@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { VerticalIndexEntry } from '../data/schema';
-import { CHARS_PER_TOKEN, CONTEXT_TOKEN_CAP, REFUSAL, REFUSAL_RE, SYSTEM_PROMPT, auditFigures, buildSystemPrompt, buildUserPrompt, capLength, cleanProse, bindPage, checkCitations, extremesList, figureMatches, figureToken, finish, fitContext, hasSelfCorrection, isWhitelisted, minify, numbersIn, parseCitations, resolvePage, resolvePath, select } from './grounding';
+import { CHARS_PER_TOKEN, CONTEXT_TOKEN_CAP, REFUSAL, REFUSAL_RE, SYSTEM_PROMPT, auditFigures, buildSystemPrompt, buildUserPrompt, capLength, cleanProse, bindPage, checkCitations, checkDerivations, evaluate, extremesList, figureMatches, figureToken, finish, fitContext, hasSelfCorrection, isWhitelisted, minify, numbersIn, parseCitations, parseDerivations, resolvePage, resolvePath, select } from './grounding';
 
 const dataDir = join(import.meta.dirname, '..', 'public', 'data');
 const index = JSON.parse(readFileSync(join(dataDir, 'index.json'), 'utf8')) as VerticalIndexEntry[];
@@ -334,6 +334,53 @@ describe('citations', () => {
     const f = finish(`Prose here.\nSource: Sales\nCite: 1,764 | rollup.sales.rows[mechanical-systems].dRevenue`, index, published, null);
     expect(f.answer).toBe('Prose here.');
     expect(f.citations.length).toBe(1);
+  });
+});
+
+describe('derived figures', () => {
+  const rollupJson = JSON.parse(rollup) as { overview: { sales: { ytdRevenue: number } }; sales: { rows: { slug: string; ytdRevenue: number }[] } };
+  const files = { rollup: rollupJson };
+  const fmt = (n: number) => Math.abs(n).toLocaleString('en-GB');
+  const cooling = rollupJson.sales.rows.find((r) => r.slug === 'cooling')!.ytdRevenue;
+  const metering = rollupJson.sales.rows.find((r) => r.slug === 'metering')!.ytdRevenue;
+  const cites = [
+    { figure: fmt(cooling), path: 'rollup.sales.rows[cooling].ytdRevenue' },
+    { figure: fmt(metering), path: 'rollup.sales.rows[metering].ytdRevenue' },
+  ];
+  test('parseDerivations reads Derive lines', () => {
+    expect(parseDerivations('Prose.\nCite: 1 | rollup.x\nDerive: 30,021 | 22,815 + 7,206')).toEqual([{ result: '30,021', expression: '22,815 + 7,206' }]);
+  });
+  test('evaluate handles precedence, parentheses, grouping and refuses anything else', () => {
+    expect(evaluate('22,815 + 7,206')).toBe(30021);
+    expect(evaluate('134,995 / 8 * 12')).toBeCloseTo(202492.5, 6);
+    expect(evaluate('(49,143 / 134,995) * 100')).toBeCloseTo(36.4036, 3);
+    expect(evaluate('2 + 3 * 4')).toBe(14);
+    expect(evaluate('10 / 0')).toBeNull();
+    expect(evaluate('Math.max(1,2)')).toBeNull();
+    expect(evaluate('1 +')).toBeNull();
+  });
+  test('a derived figure with cited inputs, a reproducing expression and the word derived passes, and its result counts as cited', () => {
+    const answer = `Cooling and Metering together made ${fmt(cooling + metering)} AED thousand year to date, a derived figure from ${fmt(cooling)} and ${fmt(metering)} AED thousand.`;
+    const r = checkCitations(answer, cites, files, index, 'combined revenue of Cooling and Metering', [{ result: fmt(cooling + metering), expression: `${fmt(cooling)} + ${fmt(metering)}` }]);
+    expect(r).toEqual({ ok: true, problems: [] });
+  });
+  test('a derived figure that does not reproduce, uses an uncited input, or is not labelled is caught', () => {
+    const cited = new Set([String(cooling), String(metering)]);
+    expect(checkDerivations('a derived figure', [{ result: fmt(cooling + metering + 1), expression: `${fmt(cooling)} + ${fmt(metering)}` }], cited)[0]).toContain('does not reproduce');
+    expect(checkDerivations('a derived figure', [{ result: '1,000', expression: '950 + 50' }], cited)[0]).toContain('not a cited published figure');
+    expect(checkDerivations('Together they made 30,021 AED thousand.', [{ result: fmt(cooling + metering), expression: `${fmt(cooling)} + ${fmt(metering)}` }], cited)).toEqual(['a derived figure is not labelled as derived in the answer']);
+  });
+  test('a run rate with a month constant reproduces at the written precision', () => {
+    const ytd = rollupJson.overview.sales.ytdRevenue;
+    const cited = new Set([String(ytd)]);
+    const runRate = Math.round((ytd / 8) * 12);
+    expect(checkDerivations('a derived run rate', [{ result: fmt(runRate), expression: `${fmt(ytd)} / 8 * 12` }], cited)).toEqual([]);
+  });
+  test('finish strips Derive lines and lets a verified derived result through the audit', () => {
+    const f = finish(`Together ${fmt(cooling + metering)} AED thousand, a derived figure.\nSource: Sales\nCite: ${fmt(cooling)} | rollup.sales.rows[cooling].ytdRevenue\nDerive: ${fmt(cooling + metering)} | ${fmt(cooling)} + ${fmt(metering)}`, index, published, null);
+    expect(f.answer).toBe(`Together ${fmt(cooling + metering)} AED thousand, a derived figure.`);
+    expect(f.derivations.length).toBe(1);
+    expect(f.unverified).toEqual([]);
   });
 });
 

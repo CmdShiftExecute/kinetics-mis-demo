@@ -14,15 +14,15 @@ What happens when someone asks the "Ask the MIS" panel a question, and why the a
 
 ## Why a number cannot be invented
 
-This is enforced mechanically, not merely by instruction. The model is told never to add, average or estimate a figure the data does not already state as one value. After it replies, code with no interest in agreeing follows every citation back to its row, checks the value to the digit, and checks that every number in the prose exists in the files actually given; a figure that does not trace, or a true figure under the wrong name, does not survive, and the panel says so instead. The panel is also proved against thirty real questions with known correct figures, run whenever the service changes, and must score at least twenty eight of thirty to count as working. Months, days and calendar years pass without a source, since they name a period rather than a result. Every answer names the page carrying its figures, so a reader can check the number in context.
+This is enforced mechanically, not merely by instruction. The model is told never to add, average or estimate silently: a computed figure must show its inputs and its working, and the working is recomputed by code before it is shown. After it replies, code with no interest in agreeing follows every citation back to its row, checks the value to the digit, and checks that every number in the prose exists in the files actually given; a figure that does not trace, or a true figure under the wrong name, does not survive, and the panel says so instead. The panel is also proved against thirty-three real questions with known correct figures, run whenever the service changes, and must score at least thirty-one of thirty-three to count as working. Months, days and calendar years pass without a source, since they name a period rather than a result. Every answer names the page carrying its figures, so a reader can check the number in context.
 
 ## What it costs and how fast it is
 
 The panel runs on the principal's existing Claude subscription through the command line, not a metered pay-per-call key. A metered option exists in the code for later but has never been switched on, and today's version carries no such key. A typical answer takes five to eleven seconds; a repeated context is served from cache and answers faster.
 
-## What it will not do
+## What it will and will not compute
 
-It will not compute a figure that was not already published, such as a sum across two verticals, and will not forecast beyond what the business itself has already forecast. Each question is answered on its own; the conversation stays on screen while the reader moves between reports and is kept only in that browser tab, never on the server; and it cannot see anything outside the published tables, including who runs the company.
+It can add, subtract, take a share or project a run rate from published figures, but only in the open: it cites every input, calls the result a derived figure, and shows the working under the answer. The service recomputes that working itself before anything is shown, so a derived figure that does not add up is withheld. It will not present a computed figure as a published one, and it will not forecast beyond what the published figures can be combined into. Each question is answered on its own; the conversation stays on screen while the reader moves between reports and is kept only in that browser tab, never on the server; and it cannot see anything outside the published tables, including who runs the company.
 
 When the data does not hold an answer, the panel says exactly this, every time:
 

@@ -1214,6 +1214,22 @@ table.mis tr.rung.active th[scope='row'] {
   padding: var(--s-sm) var(--s-md);
   color: var(--hazard-text);
 }
+.ask-work {
+  margin-top: var(--s-sm) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.ask-work .label {
+  margin-bottom: 2px;
+}
+.ask-work-line {
+  border-left: 1px solid var(--rule);
+  padding-left: var(--s-md);
+}
 .ask-src {
   margin-top: var(--s-sm) !important;
   display: flex;

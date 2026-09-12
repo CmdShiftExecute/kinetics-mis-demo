@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import type { Meta } from '../../data/schema';
 import { ASK_CLIENT_TIMEOUT_MS, ASK_SUGGESTIONS } from '../lib/askSuggestions';
 import { askStore, useAsk } from '../lib/askStore';
-import type { AskPage, Turn } from '../lib/askStore';
+import type { AskPage, Derivation, Turn } from '../lib/askStore';
 
 /*
  * Ask the MIS: a right-hand panel that sends one question at a time to
@@ -126,13 +126,13 @@ function AskPanel({ meta, onClose }: { meta: Meta; onClose: () => void }) {
         body: JSON.stringify({ question: q }),
         signal: controller.signal,
       });
-      const body = (await res.json().catch(() => null)) as { answer?: string; page?: AskPage; refused?: boolean; error?: string } | null;
+      const body = (await res.json().catch(() => null)) as { answer?: string; page?: AskPage; refused?: boolean; derived?: Derivation[]; error?: string } | null;
       if (!res.ok) {
         finish({ state: 'error', error: body?.error ?? (res.status === 429 ? 'Too many questions at once. Try again in a few seconds.' : 'The answer service is not available right now.') });
       } else if (!body || typeof body.answer !== 'string' || !body.answer.trim()) {
         finish({ state: 'error', error: 'The answer service returned an empty answer. Ask again.' });
       } else {
-        finish({ state: 'done', answer: body.answer, page: body.page, refused: body.refused === true });
+        finish({ state: 'done', answer: body.answer, page: body.page, refused: body.refused === true, derived: Array.isArray(body.derived) ? body.derived : [] });
       }
     } catch (e) {
       const aborted = e instanceof DOMException && e.name === 'AbortError';
@@ -190,6 +190,16 @@ function AskPanel({ meta, onClose }: { meta: Meta; onClose: () => void }) {
             {t.state === 'done' && (
               <>
                 <p className={t.refused ? 'ask-a muted' : 'ask-a'}>{t.answer}</p>
+                {t.derived && t.derived.length > 0 && (
+                  <p className="ask-work">
+                    <span className="label">Working</span>
+                    {t.derived.map((d) => (
+                      <span key={d.result + d.expression} className="ask-work-line">
+                        {d.result} = {d.expression.replace(/\*/g, '\u00d7')}
+                      </span>
+                    ))}
+                  </p>
+                )}
                 {t.page && (
                   <p className="ask-src">
                     <span className="label">Source</span>
@@ -223,7 +233,7 @@ function AskPanel({ meta, onClose }: { meta: Meta; onClose: () => void }) {
       </form>
 
       <p className="ask-foot">
-        Figures are quoted from revision {meta.revision}, data as of {meta.dataAsOfLabel}, and checked against it before they are shown.
+        Figures are quoted from revision {meta.revision}, data as of {meta.dataAsOfLabel}, and checked against it before they are shown. A derived figure shows its working.
       </p>
     </div>
   );

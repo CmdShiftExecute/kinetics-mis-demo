@@ -49,7 +49,7 @@ export const SYSTEM_PROMPT = `You are the "Ask the MIS" panel of a management in
 
 Rules, all binding:
 1. Quote figures exactly as they appear in the data, with their unit and period, always in digits and never in words. Money values are integers in AED thousands: write them with thousands separators followed by "AED thousand", for example 135,005 AED thousand. Percentages are plain numbers to one decimal: write 21.4% for 21.4 and 21.0% for 21, exactly as the pages print them. Never round, never convert to millions, never drop a decimal.
-2. Never calculate. Do not sum, subtract, average, rank by arithmetic you performed, or extrapolate. If a question needs a figure the data does not hold as a single published value, say exactly: "${REFUSAL}" and name the nearest report page. You may quote the separate published figures that exist.
+2. Never calculate silently. A figure the data does not hold as a single published value (a sum, a difference, a share, an average, a run-rate projection) may be given only as a DERIVED figure: quote every input as a published figure with its own Cite line, write the result in the prose with the word "derived" (for example "a derived figure, not a published one"), and add one line after the Cite lines in the form "Derive: <result as written> | <expression>", where the expression uses only the cited input figures, whole-number constants such as month counts, and + - * / with parentheses. Example: "Derive: 202,493 | 134,995 / 8 * 12". The service recomputes every expression; a derived figure whose expression does not reproduce it, or whose inputs are not cited, is withheld. Only if a question cannot be answered even by derivation from published figures, say exactly: "${REFUSAL}" and name the nearest report page.
 3. Name the period and the comparator the way the data does, for example "January to August 2026 against budget" or "full-year forecast against full-year budget".
 4. Answer in two to four sentences of plain words. No bullet lists, no markdown, no headings, no tables, no em dashes. Write only the final answer: work out any comparison before the first word, and never revise, correct or contradict yourself inside the answer. Words such as "wait", "actually", "correction", "let me" or "on second thought" must never appear; an answer that contains them is discarded unread.
 5. Every answer ends with one line of the form "Source: <page>", where <page> is exactly one of: Overview, Sales, Delivery, Net profit, Receivables, Working capital, Data basis, "Vertical: <vertical name>", "Customers: <vertical name>" (the customer aging table of a vertical), or "Engineer: <engineer name>". Choose the page where the reader would see the figures you quoted.
@@ -290,6 +290,8 @@ export interface Finished {
   citations: Citation[];
   /** True when the page link was moved to the vertical the citations name. */
   pageBound: boolean;
+  /** The Derive lines the model wrote; the caller verifies them with checkCitations. */
+  derivations: Derivation[];
 }
 
 export const MAX_SENTENCES = 4;
@@ -520,7 +522,7 @@ export interface CitationCheck {
  * names that row and no other. A true figure under the wrong label is the
  * error the plain audit cannot see, and this is the check that sees it.
  */
-export function checkCitations(answer: string, citations: Citation[], files: { rollup: unknown; vertical?: unknown; engineer?: unknown }, index: VerticalIndexEntry[], question = ''): CitationCheck {
+export function checkCitations(answer: string, citations: Citation[], files: { rollup: unknown; vertical?: unknown; engineer?: unknown }, index: VerticalIndexEntry[], question = '', derivations: Derivation[] = []): CitationCheck {
   const problems: string[] = [];
   const rows = new Map<string, string>();
   for (const v of index) {
@@ -586,6 +588,15 @@ export function checkCitations(answer: string, citations: Citation[], files: { r
     }
     for (const e of byRow.values()) if (!e.extreme) problems.push(`${e.name} is not the extreme of any cited field (${e.fields.join(', ')})`);
   }
+  // Derived figures: their inputs must be cited figures; once verified, their results count as cited.
+  problems.push(...checkDerivations(answer, derivations, cited));
+  for (const d of derivations) {
+    const r = figureToken(d.result);
+    if (r) {
+      cited.add(r.text);
+      cited.add(String(r.n));
+    }
+  }
   for (const rawWithUnit of answer.match(FIGURE_RE) ?? []) {
     if (isWhitelisted(rawWithUnit)) continue;
     const raw = /\d(?:[\d,]*\d)?(?:\.\d+)?/.exec(rawWithUnit)![0];
@@ -632,6 +643,108 @@ export function bindPage(page: Page, citations: Citation[], index: VerticalIndex
   return { page: { label: v.name, to: `/v/${v.slug}` }, bound: true };
 }
 
+/* ---------- derived figures ---------- */
+
+export interface Derivation {
+  result: string;
+  expression: string;
+}
+
+/** Reads the "Derive: <result> | <expression>" lines out of the raw reply. */
+export function parseDerivations(raw: string): Derivation[] {
+  const out: Derivation[] = [];
+  for (const m of raw.matchAll(/^\s*derive\s*:\s*(.+?)\s*\|\s*([0-9.,+\-*/() %\u00d7\u2212]+?)\s*$/gim)) out.push({ result: m[1]!.trim(), expression: m[2]!.trim() });
+  return out;
+}
+
+/** Whole-number constants an expression may use without a citation: month counts, quarters, percent scaling. */
+export const DERIVE_CONSTANTS = new Set(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '100', '1000']);
+
+/**
+ * Evaluates + - * / with parentheses over decimal literals, nothing else.
+ * A hand-written recursive descent, so no eval and no surprises; returns
+ * null on any token it does not understand or on division by zero.
+ */
+export function evaluate(expression: string): number | null {
+  const src = expression.replace(/\u00d7/g, '*').replace(/\u2212/g, '-').replace(/,/g, '').replace(/%/g, '');
+  const tokens = src.match(/\d+(?:\.\d+)?|[-+*/()]/g) ?? [];
+  if (tokens.join('') !== src.replace(/\s+/g, '')) return null;
+  let i = 0;
+  const peek = () => tokens[i];
+  const next = () => tokens[i++];
+  const primary = (): number | null => {
+    const t = next();
+    if (t === undefined) return null;
+    if (t === '(') {
+      const v = expr();
+      if (next() !== ')') return null;
+      return v;
+    }
+    if (t === '-') {
+      const v = primary();
+      return v === null ? null : -v;
+    }
+    if (/^\d/.test(t)) return Number(t);
+    return null;
+  };
+  const term = (): number | null => {
+    let v = primary();
+    while (v !== null && (peek() === '*' || peek() === '/')) {
+      const op = next();
+      const r = primary();
+      if (r === null) return null;
+      if (op === '/' && r === 0) return null;
+      v = op === '*' ? v * r : v / r;
+    }
+    return v;
+  };
+  const expr = (): number | null => {
+    let v = term();
+    while (v !== null && (peek() === '+' || peek() === '-')) {
+      const op = next();
+      const r = term();
+      if (r === null) return null;
+      v = op === '+' ? v + r : v - r;
+    }
+    return v;
+  };
+  const v = expr();
+  return i === tokens.length && v !== null && Number.isFinite(v) ? v : null;
+}
+
+/**
+ * Checks every derived figure: each literal in the expression is a cited
+ * published figure or an allowed constant, the expression reproduces the
+ * written result at the written precision, and the prose says "derived".
+ */
+export function checkDerivations(answer: string, derivations: Derivation[], citedNumbers: Set<string>): string[] {
+  const problems: string[] = [];
+  if (!derivations.length) return problems;
+  if (!/\bderived\b/i.test(answer)) problems.push('a derived figure is not labelled as derived in the answer');
+  for (const d of derivations) {
+    const r = figureToken(d.result);
+    if (!r) {
+      problems.push(`derive line carries no result: ${d.result}`);
+      continue;
+    }
+    const literals = d.expression.replace(/,/g, '').match(/\d+(?:\.\d+)?/g) ?? [];
+    for (const lit of literals) {
+      const n = String(Number(lit));
+      if (!citedNumbers.has(lit) && !citedNumbers.has(n) && !DERIVE_CONSTANTS.has(n)) problems.push(`derived figure ${d.result} uses ${lit}, which is not a cited published figure`);
+    }
+    const value = evaluate(d.expression);
+    if (value === null) {
+      problems.push(`derived figure ${d.result} has an expression that cannot be evaluated: ${d.expression}`);
+      continue;
+    }
+    const decimals = (r.text.split('.')[1] ?? '').length;
+    const tolerance = 0.5 * Math.pow(10, -decimals) + 1e-9;
+    const written = r.negative ? -r.n : r.n;
+    if (Math.abs(Math.abs(value) - Math.abs(written)) > tolerance || (r.negative && value > tolerance)) problems.push(`derived figure ${d.result} does not reproduce from ${d.expression} (${value})`);
+  }
+  return [...new Set(problems)];
+}
+
 /* ---------- finish ---------- */
 
 /**
@@ -650,7 +763,8 @@ export function inferredPage(): Page {
  */
 export function finish(raw: string, index: VerticalIndexEntry[], published: Set<string>, note: string | null): Finished {
   const citations = parseCitations(raw);
-  let text = raw.replace(/^\s*cite\s*:.*$/gim, '');
+  const derivations = parseDerivations(raw);
+  let text = raw.replace(/^\s*(?:cite|derive)\s*:.*$/gim, '');
   let page: Page | null = null;
   // The Source line may sit at the end of a line of prose; it is read and removed wherever it is.
   const sources = [...text.matchAll(/(?:^|\s)source\s*:\s*([^\n]+?)\s*(?=\n|$)/gi)];
@@ -666,7 +780,13 @@ export function finish(raw: string, index: VerticalIndexEntry[], published: Set<
   let answer = capLength(cleanProse(text));
   if (note) answer = `${answer} ${note}`.trim();
   const refused = REFUSAL_RE.test(answer);
-  const unverified = auditFigures(answer, published);
+  // A derived result is not a published number; the audit allows it only because checkCitations verifies its working.
+  const allowed = new Set(published);
+  for (const d of derivations) {
+    const r = figureToken(d.result);
+    if (r) allowed.add(r.text);
+  }
+  const unverified = auditFigures(answer, allowed);
   const selfCorrected = hasSelfCorrection(answer);
-  return { answer, page, pageResolved, refused, unverified, selfCorrected, citations, pageBound: bound.bound };
+  return { answer, page, pageResolved, refused, unverified, selfCorrected, citations, pageBound: bound.bound, derivations };
 }

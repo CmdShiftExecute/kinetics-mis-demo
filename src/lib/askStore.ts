@@ -13,12 +13,19 @@ export interface AskPage {
   to: string;
 }
 
+export interface Derivation {
+  result: string;
+  expression: string;
+}
+
 export interface Turn {
   id: number;
   question: string;
   state: 'working' | 'done' | 'error';
   answer?: string;
   page?: AskPage;
+  /** The working behind any derived figure, verified by the service before it was shown. */
+  derived?: Derivation[];
   refused?: boolean;
   error?: string;
   startedAt: number;

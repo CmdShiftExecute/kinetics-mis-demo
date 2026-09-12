@@ -159,7 +159,7 @@ async function answer(question: string, signal: AbortSignal, onCall: () => boole
     attempts.push({ text: reply.text, costUsd: reply.costUsd ?? 0, tokens: reply.tokens });
     const finished = finish(reply.text, index, published, notes.length ? notes.join(' ') : null);
     // Every figure is checked whatever the wording: a refusal that quotes a figure is still a quote (found in review, 12 Sep 2026).
-    const cites = checkCitations(finished.answer, finished.citations, jsonFiles, index, question);
+    const cites = checkCitations(finished.answer, finished.citations, jsonFiles, index, question, finished.derivations);
     return { finished, cites };
   };
   const t0 = Date.now();
@@ -232,8 +232,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse) {
   });
   try {
     const { finished, cites, ctx, retried, costUsd, tokens, calls } = await answer(question, controller.signal, takeSlot);
-    const base = { page: finished.page, pageResolved: finished.pageResolved, pageBound: finished.pageBound, provider: CONFIG.provider, elapsedMs: Date.now() - started, contextTokens: ctx.tokens, tokens, retried };
-    const meta = { tokens, costUsd, calls, retried, page: finished.page.to, pageBound: finished.pageBound };
+    const base = { page: finished.page, pageResolved: finished.pageResolved, pageBound: finished.pageBound, derived: finished.derivations, provider: CONFIG.provider, elapsedMs: Date.now() - started, contextTokens: ctx.tokens, tokens, retried };
+    const meta = { tokens, costUsd, calls, retried, page: finished.page.to, pageBound: finished.pageBound, derived: finished.derivations.length };
     if (finished.selfCorrected) {
       done('blocked', { ...meta, reason: 'self-correction' });
       return send(res, 200, { ...base, answer: `The draft answer revised itself midway, so it was withheld. Ask again in plainer words, or open ${finished.page.label}.`, refused: true, blocked: true });
