@@ -3,25 +3,19 @@ import type { Meta } from '../../data/schema';
 import { NAV } from '../lib/nav';
 import { AskLauncher } from './Ask';
 
-/** The masthead: wordmark, division, the reporting stamp, the Ask the MIS launcher, and the report navigation. */
+/** The masthead, matched to the warehouse system's: the brand block, the system title at the page-heading size, the reporting stamp, then the navigation with the Ask the MIS launcher. */
 export function Masthead({ meta }: { meta: Meta }) {
   return (
     <header className="mast">
       <div className="mast-row">
-        <div className="mast-id">
+        <div className="mast-brand">
           <Link to="/" className="wordmark display" aria-label="Halvard, back to the overview">
             Halvard
           </Link>
-          <div className="mast-lines">
-            <span>{meta.division}</span>
-            <span>Management information system</span>
-          </div>
+          <span className="mast-division">{meta.division}</span>
         </div>
+        <p className="mast-system display">Management Information System</p>
         <dl className="stamp" aria-label="Reporting stamp">
-          <div>
-            <dt>Reporting period</dt>
-            <dd>{meta.periodLabel}</dd>
-          </div>
           <div>
             <dt>Data as of</dt>
             <dd>{meta.dataAsOfLabel}</dd>
@@ -29,7 +23,7 @@ export function Masthead({ meta }: { meta: Meta }) {
           <div>
             <dt>Revision</dt>
             <dd>
-              {meta.revision}, {meta.currency} {meta.unit}s
+              {meta.revision}, {meta.currency} {meta.unit}
             </dd>
           </div>
         </dl>

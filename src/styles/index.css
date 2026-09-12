@@ -121,32 +121,51 @@ p {
   padding-top: var(--s-xl);
 }
 .mast-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: var(--s-2xl);
-  flex-wrap: wrap;
-}
-.mast-id {
-  display: flex;
-  align-items: baseline;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
   gap: var(--s-xl);
-  flex-wrap: wrap;
+}
+.mast-row .stamp {
+  flex-wrap: nowrap;
+}
+.mast-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .wordmark {
   font-size: 28px;
   letter-spacing: 0.02em;
 }
-.mast-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.mast-division {
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-2);
-  border-left: 1px solid var(--rule);
-  padding-left: var(--s-xl);
+}
+/* The system's name at the page-heading size, so the masthead says which system this is. */
+.mast-system {
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  margin: 0 0 2px;
+  justify-self: center;
+  text-align: center;
+  white-space: nowrap;
+}
+@media (max-width: 1240px) {
+  .mast-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: var(--s-lg);
+  }
+  .mast-row .stamp {
+    flex-wrap: wrap;
+  }
+  .mast-system {
+    justify-self: start;
+    text-align: left;
+    white-space: normal;
+  }
 }
 .stamp {
   display: flex;
