@@ -1,38 +1,26 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router';
 import type { Meta } from '../../data/schema';
 import { ASK_CLIENT_TIMEOUT_MS, ASK_SUGGESTIONS } from '../lib/askSuggestions';
+import { askStore, useAsk } from '../lib/askStore';
+import type { AskPage, Turn } from '../lib/askStore';
 
 /*
  * Ask the MIS: a right-hand panel that sends one question at a time to
  * /api/ask and shows the answer with the report page it came from. The
- * transcript lives in the launcher for this page view only; navigating away
- * remounts the masthead and clears it. Nothing is stored anywhere.
+ * transcript and the open state live in askStore, so a source link or a
+ * change of report keeps the conversation on screen; "New chat" starts over.
  */
-
-export interface AskPage {
-  label: string;
-  to: string;
-}
-
-interface Turn {
-  id: number;
-  question: string;
-  state: 'working' | 'done' | 'error';
-  answer?: string;
-  page?: AskPage;
-  refused?: boolean;
-  error?: string;
-  startedAt: number;
-  elapsedMs?: number;
-}
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
 
+/** Requests in flight. "New chat" aborts them; closing the panel does not, so an answer can still land in the transcript. */
+const inFlight = new Set<AbortController>();
+let nextId = Date.now();
+
 export function AskLauncher({ meta }: { meta: Meta }) {
-  const [open, setOpen] = useState(false);
-  const [turns, setTurns] = useState<Turn[]>([]);
+  const { open } = useAsk();
   const button = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -40,31 +28,30 @@ export function AskLauncher({ meta }: { meta: Meta }) {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setOpen(true);
+        askStore.open();
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const close = useCallback(() => {
-    setOpen(false);
+  const close = () => {
+    askStore.close();
     requestAnimationFrame(() => button.current?.focus());
-  }, []);
+  };
 
   return (
     <>
-      <button ref={button} type="button" className="ask-launch press" aria-haspopup="dialog" aria-expanded={open} onClick={() => setOpen(true)}>
+      <button ref={button} type="button" className="ask-launch press" aria-haspopup="dialog" aria-expanded={open} onClick={() => askStore.open()}>
         Ask the MIS <kbd aria-hidden="true">{isMac ? '⌘K' : 'Ctrl K'}</kbd>
       </button>
-      {open && createPortal(<AskPanel meta={meta} turns={turns} setTurns={setTurns} onClose={close} />, document.body)}
+      {open && createPortal(<AskPanel meta={meta} onClose={close} />, document.body)}
     </>
   );
 }
 
-let nextId = 1;
-
-function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[]; setTurns: (f: (t: Turn[]) => Turn[]) => void; onClose: () => void }) {
+function AskPanel({ meta, onClose }: { meta: Meta; onClose: () => void }) {
+  const { turns, openedAt } = useAsk();
   const titleId = useId();
   const inputId = useId();
   const panel = useRef<HTMLDivElement>(null);
@@ -73,16 +60,11 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
   const [text, setText] = useState('');
   const [now, setNow] = useState(() => Date.now());
   const working = turns.some((t) => t.state === 'working');
-  /** Requests in flight, aborted when the panel closes so a billed call does not outlive its reader. */
-  const controllers = useRef(new Set<AbortController>());
+  // Animate the entrance only when the reader has just opened the panel, not when a page change remounts it.
+  const [fresh] = useState(() => Date.now() - openedAt < 600);
 
   useEffect(() => {
     input.current?.focus();
-    const live = controllers.current;
-    return () => {
-      for (const c of live) c.abort();
-      live.clear();
-    };
   }, []);
 
   useEffect(() => {
@@ -115,20 +97,28 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
     }
   };
 
+  const newChat = () => {
+    for (const c of inFlight) c.abort();
+    inFlight.clear();
+    askStore.clear();
+    setText('');
+    input.current?.focus();
+  };
+
   const ask = async (question: string) => {
     const q = question.trim();
     if (!q || working) return;
     const id = nextId++;
-    setTurns((t) => [...t, { id, question: q, state: 'working', startedAt: Date.now() }]);
+    askStore.setTurns((t) => [...t, { id, question: q, state: 'working', startedAt: Date.now() }]);
     setText('');
     const controller = new AbortController();
-    controllers.current.add(controller);
+    inFlight.add(controller);
     let timedOut = false;
     const timer = setTimeout(() => {
       timedOut = true;
       controller.abort();
     }, ASK_CLIENT_TIMEOUT_MS);
-    const finish = (patch: Partial<Turn>) => setTurns((t) => t.map((x) => (x.id === id ? { ...x, ...patch, elapsedMs: Date.now() - x.startedAt } : x)));
+    const finish = (patch: Partial<Turn>) => askStore.setTurns((t) => t.map((x) => (x.id === id ? { ...x, ...patch, elapsedMs: Date.now() - x.startedAt } : x)));
     try {
       const res = await fetch(`${import.meta.env.BASE_URL}api/ask`, {
         method: 'POST',
@@ -146,25 +136,31 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
       }
     } catch (e) {
       const aborted = e instanceof DOMException && e.name === 'AbortError';
-      finish({ state: 'error', error: aborted ? (timedOut ? `No answer arrived within ${Math.round(ASK_CLIENT_TIMEOUT_MS / 1000)} seconds. Ask again.` : 'The panel was closed before the answer arrived.') : 'The answer service is not available right now.' });
+      if (aborted && !timedOut) return; // discarded by New chat; the turn is already gone
+      finish({ state: 'error', error: aborted ? `No answer arrived within ${Math.round(ASK_CLIENT_TIMEOUT_MS / 1000)} seconds. Ask again.` : 'The answer service is not available right now.' });
     } finally {
       clearTimeout(timer);
-      controllers.current.delete(controller);
+      inFlight.delete(controller);
     }
   };
 
   return (
-    <div className="ask" role="dialog" aria-modal="true" aria-labelledby={titleId} ref={panel} onKeyDown={onKeyDown} data-testid="ask-panel">
+    <div className={fresh ? 'ask ask-fresh' : 'ask'} role="dialog" aria-modal="true" aria-labelledby={titleId} ref={panel} onKeyDown={onKeyDown} data-testid="ask-panel">
       <header className="ask-head">
         <div>
           <h2 className="display ask-title" id={titleId}>
             Ask the MIS
           </h2>
-          <p className="ask-sub">{meta.division}. One question at a time, answered from the published tables.</p>
+          <p className="ask-sub">Every answer is quoted from this MIS and linked to its page.</p>
         </div>
-        <button type="button" className="ask-close press" onClick={onClose} aria-label="Close Ask the MIS">
-          Close
-        </button>
+        <div className="ask-actions">
+          <button type="button" className="ask-tool press" onClick={newChat} disabled={turns.length === 0} data-testid="ask-new">
+            New chat
+          </button>
+          <button type="button" className="ask-tool press" onClick={onClose} aria-label="Close Ask the MIS">
+            Close
+          </button>
+        </div>
       </header>
 
       <div className="ask-log" ref={log} aria-live="polite" aria-relevant="additions text">
@@ -197,7 +193,7 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
                 {t.page && (
                   <p className="ask-src">
                     <span className="label">Source</span>
-                    <Link to={t.page.to} className="sec-link press" onClick={onClose}>
+                    <Link to={t.page.to} className="sec-link press">
                       {t.page.label} {'>>>'}
                     </Link>
                   </p>
@@ -220,14 +216,14 @@ function AskPanel({ meta, turns, setTurns, onClose }: { meta: Meta; turns: Turn[
         </label>
         <div className="ask-row">
           <input id={inputId} ref={input} type="text" value={text} onChange={(e) => setText(e.target.value)} maxLength={400} autoComplete="off" spellCheck={false} readOnly={working} aria-busy={working} />
-          <button type="submit" className="drill-link press ask-send" disabled={working || !text.trim()}>
-            Ask
+          <button type="submit" className="ask-send" disabled={working || !text.trim()}>
+            <span>Ask</span>
           </button>
         </div>
       </form>
 
       <p className="ask-foot">
-        Answers quote the published data, revision {meta.revision}, data as of {meta.dataAsOfLabel}. Nothing is computed.
+        Figures are quoted from revision {meta.revision}, data as of {meta.dataAsOfLabel}, and checked against it before they are shown.
       </p>
     </div>
   );

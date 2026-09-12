@@ -383,21 +383,35 @@ try {
   const dashes = /[\u2014\u2013]/.test(answerText);
   check(!dashes, 'The answer carries no em or en dash');
 
-  // 20. the page link resolves to a real page and closes the panel
+  // 20. the page link opens a real page while the panel and the transcript stay on screen
   if (linkCount) {
     await ap.locator('.ask-turn .ask-src a').first().click();
-    await ap.waitForTimeout(600);
+    await ap.waitForTimeout(800);
     const h1 = (await ap.locator('h1').first().innerText()).trim();
-    const panelGone = (await ap.locator('[data-testid="ask-panel"]').count()) === 0;
-    check(h1.length > 0 && !/nothing here/i.test(h1) && panelGone, `The answer's page link opens a real page and closes the panel (${new URL(ap.url()).pathname}, h1 "${h1}")`);
+    const panelStays = (await ap.locator('[data-testid="ask-panel"]').count()) === 1;
+    const turnStays = (await ap.locator('.ask-turn[data-state="done"]').count()) === 1;
+    check(h1.length > 0 && !/nothing here/i.test(h1) && panelStays && turnStays, `The answer's page link opens a real page and the conversation stays on screen (${new URL(ap.url()).pathname}, h1 "${h1}")`);
   } else {
     check(false, 'The answer carried no page link to follow');
   }
 
+  // 20b. the transcript survives a reload of the tab, and New chat clears it
+  await ap.reload({ waitUntil: 'networkidle' });
+  await ap.waitForSelector('#sales table.mis, section.sec');
+  await ap.waitForTimeout(400);
+  const afterReload = await ap.locator('[data-testid="ask-panel"] .ask-turn[data-state="done"]').count();
+  check(afterReload === 1, `After a reload the panel is still open with the answer in it (${afterReload} turn)`);
+  await ap.locator('[data-testid="ask-new"]').click();
+  await ap.waitForTimeout(200);
+  const cleared = (await ap.locator('.ask-turn').count()) === 0 && (await ap.locator('.ask-sugg').count()) === 3;
+  check(cleared, 'New chat clears the transcript and shows the three suggestions again');
+  await ap.keyboard.press('Escape');
+  await ap.waitForTimeout(150);
+
   // 21. negative control: with the service unreachable the panel says so in words
   expectAskFailure = true;
   await ap.route('**/api/ask', (route) => route.fulfill({ status: 502, contentType: 'text/html', body: '<html>502 Bad Gateway</html>' }));
-  await ap.locator('.ask-launch').click();
+  await ap.locator('.ask-launch').first().click();
   await ap.waitForSelector('[data-testid="ask-panel"]');
   await ap.locator('input[type="text"]').fill('Is the service up?');
   await ap.keyboard.press('Enter');

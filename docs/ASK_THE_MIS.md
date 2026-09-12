@@ -22,7 +22,7 @@ The panel runs on the principal's existing Claude subscription through the comma
 
 ## What it will not do
 
-It will not compute a figure that was not already published, such as a sum across two verticals, and will not forecast beyond what the business itself has already forecast. It has no memory of earlier questions, nothing typed is stored once the reader leaves the page, and it cannot see anything outside the published tables, including who runs the company.
+It will not compute a figure that was not already published, such as a sum across two verticals, and will not forecast beyond what the business itself has already forecast. Each question is answered on its own; the conversation stays on screen while the reader moves between reports and is kept only in that browser tab, never on the server; and it cannot see anything outside the published tables, including who runs the company.
 
 When the data does not hold an answer, the panel says exactly this, every time:
 

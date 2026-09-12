@@ -1101,6 +1101,8 @@ table.mis tr.rung.active th[scope='row'] {
   flex-direction: column;
   padding: var(--s-xl) var(--s-xl) var(--s-lg);
   gap: var(--s-lg);
+}
+.ask-fresh {
   animation: ask-in 240ms var(--ease);
 }
 @keyframes ask-in {
@@ -1131,7 +1133,12 @@ table.mis tr.rung.active th[scope='row'] {
   letter-spacing: 0.04em;
   color: var(--ink-2);
 }
-.ask-close {
+.ask-actions {
+  display: flex;
+  gap: var(--s-lg);
+  flex: 0 0 auto;
+}
+.ask-tool {
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1140,9 +1147,14 @@ table.mis tr.rung.active th[scope='row'] {
   white-space: nowrap;
   transition: background-color 140ms var(--ease), color 140ms var(--ease);
 }
-.ask-close:hover {
+.ask-tool:hover:not(:disabled) {
   background: var(--ink);
   color: var(--paper);
+}
+.ask-tool:disabled {
+  color: var(--ink-2);
+  border-bottom-color: var(--rule);
+  cursor: default;
 }
 .ask-log {
   flex: 1 1 auto;
@@ -1230,14 +1242,42 @@ table.mis tr.rung.active th[scope='row'] {
   color: var(--ink-2);
   border-color: var(--rule);
 }
+/* The Ask button: an ink fill that sweeps in from the left on hover and a press that sinks. */
 .ask-send {
-  margin-top: 0;
-  align-self: stretch;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 1px solid var(--ink);
+  padding: 8px 14px;
+  color: var(--ink);
+  transition: color 160ms var(--ease), transform 120ms var(--ease), border-color 160ms var(--ease);
+}
+.ask-send::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms var(--ease);
+}
+.ask-send:hover:not(:disabled) {
+  color: var(--paper);
+}
+.ask-send:hover:not(:disabled)::before {
+  transform: scaleX(1);
+}
+.ask-send:active:not(:disabled) {
+  transform: translateY(1px) scale(0.97);
 }
 .ask-send:disabled {
   border-color: var(--rule);
   color: var(--ink-2);
-  background: none;
   cursor: default;
 }
 .ask-foot {
