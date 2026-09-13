@@ -234,7 +234,7 @@ try {
   await page.waitForTimeout(200);
   const preCondition = await ctrlChart.locator('line.xh').count();
   // Disable the children too. The capture rect carries `pointer-events: all` in the
-  // stylesheet, which overrides `none` inherited from the svg — so setting it on the
+  // stylesheet, which overrides `none` inherited from the svg, so setting it on the
   // svg alone leaves the rect live and the control proves nothing. (That it kept
   // working is itself evidence the capture surface does its job.)
   await ctrlChart.evaluate((el) => {
@@ -406,8 +406,8 @@ try {
 
   // 13b. EVERY route must actually animate on entry, measured as rendered frames.
   // Until 13 Sep 2026 nothing here could tell an animated page from a dead one: the
-  // row-reveal fade is imperceptible on its own, so Sales and Net profit — the two
-  // pages with no headline strip and no chart — rendered identically from first paint
+  // row-reveal fade is imperceptible on its own, so Sales and Net profit (the two
+  // pages with no headline strip and no chart) rendered identically from first paint
   // and the principal reported the app as static everywhere but the home page.
   const frameHashes = async (pg: Page, path: string) => {
     const seen = new Set<string>();
