@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
-import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react';
+import { motion } from 'motion/react';
 import { cx, k } from '../lib/format';
-import { EASE, useRise } from './Reveal';
+import { useRise } from './Reveal';
 
 export interface StripItem {
   label: string;
-  /** The figure, unformatted, so it can count up on entry. */
+  /** The figure, unformatted; the component applies the formatter. */
   value: number;
   /** Formatter, defaults to AED thousands. */
   f?: (n: number) => string;
@@ -13,34 +12,19 @@ export interface StripItem {
   bad?: boolean;
 }
 
-/** A figure that counts up on entry. Exported so the overview's headline band uses the
- *  identical tween as every in-section Strip, rather than a second implementation. */
-export function CountUp({ value, f, delay }: { value: number; f: (n: number) => string; delay: number }) {
-  const reduce = useReducedMotion();
-  const mv = useMotionValue(reduce ? value : value * 0.6);
-  const text = useTransform(mv, (v) => f(v));
-  useEffect(() => {
-    if (reduce) {
-      mv.set(value);
-      return;
-    }
-    const c = animate(mv, value, { duration: 0.7, delay, ease: EASE });
-    return () => c.stop();
-  }, [value, reduce, mv, delay]);
-  return <motion.span>{text}</motion.span>;
-}
-
-/** A row of headline figures, each with its label above and its comparator below. Figures count up on entry. */
+/** A row of headline figures, each with its label above and its comparator below.
+ *  The figures do NOT animate. A count-up was removed on 12 Sep 2026: mid-tween the
+ *  strip displayed values that did not cross-foot (revenue minus budget disagreeing
+ *  with the variance beside it) for about a second after every mount, which on a
+ *  finance surface is a worse failure than a slow page. The strip still rises in. */
 export function Strip({ items, cols }: { items: StripItem[]; cols?: number }) {
   const rise = useRise();
   return (
     <motion.dl className="strip" style={cols ? ({ '--cols': cols } as React.CSSProperties) : undefined} {...rise(0.1)}>
-      {items.map((it, i) => (
+      {items.map((it) => (
         <div key={it.label}>
           <dt>{it.label}</dt>
-          <dd className={cx('big', it.bad && 'bad')}>
-            <CountUp value={it.value} f={it.f ?? k} delay={0.15 + i * 0.05} />
-          </dd>
+          <dd className={cx('big', it.bad && 'bad')}>{(it.f ?? k)(it.value)}</dd>
           {it.sub && <dd className="sub">{it.sub}</dd>}
         </div>
       ))}

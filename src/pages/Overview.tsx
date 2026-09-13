@@ -11,7 +11,7 @@ import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { SortTh } from '../components/SortTh';
 import { MonthlyLine } from '../components/MonthlyLine';
-import { CountUp, Strip } from '../components/Strip';
+import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
 import { useRowReveal } from '../components/Reveal';
@@ -62,7 +62,7 @@ export default function Overview() {
           </p>
         </div>
         <p className="page-basis">
-          All amounts AED thousand
+          Tables in AED thousand, headline figures in AED millions
           <br />
           {meta.periodLabel} actual. {meta.nearMonth} onward forecast. FY {meta.fiscalYear} budget.
         </p>
@@ -75,7 +75,7 @@ export default function Overview() {
       <dl className="strip answers" aria-label="The six headline figures" id="answers" style={{ '--cols': 6 } as React.CSSProperties}>
         <div>
           <dt>YTD revenue</dt>
-          <dd className="big"><CountUp value={o.sales.ytdRevenue} f={mil} delay={0.15} /></dd>
+          <dd className="big">{mil(o.sales.ytdRevenue)}</dd>
           <dd className="sub">
             <Link to="#sales" className="vlink">
               <span className={cx(o.sales.variance < 0 && 'bad')}>{signedK(o.sales.variance)}</span> on {k(o.sales.ytdBudget)} budget ({signedPct(o.sales.variancePct)})
@@ -84,7 +84,7 @@ export default function Overview() {
         </div>
         <div>
           <dt>FY revenue forecast</dt>
-          <dd className="big"><CountUp value={o.delivery.fyForecast} f={mil} delay={0.2} /></dd>
+          <dd className="big">{mil(o.delivery.fyForecast)}</dd>
           <dd className="sub">
             <Link to="#pipeline" className="vlink">
               <span className={cx(o.delivery.variance < 0 && 'bad')}>{signedPct(o.delivery.variancePct)}</span> on budget, {signedPct(o.delivery.yoyPct)} on FY {meta.fiscalYear - 1}
@@ -93,7 +93,7 @@ export default function Overview() {
         </div>
         <div>
           <dt>Order book</dt>
-          <dd className="big"><CountUp value={orderBook} f={mil} delay={0.25} /></dd>
+          <dd className="big">{mil(orderBook)}</dd>
           <dd className="sub">
             <Link to="#sales" className="vlink">
               {k(sales.total.openOrders)} open, {k(sales.total.expectedOrders)} expected
@@ -102,7 +102,7 @@ export default function Overview() {
         </div>
         <div>
           <dt>FY net profit</dt>
-          <dd className="big"><CountUp value={o.profit.forecast.buNetProfit} f={mil} delay={0.3} /></dd>
+          <dd className="big">{mil(o.profit.forecast.buNetProfit)}</dd>
           <dd className="sub">
             <Link to="#net-profit" className="vlink">
               <span className={cx(o.profit.npForecastVsBudget < 0 && 'bad')}>{signedK(o.profit.npForecastVsBudget)}</span> on budget, {pct(profitability.total.npPct)} of revenue
@@ -111,16 +111,16 @@ export default function Overview() {
         </div>
         <div>
           <dt>Past due</dt>
-          <dd className="big bad"><CountUp value={o.receivables.pastDue} f={mil} delay={0.35} /></dd>
+          <dd className="big">{mil(o.receivables.pastDue)}</dd>
           <dd className="sub">
             <Link to="#receivables" className="vlink">
-              {pct(o.receivables.pastDuePct)} of {k(o.receivables.totalOutstanding)} outstanding, {k(o.receivables.agedOverOneYear)} over a year
+              <span className="bad">{pct(o.receivables.pastDuePct)}</span> of {k(o.receivables.totalOutstanding)} outstanding, <span className="bad">{k(o.receivables.agedOverOneYear)}</span> over a year
             </Link>
           </dd>
         </div>
         <div>
           <dt>Working capital</dt>
-          <dd className="big"><CountUp value={o.workingCapital.total} f={mil} delay={0.4} /></dd>
+          <dd className="big">{mil(o.workingCapital.total)}</dd>
           <dd className="sub">
             <Link to="#receivables" className="vlink">
               {k(o.workingCapital.receivablesNet)} receivables, {k(o.workingCapital.unbilled)} unbilled, {k(o.workingCapital.inventoryStock)} stock

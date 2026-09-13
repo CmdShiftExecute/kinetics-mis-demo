@@ -615,8 +615,12 @@ table.mis tr.clickable {
   cursor: pointer;
 }
 /* The hovered row. The old --paper-2 shift alone measured 1.09:1 against the paper,
-   which is below the threshold a reader notices, so the row is now also bracketed top
-   and bottom by an ink rule. Both effects are inset, so nothing reflows on hover. */
+   which is below the threshold a reader notices, so the row also takes an ink marker on
+   its FIRST CELL. Inset, never a border, so nothing reflows under the pointer.
+   A left edge, not a top-and-bottom bracket: a heavy horizontal ink rule already means
+   "this row is a sum" in this system (see tr.total above), so bracketing an ordinary row
+   made it impersonate a subtotal and hovering the row above a total drew a doubled rule.
+   Matches the WMS exactly; the two apps are shown side by side. */
 table.mis tbody.hov:hover > tr td,
 table.mis tbody.hov:hover > tr th[scope='row'],
 table.mis tbody.hov:focus-within > tr td,
@@ -626,7 +630,12 @@ table.mis tr.hov:hover th[scope='row'],
 table.mis tr.hov:focus-within td,
 table.mis tr.hov:focus-within th[scope='row'] {
   background: var(--row-hover);
-  box-shadow: inset 0 1px 0 var(--ink), inset 0 -1px 0 var(--ink);
+}
+table.mis tbody.hov:hover > tr > :first-child,
+table.mis tbody.hov:focus-within > tr > :first-child,
+table.mis tr.hov:hover > :first-child,
+table.mis tr.hov:focus-within > :first-child {
+  box-shadow: inset 3px 0 0 var(--ink);
 }
 table.mis tr.eng td,
 table.mis tr.eng th[scope='row'] {
@@ -695,7 +704,7 @@ table.mis.sticky tbody.hov:hover > tr th:first-child,
 table.mis.sticky tr.hov:hover td:first-child,
 table.mis.sticky tr.hov:hover th:first-child {
   background: var(--row-hover);
-  box-shadow: inset 0 1px 0 var(--ink), inset 0 -1px 0 var(--ink), 1px 0 0 var(--rule);
+  box-shadow: inset 3px 0 0 var(--ink), 1px 0 0 var(--rule);
 }
 table.mis.sticky thead th {
   z-index: 3;
@@ -883,7 +892,11 @@ table.mis tr.rung:focus-visible th[scope='row'],
 table.mis tr.rung.active td,
 table.mis tr.rung.active th[scope='row'] {
   background: var(--row-hover);
-  box-shadow: inset 0 1px 0 var(--ink), inset 0 -1px 0 var(--ink);
+}
+table.mis tr.rung:hover > :first-child,
+table.mis tr.rung:focus-visible > :first-child,
+table.mis tr.rung.active > :first-child {
+  box-shadow: inset 3px 0 0 var(--ink);
 }
 @media (max-width: 1023px) {
   .pl {
@@ -1444,4 +1457,15 @@ table.mis tr.rung.active th[scope='row'] {
   .basis-list {
     grid-template-columns: 1fr;
   }
+}
+
+/* The entry signature: a rule drawn left to right on every route entry, on the nav
+   underline's own curve. It carries the page's arrival so the FIGURES do not have to,
+   which is why the headline count-up could be removed. Under reduced motion the element
+   is not rendered at all, so there is nothing to suppress. */
+.entry-rule {
+  height: 2px;
+  background: var(--ink);
+  transform-origin: left;
+  margin-bottom: -2px;
 }

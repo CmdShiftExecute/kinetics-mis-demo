@@ -12,10 +12,14 @@ export function useReveal() {
     reduce
       ? {}
       : {
-          initial: { opacity: 0, y: 12 },
+          // Floor at 0.6, never 0. Three from-zero half-second ramps running at once left
+          // the whole page an unreadable ghost for roughly 400ms after a navigation, which
+          // is what the principal felt as lag on 12 Sep 2026. Content is legible on the
+          // first frame now and merely settles.
+          initial: { opacity: 0.6, y: 8 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, amount: 0.12 },
-          transition: { duration: 0.5, delay, ease: EASE },
+          transition: { duration: 0.3, delay, ease: EASE },
         };
 }
 
@@ -26,15 +30,15 @@ export function useRowReveal() {
     reduce
       ? {}
       : {
-          initial: { opacity: 0 },
+          initial: { opacity: 0.6 },
           whileInView: { opacity: 1 },
           viewport: { once: true, amount: 0.2 },
-          transition: { duration: 0.35, delay: Math.min(index, 12) * 0.02, ease: EASE },
+          transition: { duration: 0.25, delay: Math.min(index, 12) * 0.02, ease: EASE },
         };
 }
 
 /** Load-time rise for a page title or headline strip. */
 export function useRise() {
   const reduce = useReducedMotion();
-  return (delay = 0) => (reduce ? {} : { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay, ease: EASE } });
+  return (delay = 0) => (reduce ? {} : { initial: { opacity: 0.6, y: 6 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.24, delay, ease: EASE } });
 }

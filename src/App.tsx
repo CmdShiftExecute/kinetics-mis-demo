@@ -57,6 +57,21 @@ function Pages() {
   return (
     <AnimatePresence mode="wait">
       <motion.main key={location.pathname} {...page}>
+        {/* The entry signature. A rule draws left to right across the content on every
+            route entry, on the same curve as the nav underline, because a drawn rule is
+            this system's own vocabulary. It replaced a count-up on the headline figures,
+            which was removed on 12 Sep 2026 for showing values that did not cross-foot
+            mid-tween. A rule carries the motion; the numbers stay still. */}
+        {!reduce && (
+          <motion.div
+            key={`rule-${location.pathname}`}
+            className="entry-rule"
+            aria-hidden="true"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+          />
+        )}
         <ErrorBoundary key={location.pathname}>
           <Suspense fallback={<Fallback />}>
             <Routes location={location}>
