@@ -5,7 +5,7 @@
  * pathLength 0) has a near-zero box, and an IntersectionObserver on that box is
  * unreliable to the point of never firing, so the mark stays invisible for ever:
  * it cannot animate because it is not visible, and it is not visible because it
- * has not animated. Measured on the live page 13 Sep 2026 — four of the ten
+ * has not animated. Measured on the live page 13 Sep 2026: four of the ten
  * profitability bubbles sat at their initial state indefinitely while six beside
  * them had entered, and raising the threshold to zero did not clear it. The group
  * is a full-size element that is always laid out, so its trigger cannot deadlock.
