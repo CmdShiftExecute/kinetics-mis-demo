@@ -8,6 +8,7 @@ import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { PlLadder } from '../components/PlLadder';
+import { Waterfall } from '../components/Waterfall';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
@@ -73,6 +74,7 @@ export default function NetProfitReport() {
       />
 
       <Section id="pl" title="Profit and loss summary" note="Division total, revenue down to BU-level net profit. Hover or tab a line for its definition." source={sources['rollup.pl']} asOf={asOf} defs={['plColumns', ...plDefs.map((d) => d.key)]} definitions={defs}>
+        <Waterfall group={divisionTotal} id="pl-bridge" />
         <PlLadder groups={[divisionTotal]} cols={{ ytd: 'YTD', forecast: 'FY forecast', budget: 'FY budget' }} showVariance="all" />
         <p className="muted" style={{ marginTop: 'var(--s-md)' }}>
           Each vertical carries the same ladder on its own page.

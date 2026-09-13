@@ -7,6 +7,7 @@ import { k, pct, pts, signedK, signedPct } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
+import { HBars } from '../components/HBars';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
@@ -69,6 +70,30 @@ export default function SalesReport() {
       />
 
       <Section id="sales-by-vertical" title="Sales performance by vertical" note={`Open and expected orders at ${meta.currentMonthLabel}; revenue and gross margin for ${meta.periodLabel}; budget phased for the same months.`} source={sources['rollup.sales']} asOf={asOf} defs={['openOrders', 'expectedOrders', 'ytdRevenue', 'ytdBudget', 'variance', 'gmPct', 'attributedTotal']} definitions={definitions}>
+        <HBars
+          id="sales-chart"
+          ariaLabel="YTD revenue by vertical against YTD budget, largest first. Exact values are in the table below."
+          format={k}
+          shortfall
+          legend={[
+            { cls: 'spot', label: 'YTD revenue' },
+            { cls: 'tick', label: 'YTD budget' },
+            { cls: 'gap', label: 'Shortfall to budget' },
+          ]}
+          rows={sales.rows
+            .slice()
+            .sort((a, b) => b.ytdRevenue - a.ytdRevenue)
+            .map((r) => ({
+              key: r.slug,
+              name: r.name,
+              segments: [{ key: 'rev', value: r.ytdRevenue, cls: 'spot' as const }],
+              target: r.budgetRevenue,
+              end: k(r.ytdRevenue),
+              endDelta: signedK(r.dRevenue),
+              endBad: r.dRevenue < 0,
+              readout: `${k(r.ytdRevenue)} VS BUDGET ${k(r.budgetRevenue)}, ${signedK(r.dRevenue)} (${signedPct(r.dRevenuePct)}), GM ${pct(r.ytdGmPct)}`,
+            }))}
+        />
         <div className="scroll-x">
           <table className="mis sticky">
             <thead>

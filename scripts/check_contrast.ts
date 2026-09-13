@@ -43,6 +43,8 @@ const hazard = token('hazard');
 const hazardText = token('hazard-text');
 const rule = token('rule');
 const rowHover = token('row-hover');
+const spot = token('spot');
+const spot2 = token('spot-2');
 
 interface Pair {
   what: string;
@@ -72,6 +74,13 @@ const pairs: Pair[] = [
   { what: 'Hazard text on a hovered row', fg: hazardText, bg: rowHover, min: 4.5 },
   { what: 'Hovered row is visible against the paper (non-text)', fg: rowHover, bg: paper, min: 1.2 },
   { what: 'Hovered row bracket against the hairline it replaces (non-text)', fg: ink, bg: rule, min: 3 },
+  // The second print ink used by the report charts, and its tint. Non-text marks,
+  // measured on the paper and on the hovered band they sit on when pointed at.
+  { what: 'Chart spot ink on paper (non-text)', fg: spot, bg: paper, min: 3 },
+  { what: 'Chart spot tint on paper (non-text)', fg: spot2, bg: paper, min: 3 },
+  { what: 'Chart spot ink on a hovered band (non-text)', fg: spot, bg: rowHover, min: 3 },
+  { what: 'Chart spot tint on a hovered band (non-text)', fg: spot2, bg: rowHover, min: 3 },
+  { what: 'Hazard segment beside the spot ink (adjacent fills, reported only)', fg: hazard, bg: spot, min: 0 },
 ];
 
 let failed = false;

@@ -9,6 +9,7 @@ import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { ReasonTable } from '../components/ReasonTable';
 import { REASON_LABELS } from '../lib/reasons';
+import { HBars } from '../components/HBars';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
@@ -74,6 +75,32 @@ export default function ReceivablesReport() {
       />
 
       <Section id="by-vertical" title="Receivables by vertical" note={`Net to collect ${prev} and ${cur}; total outstanding, provision, past due beyond terms, aged over one year and disputed at ${cur} month end. The name opens the customer table.`} source={sources['rollup.receivables']} asOf={asOf} defs={['netToCollect', 'monthOnMonth', 'totalOutstanding', 'provisionReceivable', 'pastDue', 'agedOverOneYear', 'dispute']} definitions={definitions}>
+        <HBars
+          id="receivables-chart"
+          ariaLabel={`Total outstanding by vertical at ${cur} month end, split into not yet due, past due under a year and aged over a year, largest first. Exact values are in the table below.`}
+          format={k}
+          legend={[
+            { cls: 'spot2', label: 'Not yet due' },
+            { cls: 'spot', label: 'Past due, under a year' },
+            { cls: 'hz', label: 'Aged over a year' },
+          ]}
+          rows={receivables.rows
+            .slice()
+            .sort((a, b) => b.totalOutstanding - a.totalOutstanding)
+            .map((r) => ({
+              key: r.slug,
+              name: r.name,
+              segments: [
+                { key: 'due', value: r.notYetDue, cls: 'spot2' as const },
+                { key: 'past', value: r.pastDue - r.agedOverOneYear, cls: 'spot' as const },
+                { key: 'aged', value: r.agedOverOneYear, cls: 'hz' as const },
+              ],
+              end: k(r.totalOutstanding),
+              endDelta: `${pct(r.pastDuePct, 0)} past due`,
+              endBad: r.pastDuePct >= 50,
+              readout: `${k(r.totalOutstanding)} OUTSTANDING, ${k(r.pastDue)} PAST DUE (${pct(r.pastDuePct)}), ${k(r.agedOverOneYear)} OVER A YEAR, PROVISION ${k(r.provision)}`,
+            }))}
+        />
         <div className="scroll-x">
           <table className="mis sticky">
             <thead>

@@ -14,6 +14,11 @@
   /* Darkened from #c41414 on 13 Sep 2026: the deeper hovered-row substrate pushed the
      old red to 4.39:1, under the 4.5:1 floor. Measured by scripts/check_contrast.ts. */
   --hazard-text: #b81111;
+  /* A second print ink for figures in charts, and its darker tint for secondary
+     segments. Both are non-text marks and both are measured by bun run contrast
+     (7.15:1 and 4.16:1 on paper). Hazard red stays reserved for what is bad. */
+  --spot: #2547b8;
+  --spot-2: #5c70c4;
   --font-display: 'Archivo Black', 'Arial Black', Impact, sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -1047,6 +1052,122 @@ table.mis tr.rung.active > :first-child {
   border-top-width: 1px;
   border-top-color: var(--ink-2);
 }
+
+/* ---------- horizontal bars and the P&L bridge ---------- */
+/* the band behind the hovered row or column */
+.chart .rowhi {
+  fill: var(--paper-3);
+}
+/* the mark under the pointer or the keyboard cursor, outlined in ink */
+.chart .mk-on {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.chart .seg {
+  stroke: var(--paper);
+  stroke-width: 1;
+}
+.chart .seg.c-spot {
+  fill: var(--spot);
+}
+.chart .seg.c-spot2 {
+  fill: var(--spot-2);
+}
+.chart .seg.c-ink {
+  fill: var(--ink);
+}
+.chart .seg.c-hz {
+  fill: var(--hazard);
+}
+/* shown beside the stack and never added to it: goods in transit */
+.chart .seg.c-hollow {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-dasharray: 2 2;
+}
+/* the shortfall between a bar and its target */
+.chart .seg.gap {
+  fill: var(--hazard);
+  fill-opacity: 0.28;
+  stroke: var(--hazard);
+  stroke-width: 1;
+}
+.chart .seg.mk-on {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.chart .seg.gap.mk-on {
+  stroke: var(--hazard);
+}
+.chart .tick {
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+.chart .tick.spot {
+  stroke: var(--spot);
+  stroke-width: 2.5;
+}
+.chart .wf-link {
+  stroke: var(--ink-2);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+.chart text.muted {
+  fill: var(--ink-2);
+}
+.chart.hbars .grid line {
+  stroke: var(--rule);
+}
+.chart.wfall .grid line.zero {
+  stroke: var(--ink);
+}
+.wf-def {
+  margin: var(--s-sm) 0 0;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  min-height: 2.9em;
+  max-width: 90ch;
+}
+.chart-legend i.sw {
+  width: 12px;
+  height: 10px;
+  border: 0;
+}
+.chart-legend i.sw.c-spot {
+  background: var(--spot);
+}
+.chart-legend i.sw.c-spot2 {
+  background: var(--spot-2);
+}
+.chart-legend i.sw.c-ink {
+  background: var(--ink);
+}
+.chart-legend i.sw.c-hz {
+  background: var(--hazard);
+}
+.chart-legend i.sw.c-hollow {
+  border: 1px dashed var(--ink-2);
+  background: none;
+}
+.chart-legend i.sw.c-gap {
+  background: color-mix(in srgb, var(--hazard) 28%, var(--paper));
+  border: 1px solid var(--hazard);
+}
+.chart-legend i.sw.c-tick {
+  width: 3px;
+  height: 14px;
+  background: var(--ink);
+}
+.chart-legend i.sw.c-tick-spot {
+  width: 12px;
+  height: 3px;
+  background: var(--spot);
+}
+.chart-legend {
+  flex-wrap: wrap;
+  gap: var(--s-md) var(--s-xl);
+}
+
 
 /* ---------- month bridge ---------- */
 .bridge {

@@ -3,10 +3,11 @@ import { Link } from 'react-router';
 import type { Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
-import { count, signedK } from '../lib/format';
+import { count, k, pct, signedK } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
+import { HBars } from '../components/HBars';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
@@ -65,6 +66,34 @@ export default function WorkingCapitalReport() {
       />
 
       <Section id="by-vertical" title="Working capital by vertical" note="Net receivables, unbilled and stock at cost; goods in transit shown beside, not added." source={sources['rollup.receivables']} asOf={asOf} defs={['workingCapital', 'netToCollect', 'unbilled', 'inTransit']} definitions={definitions}>
+        <HBars
+          id="wc-chart"
+          ariaLabel="Working capital by vertical, largest first: net receivables, unbilled and stock at cost stacked, goods in transit drawn beside. Exact values are in the table below."
+          format={k}
+          legend={[
+            { cls: 'spot', label: 'Net receivables' },
+            { cls: 'spot2', label: 'Unbilled' },
+            { cls: 'ink', label: 'Stock at cost' },
+            { cls: 'hollow', label: 'In transit, beside' },
+          ]}
+          rows={workingCapital.rows
+            .slice()
+            .sort((a, b) => b.total - a.total)
+            .map((r) => ({
+              key: r.slug,
+              name: r.name,
+              segments: [
+                { key: 'rec', value: r.receivablesNet, cls: 'spot' as const },
+                { key: 'unb', value: r.unbilled, cls: 'spot2' as const },
+                { key: 'stk', value: r.inventoryStock, cls: 'ink' as const },
+                { key: 'trn', value: r.inTransit, cls: 'hollow' as const },
+              ],
+              end: k(r.total),
+              endDelta: `${pct((r.receivablesPastDue / Math.max(1, r.total)) * 100, 0)} past due`,
+              endBad: r.receivablesPastDue / Math.max(1, r.total) >= 0.4,
+              readout: `${k(r.total)} = RECEIVABLES ${k(r.receivablesNet)} + UNBILLED ${k(r.unbilled)} + STOCK ${k(r.inventoryStock)}; IN TRANSIT ${k(r.inTransit)} BESIDE`,
+            }))}
+        />
         <div className="scroll-x">
           <table className="mis sticky">
             <thead>

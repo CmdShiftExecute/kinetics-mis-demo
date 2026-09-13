@@ -115,6 +115,24 @@ async function forecastFrames(pg: Page) {
   return seen.size;
 }
 
+/**
+ * Moves the pointer across a chart's plot area (never a click, never a key) and
+ * reports the readout and the outlined mark it produced.
+ */
+async function chartHover(page: Page, id: string, fx: number, fy: number) {
+  const svg = page.locator(`svg#${id}`);
+  await svg.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(150);
+  const box = (await svg.boundingBox())!;
+  await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy - 2);
+  await page.mouse.move(box.x + box.width * fx, box.y + box.height * fy);
+  await page.waitForTimeout(180);
+  const n = await svg.locator('.readbox text').count();
+  const read = n === 0 ? '' : (await svg.locator('.readbox text').allTextContents()).join(' ').trim();
+  const marks = await svg.locator('.mk-on').count();
+  return { read, marks, live: read.length > 0 };
+}
+
 const browser = await chromium.launch();
 const errors: string[] = [];
 /** During the deliberate missing-data check a 404 in the console is the expected evidence, not a fault. */
@@ -257,6 +275,67 @@ try {
   const fcStatic = await forecastFrames(fcp);
   await fcc.close();
   check(fcStatic === 1, `Negative control: with the forecast clip defeated the same region renders static (${fcStatic} distinct frame${fcStatic === 1 ? '' : 's'})`);
+
+  // 4c. The four report charts, added 13 Sep 2026: sales bullets, the P&L bridge,
+  // receivables ageing and working-capital composition. Each must draw one mark per
+  // published row, answer a plain pointer move with a readout and no click, and the
+  // bridge must tie to the ladder it sits above. One negative control on the pointer
+  // path and one keyboard walk, since all four share one engine.
+  // Expected marks come from the published data, never from a constant: a zero
+  // segment is not drawn, so the count is the number of non-zero values per row.
+  const roll = (await page.evaluate(async () => (await fetch('/data/rollup.json')).json())) as {
+    sales: { rows: { ytdRevenue: number }[] };
+    receivables: { rows: { notYetDue: number; pastDue: number; agedOverOneYear: number }[] };
+    workingCapital: { rows: { receivablesNet: number; unbilled: number; inventoryStock: number; inTransit: number }[] };
+  };
+  const nz = (vals: number[][]) => vals.flat().filter((v) => v > 0).length;
+  const chartSpecs = [
+    { path: '/sales', id: 'sales-chart', rows: roll.sales.rows.length, segs: nz(roll.sales.rows.map((r) => [r.ytdRevenue])), fx: 0.5, fy: 0.2 },
+    { path: '/receivables', id: 'receivables-chart', rows: roll.receivables.rows.length, segs: nz(roll.receivables.rows.map((r) => [r.notYetDue, r.pastDue - r.agedOverOneYear, r.agedOverOneYear])), fx: 0.4, fy: 0.15 },
+    { path: '/working-capital', id: 'wc-chart', rows: roll.workingCapital.rows.length, segs: nz(roll.workingCapital.rows.map((r) => [r.receivablesNet, r.unbilled, r.inventoryStock, r.inTransit])), fx: 0.3, fy: 0.12 },
+  ] as const;
+  check(chartSpecs.every((c) => c.rows >= 5 && c.segs >= c.rows), `The published data yields ${chartSpecs.map((c) => `${c.segs}/${c.rows}`).join(', ')} expected segments per chart (a zero here would make the checks below vacuous)`);
+  for (const c of chartSpecs) {
+    await page.goto(`${base}${c.path}`, { waitUntil: 'networkidle' });
+    await page.waitForSelector(`svg#${c.id}`);
+    const segs = await page.locator(`svg#${c.id} rect.seg:not(.gap)`).count();
+    const labels = await page.locator(`svg#${c.id} text.end`).count();
+    check(segs === c.segs && labels === c.rows, `${c.path} chart draws ${segs} segments and ${labels} end figures for ${c.rows} verticals`);
+    const h = await chartHover(page, c.id, c.fx, c.fy);
+    check(h.live && h.marks > 0, `${c.path} chart reads out on plain pointer movement ("${h.read.slice(0, 70)}"), no click`);
+    await page.mouse.move(4, 4);
+  }
+  // Keyboard walk on the sales chart, and the pointer negative control.
+  await page.goto(`${base}/sales`, { waitUntil: 'networkidle' });
+  const sc = page.locator('svg#sales-chart');
+  await sc.scrollIntoViewIfNeeded();
+  await sc.focus();
+  const k0 = (await sc.locator('.readbox text').allTextContents()).join(' ');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(120);
+  const k2 = (await sc.locator('.readbox text').allTextContents()).join(' ');
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(120);
+  const kEsc = await sc.locator('.readbox').count();
+  check(k0.length > 0 && k2 !== k0 && kEsc === 0, `Sales chart walks its rows by keyboard ("${k0.slice(0, 24)}" to "${k2.slice(0, 24)}") and Escape clears the readout`);
+  await page.goto(`${base}/sales`, { waitUntil: 'networkidle' });
+  await page.locator('svg#sales-chart').evaluate((el) => {
+    (el as SVGElement).style.pointerEvents = 'none';
+    el.querySelectorAll('*').forEach((c) => ((c as SVGElement).style.pointerEvents = 'none'));
+  });
+  const dead = await chartHover(page, 'sales-chart', 0.5, 0.2);
+  check(!dead.live && dead.marks === 0, `Negative control: with pointer events off the sales chart gives no readout (${dead.marks} marks)`);
+  // The P&L bridge ties to the ladder.
+  await page.goto(`${base}/net-profit`, { waitUntil: 'networkidle' });
+  await page.waitForSelector('svg#pl-bridge');
+  const cols = await page.locator('svg#pl-bridge rect.seg').count();
+  const defBefore = (await page.getByTestId('pl-bridge-def').textContent()) ?? '';
+  const np = await chartHover(page, 'pl-bridge', 0.95, 0.6);
+  const defAfter = (await page.getByTestId('pl-bridge-def').textContent()) ?? '';
+  const ladderNp = (await page.locator('#pl table.mis tbody tr').filter({ hasText: /net profit/i }).first().locator('td').nth(1).innerText()).trim();
+  check(cols === 9 && np.live && np.read.includes(ladderNp) && defAfter !== defBefore && defAfter.length > 20, `P&L bridge draws 9 steps; pointing at net profit reads "${np.read.slice(0, 40)}", ties to the ladder's ${ladderNp}, and prints the rung's definition`);
+  await page.mouse.move(4, 4);
   await page.goto(`${base}/`, { waitUntil: 'networkidle' });
   await page.waitForSelector('#sales table.mis');
   await page.waitForTimeout(400);
@@ -550,6 +629,10 @@ try {
   const anims = await rp.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
   const opacityOk = await rp.evaluate(() => Array.from(document.querySelectorAll('section.sec, tr')).every((el) => getComputedStyle(el).opacity === '1'));
   check(anims === 0 && opacityOk, `Under reduced motion nothing is animating and every section and row is fully visible (${anims} running animations)`);
+  await rp.goto(`${base}/sales`, { waitUntil: 'networkidle' });
+  await rp.waitForSelector('svg#sales-chart');
+  const rmBars = await rp.evaluate(() => Array.from(document.querySelectorAll('svg#sales-chart rect.seg')).map((r) => getComputedStyle(r).transform));
+  check(rmBars.length > 0 && rmBars.every((t) => t === 'none'), `Under reduced motion every chart bar is at rest with no transform (${rmBars.length} bars)`);
   // Negative control for check 13b: with motion off the same page must render STATIC.
   const staticFrames = new Set<string>();
   await rp.goto(`${base}/sales`, { waitUntil: 'commit' });
