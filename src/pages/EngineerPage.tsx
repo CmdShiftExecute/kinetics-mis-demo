@@ -7,7 +7,7 @@ import { MONTHS, count, cx, k, mult, pct, signedK, signedPct } from '../lib/form
 import { Crumbs, Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
-import { MonthlyLine } from '../components/MonthlyLine';
+import { MonthlyChart } from '../components/MonthlyChart';
 import { ReasonTable } from '../components/ReasonTable';
 import { REASON_LABELS } from '../lib/reasons';
 import { SalesHead } from '../components/SalesHead';
@@ -97,7 +97,7 @@ export default function EngineerPage() {
       />
 
       <Section id="engineer-sales" title="Sales performance by product line" note={`${meta.periodLabel} actual and budget; forecast for ${meta.nearMonth} and ${meta.restOfYear}; FY budget; prior year; ROI on the engineer's total.`} source={sources['engineer.sales']} asOf={asOf} defs={['openOrders', 'expectedOrders', 'ytdRevenue', 'ytdBudget', 'fyForecast', 'priorYear', 'roiYtd', 'roiBudget', 'roiForecast', 'roiPriorYear', 'directContribution']} definitions={definitions}>
-        <MonthlyLine points={monthly} year={meta.fiscalYear} subject={data.name} id={`e-${data.slug}`} height={220} />
+        <MonthlyChart points={monthly} year={meta.fiscalYear} subject={data.name} id={`e-${data.slug}`} height={220} />
         <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
           <table className="mis dense sticky">
             <SalesHead prefix={prefix} firstLabel="Product line" nearMonth={nearMonth} restLabel={restLabel} />

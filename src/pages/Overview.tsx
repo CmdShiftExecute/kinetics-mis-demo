@@ -10,7 +10,7 @@ import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { SortTh } from '../components/SortTh';
-import { MonthlyLine } from '../components/MonthlyLine';
+import { MonthlyChart } from '../components/MonthlyChart';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
@@ -198,7 +198,7 @@ export default function Overview() {
             ]}
           />
           <div style={{ marginTop: 'var(--s-lg)' }}>
-            <MonthlyLine points={monthly} year={meta.fiscalYear} subject="the division" id="ov" height={210} />
+            <MonthlyChart points={monthly} year={meta.fiscalYear} subject="the division" id="ov" height={210} />
           </div>
         </Section>
 

@@ -3,6 +3,7 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { motion, useReducedMotion } from 'motion/react';
 import { cx } from '../lib/format';
+import { GROUP_IN_VIEW, mark } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 /** The five fills a segment may take. `hollow` is drawn beside the stack and never added to it. */
@@ -37,6 +38,8 @@ interface Props {
   format: (n: number) => string;
   /** Marks the gap between the bar and its target in hazard when the bar falls short. */
   shortfall?: boolean;
+  /** `share` normalises every row to its own hundred percent, so composition is compared rather than size. */
+  mode?: 'value' | 'share';
 }
 
 const solidSum = (r: BarRow) => r.segments.filter((s) => s.cls !== 'hollow').reduce((a, s) => a + s.value, 0);
@@ -49,18 +52,23 @@ const fullSum = (r: BarRow) => r.segments.reduce((a, s) => a + s.value, 0);
  * in from the left in sequence; under reduced motion they are simply there. Exact
  * values are always in the table the chart sits above.
  */
-export function HBars({ id, rows, ariaLabel, legend, format, shortfall }: Props) {
+export function HBars({ id, rows, ariaLabel, legend, format, shortfall, mode = 'value' }: Props) {
   const { ref, width } = useWidth(900);
   const reduce = useReducedMotion();
   const [hover, setHover] = useState<number | null>(null);
   const labelW = width < 560 ? 112 : 190;
   const m = { left: labelW, right: width < 560 ? 88 : 132, top: 22, bottom: 6 };
   const rowH = 26;
+  /** Mono at 11px runs about 6.6px a character; the column keeps 10px of air beside the bar. */
+  const maxLabelChars = Math.max(8, Math.floor((labelW - 14) / 6.6));
   const barH = 12;
   const height = m.top + rows.length * rowH + m.bottom;
-  const domainMax = Math.max(1, ...rows.map((r) => Math.max(fullSum(r), r.target ?? 0)));
-  const x = scaleLinear().domain([0, domainMax]).range([m.left, width - m.right]).nice();
-  const ticks = x.ticks(width < 560 ? 3 : 5);
+  const shareMode = mode === 'share';
+  const domainMax = shareMode ? 100 : Math.max(1, ...rows.map((r) => Math.max(fullSum(r), r.target ?? 0)));
+  const x = shareMode ? scaleLinear().domain([0, 100]).range([m.left, width - m.right]) : scaleLinear().domain([0, domainMax]).range([m.left, width - m.right]).nice();
+  const ticks = shareMode ? [0, 25, 50, 75, 100] : x.ticks(width < 560 ? 3 : 5);
+  /** In share mode every row is drawn against its own total, so the segments fill the width. */
+  const scaleOf = (r: BarRow) => (shareMode ? 100 / (solidSum(r) || 1) : 1);
   const nearest = (py: number) => {
     const i = Math.floor((py - m.top) / rowH);
     return i >= 0 && i < rows.length ? i : null;
@@ -83,8 +91,9 @@ export function HBars({ id, rows, ariaLabel, legend, format, shortfall }: Props)
   const hrName = hr ? (width < 560 && hr.name.length > 16 ? hr.name.slice(0, 15) + '.' : hr.name).toUpperCase() : '';
   const boxW = hr ? Math.min(width, 20 + (hrName.length + hr.readout.length + 3) * CH) : 0;
   const boxX = Math.max(0, Math.min(width - boxW, m.left + 10));
-  const grow = (delay: number) => (reduce ? {} : { initial: { scaleX: 0 }, whileInView: { scaleX: 1 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 0.55, delay, ease: 'easeOut' as const } });
-  const fade = (delay: number) => (reduce ? {} : { initial: { opacity: 0 }, whileInView: { opacity: 1 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 0.35, delay, ease: 'easeOut' as const } });
+  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const grow = (delay: number) => (reduce ? {} : mark({ scaleX: 0 }, { scaleX: 1 }, delay, 0.55));
+  const fade = (delay: number) => (reduce ? {} : mark({ opacity: 0 }, { opacity: 1 }, delay, 0.35));
 
   return (
     <div className="chart-wrap" ref={ref}>
@@ -110,19 +119,23 @@ export function HBars({ id, rows, ariaLabel, legend, format, shortfall }: Props)
             <g key={t}>
               <line x1={x(t)} x2={x(t)} y1={m.top - 4} y2={height - m.bottom} />
               <text x={x(t)} y={m.top - 8} textAnchor="middle">
-                {format(t)}
+                {shareMode ? `${t}%` : format(t)}
               </text>
             </g>
           ))}
         </g>
+        <motion.g {...grp}>
         {rows.map((r, i) => {
           const y = m.top + i * rowH + (rowH - barH) / 2;
-          const solid = solidSum(r);
-          const full = fullSum(r);
-          const short = shortfall && r.target != null && r.target > solid;
-          const endX = x(Math.max(full, r.target ?? 0)) + 7;
-          // The label column is 112px on a phone, about 15 mono characters; the readout carries the full name.
-          const label = width < 560 && r.name.length > 15 ? r.name.slice(0, 14) + '.' : r.name;
+          const sc = scaleOf(r);
+          const solid = solidSum(r) * sc;
+          const full = shareMode ? solid : fullSum(r);
+          const short = !shareMode && shortfall && r.target != null && r.target > solid;
+          const endX = x(Math.max(full, shareMode ? 0 : (r.target ?? 0))) + 7;
+          // The label column holds a fixed number of mono characters, so the name is cut
+          // to fit at every width rather than only on a phone. A cut name was running off
+          // the left edge of the P&L split on a full-width desktop, measured 13 Sep 2026.
+          const label = r.name.length > maxLabelChars ? r.name.slice(0, maxLabelChars - 1) + '.' : r.name;
           const showDelta = width >= 560;
           let acc = 0;
           const rowDelay = 0.05 * i;
@@ -132,14 +145,18 @@ export function HBars({ id, rows, ariaLabel, legend, format, shortfall }: Props)
                 {label}
               </text>
               {r.segments.map((s, si) => {
+                if (shareMode && s.cls === 'hollow') return null;
                 const x0 = x(acc);
-                const w = Math.max(0, x(acc + s.value) - x0);
-                acc += s.value;
+                const w = x(acc + s.value * sc) - x0;
+                acc += s.value * sc;
                 if (w <= 0) return null;
-                return <motion.rect key={s.key} className={cx('seg', `c-${s.cls}`, hover === i && 'mk-on')} x={x0} y={y} width={w} height={barH} style={{ originX: 0 }} {...grow(rowDelay + 0.08 * si)} />;
+                // A real value narrower than a pixel still gets a hairline: a segment that
+                // rounds away is indistinguishable from one that is not there at all.
+                const wDrawn = Math.max(0.75, w);
+                return <motion.rect key={s.key} className={cx('seg', `c-${s.cls}`, hover === i && 'mk-on')} x={x0} y={y} width={wDrawn} height={barH} style={{ originX: 0 }} {...grow(rowDelay + 0.08 * si)} />;
               })}
-              {short && <motion.rect className="seg gap" x={x(solid)} y={y + 2} width={Math.max(0, x(r.target!) - x(solid))} height={barH - 4} style={{ originX: 0 }} {...grow(rowDelay + 0.08 * r.segments.length)} />}
-              {r.target != null && <motion.line className="tick" x1={x(r.target)} x2={x(r.target)} y1={y - 4} y2={y + barH + 4} {...fade(rowDelay + 0.3)} />}
+              {short && <motion.rect className="seg gap" x={x(solid)} y={y + 2} width={Math.max(1, x(r.target!) - x(solid))} height={barH - 4} style={{ originX: 0 }} {...grow(rowDelay + 0.08 * r.segments.length)} />}
+              {r.target != null && !shareMode && <motion.line className="tick" x1={x(r.target)} x2={x(r.target)} y1={y - 4} y2={y + barH + 4} {...fade(rowDelay + 0.3)} />}
               <motion.text x={endX} y={y + 10} className="end" {...fade(rowDelay + 0.4)}>
                 <tspan className="ink">{r.end}</tspan>
                 {r.endDelta && showDelta && (
@@ -151,6 +168,7 @@ export function HBars({ id, rows, ariaLabel, legend, format, shortfall }: Props)
             </g>
           );
         })}
+        </motion.g>
         {hr && (
           <g className="readbox" aria-hidden="true" transform={`translate(${boxX}, ${m.top + (hover ?? 0) * rowH + 2})`}>
             <rect width={boxW} height={22} />

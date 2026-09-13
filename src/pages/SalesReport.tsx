@@ -8,6 +8,10 @@ import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { HBars } from '../components/HBars';
+import type { BarRow } from '../components/HBars';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
+import { Quadrant } from '../components/Quadrant';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
@@ -34,6 +38,19 @@ export default function SalesReport() {
   }
   const { meta, sales, engineerSplit, definitions, sources, largestVertical } = data;
   const asOf = meta.dataAsOfLabel;
+  const salesBars: BarRow[] = sales.rows
+    .slice()
+    .sort((a, b) => b.ytdRevenue - a.ytdRevenue)
+    .map((r) => ({
+      key: r.slug,
+      name: r.name,
+      segments: [{ key: 'rev', value: r.ytdRevenue, cls: 'spot' as const }],
+      target: r.budgetRevenue,
+      end: k(r.ytdRevenue),
+      endDelta: signedK(r.dRevenue),
+      endBad: r.dRevenue < 0,
+      readout: `${k(r.ytdRevenue)} VS BUDGET ${k(r.budgetRevenue)}, ${signedK(r.dRevenue)} (${signedPct(r.dRevenuePct)}), GM ${pct(r.ytdGmPct)}`,
+    }));
   const others = sales.rows.filter((r) => r.slug !== largestVertical.slug);
   const largest = sales.rows.find((r) => r.slug === largestVertical.slug)!;
   const nameOf = (slug: string) => sales.rows.find((r) => r.slug === slug)?.name ?? slug;
@@ -70,29 +87,36 @@ export default function SalesReport() {
       />
 
       <Section id="sales-by-vertical" title="Sales performance by vertical" note={`Open and expected orders at ${meta.currentMonthLabel}; revenue and gross margin for ${meta.periodLabel}; budget phased for the same months.`} source={sources['rollup.sales']} asOf={asOf} defs={['openOrders', 'expectedOrders', 'ytdRevenue', 'ytdBudget', 'variance', 'gmPct', 'attributedTotal']} definitions={definitions}>
-        <HBars
+        <ChartSwitch
           id="sales-chart"
-          ariaLabel="YTD revenue by vertical against YTD budget, largest first. Exact values are in the table below."
-          format={k}
-          shortfall
-          legend={[
-            { cls: 'spot', label: 'YTD revenue' },
-            { cls: 'tick', label: 'YTD budget' },
-            { cls: 'gap', label: 'Shortfall to budget' },
+          views={[
+            { key: 'bars', label: 'Revenue against budget', icon: 'bars', render: () => <HBars id="sales-chart-bars" ariaLabel="YTD revenue by vertical against YTD budget, largest first. Exact values are in the table below." format={k} shortfall legend={[{ cls: 'spot', label: 'YTD revenue' }, { cls: 'tick', label: 'YTD budget' }, { cls: 'gap', label: 'Shortfall to budget' }]} rows={salesBars} /> },
+            {
+              key: 'share',
+              label: 'Share of revenue',
+              icon: 'donut',
+              render: () => <Donut id="sales-chart-donut" format={k} centreLabel="YTD revenue" ariaLabel="Share of year-to-date revenue by vertical. Exact values are in the table below." rows={sales.rows.map((r) => ({ key: r.slug, name: r.name, value: r.ytdRevenue }))} />,
+            },
+            {
+              key: 'quadrant',
+              label: 'Margin against growth',
+              icon: 'quadrant',
+              render: () => (
+                <Quadrant
+                  id="sales-chart-quad"
+                  ariaLabel="Gross margin percent against variance to budget by vertical, bubble area is year-to-date revenue. Exact values are in the table below."
+                  rows={sales.rows.map((r) => ({ key: r.slug, name: r.name, x: r.dRevenuePct, y: r.ytdGmPct, size: r.ytdRevenue }))}
+                  refX={sales.total.dRevenuePct}
+                  refY={sales.total.ytdGmPct}
+                  xLabel="Variance to budget"
+                  yLabel="GM percent"
+                  fx={signedPct}
+                  fy={pct}
+                  readout={(p) => `${k(sales.rows.find((r) => r.slug === p.key)!.ytdRevenue)} REVENUE, ${signedPct(p.x)} VS BUDGET, GM ${pct(p.y)}`}
+                />
+              ),
+            },
           ]}
-          rows={sales.rows
-            .slice()
-            .sort((a, b) => b.ytdRevenue - a.ytdRevenue)
-            .map((r) => ({
-              key: r.slug,
-              name: r.name,
-              segments: [{ key: 'rev', value: r.ytdRevenue, cls: 'spot' as const }],
-              target: r.budgetRevenue,
-              end: k(r.ytdRevenue),
-              endDelta: signedK(r.dRevenue),
-              endBad: r.dRevenue < 0,
-              readout: `${k(r.ytdRevenue)} VS BUDGET ${k(r.budgetRevenue)}, ${signedK(r.dRevenue)} (${signedPct(r.dRevenuePct)}), GM ${pct(r.ytdGmPct)}`,
-            }))}
         />
         <div className="scroll-x">
           <table className="mis sticky">

@@ -7,7 +7,11 @@ import { MONTHS, k, signedK, signedPct } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
-import { MonthlyLine } from '../components/MonthlyLine';
+import { MonthlyChart } from '../components/MonthlyChart';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
+import { HBars } from '../components/HBars';
+import type { BarRow } from '../components/HBars';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
@@ -34,6 +38,22 @@ export default function PipelineReport() {
   }
   const { meta, forecast, monthly, overview: o, definitions, sources, largestVertical } = data;
   const asOf = meta.dataAsOfLabel;
+  const forecastBars: BarRow[] = forecast.rows
+    .slice()
+    .sort((a, b) => b.fyForecast - a.fyForecast)
+    .map((r) => ({
+      key: r.slug,
+      name: r.name,
+      segments: [
+        { key: 'ytd', value: r.ytdRevenue, cls: 'ink' as const },
+        { key: 'rest', value: r.nearMonthForecast + r.restOfYearForecast, cls: 'spot' as const },
+      ],
+      target: r.fyBudget,
+      end: k(r.fyForecast),
+      endDelta: signedK(r.dFy),
+      endBad: r.dFy < 0,
+      readout: `FORECAST ${k(r.fyForecast)} VS BUDGET ${k(r.fyBudget)}, ${signedK(r.dFy)} (${signedPct(r.fcVsBudgetPct)}); ${k(r.ytdRevenue)} ALREADY BANKED`,
+    }));
   const nearMonth = MONTHS[meta.monthsElapsed] ?? 'Sep';
   const restLabel = `${MONTHS[meta.monthsElapsed + 1]} to Dec`;
   const others = forecast.rows.filter((r) => r.slug !== largestVertical.slug);
@@ -68,10 +88,41 @@ export default function PipelineReport() {
       />
 
       <Section id="monthly" title="Monthly revenue, division" note={`Actual to ${meta.currentMonthLabel}, forecast from ${meta.nearMonth}, against the phased budget.`} source={sources['rollup.monthly']} asOf={asOf} defs={['fyForecast', 'variance']} definitions={definitions}>
-        <MonthlyLine points={monthly} year={meta.fiscalYear} subject="the division" id="dl" height={260} />
+        <MonthlyChart points={monthly} year={meta.fiscalYear} subject="the division" id="dl" height={260} />
       </Section>
 
       <Section id="forecast-by-vertical" title="Revenue forecast and pipeline by vertical" note={`Prior year, YTD actual, ${meta.nearMonth} forecast, ${meta.restOfYear} forecast, FY forecast against FY budget.`} source={sources['rollup.forecast']} asOf={asOf} defs={['priorYear', 'ytdRevenue', 'nearMonth', 'restOfYear', 'fyForecast', 'fyBudget', 'yoy']} definitions={definitions}>
+        <ChartSwitch
+          id="fc-chart"
+          views={[
+            {
+              key: 'bars',
+              label: 'Forecast against budget',
+              icon: 'bars',
+              render: () => (
+                <HBars
+                  id="fc-chart-bars"
+                  ariaLabel="Full-year revenue forecast by vertical, split into revenue already banked and the rest of the year, against the full-year budget. Exact values are in the table below."
+                  format={k}
+                  shortfall
+                  legend={[
+                    { cls: 'ink', label: 'Banked, year to date' },
+                    { cls: 'spot', label: 'Forecast, rest of year' },
+                    { cls: 'tick', label: 'FY budget' },
+                    { cls: 'gap', label: 'Shortfall to budget' },
+                  ]}
+                  rows={forecastBars}
+                />
+              ),
+            },
+            {
+              key: 'share',
+              label: 'Share of the forecast',
+              icon: 'donut',
+              render: () => <Donut id="fc-chart-donut" format={k} centreLabel="FY forecast" ariaLabel="Share of the full-year revenue forecast by vertical. Exact values are in the table below." rows={forecast.rows.map((r) => ({ key: r.slug, name: r.name, value: r.fyForecast }))} />,
+            },
+          ]}
+        />
         <div className="scroll-x">
           <table className="mis sticky">
             <thead>

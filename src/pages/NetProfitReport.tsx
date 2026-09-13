@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
-import type { ProfitabilityRow, Rollup } from '../../data/schema';
+import type { PlRungKey, ProfitabilityRow, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
 import { cx, k, pct, signedK } from '../lib/format';
@@ -9,6 +9,9 @@ import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { PlLadder } from '../components/PlLadder';
 import { Waterfall } from '../components/Waterfall';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { HBars } from '../components/HBars';
+import { Quadrant } from '../components/Quadrant';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
@@ -40,6 +43,16 @@ export default function NetProfitReport() {
   const maxShare = Math.max(...profitability.rows.map((x) => x.revenueShare));
   const divisionTotal = pl.find((g) => g.key === 'total')!;
   const npBudget = divisionTotal.rungs.find((r) => r.key === 'buNetProfit')!.budget;
+  const gmRungs: PlRungKey[] = ['salaryCtc', 'warehouseCost', 'warehouseSalaries', 'commonAdmin', 'provisionsInterCo', 'corporateOverhead'];
+  /** Gross margin is exactly net profit plus the six cost lines below it, so the ring is a true partition, not a proportion of convenience. */
+  const gmSplit = [
+    { key: 'buNetProfit', name: 'BU-level net profit', value: divisionTotal.rungs.find((r) => r.key === 'buNetProfit')!.forecast },
+    ...gmRungs.map((key) => {
+      const r = divisionTotal.rungs.find((x) => x.key === key)!;
+      return { key, name: r.label, value: r.forecast };
+    }),
+  ];
+  const gmTotal = divisionTotal.rungs.find((r) => r.key === 'grossMargin')!.forecast;
   const plDefs = divisionTotal.rungs.map((r) => ({ key: `pl-${r.key}`, term: r.label, text: `${r.definition} Fed by: ${r.feeds}.` }));
   const defs = { ...definitions, ...Object.fromEntries(plDefs.map((d) => [d.key, d])) };
 
@@ -74,7 +87,43 @@ export default function NetProfitReport() {
       />
 
       <Section id="pl" title="Profit and loss summary" note="Division total, revenue down to BU-level net profit. Hover or tab a line for its definition." source={sources['rollup.pl']} asOf={asOf} defs={['plColumns', ...plDefs.map((d) => d.key)]} definitions={defs}>
-        <Waterfall group={divisionTotal} id="pl-bridge" />
+        <ChartSwitch
+          id="pl-chart"
+          views={[
+            { key: 'bridge', label: 'Bridge to net profit', icon: 'steps', render: () => <Waterfall group={divisionTotal} id="pl-bridge" /> },
+            {
+              key: 'split',
+              /* Seven parts, so bars rather than a ring: length carries the comparison
+                 and colour carries nothing, which is the only honest way to show this
+                 many parts in a two-ink system. Net profit is the residual and is drawn
+                 in ink to separate it from the six costs. */
+              label: 'Where the gross margin goes',
+              icon: 'bars',
+              render: () => (
+                <HBars
+                  id="pl-split"
+                  ariaLabel="Full-year forecast gross margin split into net profit and each cost line below it, largest first. Exact values are in the ladder below."
+                  format={k}
+                  legend={[
+                    { cls: 'ink', label: 'What is left, net profit' },
+                    { cls: 'spot', label: 'Cost line' },
+                  ]}
+                  rows={gmSplit
+                    .slice()
+                    .sort((a, b) => b.value - a.value)
+                    .map((r) => ({
+                      key: r.key,
+                      name: r.name,
+                      segments: [{ key: 'v', value: r.value, cls: r.key === 'buNetProfit' ? ('ink' as const) : ('spot' as const) }],
+                      end: k(r.value),
+                      endDelta: pct((r.value / gmTotal) * 100, 0),
+                      readout: `${k(r.value)}, ${pct((r.value / gmTotal) * 100)} OF THE ${k(gmTotal)} GROSS MARGIN`,
+                    }))}
+                />
+              ),
+            },
+          ]}
+        />
         <PlLadder groups={[divisionTotal]} cols={{ ytd: 'YTD', forecast: 'FY forecast', budget: 'FY budget' }} showVariance="all" />
         <p className="muted" style={{ marginTop: 'var(--s-md)' }}>
           Each vertical carries the same ladder on its own page.
@@ -82,6 +131,61 @@ export default function NetProfitReport() {
       </Section>
 
       <Section id="profitability" title="Vertical profitability" note={`Full-year ${meta.fiscalYear} forecast: revenue, gross margin, BU-level net profit and share of netted division revenue.`} source={sources['rollup.profitability']} asOf={asOf} defs={['fyForecast', 'buNetProfit', 'revenueShare']} definitions={definitions}>
+        <ChartSwitch
+          id="prof-chart"
+          views={[
+            {
+              key: 'quadrant',
+              label: 'Net margin against gross margin',
+              icon: 'quadrant',
+              render: () => (
+                <Quadrant
+                  id="prof-chart-quad"
+                  ariaLabel="Net profit percent against gross margin percent by vertical, bubble area is full-year forecast revenue. Exact values are in the table below."
+                  rows={profitability.rows.map((r) => ({ key: r.slug, name: r.name, x: r.gmPct, y: r.npPct, size: r.fyRevenue }))}
+                  refX={profitability.total.gmPct}
+                  refY={profitability.total.npPct}
+                  xLabel="GM percent"
+                  yLabel="NP percent"
+                  fx={(n) => pct(n, 0)}
+                  fy={(n) => pct(n, 0)}
+                  readout={(p) => `${k(profitability.rows.find((r) => r.slug === p.key)!.fyRevenue)} REVENUE, GM ${pct(p.x)}, NET ${pct(p.y)}`}
+                />
+              ),
+            },
+            {
+              key: 'bars',
+              label: 'Revenue and gross margin',
+              icon: 'bars',
+              render: () => (
+                <HBars
+                  id="prof-chart-bars"
+                  ariaLabel="Full-year forecast revenue by vertical, split into gross margin and cost of sales, largest first. Exact values are in the table below."
+                  format={k}
+                  legend={[
+                    { cls: 'spot', label: 'Gross margin' },
+                    { cls: 'spot2', label: 'Cost of sales' },
+                  ]}
+                  rows={profitability.rows
+                    .slice()
+                    .sort((a, b) => b.fyRevenue - a.fyRevenue)
+                    .map((r) => ({
+                      key: r.slug,
+                      name: r.name,
+                      segments: [
+                        { key: 'gm', value: r.fyGm, cls: 'spot' as const },
+                        { key: 'cos', value: r.fyRevenue - r.fyGm, cls: 'spot2' as const },
+                      ],
+                      end: k(r.fyRevenue),
+                      endDelta: `GM ${pct(r.gmPct, 0)}`,
+                      endBad: r.npPct < 0,
+                      readout: `REVENUE ${k(r.fyRevenue)}, GM ${k(r.fyGm)} (${pct(r.gmPct)}), NET ${k(r.fyNp)} (${pct(r.npPct)})`,
+                    }))}
+                />
+              ),
+            },
+          ]}
+        />
         <div className="scroll-x">
           <table className="mis sticky">
             <thead>

@@ -4,6 +4,7 @@ import { scaleLinear } from 'd3-scale';
 import { motion, useReducedMotion } from 'motion/react';
 import type { PlGroup, PlRungKey } from '../../data/schema';
 import { cx, k, signedK } from '../lib/format';
+import { GROUP_IN_VIEW, mark } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 interface Step {
@@ -89,8 +90,9 @@ export function Waterfall({ group, id, height = 250 }: { group: PlGroup; id: str
   const hcFigs = hc ? figures(hc) : '';
   const boxW = hc ? Math.min(width, 20 + (hcName.length + hcFigs.length + 3) * CH) : 0;
   const boxX = hc ? Math.max(0, Math.min(width - boxW, cx0(hover!) - boxW / 2)) : 0;
-  const grow = (delay: number, originY: 0 | 1) => (reduce ? {} : { initial: { scaleY: 0 }, whileInView: { scaleY: 1 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 0.5, delay, ease: 'easeOut' as const }, style: { originY } });
-  const fade = (delay: number) => (reduce ? {} : { initial: { opacity: 0 }, whileInView: { opacity: 1 }, viewport: { once: true, amount: 0.3 }, transition: { duration: 0.3, delay, ease: 'easeOut' as const } });
+  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const grow = (delay: number, originY: 0 | 1) => (reduce ? {} : { ...mark({ scaleY: 0 }, { scaleY: 1 }, delay), style: { originY } });
+  const fade = (delay: number) => (reduce ? {} : mark({ opacity: 0 }, { opacity: 1 }, delay, 0.3));
 
   return (
     <div className="chart-wrap" ref={ref}>
@@ -108,6 +110,7 @@ export function Waterfall({ group, id, height = 250 }: { group: PlGroup; id: str
             </g>
           ))}
         </g>
+        <motion.g {...grp}>
         {cols.map((c, i) => {
           const x0 = cx0(i) - barW / 2;
           const top = y(Math.max(c.from, c.to));
@@ -142,6 +145,7 @@ export function Waterfall({ group, id, height = 250 }: { group: PlGroup; id: str
             </g>
           );
         })}
+        </motion.g>
         {hc && (
           <g className="readbox" aria-hidden="true" transform={`translate(${boxX}, 2)`}>
             <rect width={boxW} height={22} />

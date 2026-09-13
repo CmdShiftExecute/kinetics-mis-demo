@@ -10,12 +10,22 @@ import { Num } from '../components/Num';
 import { ReasonTable } from '../components/ReasonTable';
 import { REASON_LABELS } from '../lib/reasons';
 import { HBars } from '../components/HBars';
+import type { BarRow } from '../components/HBars';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
 import { useRise, useRowReveal } from '../components/Reveal';
 
 const REASON_ORDER: ReasonKey[] = ['internalGroup', 'followUpNoResponse', 'disputesAndNotDue'];
+
+/** One legend for the age views, so the two bar readings cannot drift apart. */
+const AGE_LEGEND = [
+  { cls: 'spot2' as const, label: 'Not yet due' },
+  { cls: 'spot' as const, label: 'Past due, under a year' },
+  { cls: 'hz' as const, label: 'Aged over a year' },
+];
 
 /** Receivables by vertical: net to collect month on month, past due, aging, reasons and the largest balances. */
 export default function ReceivablesReport() {
@@ -38,6 +48,23 @@ export default function ReceivablesReport() {
   }
   const { meta, receivables, overview: o, definitions, sources, largestVertical } = data;
   const asOf = meta.dataAsOfLabel;
+  const recBars: BarRow[] = receivables.rows
+    .slice()
+    .sort((a, b) => b.totalOutstanding - a.totalOutstanding)
+    .map((r) => ({
+      key: r.slug,
+      name: r.name,
+      segments: [
+        { key: 'due', value: r.notYetDue, cls: 'spot2' as const },
+        { key: 'past', value: r.pastDue - r.agedOverOneYear, cls: 'spot' as const },
+        { key: 'aged', value: r.agedOverOneYear, cls: 'hz' as const },
+      ],
+      end: k(r.totalOutstanding),
+      endDelta: `${pct(r.pastDuePct, 0)} past due`,
+      endBad: r.pastDuePct >= 50,
+      readout: `${k(r.totalOutstanding)} OUTSTANDING, ${k(r.pastDue)} PAST DUE (${pct(r.pastDuePct)}), ${k(r.agedOverOneYear)} OVER A YEAR, PROVISION ${k(r.provision)}`,
+    }));
+  const reasonSlices = REASON_ORDER.map((key) => ({ key, name: REASON_LABELS[key], value: receivables.total.reasons[key] }));
   const prev = meta.previousMonthLabel.split(' ')[0];
   const cur = meta.currentMonthLabel.split(' ')[0];
   const others = receivables.rows.filter((r) => r.slug !== largestVertical.slug);
@@ -75,31 +102,18 @@ export default function ReceivablesReport() {
       />
 
       <Section id="by-vertical" title="Receivables by vertical" note={`Net to collect ${prev} and ${cur}; total outstanding, provision, past due beyond terms, aged over one year and disputed at ${cur} month end. The name opens the customer table.`} source={sources['rollup.receivables']} asOf={asOf} defs={['netToCollect', 'monthOnMonth', 'totalOutstanding', 'provisionReceivable', 'pastDue', 'agedOverOneYear', 'dispute']} definitions={definitions}>
-        <HBars
-          id="receivables-chart"
-          ariaLabel={`Total outstanding by vertical at ${cur} month end, split into not yet due, past due under a year and aged over a year, largest first. Exact values are in the table below.`}
-          format={k}
-          legend={[
-            { cls: 'spot2', label: 'Not yet due' },
-            { cls: 'spot', label: 'Past due, under a year' },
-            { cls: 'hz', label: 'Aged over a year' },
+        <ChartSwitch
+          id="rec-chart"
+          views={[
+            { key: 'bars', label: 'Outstanding by age', icon: 'bars', render: () => <HBars id="rec-chart-bars" ariaLabel={`Total outstanding by vertical at ${cur} month end, split into not yet due, past due under a year and aged over a year, largest first. Exact values are in the table below.`} format={k} legend={AGE_LEGEND} rows={recBars} /> },
+            {
+              key: 'share',
+              label: 'Share of what is owed',
+              icon: 'donut',
+              render: () => <Donut id="rec-chart-donut" format={k} centreLabel="Outstanding" ariaLabel="Share of total outstanding by vertical. Exact values are in the table below." rows={receivables.rows.map((r) => ({ key: r.slug, name: r.name, value: r.totalOutstanding }))} />,
+            },
+            { key: 'composition', label: 'Age mix, each to 100%', icon: 'stack', render: () => <HBars id="rec-chart-share" mode="share" ariaLabel="Age mix of each vertical's outstanding balance as shares of its own total. Exact values are in the table below." format={k} legend={AGE_LEGEND} rows={recBars} /> },
           ]}
-          rows={receivables.rows
-            .slice()
-            .sort((a, b) => b.totalOutstanding - a.totalOutstanding)
-            .map((r) => ({
-              key: r.slug,
-              name: r.name,
-              segments: [
-                { key: 'due', value: r.notYetDue, cls: 'spot2' as const },
-                { key: 'past', value: r.pastDue - r.agedOverOneYear, cls: 'spot' as const },
-                { key: 'aged', value: r.agedOverOneYear, cls: 'hz' as const },
-              ],
-              end: k(r.totalOutstanding),
-              endDelta: `${pct(r.pastDuePct, 0)} past due`,
-              endBad: r.pastDuePct >= 50,
-              readout: `${k(r.totalOutstanding)} OUTSTANDING, ${k(r.pastDue)} PAST DUE (${pct(r.pastDuePct)}), ${k(r.agedOverOneYear)} OVER A YEAR, PROVISION ${k(r.provision)}`,
-            }))}
         />
         <div className="scroll-x">
           <table className="mis sticky">
@@ -143,6 +157,38 @@ export default function ReceivablesReport() {
       </Section>
 
       <Section id="reasons" title="Reasons for non-collection" note={`Each customer balance carries one reason. The three buckets partition total outstanding of ${k(receivables.total.totalOutstanding)}.`} source={sources['rollup.receivables']} asOf={asOf} defs={['reasons', 'dispute', 'notYetDue']} definitions={definitions}>
+        <ChartSwitch
+          id="reason-chart"
+          views={[
+            {
+              key: 'ring',
+              label: 'Why it is not collected',
+              icon: 'donut',
+              render: () => <Donut id="reason-chart-donut" format={k} centreLabel="Outstanding" ariaLabel="Total outstanding split by reason for non-collection. Exact values are in the table below." keepOrder rows={reasonSlices} />,
+            },
+            {
+              key: 'bars',
+              label: 'Reasons, side by side',
+              icon: 'bars',
+              render: () => (
+                <HBars
+                  id="reason-chart-bars"
+                  ariaLabel="Total outstanding by reason for non-collection. Exact values are in the table below."
+                  format={k}
+                  legend={[{ cls: 'spot', label: 'Outstanding under this reason' }]}
+                  rows={reasonSlices.map((r) => ({
+                    key: r.key,
+                    name: r.name,
+                    segments: [{ key: 'v', value: r.value, cls: 'spot' as const }],
+                    end: k(r.value),
+                    endDelta: pct((r.value / receivables.total.totalOutstanding) * 100, 0),
+                    readout: `${k(r.value)}, ${pct((r.value / receivables.total.totalOutstanding) * 100)} OF TOTAL OUTSTANDING`,
+                  }))}
+                />
+              ),
+            },
+          ]}
+        />
         <div style={{ maxWidth: 640 }}>
           <ReasonTable reasons={receivables.total.reasons} total={receivables.total.totalOutstanding} />
         </div>

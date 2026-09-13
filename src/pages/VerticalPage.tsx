@@ -7,7 +7,7 @@ import { MONTHS, count, cx, dateLabel, k, pct, pts, signedK, signedPct } from '.
 import { Crumbs, Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
-import { MonthlyLine } from '../components/MonthlyLine';
+import { MonthlyChart } from '../components/MonthlyChart';
 import { PlLadder } from '../components/PlLadder';
 import { ReasonTable } from '../components/ReasonTable';
 import { SalesHead } from '../components/SalesHead';
@@ -92,7 +92,7 @@ export default function VerticalPage() {
 
       {/* Block 1: sales performance by engineer with product sub-rows */}
       <Section id="engineers" title="Sales performance by sales engineer" note={`${meta.periodLabel} actual and budget; forecast for ${meta.nearMonth} and ${meta.restOfYear}; FY budget; prior year; ROI. Product lines sit under each engineer; the name opens the engineer's page.`} source={sources['vertical.sales']} asOf={asOf} defs={['openOrders', 'expectedOrders', 'ytdRevenue', 'ytdBudget', 'fyForecast', 'priorYear', 'roiYtd', 'roiBudget', 'roiForecast', 'roiPriorYear', 'attributedTotal', 'sheetTotal']} definitions={definitions}>
-        <MonthlyLine points={monthly} year={meta.fiscalYear} subject={data.name} id={`v-${slug}`} height={220} />
+        <MonthlyChart points={monthly} year={meta.fiscalYear} subject={data.name} id={`v-${slug}`} height={220} />
         <div className="scroll-x" style={{ marginTop: 'var(--s-lg)' }}>
           <table className="mis dense sticky">
             <SalesHead prefix={prefix} firstLabel="Engineer and product line" nearMonth={nearMonth} restLabel={restLabel} />

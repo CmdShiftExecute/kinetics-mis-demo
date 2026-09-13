@@ -45,6 +45,7 @@ const rule = token('rule');
 const rowHover = token('row-hover');
 const spot = token('spot');
 const spot2 = token('spot-2');
+const ink3 = token('ink-3');
 
 interface Pair {
   what: string;
@@ -80,6 +81,7 @@ const pairs: Pair[] = [
   { what: 'Chart spot tint on paper (non-text)', fg: spot2, bg: paper, min: 3 },
   { what: 'Chart spot ink on a hovered band (non-text)', fg: spot, bg: rowHover, min: 3 },
   { what: 'Chart spot tint on a hovered band (non-text)', fg: spot2, bg: rowHover, min: 3 },
+  { what: 'Ring third tone on paper (non-text)', fg: ink3, bg: paper, min: 3 },
   { what: 'Hazard segment beside the spot ink (adjacent fills, reported only)', fg: hazard, bg: spot, min: 0 },
 ];
 

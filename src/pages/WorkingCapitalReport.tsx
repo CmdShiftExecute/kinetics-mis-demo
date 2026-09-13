@@ -8,10 +8,27 @@ import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { HBars } from '../components/HBars';
+import type { BarRow } from '../components/HBars';
+import { ChartSwitch } from '../components/ChartSwitch';
+import { Donut } from '../components/Donut';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
 import { useRise, useRowReveal } from '../components/Reveal';
+
+/** One legend per reading, so the two bar views of the same rows cannot drift apart. */
+const WC_LEGEND = [
+  { cls: 'spot' as const, label: 'Net receivables' },
+  { cls: 'spot2' as const, label: 'Unbilled' },
+  { cls: 'ink' as const, label: 'Stock at cost' },
+  { cls: 'hollow' as const, label: 'In transit, beside' },
+];
+const INV_LEGEND = [
+  { cls: 'spot2' as const, label: 'Under a year' },
+  { cls: 'spot' as const, label: 'One to two years' },
+  { cls: 'ink' as const, label: 'Two to three years' },
+  { cls: 'hz' as const, label: 'Over three years' },
+];
 
 /** Where working capital is tied up: receivables, unbilled and inventory, by vertical. */
 export default function WorkingCapitalReport() {
@@ -34,6 +51,40 @@ export default function WorkingCapitalReport() {
   }
   const { meta, workingCapital, unbilled, inventory, overview: o, definitions, sources } = data;
   const asOf = meta.dataAsOfLabel;
+  const wcBars: BarRow[] = workingCapital.rows
+    .slice()
+    .sort((a, b) => b.total - a.total)
+    .map((r) => ({
+      key: r.slug,
+      name: r.name,
+      segments: [
+        { key: 'rec', value: r.receivablesNet, cls: 'spot' as const },
+        { key: 'unb', value: r.unbilled, cls: 'spot2' as const },
+        { key: 'stk', value: r.inventoryStock, cls: 'ink' as const },
+        { key: 'trn', value: r.inTransit, cls: 'hollow' as const },
+      ],
+      end: k(r.total),
+      endDelta: `${pct((r.receivablesPastDue / Math.max(1, r.total)) * 100, 0)} past due`,
+      endBad: r.receivablesPastDue / Math.max(1, r.total) >= 0.4,
+      readout: `${k(r.total)} = RECEIVABLES ${k(r.receivablesNet)} + UNBILLED ${k(r.unbilled)} + STOCK ${k(r.inventoryStock)}; IN TRANSIT ${k(r.inTransit)} BESIDE`,
+    }));
+  const invBars: BarRow[] = inventory.rows
+    .slice()
+    .sort((a, b) => b.totalStock - a.totalStock)
+    .map((r) => ({
+      key: r.slug,
+      name: r.name,
+      segments: [
+        { key: 'u1', value: r.underOneYear, cls: 'spot2' as const },
+        { key: '1to2', value: r.oneToTwoYears, cls: 'spot' as const },
+        { key: '2to3', value: r.twoToThreeYears, cls: 'ink' as const },
+        { key: 'o3', value: r.overThreeYears, cls: 'hz' as const },
+      ],
+      end: k(r.totalStock),
+      endDelta: `${pct((r.agedOverOneYear / Math.max(1, r.totalStock)) * 100, 0)} over a year`,
+      endBad: r.agedOverOneYear / Math.max(1, r.totalStock) >= 0.3,
+      readout: `${k(r.totalStock)} AT COST, ${k(r.agedOverOneYear)} OVER A YEAR, FREE STOCK ${k(r.freeStock)}, PROVISION ${k(r.provision)}`,
+    }));
   const cur = meta.currentMonthLabel.split(' ')[0];
   const prev = meta.previousMonthLabel.split(' ')[0];
 
@@ -66,33 +117,34 @@ export default function WorkingCapitalReport() {
       />
 
       <Section id="by-vertical" title="Working capital by vertical" note="Net receivables, unbilled and stock at cost; goods in transit shown beside, not added." source={sources['rollup.receivables']} asOf={asOf} defs={['workingCapital', 'netToCollect', 'unbilled', 'inTransit']} definitions={definitions}>
-        <HBars
+        <ChartSwitch
           id="wc-chart"
-          ariaLabel="Working capital by vertical, largest first: net receivables, unbilled and stock at cost stacked, goods in transit drawn beside. Exact values are in the table below."
-          format={k}
-          legend={[
-            { cls: 'spot', label: 'Net receivables' },
-            { cls: 'spot2', label: 'Unbilled' },
-            { cls: 'ink', label: 'Stock at cost' },
-            { cls: 'hollow', label: 'In transit, beside' },
+          views={[
+            { key: 'bars', label: 'What it is made of', icon: 'bars', render: () => <HBars id="wc-chart-bars" ariaLabel="Working capital by vertical, largest first: net receivables, unbilled and stock at cost stacked, goods in transit drawn beside. Exact values are in the table below." format={k} legend={WC_LEGEND} rows={wcBars} /> },
+            {
+              /* Three parts that add to the division total exactly, which is what a ring
+                 is for. Who holds the most is already answered by the bars, which are
+                 sorted largest first. */
+              key: 'share',
+              label: 'What the division holds',
+              icon: 'donut',
+              render: () => (
+                <Donut
+                  id="wc-chart-donut"
+                  format={k}
+                  centreLabel="Working capital"
+                  ariaLabel="Division working capital split into net receivables, unbilled and stock at cost. Exact values are in the table below."
+                  keepOrder
+                  rows={[
+                    { key: 'rec', name: 'Net receivables', value: workingCapital.total.receivablesNet },
+                    { key: 'unb', name: 'Unbilled', value: workingCapital.total.unbilled },
+                    { key: 'stk', name: 'Stock at cost', value: workingCapital.total.inventoryStock },
+                  ]}
+                />
+              ),
+            },
+            { key: 'composition', label: 'Mix, each to 100%', icon: 'stack', render: () => <HBars id="wc-chart-share" mode="share" ariaLabel="The mix of each vertical's working capital as shares of its own total. Goods in transit are not part of the total and are left out of this view. Exact values are in the table below." format={k} legend={WC_LEGEND.slice(0, 3)} rows={wcBars} /> },
           ]}
-          rows={workingCapital.rows
-            .slice()
-            .sort((a, b) => b.total - a.total)
-            .map((r) => ({
-              key: r.slug,
-              name: r.name,
-              segments: [
-                { key: 'rec', value: r.receivablesNet, cls: 'spot' as const },
-                { key: 'unb', value: r.unbilled, cls: 'spot2' as const },
-                { key: 'stk', value: r.inventoryStock, cls: 'ink' as const },
-                { key: 'trn', value: r.inTransit, cls: 'hollow' as const },
-              ],
-              end: k(r.total),
-              endDelta: `${pct((r.receivablesPastDue / Math.max(1, r.total)) * 100, 0)} past due`,
-              endBad: r.receivablesPastDue / Math.max(1, r.total) >= 0.4,
-              readout: `${k(r.total)} = RECEIVABLES ${k(r.receivablesNet)} + UNBILLED ${k(r.unbilled)} + STOCK ${k(r.inventoryStock)}; IN TRANSIT ${k(r.inTransit)} BESIDE`,
-            }))}
         />
         <div className="scroll-x">
           <table className="mis sticky">
@@ -191,6 +243,33 @@ export default function WorkingCapitalReport() {
       </Section>
 
       <Section id="inventory" title="Inventory by vertical" note="Stock at cost by age since receipt; provision; stock mapped to purchase orders and free stock." source={sources['rollup.inventory']} asOf={asOf} defs={['inventoryBands', 'inventoryProvision', 'mappedLpo', 'freeStockOverOneYear', 'nonMoving', 'inTransit']} definitions={definitions}>
+        <ChartSwitch
+          id="inv-chart"
+          views={[
+            { key: 'bars', label: 'Stock by age', icon: 'bars', render: () => <HBars id="inv-chart-bars" ariaLabel="Stock at cost by vertical, split by age since receipt, largest first. Exact values are in the table below." format={k} legend={INV_LEGEND} rows={invBars} /> },
+            {
+              key: 'ring',
+              label: 'Division age bands',
+              icon: 'donut',
+              render: () => (
+                <Donut
+                  id="inv-chart-donut"
+                  format={k}
+                  centreLabel="Stock at cost"
+                  ariaLabel="Division stock at cost split by age since receipt. Exact values are in the table below."
+                  keepOrder
+                  rows={[
+                    { key: 'u1', name: 'Under a year', value: inventory.total.underOneYear },
+                    { key: '1to2', name: 'One to two years', value: inventory.total.oneToTwoYears },
+                    { key: '2to3', name: 'Two to three years', value: inventory.total.twoToThreeYears },
+                    { key: 'o3', name: 'Over three years', value: inventory.total.overThreeYears, bad: true },
+                  ]}
+                />
+              ),
+            },
+            { key: 'composition', label: 'Age mix, each to 100%', icon: 'stack', render: () => <HBars id="inv-chart-share" mode="share" ariaLabel="The age mix of each vertical's stock as shares of its own total. Exact values are in the table below." format={k} legend={INV_LEGEND} rows={invBars} /> },
+          ]}
+        />
         <div className="scroll-x">
           <table className="mis sticky">
             <thead>

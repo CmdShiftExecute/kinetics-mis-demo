@@ -7,6 +7,7 @@ import { animate, motion, useReducedMotion } from 'motion/react';
 import type { AnimationPlaybackControls } from 'motion/react';
 import type { MonthPoint } from '../../data/schema';
 import { cx, k, signedK } from '../lib/format';
+import { GROUP_IN_VIEW, mark } from './ChartMotion';
 
 interface Props {
   points: MonthPoint[];
@@ -124,7 +125,8 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
   const vmax = max(points, (p) => Math.abs(p.variance)) ?? 1;
   const vy = scaleLinear().domain([-vmax, vmax]).range([vh - vm.bottom, vm.top]);
   const barW = Math.max(6, Math.min(18, (x.step() ?? 20) * 0.45));
-  const draw = reduce ? {} : { initial: { pathLength: 0 }, whileInView: { pathLength: 1 }, viewport: { once: true, amount: 0.4 } };
+  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const draw = (delay: number, duration: number) => (reduce ? {} : mark({ pathLength: 0 }, { pathLength: 1 }, delay, duration));
   // The clip starts two units left of the last actual point so the round cap is kept,
   // and runs to the right edge of the svg so nothing to the right is ever cut.
   const clipX = (lastActual ? (x(lastActual.i) ?? m.left) : m.left) - 2;
@@ -191,8 +193,9 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
             </text>
           ),
         )}
-        <motion.path className="l-budget" d={gen(budgetPts) ?? ''} {...draw} transition={{ duration: 1.0, ease: 'easeOut' }} />
-        <motion.path className="l-actual" d={gen(actualPts) ?? ''} {...draw} transition={{ duration: 1.0, delay: 0.1, ease: 'easeOut' }} onAnimationComplete={revealForecast} />
+        <motion.g {...grp}>
+        <motion.path className="l-budget" d={gen(budgetPts) ?? ''} {...draw(0, 1)} />
+        <motion.path className="l-actual" d={gen(actualPts) ?? ''} {...draw(0.1, 1)} onAnimationComplete={revealForecast} />
         {/* Under reduced motion the clip is not applied at all: the forecast is simply there. */}
         {!reduce && (
           <clipPath id={clipId}>
@@ -200,6 +203,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
           </clipPath>
         )}
         <path className="l-forecast" d={gen(fcPts) ?? ''} clipPath={reduce ? undefined : `url(#${clipId})`} />
+        </motion.g>
         {hp && (
           <g aria-hidden="true">
             <line className="xh" x1={hx} x2={hx} y1={m.top} y2={height - m.bottom} />
@@ -262,6 +266,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
         <text x={m.left - 8} y={vy(0) + 4} textAnchor="end">
           0
         </text>
+        <motion.g {...grp}>
         {points.map((p) => {
           const cx0 = x(p.index) ?? 0;
           const top = Math.min(vy(0), vy(p.variance));
@@ -276,7 +281,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
                 width={barW}
                 height={Math.max(1, h)}
                 style={{ originY: neg ? 0 : 1 }}
-                {...(reduce ? {} : { initial: { scaleY: 0 }, whileInView: { scaleY: 1 }, viewport: { once: true, amount: 0.4 }, transition: { duration: 0.6, delay: 0.03 * p.index, ease: 'easeOut' } })}
+                {...(reduce ? {} : mark({ scaleY: 0 }, { scaleY: 1 }, 0.03 * p.index, 0.6))}
               />
               {(!dense || p.index % 2 === 1) && (
                 <text className={neg ? 'hz' : undefined} x={cx0} y={neg ? top + h + 11 : top - 4} textAnchor="middle">
@@ -286,37 +291,9 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
             </g>
           );
         })}
+        </motion.g>
       </svg>
 
-      <details className="values" id={`${id}-values`}>
-        <summary>Monthly values, AED thousand</summary>
-        <table className="mis compact">
-          <thead>
-            <tr>
-              <th scope="col">Month</th>
-              <th scope="col" className="left">
-                Basis
-              </th>
-              <th scope="col">Revenue</th>
-              <th scope="col">Budget</th>
-              <th scope="col">Variance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {points.map((p) => (
-              <tr key={p.index}>
-                <td>
-                  {p.month} {year}
-                </td>
-                <td className="left muted">{p.actual != null ? 'Actual' : 'Forecast'}</td>
-                <td className="num">{k(p.actual ?? p.forecast ?? 0)}</td>
-                <td className="num">{k(p.budget)}</td>
-                <td className={cx('num', p.variance < 0 && 'bad')}>{signedK(p.variance)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </details>
     </div>
   );
 }

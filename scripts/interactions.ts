@@ -71,7 +71,7 @@ async function alignment(page: Page, sel: string) {
  */
 const DASH_CLASH_FN = `() => {
   const nums = (s) => (String(s ?? '').match(/[\\d.]+/g) ?? []).map(Number);
-  return Array.from(document.querySelectorAll('svg.chart path[pathLength]')).map((p) => {
+  return Array.from(document.querySelectorAll('svg.chart [pathLength]')).map((p) => {
     const attr = nums(p.getAttribute('stroke-dasharray'));
     const computed = nums(getComputedStyle(p).strokeDasharray);
     const same = attr.length > 0 && attr.length === computed.length && attr.every((v, i) => Math.abs(v - computed[i]) < 0.01);
@@ -131,6 +131,39 @@ async function chartHover(page: Page, id: string, fx: number, fy: number) {
   const read = n === 0 ? '' : (await svg.locator('.readbox text').allTextContents()).join(' ').trim();
   const marks = await svg.locator('.mk-on').count();
   return { read, marks, live: read.length > 0 };
+}
+
+/**
+ * Every mark a chart drew must have actually entered: a real rendered box and full
+ * opacity once its entrance has settled. This is the check that would have caught
+ * the 13 Sep 2026 defect where four of ten bubbles sat at their initial state for
+ * ever because each mark carried its own IntersectionObserver and a mark scaled to
+ * zero has no area for the observer to measure.
+ */
+const MARKS_FN = `(sel) => {
+  const svgs = Array.from(document.querySelectorAll(sel));
+  const out = { marks: 0, dead: [] };
+  for (const svg of svgs) {
+    for (const el of Array.from(svg.querySelectorAll('rect.seg, circle.dot, circle.arc, circle.mk-on, path.l-actual, path.l-budget, path.l-gap, rect.vbar, rect.aband'))) {
+      const box = el.getBoundingClientRect();
+      const op = Number(getComputedStyle(el).opacity);
+      out.marks++;
+      if (op < 0.99 || box.width < 0.5 || box.height < 0.5) out.dead.push((el.getAttribute('class') || el.tagName) + ' op ' + op.toFixed(2) + ' ' + Math.round(box.width) + 'x' + Math.round(box.height));
+    }
+  }
+  return out;
+}`;
+async function marksEntered(page: Page, sel = 'svg.chart') {
+  return (await page.evaluate(`(${MARKS_FN})(${JSON.stringify(sel)})`)) as { marks: number; dead: string[] };
+}
+
+/** Clicks a view on a chart switch and waits for its entrance to settle. */
+async function setView(page: Page, id: string, view: string) {
+  const sw = page.getByTestId(`${id}-switch`);
+  await sw.scrollIntoViewIfNeeded();
+  await sw.locator(`button[data-view="${view}"]`).click();
+  await page.waitForTimeout(1400);
+  return sw;
 }
 
 const browser = await chromium.launch();
@@ -290,9 +323,9 @@ try {
   };
   const nz = (vals: number[][]) => vals.flat().filter((v) => v > 0).length;
   const chartSpecs = [
-    { path: '/sales', id: 'sales-chart', rows: roll.sales.rows.length, segs: nz(roll.sales.rows.map((r) => [r.ytdRevenue])), fx: 0.5, fy: 0.2 },
-    { path: '/receivables', id: 'receivables-chart', rows: roll.receivables.rows.length, segs: nz(roll.receivables.rows.map((r) => [r.notYetDue, r.pastDue - r.agedOverOneYear, r.agedOverOneYear])), fx: 0.4, fy: 0.15 },
-    { path: '/working-capital', id: 'wc-chart', rows: roll.workingCapital.rows.length, segs: nz(roll.workingCapital.rows.map((r) => [r.receivablesNet, r.unbilled, r.inventoryStock, r.inTransit])), fx: 0.3, fy: 0.12 },
+    { path: '/sales', id: 'sales-chart-bars', rows: roll.sales.rows.length, segs: nz(roll.sales.rows.map((r) => [r.ytdRevenue])), fx: 0.5, fy: 0.2 },
+    { path: '/receivables', id: 'rec-chart-bars', rows: roll.receivables.rows.length, segs: nz(roll.receivables.rows.map((r) => [r.notYetDue, r.pastDue - r.agedOverOneYear, r.agedOverOneYear])), fx: 0.4, fy: 0.15 },
+    { path: '/working-capital', id: 'wc-chart-bars', rows: roll.workingCapital.rows.length, segs: nz(roll.workingCapital.rows.map((r) => [r.receivablesNet, r.unbilled, r.inventoryStock, r.inTransit])), fx: 0.3, fy: 0.12 },
   ] as const;
   check(chartSpecs.every((c) => c.rows >= 5 && c.segs >= c.rows), `The published data yields ${chartSpecs.map((c) => `${c.segs}/${c.rows}`).join(', ')} expected segments per chart (a zero here would make the checks below vacuous)`);
   for (const c of chartSpecs) {
@@ -307,7 +340,7 @@ try {
   }
   // Keyboard walk on the sales chart, and the pointer negative control.
   await page.goto(`${base}/sales`, { waitUntil: 'networkidle' });
-  const sc = page.locator('svg#sales-chart');
+  const sc = page.locator('svg#sales-chart-bars');
   await sc.scrollIntoViewIfNeeded();
   await sc.focus();
   const k0 = (await sc.locator('.readbox text').allTextContents()).join(' ');
@@ -320,11 +353,11 @@ try {
   const kEsc = await sc.locator('.readbox').count();
   check(k0.length > 0 && k2 !== k0 && kEsc === 0, `Sales chart walks its rows by keyboard ("${k0.slice(0, 24)}" to "${k2.slice(0, 24)}") and Escape clears the readout`);
   await page.goto(`${base}/sales`, { waitUntil: 'networkidle' });
-  await page.locator('svg#sales-chart').evaluate((el) => {
+  await page.locator('svg#sales-chart-bars').evaluate((el) => {
     (el as SVGElement).style.pointerEvents = 'none';
     el.querySelectorAll('*').forEach((c) => ((c as SVGElement).style.pointerEvents = 'none'));
   });
-  const dead = await chartHover(page, 'sales-chart', 0.5, 0.2);
+  const dead = await chartHover(page, 'sales-chart-bars', 0.5, 0.2);
   check(!dead.live && dead.marks === 0, `Negative control: with pointer events off the sales chart gives no readout (${dead.marks} marks)`);
   // The P&L bridge ties to the ladder.
   await page.goto(`${base}/net-profit`, { waitUntil: 'networkidle' });
@@ -336,6 +369,77 @@ try {
   const ladderNp = (await page.locator('#pl table.mis tbody tr').filter({ hasText: /net profit/i }).first().locator('td').nth(1).innerText()).trim();
   check(cols === 9 && np.live && np.read.includes(ladderNp) && defAfter !== defBefore && defAfter.length > 20, `P&L bridge draws 9 steps; pointing at net profit reads "${np.read.slice(0, 40)}", ties to the ladder's ${ladderNp}, and prints the rung's definition`);
   await page.mouse.move(4, 4);
+
+  /* 4d. The chart view switches, added 13 Sep 2026. Every switch must offer its
+     views, every view must draw marks that actually entered, and the choice must
+     survive a reload. The marks check carries its own negative control: a mark
+     forced back to its entry state must be reported. */
+  const SWITCHES: { path: string; id: string; views: string[]; mark: string }[] = [
+    { path: '/', id: 'ov-monthly', views: ['line', 'columns', 'cumulative'], mark: 'svg.chart' },
+    { path: '/sales', id: 'sales-chart', views: ['bars', 'share', 'quadrant'], mark: 'svg.chart' },
+    { path: '/pipeline', id: 'dl-monthly', views: ['line', 'columns', 'cumulative'], mark: 'svg.chart' },
+    { path: '/pipeline', id: 'fc-chart', views: ['bars', 'share'], mark: 'svg.chart' },
+    { path: '/net-profit', id: 'pl-chart', views: ['bridge', 'split'], mark: 'svg.chart' },
+    { path: '/net-profit', id: 'prof-chart', views: ['quadrant', 'bars'], mark: 'svg.chart' },
+    { path: '/receivables', id: 'rec-chart', views: ['bars', 'share', 'composition'], mark: 'svg.chart' },
+    { path: '/receivables', id: 'reason-chart', views: ['ring', 'bars'], mark: 'svg.chart' },
+    { path: '/working-capital', id: 'wc-chart', views: ['bars', 'share', 'composition'], mark: 'svg.chart' },
+    { path: '/working-capital', id: 'inv-chart', views: ['bars', 'ring', 'composition'], mark: 'svg.chart' },
+  ];
+  check(SWITCHES.length === 10, `Ten chart switches are under test across six routes (a zero here would skip every check below)`);
+  for (const sp of SWITCHES) {
+    await page.goto(`${base}${sp.path}`, { waitUntil: 'networkidle' });
+    const sw = page.getByTestId(`${sp.id}-switch`);
+    await sw.scrollIntoViewIfNeeded();
+    const btns = await sw.locator('.cv-btns button').count();
+    check(btns === sp.views.length, `${sp.path} ${sp.id} offers ${btns} views, expected ${sp.views.length}`);
+    for (const v of sp.views) {
+      await setView(page, sp.id, v);
+      const pressed = await sw.locator(`button[data-view="${v}"]`).getAttribute('aria-pressed');
+      const drew = await sw.locator(sp.mark).count();
+      const m = await marksEntered(page, `[data-testid="${sp.id}-switch"] svg.chart`);
+      check(pressed === 'true' && drew > 0 && m.marks > 0 && m.dead.length === 0, `${sp.id} view "${v}" is pressed and every one of its ${m.marks} marks entered${m.dead.length ? '; STUCK: ' + m.dead.slice(0, 3).join(', ') : ''}`);
+    }
+    // back to the first view so a stored choice cannot leak into a later check
+    await setView(page, sp.id, sp.views[0]!);
+  }
+  // Negative control for the marks check: a mark pushed back to its entry state must be reported.
+  await page.goto(`${base}/sales`, { waitUntil: 'networkidle' });
+  await page.locator('svg#sales-chart-bars').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(900);
+  const marksBefore = await marksEntered(page, 'svg#sales-chart-bars');
+  await page.locator('svg#sales-chart-bars rect.seg').first().evaluate((el) => ((el as SVGElement).style.opacity = '0'));
+  const marksBroken = await marksEntered(page, 'svg#sales-chart-bars');
+  await page.locator('svg#sales-chart-bars rect.seg').first().evaluate((el) => ((el as SVGElement).style.opacity = ''));
+  const marksAgain = await marksEntered(page, 'svg#sales-chart-bars');
+  check(marksBefore.dead.length === 0 && marksBroken.dead.length === 1 && marksAgain.dead.length === 0, `Negative control: a bar forced back to its entry state is reported (${marksBroken.dead[0] ?? 'nothing reported'}) and clears once restored`);
+
+  // The view a reader picks survives a reload within the tab.
+  await setView(page, 'sales-chart', 'quadrant');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(600);
+  const keptPressed = await page.getByTestId('sales-chart-switch').locator('button[data-view="quadrant"]').getAttribute('aria-pressed');
+  const keptQuad = await page.locator('svg#sales-chart-quad').count();
+  await setView(page, 'sales-chart', 'bars');
+  check(keptPressed === 'true' && keptQuad === 1, `The chosen view survives a reload in the same tab (quadrant still pressed: ${keptPressed}, drawn: ${keptQuad})`);
+
+  /* 4e. The composition ring is geometrically whole: its arcs must add to the full
+     circle and each must start where the last ended. Both halves were wrong on the
+     first build, where pathOffset never reached the DOM and every arc started at
+     twelve o'clock on top of the last. */
+  await page.goto(`${base}/receivables`, { waitUntil: 'networkidle' });
+  await setView(page, 'reason-chart', 'ring');
+  const ringArcs = (await page.evaluate(() =>
+    Array.from(document.querySelectorAll('svg#reason-chart-donut circle.arc')).map((c) => {
+      const d = (getComputedStyle(c).strokeDasharray.match(/[\d.]+/g) ?? ['0']).map(Number);
+      const off = Number((getComputedStyle(c).strokeDashoffset.match(/-?[\d.]+/) ?? ['0'])[0]);
+      return { len: d[0] ?? 0, off };
+    }),
+  )) as { len: number; off: number }[];
+  const ringSum = ringArcs.reduce((a, r) => a + r.len, 0);
+  const offsetsRun = ringArcs.every((r, i) => i === 0 || Math.abs(-r.off - (ringArcs[i - 1]!.len + -ringArcs[i - 1]!.off)) < 0.002);
+  check(ringArcs.length === 3 && Math.abs(ringSum - 1) < 0.002 && offsetsRun, `The reasons ring is whole: ${ringArcs.length} arcs summing to ${ringSum.toFixed(3)} of the circle, each starting where the last ended (${offsetsRun})`);
+
   await page.goto(`${base}/`, { waitUntil: 'networkidle' });
   await page.waitForSelector('#sales table.mis');
   await page.waitForTimeout(400);
@@ -630,8 +734,8 @@ try {
   const opacityOk = await rp.evaluate(() => Array.from(document.querySelectorAll('section.sec, tr')).every((el) => getComputedStyle(el).opacity === '1'));
   check(anims === 0 && opacityOk, `Under reduced motion nothing is animating and every section and row is fully visible (${anims} running animations)`);
   await rp.goto(`${base}/sales`, { waitUntil: 'networkidle' });
-  await rp.waitForSelector('svg#sales-chart');
-  const rmBars = await rp.evaluate(() => Array.from(document.querySelectorAll('svg#sales-chart rect.seg')).map((r) => getComputedStyle(r).transform));
+  await rp.waitForSelector('svg#sales-chart-bars');
+  const rmBars = await rp.evaluate(() => Array.from(document.querySelectorAll('svg#sales-chart-bars rect.seg')).map((r) => getComputedStyle(r).transform));
   check(rmBars.length > 0 && rmBars.every((t) => t === 'none'), `Under reduced motion every chart bar is at rest with no transform (${rmBars.length} bars)`);
   // Negative control for check 13b: with motion off the same page must render STATIC.
   const staticFrames = new Set<string>();
