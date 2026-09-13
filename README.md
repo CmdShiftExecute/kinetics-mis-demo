@@ -99,6 +99,8 @@ Profit is compared full year to full year. No approved profit budget exists for 
 
 `bun run ask:regression` drives the live answer service with thirty real questions and checks the reply against the published data itself, never against a stored expectation, so the gate stays true after the seed changes. It fails below 28 of 30 and prints a finding if the 95th percentile latency runs past 12 seconds.
 
+Measured on 13 Sep 2026 against the live origin on node-ss: the reconciliation passes 527 of 527 assertions (`public/data/reconciliation.json`), the interaction gate passes 120 of 120 checks against https://node-ss.tail640a1e.ts.net:926/, and the tree carries no em or en dash, attribution line, credential shape or reference label (`bash deploy/scan-staged.sh` gates every commit chain).
+
 ## Ask the MIS
 
 Every page carries a right-hand panel, opened with Ctrl+K on Windows and Linux or Cmd+K on a Mac, or from the "Ask the MIS" button in the corner. It answers one question at a time in plain words, and every answer ends with a link to the report page that carries the figures it quoted. The conversation stays on screen when the reader follows a source link or moves between reports, survives a reload of the same tab, and ends when the tab closes or the reader presses "New chat"; it lives in the browser's session storage and is never sent anywhere.
