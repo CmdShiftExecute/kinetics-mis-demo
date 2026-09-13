@@ -8,6 +8,7 @@
  * browser memory and the gate must report it.
  */
 
+import { createHash } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
@@ -143,7 +144,7 @@ try {
   await page.screenshot({ path: join(out, 'gate netting disclosure.png'), clip: box ? { x: Math.max(0, box.x - 8), y: Math.max(0, box.y - 60), width: Math.min(1440, box.width + 16), height: box.height + 80 } : undefined });
 
   // 4. chart keyboard and exact values without hover
-  const chart = page.locator('#delivery svg.chart').first();
+  const chart = page.locator('#pipeline svg.chart').first();
   await chart.focus();
   await page.keyboard.press('ArrowLeft');
   await page.waitForTimeout(100);
@@ -156,13 +157,112 @@ try {
   await page.waitForTimeout(200);
   const valuesOpen = await page.locator('#ov-values').evaluate((el) => (el as HTMLDetailsElement).open);
   check(valueRows === 12 && valuesOpen, `Exact monthly values are in a table with ${valueRows} rows, opened by keyboard`);
-  await page.locator('#delivery svg.vchart').scrollIntoViewIfNeeded();
+  await page.locator('#pipeline svg.vchart').scrollIntoViewIfNeeded();
   await page.waitForTimeout(900);
-  const bars = await page.evaluate(() => Array.from(document.querySelectorAll('#delivery svg.vchart rect.vbar')).map((r) => [r.getAttribute('height'), r.getAttribute('y')]));
+  const bars = await page.evaluate(() => Array.from(document.querySelectorAll('#pipeline svg.vchart rect.vbar')).map((r) => [r.getAttribute('height'), r.getAttribute('y')]));
   const barsOk = bars.length === 12 && bars.every(([h, y]) => h != null && y != null && Number.isFinite(Number(h)) && Number.isFinite(Number(y)) && Number(h) >= 1);
   check(barsOk, `Every variance bar carries a numeric height and y attribute after animating in (${bars.length} bars)`);
-  const axisNote = await page.locator('#delivery .chart-axis-note').first().innerText();
+  const axisNote = await page.locator('#pipeline .chart-axis-note').first().innerText();
   check(/starts at .* not zero/i.test(axisNote), `Truncated revenue axis is labelled ("${axisNote.slice(0, 60)}")`);
+
+  // 4b. PLAIN MOUSE HOVER. Check 4 above drives the chart with the keyboard, which is
+  // why this gate passed for months while the principal could not make either the rows
+  // or the charts respond to a mouse on 13 Sep 2026: nothing here had ever moved a
+  // pointer. Each check below is followed by a negative control, because a check that
+  // has never reported FAIL has never been tested.
+  const lum = (rgb: string) => {
+    const c = (rgb.match(/\d+/g) ?? ['0', '0', '0']).map(Number);
+    const f = (v: number) => {
+      const s = v / 255;
+      return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+    };
+    return 0.2126 * f(c[0]!) + 0.7152 * f(c[1]!) + 0.0722 * f(c[2]!);
+  };
+  const ratio = (a: number, b: number) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  const away = async () => {
+    await page.mouse.move(4, 4);
+    await page.waitForTimeout(150);
+  };
+
+  // Element HANDLES, not locators. A locator built on `tr.hov` re-resolves on every
+  // use, so the moment the negative control strips that class the locator silently
+  // points at the NEXT row, which is genuinely hovered, and the control reports a
+  // change that proves nothing. A handle stays bound to the one row under test.
+  const hoverRow = (await page.locator('#sales table.mis tbody tr.hov').first().elementHandle())!;
+  const hoverCell = (await hoverRow.$('td:nth-child(2)'))!;
+  const firstCell = (await hoverRow.$('td:first-child'))!;
+  await away();
+  const atRest = lum(await hoverCell.evaluate((el) => getComputedStyle(el).backgroundColor));
+  await hoverRow.hover();
+  await page.waitForTimeout(250);
+  const shaded = ratio(atRest, lum(await hoverCell.evaluate((el) => getComputedStyle(el).backgroundColor)));
+  const bracket = await firstCell.evaluate((el) => getComputedStyle(el).boxShadow);
+  check(shaded >= 1.2 && /rgb\(17, ?17, ?17\)/.test(bracket) && /inset/.test(bracket), `Hovering a row shades it ${shaded.toFixed(2)}:1 against the resting row and brackets it in an ink rule`);
+
+  await away();
+  await hoverRow.evaluate((el) => el.classList.remove('hov'));
+  await hoverRow.hover();
+  await page.waitForTimeout(200);
+  const noHovClass = ratio(atRest, lum(await hoverCell.evaluate((el) => getComputedStyle(el).backgroundColor)));
+  check(noHovClass < 1.02, `Negative control: with the hov class removed the identical hover changes nothing (${noHovClass.toFixed(2)}:1)`);
+  await hoverRow.evaluate((el) => el.classList.add('hov'));
+
+  // Both charts must answer a plain pointer move over empty plot area, with no click.
+  for (const [sel, label] of [
+    ['#pipeline svg.chart', 'The monthly revenue chart'],
+    ['#pipeline svg.vchart', 'The variance plot'],
+  ] as const) {
+    await away();
+    const c = page.locator(sel).first();
+    await c.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(200);
+    const b = (await c.boundingBox())!;
+    await page.mouse.move(b.x + b.width * 0.62, b.y + b.height * 0.2, { steps: 3 });
+    await page.waitForTimeout(220);
+    const xh = await c.locator('line.xh').count();
+    check(xh === 1, `${label} answers a plain pointer move with a crosshair and no click (${xh} crosshair drawn)`);
+  }
+
+  // The control runs on a FRESH load: the hover state is shared by both charts, so a
+  // crosshair left over from the check above would be counted as a false survivor and
+  // the control would report a failure that says nothing about pointer handling.
+  await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+  await page.waitForSelector('#pipeline svg.chart');
+  await page.waitForTimeout(400);
+  const ctrlChart = page.locator('#pipeline svg.chart').first();
+  await ctrlChart.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(200);
+  const preCondition = await ctrlChart.locator('line.xh').count();
+  // Disable the children too. The capture rect carries `pointer-events: all` in the
+  // stylesheet, which overrides `none` inherited from the svg — so setting it on the
+  // svg alone leaves the rect live and the control proves nothing. (That it kept
+  // working is itself evidence the capture surface does its job.)
+  await ctrlChart.evaluate((el) => {
+    (el as SVGElement).style.pointerEvents = 'none';
+    el.querySelectorAll('*').forEach((c) => ((c as SVGElement).style.pointerEvents = 'none'));
+  });
+  const cb = (await ctrlChart.boundingBox())!;
+  await page.mouse.move(cb.x + cb.width * 0.62, cb.y + cb.height * 0.2, { steps: 3 });
+  await page.waitForTimeout(260);
+  const deadChart = await ctrlChart.locator('line.xh').count();
+  check(preCondition === 0 && deadChart === 0, `Negative control: with pointer events off the identical move draws no crosshair (${preCondition} before, ${deadChart} after)`);
+  await ctrlChart.evaluate((el) => {
+    (el as SVGElement).style.pointerEvents = '';
+    el.querySelectorAll('*').forEach((c) => ((c as SVGElement).style.pointerEvents = ''));
+  });
+  await away();
+
+  // The pointer shape over a grid of figures must be the arrow, not the writing I-beam.
+  const cursors = await page.evaluate(() => ({
+    cell: getComputedStyle(document.querySelector('#sales table.mis td')!).cursor,
+    head: getComputedStyle(document.querySelector('#sales table.mis th')!).cursor,
+    link: getComputedStyle(document.querySelector('#sales table.mis a[href]')!).cursor,
+    chart: getComputedStyle(document.querySelector('#pipeline svg.chart')!).cursor,
+  }));
+  check(
+    cursors.cell === 'default' && cursors.head === 'default' && cursors.link === 'pointer' && cursors.chart === 'crosshair',
+    `Pointer shapes are declared, not inherited: cell ${cursors.cell}, header ${cursors.head}, link ${cursors.link}, chart ${cursors.chart}`,
+  );
 
   // 5. real keyboard traversal: tab through the page and record the sequence
   await page.goto(`${base}/`, { waitUntil: 'networkidle' });
@@ -291,7 +391,7 @@ try {
   // 13. every report route renders its heading
   for (const [path, h] of [
     ['/sales', 'Sales'],
-    ['/delivery', 'Delivery'],
+    ['/pipeline', 'Pipeline'],
     ['/net-profit', 'Net profit'],
     ['/receivables', 'Receivables'],
     ['/working-capital', 'Working capital'],
@@ -303,6 +403,30 @@ try {
   }
   const recText = await page.locator('#reconciliation').innerText();
   check(/all pass/i.test(recText), `Data basis page shows the reconciliation result ("${(recText.match(/\d+ of \d+ assertions pass/) ?? [''])[0]}")`);
+
+  // 13b. EVERY route must actually animate on entry, measured as rendered frames.
+  // Until 13 Sep 2026 nothing here could tell an animated page from a dead one: the
+  // row-reveal fade is imperceptible on its own, so Sales and Net profit — the two
+  // pages with no headline strip and no chart — rendered identically from first paint
+  // and the principal reported the app as static everywhere but the home page.
+  const frameHashes = async (pg: Page, path: string) => {
+    const seen = new Set<string>();
+    await pg.goto(`${base}${path}`, { waitUntil: 'commit' });
+    // Anchor on mount, not on navigation. Entry motion starts when the content exists,
+    // so a heavy page that paints late would otherwise be sampled twice while blank and
+    // read as static. Waiting for the h1 makes the window the same on every route.
+    await pg.waitForSelector('h1', { timeout: 15000 }).catch(() => {});
+    for (const gap of [0, 60, 90, 140, 220, 400]) {
+      await pg.waitForTimeout(gap);
+      const buf = await pg.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } });
+      seen.add(createHash('md5').update(buf).digest('hex'));
+    }
+    return seen.size;
+  };
+  for (const path of ['/', '/sales', '/pipeline', '/net-profit', '/receivables', '/working-capital', '/data-basis']) {
+    const n = await frameHashes(page, path);
+    check(n >= 3, `${path} animates on entry (${n} distinct rendered frames across the first 1.4s; a static page gives 2)`);
+  }
 
   // 14. invalid route, missing data, malformed data
   await page.goto(`${base}/no/such/page`, { waitUntil: 'networkidle' });
@@ -328,6 +452,15 @@ try {
   const anims = await rp.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
   const opacityOk = await rp.evaluate(() => Array.from(document.querySelectorAll('section.sec, tr')).every((el) => getComputedStyle(el).opacity === '1'));
   check(anims === 0 && opacityOk, `Under reduced motion nothing is animating and every section and row is fully visible (${anims} running animations)`);
+  // Negative control for check 13b: with motion off the same page must render STATIC.
+  const staticFrames = new Set<string>();
+  await rp.goto(`${base}/sales`, { waitUntil: 'commit' });
+  await rp.waitForSelector('h1', { timeout: 15000 }).catch(() => {});
+  for (const gap of [0, 60, 90, 140, 220, 400]) {
+    await rp.waitForTimeout(gap);
+    staticFrames.add(createHash('md5').update(await rp.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } })).digest('hex'));
+  }
+  check(staticFrames.size <= 2, `Negative control: under reduced motion /sales renders static (${staticFrames.size} distinct frames, against ${'>=3'} with motion on)`);
   await rp.locator('.ask-launch').click();
   await rp.waitForSelector('[data-testid="ask-panel"]');
   const panelAnims = await rp.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);

@@ -406,10 +406,10 @@ describe('finish', () => {
     expect(f.answer).toBe('Cooling revenue was 22,815 AED thousand, or 4.2%.');
   });
   test('detects the refusal wording', () => {
-    const f = finish(`${REFUSAL} The nearest report is Delivery.\nSource: Delivery`, index, published, null);
+    const f = finish(`${REFUSAL} The nearest report is Pipeline.\nSource: Pipeline`, index, published, null);
     expect(f.refused).toBe(true);
-    expect(f.page.to).toBe('/delivery');
-    const g = finish('The published data does not carry a delivery variance percentage.\nSource: Delivery', index, published, null);
+    expect(f.page.to).toBe('/pipeline');
+    const g = finish('The published data does not carry a delivery variance percentage.\nSource: Pipeline', index, published, null);
     expect(g.refused).toBe(true);
   });
   test('reports a self-correcting answer', () => {

@@ -11,7 +11,7 @@ import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { SortTh } from '../components/SortTh';
 import { MonthlyLine } from '../components/MonthlyLine';
-import { Strip } from '../components/Strip';
+import { CountUp, Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
 import { useRowReveal } from '../components/Reveal';
@@ -46,7 +46,8 @@ export default function Overview() {
     );
   }
 
-  const { meta, overview: o, sales, monthly, definitions, sources, receivables, largestVertical } = data;
+  const { meta, overview: o, sales, monthly, definitions, sources, receivables, largestVertical, profitability } = data;
+  const orderBook = sales.total.openOrders + sales.total.expectedOrders;
   const asOf = meta.dataAsOfLabel;
   const sortProps = (key: SalesKey, natural: 'asc' | 'desc') => ({ active: state.key === key, dir: state.dir, natural, onSort: () => toggle(key, natural) });
 
@@ -66,6 +67,67 @@ export default function Overview() {
           {meta.periodLabel} actual. {meta.nearMonth} onward forecast. FY {meta.fiscalYear} budget.
         </p>
       </div>
+
+      {/* The six figures a division head reads first: what we sold, what we will land,
+          what is committed ahead, what we keep, what is owed beyond terms, and what is
+          tied up. Each opens the section that carries its detail. Every figure is
+          published in rollup.json; none is derived here. */}
+      <dl className="strip answers" aria-label="The six headline figures" id="answers" style={{ '--cols': 6 } as React.CSSProperties}>
+        <div>
+          <dt>YTD revenue</dt>
+          <dd className="big"><CountUp value={o.sales.ytdRevenue} f={mil} delay={0.15} /></dd>
+          <dd className="sub">
+            <Link to="#sales" className="vlink">
+              <span className={cx(o.sales.variance < 0 && 'bad')}>{signedK(o.sales.variance)}</span> on {k(o.sales.ytdBudget)} budget ({signedPct(o.sales.variancePct)})
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>FY revenue forecast</dt>
+          <dd className="big"><CountUp value={o.delivery.fyForecast} f={mil} delay={0.2} /></dd>
+          <dd className="sub">
+            <Link to="#pipeline" className="vlink">
+              <span className={cx(o.delivery.variance < 0 && 'bad')}>{signedPct(o.delivery.variancePct)}</span> on budget, {signedPct(o.delivery.yoyPct)} on FY {meta.fiscalYear - 1}
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>Order book</dt>
+          <dd className="big"><CountUp value={orderBook} f={mil} delay={0.25} /></dd>
+          <dd className="sub">
+            <Link to="#sales" className="vlink">
+              {k(sales.total.openOrders)} open, {k(sales.total.expectedOrders)} expected
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>FY net profit</dt>
+          <dd className="big"><CountUp value={o.profit.forecast.buNetProfit} f={mil} delay={0.3} /></dd>
+          <dd className="sub">
+            <Link to="#net-profit" className="vlink">
+              <span className={cx(o.profit.npForecastVsBudget < 0 && 'bad')}>{signedK(o.profit.npForecastVsBudget)}</span> on budget, {pct(profitability.total.npPct)} of revenue
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>Past due</dt>
+          <dd className="big bad"><CountUp value={o.receivables.pastDue} f={mil} delay={0.35} /></dd>
+          <dd className="sub">
+            <Link to="#receivables" className="vlink">
+              {pct(o.receivables.pastDuePct)} of {k(o.receivables.totalOutstanding)} outstanding, {k(o.receivables.agedOverOneYear)} over a year
+            </Link>
+          </dd>
+        </div>
+        <div>
+          <dt>Working capital</dt>
+          <dd className="big"><CountUp value={o.workingCapital.total} f={mil} delay={0.4} /></dd>
+          <dd className="sub">
+            <Link to="#receivables" className="vlink">
+              {k(o.workingCapital.receivablesNet)} receivables, {k(o.workingCapital.unbilled)} unbilled, {k(o.workingCapital.inventoryStock)} stock
+            </Link>
+          </dd>
+        </div>
+      </dl>
 
       <div className="overview-grid">
         {/* 1. Sales against plan */}
@@ -125,8 +187,8 @@ export default function Overview() {
           </details>
         </Section>
 
-        {/* 2. Delivery */}
-        <Section id="delivery" title="Delivery" note={`Full-year ${meta.fiscalYear} forecast against full-year budget. Forecast is YTD actual plus engineer forecasts for ${meta.nearMonth} onward.`} link={{ to: '/delivery', label: 'Full delivery report' }} source={sources['rollup.monthly']} asOf={asOf} defs={['fyForecast', 'fyBudget', 'variance']} definitions={definitions} compact>
+        {/* 2. Pipeline */}
+        <Section id="pipeline" title="Pipeline" note={`Full-year ${meta.fiscalYear} forecast against full-year budget. Forecast is YTD actual plus engineer forecasts for ${meta.nearMonth} onward.`} link={{ to: '/pipeline', label: 'Full pipeline report' }} source={sources['rollup.monthly']} asOf={asOf} defs={['fyForecast', 'fyBudget', 'variance']} definitions={definitions} compact>
           <Strip
             cols={3}
             items={[

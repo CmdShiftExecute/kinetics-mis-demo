@@ -27,7 +27,7 @@ const widths = arg('widths', '1440,1024,390').split(',').map((w) => Number(w));
 const pages = [
   { path: '/', name: 'overview' },
   { path: '/sales', name: 'sales' },
-  { path: '/delivery', name: 'delivery' },
+  { path: '/pipeline', name: 'pipeline' },
   { path: '/net-profit', name: 'net-profit' },
   { path: '/receivables', name: 'receivables' },
   { path: '/working-capital', name: 'working-capital' },

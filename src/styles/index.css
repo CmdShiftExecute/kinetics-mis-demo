@@ -5,11 +5,15 @@
   --paper: #f4f4f0;
   --paper-2: #eae8e3;
   --paper-3: #dedbd3;
+  /* Substrate of a hovered table row. Aliased, never a second literal. */
+  --row-hover: var(--paper-3);
   --ink: #111111;
   --ink-2: #4a4842;
   --rule: #c9c6bd;
   --hazard: #e61919;
-  --hazard-text: #c41414;
+  /* Darkened from #c41414 on 13 Sep 2026: the deeper hovered-row substrate pushed the
+     old red to 4.39:1, under the 4.5:1 floor. Measured by scripts/check_contrast.ts. */
+  --hazard-text: #b81111;
   --font-display: 'Archivo Black', 'Arial Black', Impact, sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -345,6 +349,19 @@ p {
   font-size: 11px;
   color: var(--ink-2);
 }
+/* The headline band at the top of the overview: the figures a division head reads
+   before any table. A heavier top rule separates it from the masthead, and the
+   figures are set one step larger than an in-section strip. */
+.strip.answers {
+  margin-top: var(--s-xl);
+  border-top: 2px solid var(--ink);
+}
+.strip.answers .big {
+  font-size: 22px;
+}
+.strip.answers .sub a {
+  font-weight: 400;
+}
 @media (max-width: 1100px) {
   .strip {
     grid-template-columns: repeat(3, 1fr);
@@ -597,6 +614,9 @@ table.mis tr.indent th[scope='row'] {
 table.mis tr.clickable {
   cursor: pointer;
 }
+/* The hovered row. The old --paper-2 shift alone measured 1.09:1 against the paper,
+   which is below the threshold a reader notices, so the row is now also bracketed top
+   and bottom by an ink rule. Both effects are inset, so nothing reflows on hover. */
 table.mis tbody.hov:hover > tr td,
 table.mis tbody.hov:hover > tr th[scope='row'],
 table.mis tbody.hov:focus-within > tr td,
@@ -605,7 +625,8 @@ table.mis tr.hov:hover td,
 table.mis tr.hov:hover th[scope='row'],
 table.mis tr.hov:focus-within td,
 table.mis tr.hov:focus-within th[scope='row'] {
-  background: var(--paper-2);
+  background: var(--row-hover);
+  box-shadow: inset 0 1px 0 var(--ink), inset 0 -1px 0 var(--ink);
 }
 table.mis tr.eng td,
 table.mis tr.eng th[scope='row'] {
@@ -673,7 +694,8 @@ table.mis.sticky tbody.hov:hover > tr td:first-child,
 table.mis.sticky tbody.hov:hover > tr th:first-child,
 table.mis.sticky tr.hov:hover td:first-child,
 table.mis.sticky tr.hov:hover th:first-child {
-  background: var(--paper-2);
+  background: var(--row-hover);
+  box-shadow: inset 0 1px 0 var(--ink), inset 0 -1px 0 var(--ink), 1px 0 0 var(--rule);
 }
 table.mis.sticky thead th {
   z-index: 3;
@@ -784,6 +806,30 @@ th[aria-sort='descending'] button.sort {
   }
 }
 
+/* ---------- cursor: a dashboard of figures is not a page of prose ----------
+   Firefox, and so Zen, shows the writing I-beam over any selectable text. Across a
+   dense grid of numbers that reads as a text document rather than a report, which is
+   what the principal reported on 13 Sep 2026. The figures stay selectable; only the
+   pointer shape changes. Anything clickable now declares its own cursor instead of
+   inheriting a user-agent default, so no element is left ambiguous. */
+table.mis th,
+table.mis td,
+table.mis caption,
+.strip,
+.chart-axis-note,
+.chart-legend {
+  cursor: default;
+}
+a[href],
+summary,
+button,
+.sort,
+.vlink,
+.press,
+table.mis tr.clickable {
+  cursor: pointer;
+}
+
 /* ---------- P&L ladder with definition rail ---------- */
 .pl {
   display: grid;
@@ -836,7 +882,8 @@ table.mis tr.rung:focus-visible td,
 table.mis tr.rung:focus-visible th[scope='row'],
 table.mis tr.rung.active td,
 table.mis tr.rung.active th[scope='row'] {
-  background: var(--paper-2);
+  background: var(--row-hover);
+  box-shadow: inset 0 1px 0 var(--ink), inset 0 -1px 0 var(--ink);
 }
 @media (max-width: 1023px) {
   .pl {
@@ -865,7 +912,7 @@ table.mis tr.rung.active th[scope='row'] {
   overflow: visible;
 }
 .chart.vchart {
-  cursor: default;
+  cursor: crosshair;
 }
 .chart:focus-visible {
   outline-offset: 6px;
@@ -920,7 +967,16 @@ table.mis tr.rung.active th[scope='row'] {
 }
 .chart .xh {
   stroke: var(--ink);
-  stroke-width: 1;
+  stroke-width: 1.5;
+}
+.chart .xh-tick {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+/* The transparent capture surface. It carries no paint, only a hit area, so a plain
+   pointer move anywhere over the plot reaches the svg handler in every engine. */
+.chart .hit {
+  pointer-events: all;
 }
 .chart .readbox rect {
   fill: var(--ink);
@@ -948,6 +1004,11 @@ table.mis tr.rung.active th[scope='row'] {
 }
 .chart .vbar.fc {
   fill-opacity: 0.55;
+}
+.chart .vbar.on {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  fill-opacity: 1;
 }
 .chart-legend {
   display: flex;

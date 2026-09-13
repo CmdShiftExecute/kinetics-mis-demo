@@ -5,7 +5,7 @@
 ## Read the code graph before you read the code
 
 This repo has a **Graft code graph**: every file, function, class and method as a
-node, every call and import as an edge. It is 376 nodes and 897 edges,
+node, every call and import as an edge. It is 400 nodes and 947 edges,
 rebuilt nightly at 04:35 GST. **Use it before grepping or reading whole files.**
 Reading this repo's source in full costs orders of magnitude more context than
 the three commands below.

@@ -1,18 +1,23 @@
+import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import type { ProfitabilityRow, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
-import { cx, pct, signedK } from '../lib/format';
+import { cx, k, pct, signedK } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
 import { PlLadder } from '../components/PlLadder';
+import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
+import { useRise, useRowReveal } from '../components/Reveal';
 
-/** The P&L ladder in three column groups and vertical profitability on the FY forecast. */
+/** The division-total P&L ladder and vertical profitability on the FY forecast. */
 export default function NetProfitReport() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
+  const rise = useRise();
+  const rowReveal = useRowReveal();
   if (error) {
     return (
       <div className="wrap">
@@ -32,7 +37,9 @@ export default function NetProfitReport() {
   const others = profitability.rows.filter((r) => r.slug !== largestVertical.slug);
   const largest = profitability.rows.find((r) => r.slug === largestVertical.slug)!;
   const maxShare = Math.max(...profitability.rows.map((x) => x.revenueShare));
-  const plDefs = pl[0]!.rungs.map((r) => ({ key: `pl-${r.key}`, term: r.label, text: `${r.definition} Fed by: ${r.feeds}.` }));
+  const divisionTotal = pl.find((g) => g.key === 'total')!;
+  const npBudget = divisionTotal.rungs.find((r) => r.key === 'buNetProfit')!.budget;
+  const plDefs = divisionTotal.rungs.map((r) => ({ key: `pl-${r.key}`, term: r.label, text: `${r.definition} Fed by: ${r.feeds}.` }));
   const defs = { ...definitions, ...Object.fromEntries(plDefs.map((d) => [d.key, d])) };
 
 
@@ -41,7 +48,9 @@ export default function NetProfitReport() {
       <Masthead meta={meta} />
       <div className="page-head">
         <div>
-          <h1 className="display page-title">Net profit</h1>
+          <motion.h1 className="display page-title" {...rise()}>
+            Net profit
+          </motion.h1>
           <p className="page-sub">Profit and loss summary and vertical profitability, FY {meta.fiscalYear}</p>
         </div>
         <p className="page-basis">
@@ -51,10 +60,22 @@ export default function NetProfitReport() {
         </p>
       </div>
 
-      <Section id="pl" title="Profit and loss summary" note={`${largestVertical.name} is ${pct(largest.revenueShare, 0)} of forecast revenue, so the ladder is shown without it, for it alone, and in total. Hover or tab a line for its definition.`} source={sources['rollup.pl']} asOf={asOf} defs={['plColumns', ...plDefs.map((d) => d.key)]} definitions={defs}>
-        <PlLadder groups={pl} cols={{ ytd: 'YTD', forecast: 'FY forecast', budget: 'FY budget' }} showVariance="last" />
+      {/* Headline figures, added 13 Sep 2026. See the note in SalesReport: these were
+          the two report pages with no headline strip and no chart. */}
+      <Strip
+        cols={4}
+        items={[
+          { label: 'FY forecast revenue', value: profitability.total.fyRevenue, f: k },
+          { label: 'FY gross margin', value: profitability.total.fyGm, f: k, sub: `${pct(profitability.total.gmPct)} of revenue` },
+          { label: 'FY net profit', value: profitability.total.fyNp, f: k, sub: `${signedK(profitability.total.fyNp - npBudget)} against FY budget` },
+          { label: 'Net margin', value: profitability.total.npPct, f: pct, sub: 'of netted division revenue' },
+        ]}
+      />
+
+      <Section id="pl" title="Profit and loss summary" note="Division total, revenue down to BU-level net profit. Hover or tab a line for its definition." source={sources['rollup.pl']} asOf={asOf} defs={['plColumns', ...plDefs.map((d) => d.key)]} definitions={defs}>
+        <PlLadder groups={[divisionTotal]} cols={{ ytd: 'YTD', forecast: 'FY forecast', budget: 'FY budget' }} showVariance="all" />
         <p className="muted" style={{ marginTop: 'var(--s-md)' }}>
-          Excluding {largestVertical.name} plus {largestVertical.name} equals the division total on every line, checked on the Data basis page.
+          Each vertical carries the same ladder on its own page.
         </p>
       </Section>
 
@@ -75,8 +96,8 @@ export default function NetProfitReport() {
               </tr>
             </thead>
             <tbody>
-              {[...others].sort((a, b) => a.fyNp - b.fyNp).map((r) => (
-                <Row key={r.slug} r={r} largest={largestVertical.slug} maxShare={maxShare} />
+              {[...others].sort((a, b) => a.fyNp - b.fyNp).map((r, i) => (
+                <Row key={r.slug} r={r} largest={largestVertical.slug} maxShare={maxShare} reveal={rowReveal(i)} />
               ))}
               <Row r={profitability.subtotalExcludingLargest} cls="sub" largest={largestVertical.slug} maxShare={maxShare} />
               <Row r={largest} largest={largestVertical.slug} maxShare={maxShare} />
@@ -99,9 +120,9 @@ export default function NetProfitReport() {
   );
 }
 
-function Row({ r, cls, largest, maxShare }: { r: ProfitabilityRow; cls?: string; largest: string; maxShare: number }) {
+function Row({ r, cls, largest, maxShare, reveal }: { r: ProfitabilityRow; cls?: string; largest: string; maxShare: number; reveal?: object }) {
 return (
-  <tr className={cls ?? 'hov'}>
+  <motion.tr className={cls ?? 'hov'} {...reveal}>
     <td>
       {cls ? (
         r.name
@@ -120,6 +141,6 @@ return (
       {!cls && <span className={cx('bar', r.slug === largest && 'soft')} style={{ width: `${(r.revenueShare / maxShare) * 90}px` }} aria-hidden="true" />}
       {pct(r.revenueShare)}
     </td>
-  </tr>
+  </motion.tr>
 );
 }

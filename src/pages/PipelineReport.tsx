@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import type { ForecastRow, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
@@ -10,10 +11,13 @@ import { MonthlyLine } from '../components/MonthlyLine';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
+import { useRise, useRowReveal } from '../components/Reveal';
 
 /** Revenue forecast and pipeline by vertical, with the division's monthly run. */
-export default function DeliveryReport() {
+export default function PipelineReport() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
+  const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) {
     return (
       <div className="wrap">
@@ -41,7 +45,9 @@ export default function DeliveryReport() {
       <Masthead meta={meta} />
       <div className="page-head">
         <div>
-          <h1 className="display page-title">Delivery</h1>
+          <motion.h1 className="display page-title" {...rise()}>
+            Pipeline
+          </motion.h1>
           <p className="page-sub">Revenue forecast and pipeline by vertical, full year {meta.fiscalYear}</p>
         </div>
         <p className="page-basis">
@@ -83,8 +89,8 @@ export default function DeliveryReport() {
               </tr>
             </thead>
             <tbody>
-              {others.map((r) => (
-                <Row key={r.slug} r={r} />
+              {others.map((r, i) => (
+                <Row key={r.slug} r={r} reveal={rowReveal(i)} />
               ))}
               <Row r={forecast.subtotalExcludingLargest} cls="sub" />
               <Row r={largest} />
@@ -102,27 +108,35 @@ export default function DeliveryReport() {
   );
 }
 
-function Row({ r, cls }: { r: ForecastRow; cls?: string }) {
-return (
-  <tr className={cls ?? 'hov'}>
-    <td>
-      {cls ? (
-        r.name
-      ) : (
-        <Link to={`/v/${r.slug}`} className="vlink press">
-          {r.name}
-        </Link>
-      )}
-    </td>
-    <Num v={r.priorYearRevenue} />
-    <Num v={r.ytdRevenue} />
-    <Num v={r.nearMonthForecast} />
-    <Num v={r.restOfYearForecast} />
-    <Num v={r.fyForecast} />
-    <Num v={r.fyBudget} />
-    <Num v={r.dFy} f={signedK} bad={r.dFy < 0} />
-    <Num v={r.fcVsBudgetPct} f={signedPct} bad={r.fcVsBudgetPct < 0} />
-    <Num v={r.yoyPct} f={signedPct} bad={r.yoyPct < 0} />
-  </tr>
-);
+function Row({ r, cls, reveal }: { r: ForecastRow; cls?: string; reveal?: object }) {
+  const cells = (
+    <>
+      <td>
+        {cls ? (
+          r.name
+        ) : (
+          <Link to={`/v/${r.slug}`} className="vlink press">
+            {r.name}
+          </Link>
+        )}
+      </td>
+      <Num v={r.priorYearRevenue} />
+      <Num v={r.ytdRevenue} />
+      <Num v={r.nearMonthForecast} />
+      <Num v={r.restOfYearForecast} />
+      <Num v={r.fyForecast} />
+      <Num v={r.fyBudget} />
+      <Num v={r.dFy} f={signedK} bad={r.dFy < 0} />
+      <Num v={r.fcVsBudgetPct} f={signedPct} bad={r.fcVsBudgetPct < 0} />
+      <Num v={r.yoyPct} f={signedPct} bad={r.yoyPct < 0} />
+    </>
+  );
+  if (reveal) {
+    return (
+      <motion.tr className={cls ?? 'hov'} {...reveal}>
+        {cells}
+      </motion.tr>
+    );
+  }
+  return <tr className={cls ?? 'hov'}>{cells}</tr>;
 }

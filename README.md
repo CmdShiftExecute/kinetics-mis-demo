@@ -8,10 +8,10 @@ This is a zero-backend management information system demo built for a fictional 
 
 | Route | Description |
 |---|---|
-| `/` | Overview: the division headline, the data-as-of stamp, and summary blocks for sales, delivery, profit, receivables and working capital. |
+| `/` | Overview: the division headline, the data-as-of stamp, and summary blocks for sales, pipeline, profit, receivables and working capital. |
 | `/sales` | Sales: YTD revenue and gross margin by vertical against budget, with the netting explanation. |
-| `/delivery` | Delivery: revenue forecast by vertical against budget and against prior year. |
-| `/net-profit` | Net profit: the profit and loss ladder from revenue down to BU-level net profit, by vertical group. |
+| `/pipeline` | Pipeline: revenue forecast by vertical against budget and against prior year. |
+| `/net-profit` | Net profit: the profit and loss ladder from revenue down to BU-level net profit, division total, and vertical profitability. |
 | `/receivables` | Receivables: net to collect, past due and aging by vertical, with the largest balances by reason. |
 | `/working-capital` | Working capital: receivables, unbilled and inventory tied up by vertical. |
 | `/data-basis` | Data basis: sources, definitions, the precision policy, the assumptions, and the reconciliation result. |

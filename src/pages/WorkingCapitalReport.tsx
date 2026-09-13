@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import type { Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
@@ -9,10 +10,13 @@ import { Num } from '../components/Num';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
+import { useRise, useRowReveal } from '../components/Reveal';
 
 /** Where working capital is tied up: receivables, unbilled and inventory, by vertical. */
 export default function WorkingCapitalReport() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
+  const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) {
     return (
       <div className="wrap">
@@ -37,7 +41,9 @@ export default function WorkingCapitalReport() {
       <Masthead meta={meta} />
       <div className="page-head">
         <div>
-          <h1 className="display page-title">Working capital</h1>
+          <motion.h1 className="display page-title" {...rise()}>
+            Working capital
+          </motion.h1>
           <p className="page-sub">Receivables, unbilled and inventory by vertical at {meta.currentMonthLabel} month end</p>
         </div>
         <p className="page-basis">
@@ -74,8 +80,8 @@ export default function WorkingCapitalReport() {
               </tr>
             </thead>
             <tbody>
-              {[...workingCapital.rows].sort((a, b) => b.total - a.total).map((r) => (
-                <tr key={r.slug} className="hov">
+              {[...workingCapital.rows].sort((a, b) => b.total - a.total).map((r, i) => (
+                <motion.tr key={r.slug} className="hov" {...rowReveal(i)}>
                   <td>
                     <Link to={`/v/${r.slug}`} className="vlink press">
                       {r.name}
@@ -88,7 +94,7 @@ export default function WorkingCapitalReport() {
                   <Num v={r.inventoryFreeStockOverOneYear} bad={r.inventoryFreeStockOverOneYear > 0} />
                   <Num v={r.total} />
                   <Num v={r.inTransit} />
-                </tr>
+                </motion.tr>
               ))}
               <tr className="total">
                 <td>{workingCapital.total.name}</td>
@@ -122,8 +128,8 @@ export default function WorkingCapitalReport() {
               </tr>
             </thead>
             <tbody>
-              {unbilled.rows.map((r) => (
-                <tr key={r.slug} className="hov">
+              {unbilled.rows.map((r, i) => (
+                <motion.tr key={r.slug} className="hov" {...rowReveal(i)}>
                   <td>
                     <Link to={`/v/${r.slug}#unbilled`} className="vlink press">
                       {r.name}
@@ -137,7 +143,7 @@ export default function WorkingCapitalReport() {
                   <Num v={r.currentMonth} />
                   <Num v={r.agedOver60} bad={r.agedOver60 > 0} />
                   <Num v={r.provision} />
-                </tr>
+                </motion.tr>
               ))}
               <tr className="total">
                 <td>{unbilled.total.name}</td>
@@ -189,8 +195,8 @@ export default function WorkingCapitalReport() {
               </tr>
             </thead>
             <tbody>
-              {inventory.rows.map((r) => (
-                <tr key={r.slug} className="hov">
+              {inventory.rows.map((r, i) => (
+                <motion.tr key={r.slug} className="hov" {...rowReveal(i)}>
                   <td>
                     <Link to={`/v/${r.slug}#inventory`} className="vlink press">
                       {r.name}
@@ -208,7 +214,7 @@ export default function WorkingCapitalReport() {
                   <Num v={r.freeStock} />
                   <Num v={r.freeStockOverOneYear} bad={r.freeStockOverOneYear > 0} />
                   <Num v={r.inTransit} />
-                </tr>
+                </motion.tr>
               ))}
               <tr className="total">
                 <td>{inventory.total.name}</td>

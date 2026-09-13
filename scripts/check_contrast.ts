@@ -14,9 +14,13 @@ const here = dirname(fileURLToPath(import.meta.url));
 const css = readFileSync(join(here, '..', 'src', 'styles', 'index.css'), 'utf8');
 
 function token(name: string): string {
-  const m = css.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`));
+  const m = css.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6}|var\\(--[a-z0-9-]+\\))`));
   if (!m) throw new Error(`Token --${name} not found in index.css`);
-  return m[1]!.toLowerCase();
+  const v = m[1]!.toLowerCase();
+  // A semantic token may alias another, e.g. --row-hover: var(--paper-3). Resolve it
+  // so the gate measures the colour that actually paints, not the alias.
+  const alias = v.match(/^var\(--([a-z0-9-]+)\)$/);
+  return alias ? token(alias[1]!) : v;
 }
 
 function luminance(hex: string): number {
@@ -38,6 +42,7 @@ const ink2 = token('ink-2');
 const hazard = token('hazard');
 const hazardText = token('hazard-text');
 const rule = token('rule');
+const rowHover = token('row-hover');
 
 interface Pair {
   what: string;
@@ -57,6 +62,16 @@ const pairs: Pair[] = [
   { what: 'Chart readbox hazard text (#ff9a9a on ink)', fg: '#ff9a9a', bg: ink, min: 4.5 },
   { what: 'Hazard marks, bars and borders on paper (non-text)', fg: hazard, bg: paper, min: 3 },
   { what: 'Hairline rule on paper (decorative, reported only)', fg: rule, bg: paper, min: 0 },
+  // The hovered row. The pair below the text pairs is the one that matters for
+  // perception: --paper-2 gave a 1.11:1 step against the paper, which the principal
+  // could not see on 13 Sep 2026. The floor of 1.2 holds that ground. The ink
+  // bracket rule is what carries the signal, so it is measured against the hairline
+  // it replaces, not against the paper.
+  { what: 'Text on a hovered row (ink on row-hover)', fg: ink, bg: rowHover, min: 4.5 },
+  { what: 'Labels on a hovered row (ink-2 on row-hover)', fg: ink2, bg: rowHover, min: 4.5 },
+  { what: 'Hazard text on a hovered row', fg: hazardText, bg: rowHover, min: 4.5 },
+  { what: 'Hovered row is visible against the paper (non-text)', fg: rowHover, bg: paper, min: 1.2 },
+  { what: 'Hovered row bracket against the hairline it replaces (non-text)', fg: ink, bg: rule, min: 3 },
 ];
 
 let failed = false;

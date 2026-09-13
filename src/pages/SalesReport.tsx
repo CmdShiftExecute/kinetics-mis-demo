@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import type { Rollup, SalesRow } from '../../data/schema';
 import { useJson } from '../lib/data';
@@ -6,12 +7,16 @@ import { k, pct, pts, signedK, signedPct } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
+import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
+import { useRise, useRowReveal } from '../components/Reveal';
 
 /** Sales performance by vertical, the engineer split, and the netting note with every shared line. */
 export default function SalesReport() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
+  const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) {
     return (
       <div className="wrap">
@@ -31,14 +36,16 @@ export default function SalesReport() {
   const others = sales.rows.filter((r) => r.slug !== largestVertical.slug);
   const largest = sales.rows.find((r) => r.slug === largestVertical.slug)!;
   const nameOf = (slug: string) => sales.rows.find((r) => r.slug === slug)?.name ?? slug;
-
+  let rowIndex = 0;
 
   return (
     <div className="wrap">
       <Masthead meta={meta} />
       <div className="page-head">
         <div>
-          <h1 className="display page-title">Sales</h1>
+          <motion.h1 className="display page-title" {...rise()}>
+            Sales
+          </motion.h1>
           <p className="page-sub">Sales performance by vertical, {meta.periodLabel}</p>
         </div>
         <p className="page-basis">
@@ -47,6 +54,19 @@ export default function SalesReport() {
           YTD actual against YTD budget, same months
         </p>
       </div>
+
+      {/* Headline figures. Sales and Net profit were the only two report pages with
+          neither a headline strip nor a chart, which is why they read as dead next to
+          the overview: the row reveal alone is imperceptible. Measured 13 Sep 2026. */}
+      <Strip
+        cols={4}
+        items={[
+          { label: 'YTD revenue', value: sales.total.ytdRevenue, f: k },
+          { label: 'YTD budget', value: sales.total.budgetRevenue, f: k },
+          { label: 'Actual less budget', value: sales.total.dRevenue, f: signedK, sub: `${signedPct(sales.total.dRevenuePct)} of budget`, bad: sales.total.dRevenue < 0 },
+          { label: 'YTD gross margin', value: sales.total.ytdGm, f: k, sub: `${pct(sales.total.ytdGmPct)} of revenue` },
+        ]}
+      />
 
       <Section id="sales-by-vertical" title="Sales performance by vertical" note={`Open and expected orders at ${meta.currentMonthLabel}; revenue and gross margin for ${meta.periodLabel}; budget phased for the same months.`} source={sources['rollup.sales']} asOf={asOf} defs={['openOrders', 'expectedOrders', 'ytdRevenue', 'ytdBudget', 'variance', 'gmPct', 'attributedTotal']} definitions={definitions}>
         <div className="scroll-x">
@@ -84,8 +104,8 @@ export default function SalesReport() {
               </tr>
             </thead>
             <tbody>
-              {others.map((r) => (
-                <Row key={r.slug} r={r} />
+              {others.map((r, i) => (
+                <Row key={r.slug} r={r} reveal={rowReveal(i)} />
               ))}
               <Row r={sales.subtotalExcludingLargest} cls="sub" />
               <Row r={largest} />
@@ -127,7 +147,7 @@ export default function SalesReport() {
                   <td className="num" colSpan={2} />
                 </tr>
                 {(engineerSplit[v.slug] ?? []).map((e) => (
-                  <tr key={e.slug} className="indent hov">
+                  <motion.tr key={e.slug} className="indent hov" {...rowReveal(rowIndex++)}>
                     <td>
                       <Link to={`/v/${v.slug}/e/${e.slug}`} className="elink press">
                         {e.name}
@@ -139,7 +159,7 @@ export default function SalesReport() {
                     <Num v={e.ytdGmPct} f={pct} />
                     <Num v={e.fyForecast} />
                     <Num v={e.fyBudget} />
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             ))}
@@ -171,7 +191,7 @@ export default function SalesReport() {
             </thead>
             <tbody>
               {sales.netting.items.map((it, i) => (
-                <tr key={i}>
+                <motion.tr key={i} {...rowReveal(i)}>
                   <td>{it.product}</td>
                   <td className="left">
                     <Link to={`/v/${it.homeVertical}/e/${it.engineer.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="elink">
@@ -182,7 +202,7 @@ export default function SalesReport() {
                   <td className="left">{nameOf(it.categoryVertical)}</td>
                   <Num v={it.ytdRevenue} />
                   <Num v={it.fyForecastRevenue} />
-                </tr>
+                </motion.tr>
               ))}
               <tr className="total">
                 <td colSpan={4}>Double counted if sheets were added</td>
@@ -199,30 +219,38 @@ export default function SalesReport() {
   );
 }
 
-function Row({ r, cls }: { r: SalesRow; cls?: string }) {
-return (
-  <tr className={cls ?? 'hov'}>
-    <td>
-      {cls ? (
-        r.name
-      ) : (
-        <Link to={`/v/${r.slug}`} className="vlink press">
-          {r.name}
-        </Link>
-      )}
-    </td>
-    <Num v={r.openOrders} />
-    <Num v={r.expectedOrders} />
-    <Num v={r.ytdRevenue} />
-    <Num v={r.ytdGm} />
-    <Num v={r.ytdGmPct} f={pct} />
-    <Num v={r.budgetRevenue} />
-    <Num v={r.budgetGm} />
-    <Num v={r.budgetGmPct} f={pct} />
-    <Num v={r.dRevenue} f={signedK} bad={r.dRevenue < 0} />
-    <Num v={r.dRevenuePct} f={signedPct} bad={r.dRevenuePct < 0} />
-    <Num v={r.dGm} f={signedK} bad={r.dGm < 0} />
-    <Num v={r.dGmPts} f={pts} bad={r.dGmPts < 0} />
-  </tr>
-);
+function Row({ r, cls, reveal }: { r: SalesRow; cls?: string; reveal?: object }) {
+  const cells = (
+    <>
+      <td>
+        {cls ? (
+          r.name
+        ) : (
+          <Link to={`/v/${r.slug}`} className="vlink press">
+            {r.name}
+          </Link>
+        )}
+      </td>
+      <Num v={r.openOrders} />
+      <Num v={r.expectedOrders} />
+      <Num v={r.ytdRevenue} />
+      <Num v={r.ytdGm} />
+      <Num v={r.ytdGmPct} f={pct} />
+      <Num v={r.budgetRevenue} />
+      <Num v={r.budgetGm} />
+      <Num v={r.budgetGmPct} f={pct} />
+      <Num v={r.dRevenue} f={signedK} bad={r.dRevenue < 0} />
+      <Num v={r.dRevenuePct} f={signedPct} bad={r.dRevenuePct < 0} />
+      <Num v={r.dGm} f={signedK} bad={r.dGm < 0} />
+      <Num v={r.dGmPts} f={pts} bad={r.dGmPts < 0} />
+    </>
+  );
+  if (reveal) {
+    return (
+      <motion.tr className={cls ?? 'hov'} {...reveal}>
+        {cells}
+      </motion.tr>
+    );
+  }
+  return <tr className={cls ?? 'hov'}>{cells}</tr>;
 }

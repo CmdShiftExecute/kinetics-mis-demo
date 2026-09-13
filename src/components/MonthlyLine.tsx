@@ -130,6 +130,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
         onFocus={() => setHover(lastActual?.i ?? 1)}
         onBlur={() => setHover(null)}
       >
+        <rect className="hit" x={0} y={0} width={width} height={height} fill="transparent" />
         {boundaryX != null && (
           <g className="fc-zone" aria-hidden="true">
             <rect x={boundaryX} y={m.top} width={width - m.right - boundaryX} height={height - m.top - m.bottom} />
@@ -165,6 +166,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
         {hp && (
           <g aria-hidden="true">
             <line className="xh" x1={hx} x2={hx} y1={m.top} y2={height - m.bottom} />
+            <line className="xh-tick" x1={hx} x2={hx} y1={height - m.bottom} y2={height - m.bottom + 6} />
             <circle className="dot" cx={hx} cy={y(hp.budget)} r={3} />
             <circle className="dot" cx={hx} cy={y(hv)} r={4} />
             <g className="readbox" transform={`translate(${boxX}, ${boxY})`}>
@@ -203,8 +205,23 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
       <p className="chart-axis-note" style={{ marginTop: 'var(--s-lg)' }}>
         Variance to budget by month: actual (or forecast) less budget, AED thousand, zero baseline.
       </p>
-      <svg className="chart vchart" width={width} height={vh} viewBox={`0 0 ${width} ${vh}`} role="img" aria-label={`Monthly variance to budget for ${subject}. Exact values are in the table below.`}>
+      <svg
+        className="chart vchart"
+        width={width}
+        height={vh}
+        viewBox={`0 0 ${width} ${vh}`}
+        role="img"
+        aria-label={`Monthly variance to budget for ${subject}. Exact values are in the table below.`}
+        tabIndex={0}
+        onPointerMove={onMove}
+        onPointerLeave={() => setHover(null)}
+        onKeyDown={onKey}
+        onFocus={() => setHover(lastActual?.i ?? 1)}
+        onBlur={() => setHover(null)}
+      >
+        <rect className="hit" x={0} y={0} width={width} height={vh} fill="transparent" />
         <line className="zero" x1={m.left} x2={width - m.right} y1={vy(0)} y2={vy(0)} />
+        {hp && <line className="xh" x1={hx} x2={hx} y1={vm.top} y2={vh - vm.bottom} />}
         <text x={m.left - 8} y={vy(0) + 4} textAnchor="end">
           0
         </text>
@@ -216,7 +233,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
           return (
             <g key={p.index}>
               <motion.rect
-                className={cx('vbar', neg && 'neg', p.forecast != null && 'fc')}
+                className={cx('vbar', neg && 'neg', p.forecast != null && 'fc', hover === p.index && 'on')}
                 x={cx0 - barW / 2}
                 y={top}
                 width={barW}

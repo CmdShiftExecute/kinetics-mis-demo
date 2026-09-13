@@ -1,17 +1,21 @@
+import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import type { Reconciliation, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateReconciliation, validateRollup } from '../lib/validate';
-import { cx, k } from '../lib/format';
+import { count, cx, k } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
+import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
+import { useRise } from '../components/Reveal';
 
 /** Sources, definitions, the precision policy, the reconciliation result and the synthetic assumptions. */
 export default function DataBasis() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
   const rec = useJson<Reconciliation>('reconciliation.json', validateReconciliation);
+  const rise = useRise();
   if (error) {
     return (
       <div className="wrap">
@@ -36,7 +40,9 @@ export default function DataBasis() {
       <Masthead meta={meta} />
       <div className="page-head">
         <div>
-          <h1 className="display page-title">Data basis</h1>
+          <motion.h1 className="display page-title" {...rise()}>
+            Data basis
+          </motion.h1>
           <p className="page-sub">Where every figure comes from, what it means, and the machine's own check that the tables agree</p>
         </div>
         <p className="page-basis">
@@ -45,6 +51,18 @@ export default function DataBasis() {
           Generated {meta.generatedAt.replace('T', ' ').slice(0, 16)} GST, seed {meta.seed}
         </p>
       </div>
+
+      {/* Headline figures, so this page carries the same entry motion as every other. */}
+      {rec.data && (
+        <Strip
+          cols={3}
+          items={[
+            { label: 'Assertions checked', value: rec.data.assertions.length, f: count, sub: 'every figure tied to every other' },
+            { label: 'Passing', value: rec.data.passed, f: count, sub: `checked ${rec.data.checkedAt.replace('T', ' ').slice(0, 16)} GST` },
+            { label: 'Failing', value: rec.data.failed, f: count, sub: rec.data.failed === 0 ? 'the tables agree' : 'listed first below', bad: rec.data.failed > 0 },
+          ]}
+        />
+      )}
 
       <Section id="reporting-basis" title="Reporting basis">
         <dl className="basis-list">

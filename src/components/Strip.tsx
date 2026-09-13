@@ -13,7 +13,9 @@ export interface StripItem {
   bad?: boolean;
 }
 
-function CountUp({ value, f, delay }: { value: number; f: (n: number) => string; delay: number }) {
+/** A figure that counts up on entry. Exported so the overview's headline band uses the
+ *  identical tween as every in-section Strip, rather than a second implementation. */
+export function CountUp({ value, f, delay }: { value: number; f: (n: number) => string; delay: number }) {
   const reduce = useReducedMotion();
   const mv = useMotionValue(reduce ? value : value * 0.6);
   const text = useTransform(mv, (v) => f(v));

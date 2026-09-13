@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import type { ReasonKey, ReceivableSummaryRow, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
@@ -11,12 +12,15 @@ import { REASON_LABELS } from '../lib/reasons';
 import { Strip } from '../components/Strip';
 import { Footer } from '../components/Footer';
 import { ErrorBlock, TableSkeleton } from '../components/Skeleton';
+import { useRise, useRowReveal } from '../components/Reveal';
 
 const REASON_ORDER: ReasonKey[] = ['internalGroup', 'followUpNoResponse', 'disputesAndNotDue'];
 
 /** Receivables by vertical: net to collect month on month, past due, aging, reasons and the largest balances. */
 export default function ReceivablesReport() {
   const { data, error } = useJson<Rollup>('rollup.json', validateRollup);
+  const rowReveal = useRowReveal();
+  const rise = useRise();
   if (error) {
     return (
       <div className="wrap">
@@ -44,7 +48,9 @@ export default function ReceivablesReport() {
       <Masthead meta={meta} />
       <div className="page-head">
         <div>
-          <h1 className="display page-title">Receivables</h1>
+          <motion.h1 className="display page-title" {...rise()}>
+            Receivables
+          </motion.h1>
           <p className="page-sub">
             Collections by vertical at {meta.currentMonthLabel} month end
           </p>
@@ -95,8 +101,8 @@ export default function ReceivablesReport() {
               </tr>
             </thead>
             <tbody>
-              {[...others].sort((a, b) => b.currentMonth - a.currentMonth).map((r) => (
-                <Row key={r.slug} r={r} />
+              {[...others].sort((a, b) => b.currentMonth - a.currentMonth).map((r, i) => (
+                <Row key={r.slug} r={r} reveal={rowReveal(i)} />
               ))}
               <Row r={receivables.subtotalExcludingLargest} cls="sub" />
               <Row r={largest} />
@@ -159,8 +165,8 @@ export default function ReceivablesReport() {
               </tr>
             </thead>
             <tbody>
-              {receivables.rows.map((r) => (
-                <tr key={r.slug} className="hov">
+              {receivables.rows.map((r, i) => (
+                <motion.tr key={r.slug} className="hov" {...rowReveal(i)}>
                   <td>
                     <Link to={`/v/${r.slug}/receivables`} className="vlink press">
                       {r.name}
@@ -181,7 +187,7 @@ export default function ReceivablesReport() {
                       'None'
                     )}
                   </td>
-                </tr>
+                </motion.tr>
               ))}
               <tr className="total">
                 <td>{receivables.total.name}</td>
@@ -203,28 +209,36 @@ export default function ReceivablesReport() {
   );
 }
 
-function Row({ r, cls }: { r: ReceivableSummaryRow; cls?: string }) {
-return (
-  <tr className={cls ?? 'hov'}>
-    <td>
-      {cls ? (
-        r.name
-      ) : (
-        <Link to={`/v/${r.slug}/receivables`} className="vlink press">
-          {r.name}
-        </Link>
-      )}
-    </td>
-    <Num v={r.previousMonth} />
-    <Num v={r.currentMonth} />
-    <Num v={r.change} f={signedK} bad={r.change > 0} />
-    <Num v={r.totalOutstanding} />
-    <Num v={r.provision} />
-    <Num v={r.pastDue} bad={r.pastDue > 0} />
-    <Num v={r.pastDuePct} f={pct} />
-    <Num v={r.agedOverOneYear} bad={r.agedOverOneYear > 0} />
-    <Num v={r.agedOverOneYearPct} f={pct} />
-    <Num v={r.disputed} bad={r.disputed > 0} />
-  </tr>
-);
+function Row({ r, cls, reveal }: { r: ReceivableSummaryRow; cls?: string; reveal?: object }) {
+  const cells = (
+    <>
+      <td>
+        {cls ? (
+          r.name
+        ) : (
+          <Link to={`/v/${r.slug}/receivables`} className="vlink press">
+            {r.name}
+          </Link>
+        )}
+      </td>
+      <Num v={r.previousMonth} />
+      <Num v={r.currentMonth} />
+      <Num v={r.change} f={signedK} bad={r.change > 0} />
+      <Num v={r.totalOutstanding} />
+      <Num v={r.provision} />
+      <Num v={r.pastDue} bad={r.pastDue > 0} />
+      <Num v={r.pastDuePct} f={pct} />
+      <Num v={r.agedOverOneYear} bad={r.agedOverOneYear > 0} />
+      <Num v={r.agedOverOneYearPct} f={pct} />
+      <Num v={r.disputed} bad={r.disputed > 0} />
+    </>
+  );
+  if (reveal) {
+    return (
+      <motion.tr className={cls ?? 'hov'} {...reveal}>
+        {cells}
+      </motion.tr>
+    );
+  }
+  return <tr className={cls ?? 'hov'}>{cells}</tr>;
 }
