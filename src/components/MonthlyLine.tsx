@@ -3,7 +3,8 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { scaleLinear, scalePoint } from 'd3-scale';
 import { line as d3line } from 'd3-shape';
 import { max, min } from 'd3-array';
-import { motion, useReducedMotion } from 'motion/react';
+import { animate, motion, useReducedMotion } from 'motion/react';
+import type { AnimationPlaybackControls } from 'motion/react';
 import type { MonthPoint } from '../../data/schema';
 import { cx, k, signedK } from '../lib/format';
 
@@ -34,6 +35,20 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
   const [width, setWidth] = useState(900);
   const [hover, setHover] = useState<number | null>(null);
   const reduce = useReducedMotion();
+  /* The forecast reveal. Motion draws a line in by writing pathLength="1" and
+     stroke-dasharray as SVG ATTRIBUTES, and a stylesheet rule beats an attribute.
+     The forecast is dashed by the stylesheet (.l-forecast, 3 6), so on that path
+     Motion's draw-in was silently overridden: the line sat fully drawn from the
+     first frame, and with pathLength forced to 1 its dashes stretched to whole
+     path-lengths, so it rendered solid as well. Found by the principal on
+     13 Sep 2026. The dashed line is therefore revealed through a clip whose width
+     is animated as an attribute, which nothing in a stylesheet can override, and
+     the wipe starts the moment the actual line finishes drawing, so the pen simply
+     continues past the boundary. */
+  const clipRef = useRef<SVGRectElement>(null);
+  const clipAnim = useRef<AnimationPlaybackControls | null>(null);
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => () => clipAnim.current?.stop(), []);
 
   useEffect(() => {
     const el = ref.current;
@@ -110,6 +125,22 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
   const vy = scaleLinear().domain([-vmax, vmax]).range([vh - vm.bottom, vm.top]);
   const barW = Math.max(6, Math.min(18, (x.step() ?? 20) * 0.45));
   const draw = reduce ? {} : { initial: { pathLength: 0 }, whileInView: { pathLength: 1 }, viewport: { once: true, amount: 0.4 } };
+  // The clip starts two units left of the last actual point so the round cap is kept,
+  // and runs to the right edge of the svg so nothing to the right is ever cut.
+  const clipX = (lastActual ? (x(lastActual.i) ?? m.left) : m.left) - 2;
+  const clipSpan = Math.max(0, width - clipX);
+  const clipId = `${id}-fc-clip`;
+  const revealForecast = () => {
+    const r = clipRef.current;
+    if (reduce || revealed || !r) return;
+    clipAnim.current?.stop();
+    clipAnim.current = animate(0, clipSpan, {
+      duration: 0.8,
+      ease: 'easeOut',
+      onUpdate: (v) => r.setAttribute('width', String(v)),
+      onComplete: () => setRevealed(true),
+    });
+  };
 
   return (
     <div className="chart-wrap" ref={ref}>
@@ -161,8 +192,14 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
           ),
         )}
         <motion.path className="l-budget" d={gen(budgetPts) ?? ''} {...draw} transition={{ duration: 1.0, ease: 'easeOut' }} />
-        <motion.path className="l-actual" d={gen(actualPts) ?? ''} {...draw} transition={{ duration: 1.0, delay: 0.1, ease: 'easeOut' }} />
-        <motion.path className="l-forecast" d={gen(fcPts) ?? ''} {...draw} transition={{ duration: 0.8, delay: 0.8, ease: 'easeOut' }} />
+        <motion.path className="l-actual" d={gen(actualPts) ?? ''} {...draw} transition={{ duration: 1.0, delay: 0.1, ease: 'easeOut' }} onAnimationComplete={revealForecast} />
+        {/* Under reduced motion the clip is not applied at all: the forecast is simply there. */}
+        {!reduce && (
+          <clipPath id={clipId}>
+            <rect ref={clipRef} x={clipX} y={0} width={revealed ? clipSpan : 0} height={height} />
+          </clipPath>
+        )}
+        <path className="l-forecast" d={gen(fcPts) ?? ''} clipPath={reduce ? undefined : `url(#${clipId})`} />
         {hp && (
           <g aria-hidden="true">
             <line className="xh" x1={hx} x2={hx} y1={m.top} y2={height - m.bottom} />

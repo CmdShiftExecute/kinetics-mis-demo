@@ -61,6 +61,60 @@ async function alignment(page: Page, sel: string) {
   return page.evaluate(`(${ALIGN_FN})(${JSON.stringify(sel)})`) as Promise<{ out: string[]; rows: number; cols: number }>;
 }
 
+/**
+ * Motion draws a chart line in by writing pathLength="1" and stroke-dasharray as SVG
+ * ATTRIBUTES, and any stylesheet rule on stroke-dasharray beats an attribute. A line
+ * caught that way never draws in, and its dashes are rescaled to whole path-lengths
+ * so it renders solid. This is how the forecast line sat pre-drawn on every chart
+ * until the principal saw it on 13 Sep 2026. For every path Motion is drawing, the
+ * dash pattern the browser computed must be the one Motion wrote.
+ */
+const DASH_CLASH_FN = `() => {
+  const nums = (s) => (String(s ?? '').match(/[\\d.]+/g) ?? []).map(Number);
+  return Array.from(document.querySelectorAll('svg.chart path[pathLength]')).map((p) => {
+    const attr = nums(p.getAttribute('stroke-dasharray'));
+    const computed = nums(getComputedStyle(p).strokeDasharray);
+    const same = attr.length > 0 && attr.length === computed.length && attr.every((v, i) => Math.abs(v - computed[i]) < 0.01);
+    return { cls: p.getAttribute('class') ?? '', attr: attr.join(' '), computed: computed.join(' '), clash: !same };
+  });
+}`;
+async function dashClashes(page: Page) {
+  const rows = (await page.evaluate(`(${DASH_CLASH_FN})()`)) as { cls: string; attr: string; computed: string; clash: boolean }[];
+  return { paths: rows.length, clashes: rows.filter((r) => r.clash) };
+}
+/** Puts a stylesheet into the page that defeats a rule, so a probe can be proven to fail. */
+async function breakStyle(page: Page, css: string) {
+  await page.evaluate((text) => {
+    const el = document.createElement('style');
+    el.id = 'negative-control';
+    el.textContent = text;
+    document.head.appendChild(el);
+  }, css);
+}
+async function unbreakStyle(page: Page) {
+  await page.evaluate(() => document.getElementById('negative-control')?.remove());
+}
+/**
+ * Waits for Motion to finish drawing the actual line (its dash attribute reads a
+ * whole path), then hashes the forecast region of the chart on four offsets. The
+ * region is the right third of the plot, past the actual/forecast boundary; the
+ * budget line has finished there by the time the actual completes, so the only
+ * thing that can change in it is the forecast reveal.
+ */
+async function forecastFrames(pg: Page) {
+  await pg.waitForSelector('#monthly svg.chart path.l-actual');
+  const svg = pg.locator('#monthly svg.chart').first();
+  await svg.scrollIntoViewIfNeeded();
+  await pg.waitForFunction(() => /^1(\.0+)?\s/.test(document.querySelector('#monthly svg.chart path.l-actual')?.getAttribute('stroke-dasharray') ?? ''), null, { timeout: 8000 }).catch(() => {});
+  const b = (await svg.boundingBox())!;
+  const seen = new Set<string>();
+  for (const gap of [60, 250, 350, 900]) {
+    await pg.waitForTimeout(gap);
+    seen.add(createHash('md5').update(await pg.screenshot({ clip: { x: b.x + b.width * 0.68, y: b.y, width: b.width * 0.32, height: b.height } })).digest('hex'));
+  }
+  return seen.size;
+}
+
 const browser = await chromium.launch();
 const errors: string[] = [];
 /** During the deliberate missing-data check a 404 in the console is the expected evidence, not a fault. */
@@ -164,6 +218,48 @@ try {
   check(barsOk, `Every variance bar carries a numeric height and y attribute after animating in (${bars.length} bars)`);
   const axisNote = await page.locator('#pipeline .chart-axis-note').first().innerText();
   check(/starts at .* not zero/i.test(axisNote), `Truncated revenue axis is labelled ("${axisNote.slice(0, 60)}")`);
+
+  // 4a. No drawn-in chart line has its dash pattern overridden by the stylesheet. The
+  // forecast line was caught exactly this way until 13 Sep 2026: it is dashed by CSS,
+  // Motion writes its draw-in as attributes, and the CSS won, so it sat fully drawn
+  // and solid while the two lines beside it drew themselves. Negative control: a rule
+  // on the actual line must make the detector fire, and lifting it must clear it.
+  const dc = await dashClashes(page);
+  check(dc.paths >= 2 && dc.clashes.length === 0, `No drawn-in chart line has its dashes overridden by the stylesheet (${dc.paths} drawn paths, ${dc.clashes.length} clash${dc.clashes.length === 1 ? '' : 'es'}${dc.clashes.length ? ': ' + dc.clashes.map((c) => `${c.cls} attr "${c.attr}" computed "${c.computed}"`).join('; ') : ''})`);
+  await breakStyle(page, 'svg.chart path.l-actual { stroke-dasharray: 3 6; }');
+  const dcBroken = await dashClashes(page);
+  await unbreakStyle(page);
+  const dcAgain = await dashClashes(page);
+  check(dcBroken.clashes.length === 1 && /l-actual/.test(dcBroken.clashes[0]?.cls ?? '') && dcAgain.clashes.length === 0, `Negative control: a stylesheet dash rule on the actual line is reported (${dcBroken.clashes.length} clash: ${dcBroken.clashes[0]?.cls ?? 'none'}) and clears once lifted (${dcAgain.clashes.length})`);
+
+  // 4b. The forecast segment is REVEALED after the actual line completes, as rendered
+  // pixels, and it stays dashed on screen. Its own negative control follows: with the
+  // clip defeated the segment is fully drawn from the first frame and the same region
+  // must render static, which is precisely the defect this check exists to catch.
+  await page.goto(`${base}/pipeline`, { waitUntil: 'commit' });
+  const fcFrames = await forecastFrames(page);
+  check(fcFrames >= 2, `The forecast segment is revealed after the actual line completes (${fcFrames} distinct rendered frames in the forecast region; a pre-drawn segment gives 1)`);
+  await page.waitForTimeout(600);
+  const fcDash = await page.evaluate(() => {
+    const p = document.querySelector('#monthly svg.chart path.l-forecast')!;
+    return { dash: getComputedStyle(p).strokeDasharray, normalised: p.hasAttribute('pathLength') };
+  });
+  check(/^3px, 6px$/.test(fcDash.dash) && !fcDash.normalised, `The forecast line stays dashed on screen in its own units (stroke-dasharray ${fcDash.dash}${fcDash.normalised ? ', but pathLength is normalised so the dashes are rescaled' : ''})`);
+  const { context: fcc, page: fcp } = await newPage(1440);
+  await fcp.addInitScript(() => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.createElement('style');
+      el.textContent = 'svg.chart path.l-forecast { clip-path: none !important; }';
+      document.head.appendChild(el);
+    });
+  });
+  await fcp.goto(`${base}/pipeline`, { waitUntil: 'commit' });
+  const fcStatic = await forecastFrames(fcp);
+  await fcc.close();
+  check(fcStatic === 1, `Negative control: with the forecast clip defeated the same region renders static (${fcStatic} distinct frame${fcStatic === 1 ? '' : 's'})`);
+  await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+  await page.waitForSelector('#sales table.mis');
+  await page.waitForTimeout(400);
 
   // 4b. PLAIN MOUSE HOVER. Check 4 above drives the chart with the keyboard, which is
   // why this gate passed for months while the principal could not make either the rows
