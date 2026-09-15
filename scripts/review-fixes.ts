@@ -2,6 +2,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium, firefox } from 'playwright';
+import { readFileSync } from 'node:fs'
 const args = process.argv.slice(2);
 const option = (name: string, fallback: string) => args[args.indexOf('--' + name) + 1] || fallback;
 const base = (args.includes('--base') ? option('base', '') : 'http://127.0.0.1:4181').replace(/\/$/, '');
@@ -32,7 +33,16 @@ for (const [name, engine] of [['chromium', chromium], ['firefox', firefox]] as c
     await page.evaluate(() => document.fonts.ready);
   };
   try {
-    for (const [value, port, keys] of [['Central Store', 927, 1], ['Project Intelligence', 928, 2]] as const) {
+    // The expected hrefs come from the same file the masthead reads, so this gate follows a
+    // host change instead of failing on one. Read from source rather than imported, because this
+    // script runs outside Vite and has no import.meta.env.
+    const suiteSrc = readFileSync(new URL('../src/lib/suite.ts', import.meta.url), 'utf8')
+    const suiteUrl = (key: string) => {
+      const m = suiteSrc.match(new RegExp(`${key}:[^']*'([^']+)'`))
+      if (!m) throw new Error(`suite.ts has no default for ${key}`)
+      return m[1]
+    }
+    for (const [value, key, keys] of [['Central Store', 'wms', 1], ['Project Intelligence', 'pis', 2]] as const) {
       await ready();
       const count = departures.length;
       const url = page.url();
@@ -44,7 +54,7 @@ for (const [name, engine] of [['chromium', chromium], ['firefox', firefox]] as c
       check(departures.length === count && page.url() === url && await page.getByRole('menuitem', { name: value }).evaluate(el => el === document.activeElement), 'Module menu arrows browse without navigation', value);
       await page.keyboard.press('Enter');
       await page.waitForTimeout(200);
-      check(departures.length === count + 1 && departures.at(-1) === `https://node-ss.tail640a1e.ts.net:${port}/`, 'Explicit activation requests the chosen module only', departures.at(-1));
+      check(departures.length === count + 1 && departures.at(-1) === suiteUrl(key), 'Explicit activation requests the chosen module only', departures.at(-1));
     }
     await ready();
     check((await page.locator('.mast-tools').innerText()).trim() === '', 'Closed circular controls display no module or theme names');
