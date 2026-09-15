@@ -4,12 +4,12 @@ import type { Meta } from '../../data/schema';
 import { NAV } from '../lib/nav';
 import { AskLauncher } from './Ask';
 import { ThemeControl } from './ThemeControl';
+import { IconMenu } from './IconMenu';
 
 /** Persistent technical masthead: reporting context, modules, theme and report navigation. */
 export function Masthead({ meta }: { meta: Meta }) {
   const header = useRef<HTMLElement>(null);
   const [sections, setSections] = useState<{ id: string; label: string }[]>([]);
-  const [module, setModule] = useState('mis');
   const [section, setSection] = useState('');
   const navigate = useNavigate();
   useEffect(() => {
@@ -42,21 +42,11 @@ export function Masthead({ meta }: { meta: Meta }) {
           </dl>
         </div>
         <div className="mast-tools">
-          <form className="module-control" onSubmit={(event) => {
-            event.preventDefault();
-            const port = module === 'warehouse' ? 927 : module === 'projects' ? 928 : null;
-            if (port) window.location.assign(`https://node-ss.tail640a1e.ts.net:${port}/`);
-          }}>
-            <label className="mast-control">
-              <span>Module</span>
-              <select aria-label="Module" value={module} onChange={(event) => setModule(event.target.value)}>
-                <option value="mis">Group MIS</option>
-                <option value="warehouse">Central Store</option>
-                <option value="projects">Project Intelligence</option>
-              </select>
-            </label>
-            <button className="nav-action" type="submit" aria-label="Open selected module" disabled={module === 'mis'}>Open</button>
-          </form>
+          <IconMenu label="Module" icon={<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><rect x="14" y="14" width="6" height="6" rx="1" /></svg>}>
+            <Link role="menuitem" tabIndex={-1} to="/" aria-current="true"><span>Group MIS</span><span className="menu-check" aria-hidden="true">✓</span></Link>
+            <a role="menuitem" tabIndex={-1} href="https://node-ss.tail640a1e.ts.net:927/">Central Store</a>
+            <a role="menuitem" tabIndex={-1} href="https://node-ss.tail640a1e.ts.net:928/">Project Intelligence</a>
+          </IconMenu>
           <ThemeControl />
         </div>
       </div>

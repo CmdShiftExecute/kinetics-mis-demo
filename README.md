@@ -141,7 +141,7 @@ The build output is a static `dist` folder. Any static host that falls back to `
 
 The overview keeps its analytical sections while promoting four headline figures and three data-backed management priorities. Order book and working capital remain visible in a secondary band. Precise comparisons, netting, source definitions, loss-making businesses, receivables concentration and all chart views remain available. No financial fixture or answer-service changes are included.
 
-The masthead provides persistent report navigation, module access, section jumps and Parchment, Light and Dark themes. Theme choice persists on this origin when browser storage is available. Section jumps support delayed route/data loading and keyboard focus at the destination heading. Existing motion and reduced-motion behavior remain in place.
+The masthead provides persistent report navigation, section jumps and two circular icon buttons for the suite modules and Parchment, Light and Dark themes. Selected names appear inside the dropdowns. Menus support explicit activation, arrow keys, Escape, outside dismissal and Tab exit. Theme choice persists on this origin when browser storage is available. Section jumps support delayed route/data loading and keyboard focus at the destination heading. Existing motion and reduced-motion behavior remain in place.
 
 Verification additions:
 
@@ -150,3 +150,5 @@ Verification additions:
 - `bun run contrast` now checks all three theme palettes, including tooltip text and hovered chart bands.
 
 Use `docs/mis-refinement-plan.md` for scope and design rationale. The isolated review branch must be assessed before replacing the demo's currently served build.
+
+The circular-menu regression gate runs with `node --experimental-strip-types scripts/review-fixes.ts --base <origin> --out <evidence-directory>`. It blocks external navigation and answer requests while testing both Chromium and Firefox, actual circle geometry, keyboard focus, section jumps and critical mobile control visibility.

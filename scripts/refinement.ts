@@ -77,7 +77,8 @@ function rgb(hex: string) {
   return 'rgb(' + parseInt(value.slice(0, 2), 16) + ', ' + parseInt(value.slice(2, 4), 16) + ', ' + parseInt(value.slice(4, 6), 16) + ')';
 }
 async function chooseTheme(page: Page, theme: Theme) {
-  await page.getByLabel('Theme').selectOption(theme);
+  await page.getByRole('button', { name: 'Theme', exact: true }).click();
+  await page.getByRole('menuitemradio', { name: theme, exact: false }).click();
   await page.waitForFunction((value) => document.documentElement.dataset.theme === value, theme);
 }
 async function overviewFingerprint(page: Page) {
@@ -183,13 +184,14 @@ try {
     return { targetTop: target.top, mastBottom: mast.bottom, focusedId: document.activeElement?.id, visible: target.top >= mast.bottom - 2 && target.top < innerHeight };
   });
   check(repeatJump.visible && repeatJump.focusedId === 'net-profit-title', 'Jump-to-section repeats from top and focuses destination heading', JSON.stringify(repeatJump));
-  await page.getByLabel('Theme').focus();
-  await page.keyboard.press('Home');
+  await page.getByRole('button', { name: 'Theme', exact: true }).focus();
   await page.keyboard.press('ArrowDown');
-  await page.waitForTimeout(150);
+  await page.keyboard.press('ArrowDown');
+  const beforeKeyboardChoice = await themeState(page);
+  await page.keyboard.press('Enter');
   const keyboardTheme = await themeState(page);
   const themeFocused = await page.evaluate(() => document.activeElement?.getAttribute('aria-label') === 'Theme');
-  check(keyboardTheme.theme === 'light' && themeFocused, 'Keyboard theme selection changes theme and retains select focus', JSON.stringify(keyboardTheme));
+  check(beforeKeyboardChoice.theme === 'dark' && keyboardTheme.theme === 'light' && themeFocused, 'Keyboard theme menu requires activation and returns focus to its trigger', JSON.stringify(keyboardTheme));
   await page.locator('.ask-launch').click();
   await page.waitForSelector('[data-testid="ask-panel"]');
   const overlay = await page.evaluate(() => {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { IconMenu } from './IconMenu';
 
 type Theme = 'parchment' | 'light' | 'dark';
 const STORAGE_KEY = 'halvard-mis-theme';
@@ -13,13 +14,14 @@ export function ThemeControl() {
     try { localStorage.setItem(STORAGE_KEY, theme); } catch { /* Private browsing can deny storage. */ }
   }, [theme]);
   return (
-    <label className="mast-control">
-      <span>Theme</span>
-      <select aria-label="Theme" value={theme} onChange={(event) => setTheme(validTheme(event.target.value))}>
-        <option value="parchment">Parchment</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-      </select>
-    </label>
+    <IconMenu label="Theme" icon={<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 4a8 8 0 0 1 0 16Z" fill="currentColor" stroke="none" /></svg>}>
+      {(['parchment', 'light', 'dark'] as const).map(value => (
+        <button key={value} type="button" role="menuitemradio" tabIndex={-1} aria-checked={theme === value} onClick={() => setTheme(value)}>
+          <span className={'theme-swatch theme-swatch-' + value} aria-hidden="true" />
+          <span>{value === 'parchment' ? 'Parchment' : value === 'light' ? 'Light' : 'Dark'}</span>
+          {theme === value && <span className="menu-check" aria-hidden="true">✓</span>}
+        </button>
+      ))}
+    </IconMenu>
   );
 }
