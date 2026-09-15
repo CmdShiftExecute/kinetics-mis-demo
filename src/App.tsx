@@ -31,17 +31,26 @@ function Fallback() {
 
 /** Scroll to the top on every path change, or to the anchor when the address carries one. */
 function ScrollManager() {
-  const { pathname, hash } = useLocation();
+  const { pathname, hash, key } = useLocation();
   useEffect(() => {
-    if (hash) {
-      const el = document.getElementById(hash.slice(1));
-      if (el) {
-        el.scrollIntoView({ block: 'start' });
-        return;
-      }
+    if (!hash) {
+      window.scrollTo({ top: 0 });
+      return;
     }
-    window.scrollTo({ top: 0 });
-  }, [pathname, hash]);
+    // Lazy routes and JSON can arrive after the route effect. Wait for the
+    // destination page, and never resolve an anchor on the exiting page.
+    const scroll = () => {
+      const el = document.getElementById(hash.slice(1));
+      if (!el || el.closest('main')?.dataset.page !== pathname) return false;
+      el.scrollIntoView({ block: 'start' });
+      return true;
+    };
+    if (scroll()) return;
+    const observer = new MutationObserver(() => { if (scroll()) observer.disconnect(); });
+    observer.observe(document.getElementById('root')!, { childList: true, subtree: true });
+    const timeout = window.setTimeout(() => observer.disconnect(), 10000);
+    return () => { observer.disconnect(); window.clearTimeout(timeout); };
+  }, [pathname, hash, key]);
   return null;
 }
 
@@ -56,7 +65,7 @@ function Pages() {
   // took /calculator in the sibling WMS from 1 distinct rendered frame to 3.
   return (
     <AnimatePresence mode="wait">
-      <motion.main key={location.pathname} {...page}>
+      <motion.main key={location.pathname} data-page={location.pathname} {...page}>
         {/* The entry signature. A rule draws left to right across the content on every
             route entry, on the same curve as the nav underline, because a drawn rule is
             this system's own vocabulary. It replaced a count-up on the headline figures,

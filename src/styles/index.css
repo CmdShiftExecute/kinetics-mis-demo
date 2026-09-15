@@ -14,6 +14,7 @@
   /* Darkened from #c41414 on 13 Sep 2026: the deeper hovered-row substrate pushed the
      old red to 4.39:1, under the 4.5:1 floor. Measured by scripts/check_contrast.ts. */
   --hazard-text: #b81111;
+  --readbox-hazard: #ff9a9a;
   /* A second print ink for figures in charts, and its darker tint for secondary
      segments. Both are non-text marks and both are measured by bun run contrast
      (7.15:1 and 4.16:1 on paper). Hazard red stays reserved for what is bad. */
@@ -34,10 +35,39 @@
   --s-3xl: 48px;
   --s-4xl: 64px;
   --maxw: 1440px;
-  /* One size for the page heading and the masthead's system name, so the two always match. */
+  /* Page headings; the persistent masthead uses a smaller contextual title. */
   --title-size: clamp(1.6rem, 2.6vw, 2.4rem);
 }
 
+:root[data-theme='light'] {
+  --paper: #ffffff;
+  --paper-2: #f2f4f6;
+  --paper-3: #dde3e9;
+  --ink: #151b24;
+  --ink-2: #475361;
+  --ink-3: #6e7885;
+  --rule: #c5cdd6;
+  --hazard: #d51d2c;
+  --hazard-text: #af1423;
+  --readbox-hazard: #ffacb4;
+  --spot: #204db0;
+  --spot-2: #6179b9;
+}
+:root[data-theme='dark'] {
+  --paper: #171c21;
+  --paper-2: #20272e;
+  --paper-3: #2b3540;
+  --ink: #edf0f3;
+  --ink-2: #b8c2cc;
+  --ink-3: #8a9aa9;
+  --rule: #46525f;
+  --hazard: #ff807b;
+  --hazard-text: #ff9d98;
+  --readbox-hazard: #a51b27;
+  --spot: #83b2ff;
+  --spot-2: #97a0e1;
+  color-scheme: dark;
+}
 html {
   background: var(--paper);
   color: var(--ink);
@@ -1006,7 +1036,7 @@ table.mis tr.rung.active > :first-child {
   fill: var(--paper);
 }
 .chart .readbox text.hz {
-  fill: #ff9a9a;
+  fill: var(--readbox-hazard);
 }
 .chart .dot {
   fill: var(--paper);
@@ -1024,7 +1054,7 @@ table.mis tr.rung.active > :first-child {
   fill: var(--hazard);
 }
 .chart .vbar.fc {
-  fill-opacity: 0.55;
+  fill-opacity: 0.72;
 }
 .chart .vbar.on {
   stroke: var(--ink);
@@ -1809,8 +1839,147 @@ table.mis tr.rung.active > :first-child {
    which is why the headline count-up could be removed. Under reduced motion the element
    is not rendered at all, so there is nothing to suppress. */
 .entry-rule {
+  position: relative;
+  z-index: 11;
   height: 2px;
   background: var(--ink);
   transform-origin: left;
   margin-bottom: -2px;
+}
+
+/* ---------- MIS reading hierarchy and persistent controls ---------- */
+html { scroll-padding-top: var(--mast-offset, 210px); }
+.mast {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  padding-top: 18px;
+}
+.mast-row { grid-template-columns: auto 1fr auto; align-items: center; gap: 28px; }
+.mast-brand { gap: 5px; }
+.mast-system { font-size: 16px; white-space: normal; margin: 0 0 6px; }
+.mast-identity { padding-left: 26px; border-left: 1px solid var(--rule); }
+.mast-identity .stamp { justify-content: flex-start; font-size: 10px; }
+.mast-identity .stamp > div { display: flex; gap: 8px; }
+.mast-identity .stamp dt, .mast-identity .stamp dd { margin: 0; }
+.mast-tools { display: flex; gap: 16px; }
+.mast-control { display: grid; gap: 3px; font-size: 10px; color: var(--ink-2); text-transform: uppercase; letter-spacing: .06em; }
+.mast-control select, .section-select {
+  font: 11px var(--font-mono);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 7px 22px 7px 8px;
+  max-width: 165px;
+  cursor: pointer;
+}
+.mast-control select:hover, .section-select:hover { border-color: var(--ink); }
+.nav { gap: 20px; margin-top: 16px; padding: 10px 0; align-items: center; font-size: 11px; letter-spacing: .02em; }
+.section-select { margin-left: auto; max-width: 140px; border-color: transparent; }
+.nav .ask-launch { margin-left: 0; padding: 7px 10px; }
+.overview .page-head { margin-top: 32px; }
+.overview .page-basis { text-transform: none; letter-spacing: 0; line-height: 1.8; }
+.overview .strip.answers { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 26px; }
+.overview .strip.answers > div { padding: 22px 20px; }
+.overview .strip.answers > div:first-child { padding-left: 0; }
+.overview .strip.answers dt a { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.overview .strip.answers dt a:hover { color: var(--spot); }
+.overview .strip.answers dt a span { color: var(--ink-2); font-size: 16px; transition: transform 160ms var(--ease); }
+.overview .strip.answers dt a:hover span { transform: translate(2px, -2px); }
+.overview .strip.answers .big { font-size: clamp(24px, 2.6vw, 38px); letter-spacing: -.055em; line-height: 1.25; margin: 12px 0 10px; }
+.overview .strip.answers .sub { font-size: 12px; }
+.support-band { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--rule); }
+.support-band > div { padding: 15px 0; display: flex; gap: 5px 20px; align-items: baseline; flex-wrap: wrap; }
+.support-band > div + div { padding-left: 20px; }
+.support-band a { font-size: 12px; }
+.support-band strong { font-size: 16px; margin-left: 8px; font-weight: 600; }
+.support-band > div > span { color: var(--ink-2); font-size: 10px; }
+.attention { margin-top: 28px; }
+.attention-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.attention-head h2 { font-weight: 600; margin: 0; color: var(--ink); }
+.attention-head > span { font-size: 10px; text-transform: none; letter-spacing: 0; }
+.attention-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--rule); background: var(--paper-2); }
+.attention-item { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; transition: background-color 140ms var(--ease), box-shadow 140ms var(--ease); }
+.attention-item + .attention-item { border-left: 1px solid var(--rule); }
+.attention-item:hover { background: var(--row-hover); box-shadow: inset 0 2px var(--ink); }
+.attention-index { display: flex; justify-content: space-between; color: var(--hazard-text); font-size: 10px; text-transform: uppercase; letter-spacing: .07em; }
+.attention-index > span { color: var(--ink-2); }
+.attention-item > strong { font-family: var(--font-mono); font-size: 14px; letter-spacing: -.03em; font-weight: 600; }
+.attention-item > span:last-child { font-size: 12px; line-height: 1.6; color: var(--ink-2); }
+.overview-grid { gap: 0 40px; }
+.overview-grid .sec { margin-top: 36px; }
+.overview-grid .sec-head { align-items: flex-start; gap: 12px; }
+.overview-grid .sec-title { font-size: 20px; }
+.overview-grid .sec-link { font-size: 10px; letter-spacing: .03em; }
+.overview-grid .sec-note { margin-top: 7px; letter-spacing: 0; }
+.section-takeaway { margin: 0 0 14px; font-size: 12px; color: var(--ink-2); }
+.section-takeaway strong { color: var(--ink); }
+.overview-grid .sec-intro { font-size: 12px; line-height: 1.7; }
+.overview-grid table.mis.compact td { padding-top: 9px; padding-bottom: 9px; }
+.overview-grid .strip { margin-top: 16px; }
+.overview-grid .strip .big { font-size: 18px; }
+@media (max-width: 1100px) {
+  .mast-row { gap: 16px; }
+  .mast-identity { padding-left: 16px; }
+  .mast-system { font-size: 13px; }
+  .mast-tools { gap: 8px; }
+  .nav { gap: 10px 16px; }
+  .nav .section-select { margin-left: 0; }
+  .nav .ask-launch { margin-left: auto; }
+  .overview .strip.answers > div { padding: 18px 14px; }
+  .support-band > div { flex-direction: column; }
+  .overview-grid { gap: 0 32px; }
+}
+@media (max-width: 760px) {
+  .mast { padding-top: 12px; }
+  .mast-row { grid-template-columns: 1fr auto; gap: 12px; }
+  .mast-identity { display: none; }
+  .mast-tools { gap: 10px; }
+  .mast-control select { max-width: 125px; }
+  .nav { flex-wrap: nowrap; overflow-x: auto; gap: 18px; padding: 10px 2px; }
+  .nav > * { flex-shrink: 0; white-space: nowrap; }
+  .nav .ask-launch { margin-left: 0; }
+  .overview .page-head { margin-top: 24px; gap: 12px; }
+  .overview .page-basis { text-align: left; }
+  .overview .strip.answers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .overview .strip.answers > div:nth-child(odd) { padding-left: 0; }
+  .overview .strip.answers .big { font-size: 30px; }
+  .attention-grid { grid-template-columns: 1fr; }
+  .attention-item + .attention-item { border-left: 0; border-top: 1px solid var(--rule); }
+  .attention-item { padding: 16px; }
+  .attention-item > strong { font-size: 14px; }
+  .overview-grid .sec-head { flex-wrap: wrap; }
+}
+@media (max-width: 440px) {
+  .mast-brand .wordmark { font-size: 24px; }
+  .mast-division { font-size: 9px; }
+  .mast-tools { gap: 5px; }
+  .mast-control select { max-width: 98px; padding: 7px 2px; font-size: 10px; }
+  .overview .strip.answers .big { font-size: 26px; }
+  .overview .strip.answers dt { font-size: 10px; }
+  .support-band strong { display: block; margin-left: 0; margin-top: 4px; }
+  .support-band > div + div { padding-left: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .overview .strip.answers dt a:hover span { transform: none; }
+}
+.mast-system { text-align: left; justify-self: start; }
+.mast-identity .stamp { justify-self: start; }
+.mast-identity .stamp > div { flex-direction: row; }
+.attention-item > span:last-child, .overview-grid .sec-intro, .overview-grid .defs dd {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+.pipeline-context { font-size: 11px; color: var(--ink-2); margin: 10px 0 0; }
+@media (max-width: 760px) {
+  .mast-brand { order: 1; }
+  .mast-tools { order: 2; }
+  .mast-identity { display: block; grid-column: 1 / -1; order: 3; padding: 0; border: 0; }
+  .mast-identity .mast-system { display: none; }
+  .mast-identity .stamp { font-size: 9px; }
+  .nav { margin-top: 10px; }
+}
+@media (max-width: 440px) {
+  .support-band a > span[aria-hidden] { display: none; }
 }

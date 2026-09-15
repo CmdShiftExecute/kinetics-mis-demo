@@ -22,6 +22,7 @@ const arg = (name: string, fallback: string) => {
 const base = arg('base', 'http://127.0.0.1:4180').replace(/\/$/, '');
 const out = arg('out', join(process.cwd(), 'screenshots'));
 const insecure = args.includes('--insecure');
+const mockAsk = args.includes('--mock-ask');
 mkdirSync(out, { recursive: true });
 
 const results: { ok: boolean; what: string }[] = [];
@@ -690,23 +691,27 @@ try {
   // and the principal reported the app as static everywhere but the home page.
   const frameHashes = async (pg: Page, path: string) => {
     const seen = new Set<string>();
-    await pg.goto(`${base}${path}`, { waitUntil: 'commit' });
-    // Sample from NAVIGATION on fixed offsets, not from the h1. Anchoring on the h1 was
-    // wrong once the entry animation started from a 0.6 opacity floor: the title is
-    // visible on frame one, so waitForSelector plus its round trip resolves AFTER most
-    // of the motion and every page read as static. Verified 12 Sep 2026 against an
-    // independent probe that reported 4 to 6 distinct frames on the same routes. The
-    // window runs to 1.4s so a late-painting page is still covered.
-    for (const gap of [120, 80, 100, 150, 250, 700]) {
-      await pg.waitForTimeout(gap);
-      const buf = await pg.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } });
-      seen.add(createHash('md5').update(buf).digest('hex'));
+    // Warm fonts BEFORE navigation so a font swap is not counted as motion.
+    // Playwright screenshot waits for font readiness after navigation, which can
+    // miss a legitimate 240-450ms entrance. Capture compositor pixels directly,
+    // starting earlier. The reduced-motion negative control uses this same probe.
+    await pg.evaluate(() => document.fonts.ready.then(() => undefined));
+    const capture = await pg.context().newCDPSession(pg);
+    try {
+      await pg.goto(`${base}${path}`, { waitUntil: 'commit' });
+      for (const gap of [16, 32, 48, 80, 100, 150, 250, 700]) {
+        await pg.waitForTimeout(gap);
+        const frame = await capture.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: 1440, height: 860, scale: 1 }, captureBeyondViewport: false });
+        seen.add(createHash('md5').update(frame.data).digest('hex'));
+      }
+    } finally {
+      await capture.detach();
     }
     return seen.size;
   };
   for (const path of ['/', '/sales', '/pipeline', '/net-profit', '/receivables', '/working-capital', '/data-basis']) {
     const n = await frameHashes(page, path);
-    check(n >= 3, `${path} animates on entry (${n} distinct rendered frames across the first 1.4s; a static page gives 2)`);
+    check(n >= 3, `${path} animates on entry (${n} distinct compositor frames; a static page gives at most 2)`);
   }
 
   // 14. invalid route, missing data, malformed data
@@ -738,14 +743,8 @@ try {
   const rmBars = await rp.evaluate(() => Array.from(document.querySelectorAll('svg#sales-chart-bars rect.seg')).map((r) => getComputedStyle(r).transform));
   check(rmBars.length > 0 && rmBars.every((t) => t === 'none'), `Under reduced motion every chart bar is at rest with no transform (${rmBars.length} bars)`);
   // Negative control for check 13b: with motion off the same page must render STATIC.
-  const staticFrames = new Set<string>();
-  await rp.goto(`${base}/sales`, { waitUntil: 'commit' });
-  await rp.waitForSelector('h1', { timeout: 15000 }).catch(() => {});
-  for (const gap of [120, 80, 100, 150, 250, 700]) {
-    await rp.waitForTimeout(gap);
-    staticFrames.add(createHash('md5').update(await rp.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 860 } })).digest('hex'));
-  }
-  check(staticFrames.size <= 2, `Negative control: under reduced motion /sales renders static (${staticFrames.size} distinct frames, against ${'>=3'} with motion on)`);
+  const staticFrames = await frameHashes(rp, '/sales');
+  check(staticFrames <= 2, `Negative control: under reduced motion /sales renders static (${staticFrames} distinct frames, against ${'>=3'} with motion on)`);
   await rp.locator('.ask-launch').click();
   await rp.waitForSelector('[data-testid="ask-panel"]');
   const panelAnims = await rp.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
@@ -786,7 +785,15 @@ try {
   const backOnLauncher = await ap.evaluate(() => document.activeElement?.classList.contains('ask-launch') === true);
   check(closed && backOnLauncher, 'Escape closes the panel and focus returns to the Ask the MIS launcher');
 
-  // 19. a suggested question round-trips to an answer with a page link (a real call to /api/ask)
+  // Optional deterministic UI contract check; the default still exercises the real service.
+  if (mockAsk) {
+    console.log('Ask mode: mocked transport; model/backend integration is not measured.');
+    await ap.route('**/api/ask', async route => {
+      await new Promise(resolve => setTimeout(resolve, 350));
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'YTD revenue is AED 134,995 thousand against a budget of AED 137,845 thousand.', page: { to: '/sales', label: 'Sales report' }, refused: false }) });
+    });
+  }
+  // 19. a suggested question round-trips to an answer with a page link
   await ap.locator('.ask-launch').click();
   await ap.waitForSelector('[data-testid="ask-panel"]');
   const suggestion = (await ap.locator('.ask-sugg').first().innerText()).trim();

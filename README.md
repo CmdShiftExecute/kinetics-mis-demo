@@ -136,3 +136,17 @@ Vite 8, React 19, TypeScript in strict mode, Tailwind v4 through its Vite plugin
 ## Deploying
 
 The build output is a static `dist` folder. Any static host that falls back to `index.html` for unknown paths works, since the app is a single-page application.
+
+## MIS refinement review (15 September 2026)
+
+The overview keeps its analytical sections while promoting four headline figures and three data-backed management priorities. Order book and working capital remain visible in a secondary band. Precise comparisons, netting, source definitions, loss-making businesses, receivables concentration and all chart views remain available. No financial fixture or answer-service changes are included.
+
+The masthead provides persistent report navigation, module access, section jumps and Parchment, Light and Dark themes. Theme choice persists on this origin when browser storage is available. Section jumps support delayed route/data loading and keyboard focus at the destination heading. Existing motion and reduced-motion behavior remain in place.
+
+Verification additions:
+
+- `bun scripts/refinement.ts --base <preview-origin> --out <evidence-directory>` checks theme rendering/persistence, storage failure, retained analytical values, sticky navigation, keyboard section jumps, responsive layouts and Ask overlay order without calling the answer service.
+- `bun scripts/interactions.ts --base <preview-origin> --out <evidence-directory> --mock-ask` runs the inherited interaction gate with a deterministic Ask UI response. This mode does not verify model/backend integration. Omitting the flag retains the existing live-service test.
+- `bun run contrast` now checks all three theme palettes, including tooltip text and hovered chart bands.
+
+Use `docs/mis-refinement-plan.md` for scope and design rationale. The isolated review branch must be assessed before replacing the demo's currently served build.

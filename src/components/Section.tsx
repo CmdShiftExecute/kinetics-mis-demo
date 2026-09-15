@@ -29,7 +29,7 @@ export function Section({ id, title, note, intro, link, source, asOf, defs, defi
     <motion.section className={compact ? 'sec compact' : 'sec'} id={id} aria-labelledby={`${id}-title`} {...reveal()}>
       <header className="sec-head">
         <div>
-          <h2 className="display sec-title" id={`${id}-title`}>
+          <h2 className="display sec-title" id={`${id}-title`} tabIndex={-1}>
             {title}
           </h2>
           {note && <p className="sec-note">{note}</p>}
