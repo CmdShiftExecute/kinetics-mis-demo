@@ -164,6 +164,7 @@ try {
   check(coldAnchor.visible, 'Cold /sales#netting-items anchor lands below persistent header', JSON.stringify(coldAnchor));
   await page.goto(base + '/', { waitUntil: 'networkidle' });
   await page.getByLabel('Jump to section').selectOption('net-profit');
+  await page.getByRole('button', { name: 'Go to selected section' }).click();
   await page.waitForTimeout(250);
   const jump = await page.evaluate(() => {
     const target = document.querySelector('#net-profit')!.getBoundingClientRect();
@@ -174,6 +175,7 @@ try {
   await page.evaluate(() => scrollTo(0, 0));
   await page.waitForTimeout(150);
   await page.getByLabel('Jump to section').selectOption('net-profit');
+  await page.getByRole('button', { name: 'Go to selected section' }).click();
   await page.waitForTimeout(250);
   const repeatJump = await page.evaluate(() => {
     const target = document.querySelector('#net-profit')!.getBoundingClientRect();

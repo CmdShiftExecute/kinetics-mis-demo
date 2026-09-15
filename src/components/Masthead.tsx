@@ -9,6 +9,8 @@ import { ThemeControl } from './ThemeControl';
 export function Masthead({ meta }: { meta: Meta }) {
   const header = useRef<HTMLElement>(null);
   const [sections, setSections] = useState<{ id: string; label: string }[]>([]);
+  const [module, setModule] = useState('mis');
+  const [section, setSection] = useState('');
   const navigate = useNavigate();
   useEffect(() => {
     const element = header.current;
@@ -33,44 +35,55 @@ export function Masthead({ meta }: { meta: Meta }) {
         <div className="mast-identity">
           <p className="mast-system display">Management Information System</p>
           <dl className="stamp" aria-label="Reporting stamp">
-          <div>
-            <dt>Data as of</dt>
-            <dd>{meta.dataAsOfLabel}</dd>
-          </div>
+            <div>
+              <dt>Data as of</dt>
+              <dd>{meta.dataAsOfLabel}</dd>
+            </div>
           </dl>
         </div>
         <div className="mast-tools">
-          <label className="mast-control">
-            <span>Module</span>
-            <select aria-label="Module" value="mis" onChange={(event) => {
-              const port = event.target.value === 'warehouse' ? 927 : event.target.value === 'projects' ? 928 : null;
-              if (port) window.location.assign(`https://node-ss.tail640a1e.ts.net:${port}/`);
-            }}>
-              <option value="mis">Group MIS</option>
-              <option value="warehouse">Central Store</option>
-              <option value="projects">Project Intelligence</option>
-            </select>
-          </label>
+          <form className="module-control" onSubmit={(event) => {
+            event.preventDefault();
+            const port = module === 'warehouse' ? 927 : module === 'projects' ? 928 : null;
+            if (port) window.location.assign(`https://node-ss.tail640a1e.ts.net:${port}/`);
+          }}>
+            <label className="mast-control">
+              <span>Module</span>
+              <select aria-label="Module" value={module} onChange={(event) => setModule(event.target.value)}>
+                <option value="mis">Group MIS</option>
+                <option value="warehouse">Central Store</option>
+                <option value="projects">Project Intelligence</option>
+              </select>
+            </label>
+            <button className="nav-action" type="submit" aria-label="Open selected module" disabled={module === 'mis'}>Open</button>
+          </form>
           <ThemeControl />
         </div>
       </div>
       <nav className="nav" aria-label="Reports">
-        {NAV.map((n) => (
-          <NavLink key={n.to} to={n.to} end={n.end}>
-            {n.label}
-          </NavLink>
-        ))}
-        {sections.length > 0 && <select className="section-select" aria-label="Jump to section" value="" onChange={(event) => {
-          const id = event.target.value;
-          if (!id) return;
-          navigate(`#${id}`);
-          // Continue keyboard reading at the chosen section, rather than back in the masthead.
-          requestAnimationFrame(() => document.getElementById(`${id}-title`)?.focus({ preventScroll: true }));
-        }}>
-          <option value="">On this page</option>
-          {sections.map(section => <option key={section.id} value={section.id}>{section.label}</option>)}
-        </select>}
-        <AskLauncher meta={meta} />
+        <div className="nav-reports">
+          {NAV.map((n) => (
+            <NavLink key={n.to} to={n.to} end={n.end}>
+              {n.label}
+            </NavLink>
+          ))}
+        </div>
+        <div className="nav-actions">
+          {sections.length > 0 && <form className="section-control" onSubmit={(event) => {
+            event.preventDefault();
+            if (!section) return;
+            navigate(`#${section}`);
+            // Continue keyboard reading at the chosen section, rather than back in the masthead.
+            requestAnimationFrame(() => document.getElementById(`${section}-title`)?.focus({ preventScroll: true }));
+          }}>
+            <select className="section-select" aria-label="Jump to section" value={section} onChange={(event) => setSection(event.target.value)}>
+              <option value="">On this page</option>
+              {sections.map(section => <option key={section.id} value={section.id}>{section.label}</option>)}
+            </select>
+            <button className="nav-action" type="submit" aria-label="Go to selected section" disabled={!section}>Go</button>
+          </form>}
+          <AskLauncher meta={meta} />
+        </div>
       </nav>
     </header>
   );
