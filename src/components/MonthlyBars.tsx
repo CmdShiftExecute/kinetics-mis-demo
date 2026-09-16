@@ -6,7 +6,7 @@ import { max } from 'd3-array';
 import { motion, useReducedMotion } from 'motion/react';
 import type { MonthPoint } from '../../data/schema';
 import { AED_COMPACT_GUIDE, cx, k, signedK } from '../lib/format';
-import { GROUP_IN_VIEW, mark } from './ChartMotion';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 interface Props {
@@ -101,7 +101,7 @@ export function MonthlyBars({ points, year, subject, id, mode, height = 250 }: P
   const boxTop = mode === 'columns' ? y(hv) : y(Math.max(hc?.run ?? 0, hc?.runBudget ?? 0));
   const boxY = Math.max(m.top, Math.min(boxTop - 30, height - m.bottom - 66));
   const readout = hp && hc ? (mode === 'columns' ? `${hp.month} ${year}: ${hp.actual != null ? 'actual' : 'forecast'} ${k(hv)}, budget ${k(hp.budget)}, variance ${signedK(hp.variance)}` : `${hp.month} ${year}: ${k(hc.run)} to date against plan ${k(hc.runBudget)}, ${signedK(hc.run - hc.runBudget)}`) : '';
-  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const grp = useChartEntry(ref, reduce);
   const draw = (delay: number, duration = 0.9) => (reduce ? {} : mark({ pathLength: 0 }, { pathLength: 1 }, delay, duration));
   /* The running gap, drawn under the cumulative lines. On this division the two
      lines sit within one percent of each other all year, so the band between them

@@ -3,7 +3,7 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { motion, useReducedMotion } from 'motion/react';
 import { cx } from '../lib/format';
-import { GROUP_IN_VIEW, mark } from './ChartMotion';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 /** The five fills a segment may take. `hollow` is drawn beside the stack and never added to it. */
@@ -91,7 +91,7 @@ export function HBars({ id, rows, ariaLabel, legend, format, shortfall, mode = '
   const hrName = hr ? (width < 560 && hr.name.length > 16 ? hr.name.slice(0, 15) + '.' : hr.name).toUpperCase() : '';
   const boxW = hr ? Math.min(width, 20 + (hrName.length + hr.readout.length + 3) * CH) : 0;
   const boxX = Math.max(0, Math.min(width - boxW, m.left + 10));
-  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const grp = useChartEntry(ref, reduce);
   const grow = (delay: number) => (reduce ? {} : mark({ scaleX: 0 }, { scaleX: 1 }, delay, 0.55));
   const fade = (delay: number) => (reduce ? {} : mark({ opacity: 0 }, { opacity: 1 }, delay, 0.35));
 

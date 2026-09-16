@@ -13,6 +13,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
 import type { Page } from 'playwright';
+import { phoneChecks } from './phone';
 
 const args = process.argv.slice(2);
 const arg = (name: string, fallback: string) => {
@@ -890,6 +891,9 @@ try {
   // 24. console errors
   check(errors.length === 0, `No console errors (${errors.length}; ${expectedAskFailures} expected during the deliberate service failures)`);
   for (const e of errors) console.log('   ' + e);
+
+  // 25. the phone pass: every route at 390px, real motion, coarse pointer
+  await phoneChecks({ browser, base, insecure, check, routes: ['/', '/sales', '/pipeline', '/net-profit', '/receivables', '/working-capital', '/data-basis', '/v/cooling'] });
 } finally {
   await browser.close();
 }

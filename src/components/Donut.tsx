@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { cx, pct } from '../lib/format';
-import { GROUP_IN_VIEW, mark } from './ChartMotion';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 export interface Slice {
@@ -44,6 +44,7 @@ export function Donut({ id, rows, format, ariaLabel, centreLabel, maxSlices = 5,
   const { ref, width } = useWidth(760, 260);
   const reduce = useReducedMotion();
   const [hover, setHover] = useState<number | null>(null);
+  const grp = useChartEntry(ref, reduce);
 
   const clean = rows.filter((r) => r.value > 0);
   const ordered = keepOrder ? clean : clean.slice().sort((a, b) => b.value - a.value);
@@ -99,7 +100,7 @@ export function Donut({ id, rows, format, ariaLabel, centreLabel, maxSlices = 5,
         onPointerLeave={() => setHover(null)}
         id={id}
       >
-        <motion.g transform={`rotate(-90 ${cx0} ${cx0})`} {...(reduce ? {} : GROUP_IN_VIEW)}>
+        <motion.g transform={`rotate(-90 ${cx0} ${cx0})`} {...grp}>
           {arcs.map((a) => (
             <motion.circle
               key={a.key}
@@ -130,7 +131,7 @@ export function Donut({ id, rows, format, ariaLabel, centreLabel, maxSlices = 5,
           </text>
         )}
       </svg>
-      <motion.ul className="d-legend" {...(reduce ? {} : GROUP_IN_VIEW)}>
+      <motion.ul className="d-legend" {...grp}>
         {arcs.map((a) => (
           <motion.li
             key={a.key}

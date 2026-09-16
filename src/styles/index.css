@@ -1970,7 +1970,7 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
 }
 @media (max-width: 440px) {
   .mast-brand .wordmark { font-size: 24px; }
-  .mast-division { font-size: 9px; }
+  .mast-division { font-size: 10px; }
   .mast-tools { gap: 5px; }
   .mast-row { gap: 10px; }
   .overview .strip.answers .big { font-size: 26px; }
@@ -1994,9 +1994,27 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
   .mast-tools { order: 2; }
   .mast-identity { display: block; grid-column: 1 / -1; order: 3; padding: 0; border: 0; }
   .mast-identity .mast-system { display: none; }
-  .mast-identity .stamp { font-size: 9px; }
+  .mast-identity .stamp { font-size: 10px; }
   .nav { margin-top: 10px; }
 }
 @media (max-width: 440px) {
   .support-band a > span[aria-hidden] { display: none; }
+}
+
+/* ---------- touch: every target a finger can hit, without moving the print layout ----------
+   Bound to the pointer, not the width: a phone is coarse-pointer at any width, and a narrow
+   desktop window with a mouse needs none of this. Inline links keep their line box; the
+   block padding only widens what a finger can hit. Measured 16 Sep 2026 at 390px: sort
+   buttons were 15px tall, links 17px, calculator checkboxes 13px, against the 24px floor. */
+@media (pointer: coarse) {
+  .vlink, .elink, .sec-link, .drill-link, .sec-note a, td a, dd a, p a, li a { padding-block: 6px; }
+  button.sort { min-height: 28px; padding-block: 4px; align-items: center; }
+  summary { padding-block: 6px; }
+  .nav-reports > a { min-height: 36px; padding-block: 8px; display: inline-flex; align-items: center; }
+  .section-select, .nav-action, .press, .mast-icon { min-height: 36px; }
+  /* block and flex links grow by their padding, which is the point on a phone */
+  .strip dt a, .strip dd a, .vnav a, details a, .netting-box a { padding-block: 6px; }
+  button.disc { min-height: 28px; padding-block: 4px; }
+  input[type='checkbox'] { width: 24px; height: 24px; }
+  table.mis.calc input { min-height: 28px; }
 }

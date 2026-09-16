@@ -3,7 +3,7 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { scaleLinear, scaleSqrt } from 'd3-scale';
 import { motion, useReducedMotion } from 'motion/react';
 import { cx } from '../lib/format';
-import { GROUP_IN_VIEW, mark } from './ChartMotion';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 export interface Point {
@@ -120,7 +120,7 @@ export function Quadrant({ id, rows, refX, refY, refLabel = 'Division', xLabel, 
       })
       .map((p) => p.key),
   );
-  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const grp = useChartEntry(ref, reduce);
   const pop = (delay: number) => (reduce ? {} : mark({ scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1 }, delay, 0.45));
   const fade = (delay: number) => (reduce ? {} : mark({ opacity: 0 }, { opacity: 1 }, delay, 0.3));
 

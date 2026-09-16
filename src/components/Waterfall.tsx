@@ -4,7 +4,7 @@ import { scaleLinear } from 'd3-scale';
 import { motion, useReducedMotion } from 'motion/react';
 import type { PlGroup, PlRungKey } from '../../data/schema';
 import { AED_COMPACT_GUIDE, cx, k, signedK } from '../lib/format';
-import { GROUP_IN_VIEW, mark } from './ChartMotion';
+import { mark, useChartEntry } from './ChartMotion';
 import { useWidth } from './useWidth';
 
 interface Step {
@@ -90,7 +90,7 @@ export function Waterfall({ group, id, height = 250 }: { group: PlGroup; id: str
   const hcFigs = hc ? figures(hc) : '';
   const boxW = hc ? Math.min(width, 20 + (hcName.length + hcFigs.length + 3) * CH) : 0;
   const boxX = hc ? Math.max(0, Math.min(width - boxW, cx0(hover!) - boxW / 2)) : 0;
-  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const grp = useChartEntry(ref, reduce);
   const grow = (delay: number, originY: 0 | 1) => (reduce ? {} : { ...mark({ scaleY: 0 }, { scaleY: 1 }, delay), style: { originY } });
   const fade = (delay: number) => (reduce ? {} : mark({ opacity: 0 }, { opacity: 1 }, delay, 0.3));
 

@@ -7,7 +7,7 @@ import { animate, motion, useReducedMotion } from 'motion/react';
 import type { AnimationPlaybackControls } from 'motion/react';
 import type { MonthPoint } from '../../data/schema';
 import { AED_COMPACT_GUIDE, cx, k, signedK } from '../lib/format';
-import { GROUP_IN_VIEW, mark } from './ChartMotion';
+import { mark, useChartEntry } from './ChartMotion';
 
 interface Props {
   points: MonthPoint[];
@@ -125,7 +125,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
   const vmax = max(points, (p) => Math.abs(p.variance)) ?? 1;
   const vy = scaleLinear().domain([-vmax, vmax]).range([vh - vm.bottom, vm.top]);
   const barW = Math.max(6, Math.min(18, (x.step() ?? 20) * 0.45));
-  const grp = reduce ? {} : GROUP_IN_VIEW;
+  const grp = useChartEntry(ref, reduce);
   const draw = (delay: number, duration: number) => (reduce ? {} : mark({ pathLength: 0 }, { pathLength: 1 }, delay, duration));
   // The clip starts two units left of the last actual point so the round cap is kept,
   // and runs to the right edge of the svg so nothing to the right is ever cut.
