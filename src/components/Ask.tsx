@@ -151,7 +151,7 @@ function AskPanel({ meta, onClose }: { meta: Meta; onClose: () => void }) {
           <h2 className="display ask-title" id={titleId}>
             Ask the MIS
           </h2>
-          <p className="ask-sub">Every answer is quoted from this MIS and linked to its page.</p>
+          <p className="ask-sub">Ask for rankings, trends, comparisons or calculations from this MIS.</p>
         </div>
         <div className="ask-actions">
           <button type="button" className="ask-tool press" onClick={newChat} disabled={turns.length === 0} data-testid="ask-new">
@@ -233,7 +233,7 @@ function AskPanel({ meta, onClose }: { meta: Meta; onClose: () => void }) {
       </form>
 
       <p className="ask-foot">
-        Figures are quoted from revision {meta.revision}, data as of {meta.dataAsOfLabel}, and checked against it before they are shown. A derived figure shows its working.
+        Revision {meta.revision}, data as of {meta.dataAsOfLabel}. Published figures are checked against their source, and calculations are recomputed before they are shown.
       </p>
     </div>
   );

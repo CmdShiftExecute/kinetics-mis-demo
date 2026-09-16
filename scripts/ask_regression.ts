@@ -25,6 +25,8 @@ import type { EngineerData, Rollup, VerticalData, VerticalIndexEntry } from '../
 import { gstStamp } from '../data/gst';
 import { REFUSAL, auditFigures, hasSelfCorrection, numbersIn } from '../server/grounding';
 import { ASK_SUGGESTIONS } from '../src/lib/askSuggestions';
+import { compactMoneyDecimals } from '../src/lib/format';
+import { buildExecutiveAnalysis } from '../server/analysis';
 
 const args = process.argv.slice(2);
 const arg = (name: string, fallback: string) => {
@@ -48,7 +50,7 @@ const engineer = (slug: string) => read<EngineerData>(`engineers/${slug}.json`);
 
 const k = (n: number) => {
   const value = Math.abs(n);
-  const rounded = (amount: number) => amount.toFixed(1).replace(/\.0$/, '');
+  const rounded = (amount: number) => amount.toFixed(compactMoneyDecimals(value)).replace(/\.0+$/, '').replace(/(\.\d*[1-9])0+$/, '$1');
   if (value >= 1_000_000) return `AED ${rounded(value / 1_000_000)} billion`;
   if (value >= 1_000) return `AED ${rounded(value / 1_000)} million`;
   return `AED ${Math.round(value).toLocaleString('en-GB')} thousand`;
@@ -68,9 +70,7 @@ interface Q {
 const o = r.overview;
 const totalRungs = r.pl.find((g) => g.key === 'total')!.rungs;
 const rung = (key: string) => totalRungs.find((g) => g.key === key)!;
-const minBy = <T,>(xs: T[], f: (t: T) => number) => xs.reduce((a, b) => (f(b) < f(a) ? b : a));
 const maxBy = <T,>(xs: T[], f: (t: T) => number) => xs.reduce((a, b) => (f(b) > f(a) ? b : a));
-const behind = minBy(r.sales.rows, (s) => s.dRevenue);
 const bestGm = maxBy(r.sales.rows, (s) => s.ytdGmPct);
 const largestShare = r.profitability.rows.find((p) => p.slug === r.largestVertical.slug)!;
 const august = r.monthly.find((m) => m.index === r.meta.monthsElapsed)!;
@@ -86,15 +86,21 @@ const fab = vertical('fabrication');
 const bassem = engineer('bassem-farouk');
 const rohan = engineer('rohan-pillai');
 const engRoute = (e: EngineerData) => `/v/${e.vertical.slug}/e/${e.slug}`;
+const analysis = buildExecutiveAnalysis(r, index, (entry) => vertical(entry.slug));
+const topEngineer = analysis.companyEngineerLeaderboard[0]!;
+const lastQuarter = analysis.lastCompletedQuarter!;
+const bestLastQuarter = maxBy(analysis.quarterPerformance[lastQuarter].filter((row) => row.complete), (row) => row.variance ?? Number.NEGATIVE_INFINITY);
+const mechanicalActuals = analysis.verticalMonthly['mechanical-systems']!.filter((month) => month.actual !== null);
+const mechanicalRecentChanges = mechanicalActuals.slice(-4).slice(1).map((month, i) => ({ month: month.month, change: month.actual! - mechanicalActuals.slice(-4)[i]!.actual! }));
 
 const questions: Q[] = [
   { id: 1, kind: 'rollup', question: 'What is year to date revenue for the division against budget?', figures: [k(o.sales.ytdRevenue), k(o.sales.ytdBudget)], pages: ['/', '/sales'], refusal: false },
-  { id: 2, kind: 'rollup', question: ASK_SUGGESTIONS[0]!, figures: [behind.name, k(behind.dRevenue)], pages: ['/', '/sales'], refusal: false },
-  { id: 3, kind: 'rollup', question: ASK_SUGGESTIONS[1]!, figures: [k(o.delivery.fyForecast), k(o.delivery.fyBudget)], pages: ['/', '/delivery'], refusal: false },
+  { id: 2, kind: 'rollup', question: ASK_SUGGESTIONS[0]!, figures: [topEngineer.name, k(topEngineer.ytdRevenue), k(topEngineer.ytdGm), pct(topEngineer.ytdGmPct), k(topEngineer.dRevenue)], pages: ['/sales'], refusal: false },
+  { id: 3, kind: 'rollup', question: ASK_SUGGESTIONS[1]!, figures: [bestLastQuarter.name, k(bestLastQuarter.actual ?? 0), k(bestLastQuarter.budget ?? 0), k(bestLastQuarter.variance ?? 0), pct(bestLastQuarter.variancePct ?? 0)], pages: ['/sales', '/pipeline', `/v/${bestLastQuarter.slug}`], refusal: false },
   { id: 4, kind: 'rollup', question: 'What is the forecast BU level net profit for the full year against budget?', figures: [k(rung('buNetProfit').forecast), k(rung('buNetProfit').budget)], pages: ['/', '/net-profit'], refusal: false },
   { id: 5, kind: 'rollup', question: 'Which verticals are forecast to make a loss this year?', figures: o.profit.lossMakers.flatMap((l) => [l.name, k(l.fyNp)]), pages: ['/', '/net-profit'], refusal: false },
   { id: 6, kind: 'rollup', question: 'What is net to collect at the current month end, and how did it move from the previous month?', figures: [k(o.receivables.currentMonth), k(o.receivables.change)], pages: ['/', '/receivables'], refusal: false },
-  { id: 7, kind: 'rollup', question: ASK_SUGGESTIONS[2]!, figures: [k(o.receivables.pastDue)], pages: ['/', '/receivables'], refusal: false },
+  { id: 7, kind: 'derived', question: ASK_SUGGESTIONS[2]!, figures: mechanicalRecentChanges.flatMap((month) => [month.month, k(month.change)]), pages: ['/v/mechanical-systems', '/pipeline'], refusal: false },
   { id: 8, kind: 'rollup', question: 'How much working capital is tied up in total?', figures: [k(o.workingCapital.total)], pages: ['/', '/working-capital'], refusal: false },
   { id: 9, kind: 'rollup', question: 'What is total stock across the division?', figures: [k(r.inventory.total.totalStock)], pages: ['/', '/working-capital'], refusal: false },
   { id: 10, kind: 'rollup', question: 'What is the unbilled balance at the current month end?', figures: [k(r.unbilled.total.currentMonth)], pages: ['/', '/working-capital'], refusal: false },
@@ -131,6 +137,7 @@ if (questions.length !== TOTAL) throw new Error(`Expected ${TOTAL} questions, ha
 /* ---------- every published number, for the independent audit ---------- */
 
 const published = numbersIn(readFileSync(join(dataDir, 'rollup.json'), 'utf8'));
+for (const n of numbersIn(JSON.stringify(analysis))) published.add(n);
 for (const v of index) {
   for (const n of numbersIn(readFileSync(join(dataDir, v.file), 'utf8'))) published.add(n);
   for (const e of v.engineers) for (const n of numbersIn(readFileSync(join(dataDir, 'engineers', `${e.slug}.json`), 'utf8'))) published.add(n);

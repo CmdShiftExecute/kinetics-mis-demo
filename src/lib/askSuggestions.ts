@@ -4,9 +4,9 @@
  * the room sees first is what the gate proves.
  */
 export const ASK_SUGGESTIONS: readonly string[] = [
-  'Which vertical is furthest behind budget on year to date revenue?',
-  'What is the full-year revenue forecast against budget?',
-  'How much is past due across the division?',
+  'Who is the best salesperson in the company, and how much revenue and gross margin did they bring in?',
+  'Which verticals performed best last quarter?',
+  'How did Mechanical Systems sales change month on month over the past three months?',
 ];
 
 /** The browser gives up on an answer after this long and says so in words. */

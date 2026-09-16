@@ -705,7 +705,16 @@ try {
       await pg.goto(`${base}${path}`, { waitUntil: 'commit' });
       for (const gap of [16, 32, 48, 80, 100, 150, 250, 700]) {
         await pg.waitForTimeout(gap);
-        const frame = await capture.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: 1440, height: 860, scale: 1 }, captureBeyondViewport: false });
+        let frame: { data: string } | null = null;
+        for (let attempt = 0; attempt < 3 && !frame; attempt++) {
+          try {
+            frame = await capture.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: 1440, height: 860, scale: 1 }, captureBeyondViewport: false });
+          } catch (error) {
+            if (attempt === 2) throw error;
+            await pg.waitForTimeout(50);
+          }
+        }
+        if (!frame) throw new Error('Screenshot capture returned no frame');
         seen.add(createHash('md5').update(frame.data).digest('hex'));
       }
     } finally {
@@ -764,6 +773,10 @@ try {
   // 16. opens with the keyboard shortcut and focus lands in the question input
   await ap.keyboard.press('Control+KeyK');
   await ap.waitForSelector('[data-testid="ask-panel"]', { timeout: 5000 });
+  const analystCopy = `${await ap.locator('.ask-sub').innerText()} ${await ap.locator('.ask-foot').innerText()}`;
+  const suggestedQuestions = await ap.locator('.ask-sugg').allInnerTexts();
+  check(/rankings, trends, comparisons or calculations/i.test(analystCopy) && /calculations are recomputed/i.test(analystCopy), 'Ask the MIS explains that it analyses and verifies, rather than only quoting FAQs');
+  check(suggestedQuestions.length === 3 && /best salesperson/i.test(suggestedQuestions[0] ?? '') && /last quarter/i.test(suggestedQuestions[1] ?? '') && /month on month/i.test(suggestedQuestions[2] ?? ''), 'Suggested questions demonstrate company ranking, quarterly comparison and monthly trend analysis');
   const focusInInput = await ap.evaluate(() => {
     const el = document.activeElement as HTMLElement | null;
     return !!el && el.tagName === 'INPUT' && !!el.closest('[data-testid="ask-panel"]');
@@ -794,7 +807,7 @@ try {
     console.log('Ask mode: mocked transport; model/backend integration is not measured.');
     await ap.route('**/api/ask', async route => {
       await new Promise(resolve => setTimeout(resolve, 350));
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'YTD revenue is AED 135 million against a budget of AED 137.8 million.', page: { to: '/sales', label: 'Sales report' }, refused: false }) });
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'Kavya Nair leads the company on YTD revenue at AED 12.1 million. She generated AED 1.97 million in gross margin, a 16.3% margin, and is AED 2 thousand below budget.', page: { to: '/sales', label: 'Sales report' }, refused: false }) });
     });
   }
   // 19. a suggested question round-trips to an answer with a page link
@@ -808,7 +821,7 @@ try {
   const answerText = (await ap.locator('.ask-turn .ask-a, .ask-turn .ask-err').first().innerText()).trim();
   const linkCount = await ap.locator('.ask-turn .ask-src a').count();
   const linkHref = linkCount ? await ap.locator('.ask-turn .ask-src a').first().getAttribute('href') : null;
-  check(turnState === 'done' && workingShown === 1 && answerText.length > 20 && linkCount === 1, `"${suggestion}" round-trips to an answer with a page link (state ${turnState}, link ${linkHref ?? 'none'}, "${answerText.slice(0, 70)}")`);
+  check(turnState === 'done' && workingShown === 1 && /Kavya Nair/i.test(answerText) && !/withheld|draft answer/i.test(answerText) && linkCount === 1, `"${suggestion}" returns the executive finding with a page link (state ${turnState}, link ${linkHref ?? 'none'}, "${answerText.slice(0, 70)}")`);
   const dashes = /[\u2014\u2013]/.test(answerText);
   check(!dashes, 'The answer carries no em or en dash');
 

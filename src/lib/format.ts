@@ -5,13 +5,19 @@ export const AED_COMPACT_GUIDE = 'AED · k = thousand · m = million · bn = bil
 const grouped = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
 const scaled = (n: number, d = 1) => new Intl.NumberFormat('en-GB', { maximumFractionDigits: d }).format(n);
 
+/** Two decimals only where one decimal can hide a meaningful sub-AED-10m difference. */
+export function compactMoneyDecimals(thousands: number): number {
+  const absolute = Math.abs(thousands);
+  return absolute >= 1_000 && absolute < 10_000 ? 2 : 1;
+}
+
 /** Compact AED amount from a value stored in thousands. */
 export function k(n: number): string {
   const absolute = Math.abs(n);
   const s = absolute >= 1_000_000
-    ? `${scaled(absolute / 1_000_000)}bn`
+    ? `${scaled(absolute / 1_000_000, compactMoneyDecimals(absolute))}bn`
     : absolute >= 1_000
-      ? `${scaled(absolute / 1_000)}m`
+      ? `${scaled(absolute / 1_000, compactMoneyDecimals(absolute))}m`
       : `${grouped.format(Math.round(absolute))}k`;
   return n < 0 ? `${MINUS}${s}` : s;
 }
@@ -43,12 +49,13 @@ export function pts(n: number): string {
 }
 
 /** AED-prefixed compact amount for headline figures. */
-export function mil(thousands: number, d = 1): string {
+export function mil(thousands: number, d?: number): string {
   const absolute = Math.abs(thousands);
+  const decimals = d ?? compactMoneyDecimals(absolute);
   const amount = absolute >= 1_000_000
-    ? `${scaled(absolute / 1_000_000, d)}bn`
+    ? `${scaled(absolute / 1_000_000, decimals)}bn`
     : absolute >= 1_000
-      ? `${scaled(absolute / 1_000, d)}m`
+      ? `${scaled(absolute / 1_000, decimals)}m`
       : `${grouped.format(Math.round(absolute))}k`;
   return `${thousands < 0 ? MINUS : ''}AED ${amount}`;
 }

@@ -28,9 +28,10 @@ import { appendFileSync, chmodSync, existsSync, mkdirSync, readFileSync, unlinkS
 import { connect } from 'node:net';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { VerticalIndexEntry } from '../data/schema';
+import type { Rollup, VerticalData, VerticalIndexEntry } from '../data/schema';
 import { gstStamp } from '../data/gst';
-import { REFUSAL, SYSTEM_PROMPT, buildSystemPrompt, buildUserPrompt, checkCitations, estimateTokens, finish, fitContext, minify, numbersIn, select } from './grounding';
+import { buildExecutiveAnalysis } from './analysis';
+import { REFUSAL, SYSTEM_PROMPT, buildSystemPrompt, buildUserPrompt, checkCitations, estimateTokens, finish, fitContext, minify, normalizeCitedMoney, numbersIn, select } from './grounding';
 import type { ContextFiles } from './grounding';
 import { ClientGone, ProviderTimeout, askApi, askSubscription } from './provider';
 
@@ -69,7 +70,7 @@ const modelName = CONFIG.provider === 'api' ? CONFIG.apiModel : CONFIG.model;
 const index = JSON.parse(readFileSync(join(dataDir, 'index.json'), 'utf8')) as VerticalIndexEntry[];
 const rollupText = minify(readFileSync(join(dataDir, 'rollup.json'), 'utf8'));
 const rollupNumbers = numbersIn(rollupText);
-const rollupJson = JSON.parse(rollupText) as unknown;
+const rollupJson = JSON.parse(rollupText) as Rollup;
 const fieldGuide = readFileSync(join(repo, 'data', 'schema.ts'), 'utf8');
 const baseTokens = estimateTokens(SYSTEM_PROMPT) + estimateTokens(fieldGuide);
 const fileCache = new Map<string, { text: string; numbers: Set<string>; json: unknown }>();
@@ -82,6 +83,9 @@ function file(rel: string) {
   }
   return hit;
 }
+const analysisJson = buildExecutiveAnalysis(rollupJson, index, (entry) => file(entry.file).json as VerticalData);
+const analysisText = minify(JSON.stringify(analysisJson));
+const analysisNumbers = numbersIn(analysisText);
 
 /* ---------- caps ---------- */
 
@@ -139,16 +143,18 @@ interface Attempt {
 
 async function answer(question: string, signal: AbortSignal, onCall: () => boolean) {
   const sel = select(question, index);
-  const files: ContextFiles = { rollup: rollupText };
+  const files: ContextFiles = { rollup: rollupText, analysis: analysisText };
   if (sel.vertical) files.vertical = { entry: sel.vertical, text: file(sel.vertical.file).text };
   if (sel.engineer) files.engineer = { entry: sel.engineer.entry, vertical: sel.engineer.vertical, text: file(`engineers/${sel.engineer.entry.slug}.json`).text };
   const ctx = fitContext(files, baseTokens);
   const notes = [ctx.note, sel.otherVerticals.length && sel.vertical ? `Sheet-level detail here is for ${sel.vertical.name}; ${sel.otherVerticals.map((v) => v.name).join(' and ')} ${sel.otherVerticals.length > 1 ? 'are' : 'is'} quoted from the division roll-up.` : null].filter((n): n is string => Boolean(n));
   const published = new Set(rollupNumbers);
+  for (const n of analysisNumbers) published.add(n);
   if (ctx.files.vertical) for (const n of file(ctx.files.vertical.entry.file).numbers) published.add(n);
   if (ctx.files.engineer) for (const n of file(`engineers/${ctx.files.engineer.entry.slug}.json`).numbers) published.add(n);
   const jsonFiles = {
     rollup: rollupJson,
+    analysis: analysisJson,
     vertical: ctx.files.vertical ? file(ctx.files.vertical.entry.file).json : undefined,
     engineer: ctx.files.engineer ? file(`engineers/${ctx.files.engineer.entry.slug}.json`).json : undefined,
   };
@@ -157,7 +163,7 @@ async function answer(question: string, signal: AbortSignal, onCall: () => boole
   const attempt = async () => {
     const reply = CONFIG.provider === 'api' ? await askApi(req, process.env.ANTHROPIC_API_KEY!) : await askSubscription(req);
     attempts.push({ text: reply.text, costUsd: reply.costUsd ?? 0, tokens: reply.tokens });
-    const finished = finish(reply.text, index, published, notes.length ? notes.join(' ') : null);
+    const finished = finish(normalizeCitedMoney(reply.text, jsonFiles), index, published, notes.length ? notes.join(' ') : null);
     // Every figure is checked whatever the wording: a refusal that quotes a figure is still a quote (found in review, 12 Sep 2026).
     const cites = checkCitations(finished.answer, finished.citations, jsonFiles, index, question, finished.derivations);
     return { finished, cites };

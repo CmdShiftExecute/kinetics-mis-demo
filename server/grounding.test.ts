@@ -1,8 +1,9 @@
 import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { VerticalIndexEntry } from '../data/schema';
-import { CHARS_PER_TOKEN, CONTEXT_TOKEN_CAP, REFUSAL, REFUSAL_RE, SYSTEM_PROMPT, auditFigures, buildSystemPrompt, buildUserPrompt, capLength, cleanProse, bindPage, checkCitations, checkDerivations, evaluate, extremesList, figureMatches, figureToken, finish, fitContext, hasSelfCorrection, isWhitelisted, minify, numbersIn, parseCitations, parseDerivations, resolvePage, resolvePath, select, unreadableMoneyFigures } from './grounding';
+import type { Rollup, VerticalData, VerticalIndexEntry } from '../data/schema';
+import { buildExecutiveAnalysis } from './analysis';
+import { CHARS_PER_TOKEN, CONTEXT_TOKEN_CAP, REFUSAL, REFUSAL_RE, SYSTEM_PROMPT, auditFigures, buildSystemPrompt, buildUserPrompt, capLength, cleanProse, bindPage, checkCitations, checkDerivations, estimateTokens, evaluate, extremesList, figureMatches, figureToken, finish, fitContext, hasSelfCorrection, isWhitelisted, minify, normalizeCitedMoney, numbersIn, parseCitations, parseDerivations, resolvePage, resolvePath, select, unreadableMoneyFigures } from './grounding';
 
 const dataDir = join(import.meta.dirname, '..', 'public', 'data');
 const index = JSON.parse(readFileSync(join(dataDir, 'index.json'), 'utf8')) as VerticalIndexEntry[];
@@ -11,12 +12,14 @@ const fieldGuide = readFileSync(join(import.meta.dirname, '..', 'data', 'schema.
 const published = numbersIn(rollup);
 
 describe('the rules', () => {
-  test('carry the quote-only, never-calculate, refusal and page-line rules verbatim', () => {
-    for (const phrase of ['Quote figures exactly', 'Never calculate', REFUSAL, 'Source: <page>', 'synthetic demonstration set', 'two to four sentences', 'no em dashes', 'A superlative is a comparison of published values', 'Where each figure is shown', 'never revise, correct or contradict yourself', 'the ranking is by the AED variance']) {
-      expect(SYSTEM_PROMPT).toContain(phrase);
+  test('make the model a calculating executive analyst while keeping verification rules', () => {
+    for (const phrase of ['senior management analyst', 'compare, rank and calculate', 'best salesperson', 'closest useful answer', REFUSAL, 'Source: <page>', 'synthetic demonstration set', 'em dashes', 'Where each figure is shown', 'never revise, correct or contradict yourself', 'the ranking is by the AED variance']) {
+      expect(SYSTEM_PROMPT.toLowerCase()).toContain(phrase.toLowerCase());
     }
     expect(SYSTEM_PROMPT).toContain('AED 100.5 million');
+    expect(SYSTEM_PROMPT).toContain('AED 5.05 million');
     expect(SYSTEM_PROMPT).not.toContain('Never round, never convert to millions');
+    expect(SYSTEM_PROMPT).not.toContain('Never calculate silently');
   });
   test('contain no em or en dash', () => {
     expect(/[\u2014\u2013]/.test(SYSTEM_PROMPT)).toBe(false);
@@ -28,6 +31,12 @@ describe('executive money wording', () => {
     expect(unreadableMoneyFigures('Revenue was 100,505 AED thousand.')).toEqual(['100,505 AED thousand']);
     expect(unreadableMoneyFigures('Revenue was AED 100.5 million.')).toEqual([]);
     expect(unreadableMoneyFigures('Revenue was AED 785 thousand.')).toEqual([]);
+  });
+
+  test('accepts two-decimal millions below AED 10m against the exact stored value', () => {
+    const exact = numbersIn('{"value":5048}');
+    expect(auditFigures('Revenue was AED 5.05 million.', exact)).toEqual([]);
+    expect(figureMatches('AED 5.05 million', 5048)).toBe(true);
   });
 });
 
@@ -111,6 +120,16 @@ describe('fitContext', () => {
       }
     }
   });
+  test('keeps executive analysis together with a named vertical detail file', () => {
+    const rollupJson = JSON.parse(rollup) as Rollup;
+    const analysis = minify(JSON.stringify(buildExecutiveAnalysis(rollupJson, index, (entry) => JSON.parse(readFileSync(join(dataDir, entry.file), 'utf8')) as VerticalData)));
+    const entry = index.find((v) => v.slug === 'mechanical-systems')!;
+    const vertical = minify(readFileSync(join(dataDir, entry.file), 'utf8'));
+    const base = estimateTokens(SYSTEM_PROMPT) + estimateTokens(fieldGuide);
+    const ctx = fitContext({ rollup, analysis, vertical: { entry, text: vertical } }, base);
+    expect(ctx.files.vertical?.entry.slug).toBe(entry.slug);
+    expect(ctx.tokens).toBeLessThanOrEqual(CONTEXT_TOKEN_CAP);
+  });
   test('minify is idempotent and keeps every value', () => {
     expect(minify(rollup)).toBe(rollup);
     expect(JSON.parse(minify(readFileSync(join(dataDir, 'rollup.json'), 'utf8')))).toEqual(JSON.parse(rollup));
@@ -132,11 +151,13 @@ describe('extremesList', () => {
 describe('prompts', () => {
   test('the system prompt carries the rules, the guide and the data in that order; the user turn is the question alone', () => {
     const v = index[1]!;
-    const ctx = fitContext({ rollup, vertical: { entry: v, text: minify(readFileSync(join(dataDir, v.file), 'utf8')) } });
+    const analysis = '{"companyEngineerLeaderboard":[{"name":"Kavya Nair","slug":"kavya-nair","ytdRevenue":12054}]}';
+    const ctx = fitContext({ rollup, analysis, vertical: { entry: v, text: minify(readFileSync(join(dataDir, v.file), 'utf8')) } });
     const sys = buildSystemPrompt(ctx, fieldGuide);
     expect(sys.indexOf('Rules, all binding')).toBeLessThan(sys.indexOf('FIELD GUIDE'));
     expect(sys.indexOf('FIELD GUIDE')).toBeLessThan(sys.indexOf('rollup.json'));
-    expect(sys.indexOf('rollup.json')).toBeLessThan(sys.indexOf(`verticals/${v.slug}.json`));
+    expect(sys.indexOf('rollup.json')).toBeLessThan(sys.indexOf('executive-analysis.json'));
+    expect(sys.indexOf('executive-analysis.json')).toBeLessThan(sys.indexOf(`verticals/${v.slug}.json`));
     expect(sys.indexOf(`verticals/${v.slug}.json`)).toBeLessThan(sys.indexOf('EXTREMES, read from the published rows'));
     expect(sys).toContain('vertical.sales.engineers.ytdRevenue: lowest');
     expect(buildUserPrompt('  How is Cooling doing?  ')).toBe('QUESTION: How is Cooling doing?');
@@ -165,17 +186,17 @@ describe('cleanProse and capLength', () => {
     expect(cleanProse('2025\u20132026 range')).toBe('2025 to 2026 range');
     expect(cleanProse('| Vertical | Revenue |\n|---|---|\n| Cooling | 22,815 |\n1. First *point* [Sales](/sales) ~~gone~~')).toBe('Vertical Revenue Cooling 22,815 First point Sales gone');
   });
-  test('keeps at most four sentences', () => {
-    const five = 'One. Two. Three. Four. Five.';
-    expect(capLength(five)).toBe('One. Two. Three. Four.');
+  test('keeps enough room for a concise multi-vertical executive answer', () => {
+    const nine = 'One. Two. Three. Four. Five. Six. Seven. Eight. Nine.';
+    expect(capLength(nine)).toBe('One. Two. Three. Four. Five. Six. Seven. Eight.');
   });
   test('a decimal point does not end a sentence', () => {
     const t = 'Cooling is 12.3% behind budget. Metering is 4.1% behind. Third. Fourth. Fifth.';
-    expect(capLength(t)).toBe('Cooling is 12.3% behind budget. Metering is 4.1% behind. Third. Fourth.');
+    expect(capLength(t)).toBe(t);
   });
   test('cuts at a sentence boundary near the character cap', () => {
-    const long = `${'a'.repeat(400)}. ${'b'.repeat(400)}. c.`;
-    expect(capLength(long)).toBe(`${'a'.repeat(400)}.`);
+    const long = `${'a'.repeat(1_000)}. ${'b'.repeat(1_000)}. c.`;
+    expect(capLength(long)).toBe(`${'a'.repeat(1_000)}.`);
   });
 });
 
@@ -279,6 +300,7 @@ describe('citations', () => {
     expect(resolvePath('rollup.overview.delivery.fyForecast', files)).toBe(rollupJson.overview.delivery.fyForecast);
     expect(resolvePath('rollup.monthly[8].actual', files)).toBe(rollupJson.monthly.find((m) => m.index === 8)!.actual);
     expect(resolvePath('rollup.pl[total].rungs[buNetProfit].forecast', files)).toBe(rollupJson.pl.find((g) => g.key === 'total')!.rungs.find((r) => r.key === 'buNetProfit')!.forecast);
+    expect(resolvePath('analysis.companyEngineerLeaderboard[kavya-nair].ytdRevenue', { ...files, analysis: { companyEngineerLeaderboard: [{ slug: 'kavya-nair', ytdRevenue: 12054 }] } })).toBe(12054);
     expect(resolvePath('rollup.sales.rows[lighting].dRevenue', files)).toBeNull();
     expect(resolvePath('vertical.headline.ytdRevenue', files)).toBeNull();
     expect(resolvePath('rollup.sales.rows[mechanical-systems].name', files)).toBeNull();
@@ -327,6 +349,50 @@ describe('citations', () => {
     // The extreme row may carry a supporting figure that is not itself an extreme.
     const withPct = checkCitations(`Mechanical Systems is furthest behind at ${fmt(mech.dRevenue)} AED thousand below budget, or ${Math.abs(mech.dRevenuePct)}%.`, [{ figure: fmt(mech.dRevenue), path: 'rollup.sales.rows[mechanical-systems].dRevenue' }, { figure: `${Math.abs(mech.dRevenuePct)}%`, path: 'rollup.sales.rows[mechanical-systems].dRevenuePct' }], files, index, q);
     expect(withPct.ok).toBe(true);
+  });
+
+  test('validates a company-wide engineer winner from the executive leaderboard', () => {
+    const analysis = {
+      companyEngineerLeaderboard: [
+        { slug: 'kavya-nair', name: 'Kavya Nair', ytdRevenue: 12054, ytdGm: 1966 },
+        { slug: 'farah-haddad', name: 'Farah Haddad', ytdRevenue: 10394, ytdGm: 2119 },
+      ],
+    };
+    const companyFiles = { ...files, analysis };
+    const wrong = checkCitations('Farah Haddad is the best salesperson with AED 10.4 million of revenue.', [{ figure: 'AED 10.4 million', path: 'analysis.companyEngineerLeaderboard[farah-haddad].ytdRevenue' }], companyFiles, index, 'Who is the best salesperson in the company?');
+    expect(wrong.ok).toBe(false);
+    const right = checkCitations('Kavya Nair is the best salesperson with AED 12.1 million of revenue and AED 1.97 million of gross margin.', [
+      { figure: 'AED 12.1 million', path: 'analysis.companyEngineerLeaderboard[kavya-nair].ytdRevenue' },
+      { figure: 'AED 1.97 million', path: 'analysis.companyEngineerLeaderboard[kavya-nair].ytdGm' },
+    ], companyFiles, index, 'Who is the best salesperson in the company?');
+    expect(right).toEqual({ ok: true, problems: [] });
+  });
+
+  test('normalises cited money to the same executive precision as the dashboard', () => {
+    const analysis = {
+      companyEngineerLeaderboard: [
+        { slug: 'kavya-nair', name: 'Kavya Nair', ytdRevenue: 12054, ytdBudget: 12056, ytdGm: 1966, ytdGmPct: 16.3 },
+      ],
+    };
+    const raw = 'Kavya Nair leads with AED 12.05 million of revenue, against AED 12.06 million budget, and AED 1.966 million of gross margin at 16.3%.\nSource: Sales\nCite: AED 12.05 million | analysis.companyEngineerLeaderboard[kavya-nair].ytdRevenue\nCite: AED 12.06 million | analysis.companyEngineerLeaderboard[kavya-nair].ytdBudget\nCite: AED 1.966 million | analysis.companyEngineerLeaderboard[kavya-nair].ytdGm\nCite: 16.3% | analysis.companyEngineerLeaderboard[kavya-nair].ytdGmPct';
+    const normalised = normalizeCitedMoney(raw, { rollup: rollupJson, analysis });
+    expect(normalised).toContain('AED 12.1 million of revenue');
+    expect(normalised).toContain('AED 12.1 million budget');
+    expect(normalised).toContain('AED 1.97 million of gross margin at 16.3%');
+    expect(normalised).toContain('Cite: AED 12.1 million | analysis.companyEngineerLeaderboard[kavya-nair].ytdRevenue');
+    expect(normalised).toContain('Cite: 16.3% | analysis.companyEngineerLeaderboard[kavya-nair].ytdGmPct');
+  });
+
+  test('verifies a month-on-month calculation from executive analysis values', () => {
+    const analysis = { verticalMonthly: { 'mechanical-systems': [{ index: 7, actual: 6000 }, { index: 8, actual: 5650 }] } };
+    const answer = 'Mechanical Systems sales fell by AED 0.35 million from July to August, a derived figure.';
+    const result = checkCitations(answer, [
+      { figure: 'AED 6 million', path: 'analysis.verticalMonthly[mechanical-systems][7].actual' },
+      { figure: 'AED 5.65 million', path: 'analysis.verticalMonthly[mechanical-systems][8].actual' },
+    ], { ...files, analysis }, index, 'By how much did Mechanical Systems sales change month on month?', [
+      { result: 'AED 0.35 million', expression: '6 - 5.65' },
+    ]);
+    expect(result).toEqual({ ok: true, problems: [] });
   });
   test('a correctly cited answer passes', () => {
     const answer = `Mechanical Systems is furthest behind budget, at ${fmt(mech.dRevenue)} AED thousand below budget, or ${Math.abs(mech.dRevenuePct)}%.`;

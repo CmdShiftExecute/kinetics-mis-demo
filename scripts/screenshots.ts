@@ -1,7 +1,7 @@
 /**
  * Captures every route at desktop, laptop and phone widths with a real Chromium.
  *
- * Run:  bun scripts/screenshots.ts [--base http://127.0.0.1:4180] [--out <dir>] [--tag <label>] [--insecure] [--widths 1440,1024,390]
+ * Run:  bun scripts/screenshots.ts [--base http://127.0.0.1:4180] [--out <dir>] [--tag <label>] [--insecure] [--widths 1440,1024,390] [--mock-ask]
  * Default output: ./screenshots (gitignored).
  *
  * Reduced motion is requested so the capture shows the settled page, not a
@@ -24,6 +24,7 @@ const insecure = args.includes('--insecure');
 const tag = arg('tag', 'halvard-mis');
 const widths = arg('widths', '1440,1024,390').split(',').map((w) => Number(w));
 const skipAsk = args.includes('--skip-ask');
+const mockAsk = args.includes('--mock-ask');
 
 const pages = [
   { path: '/', name: 'overview' },
@@ -53,6 +54,17 @@ try {
       hasTouch: mobile,
     });
     const page = await context.newPage();
+    if (mockAsk) {
+      await page.route('**/api/ask', (route) => route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          answer: 'Kavya Nair leads the company on YTD revenue at AED 12.1 million. She generated AED 1.97 million in gross margin, a 16.3% margin, and is AED 2 thousand below budget.',
+          page: { to: '/sales', label: 'Sales report' },
+          refused: false,
+        }),
+      }));
+    }
     const errors: string[] = [];
     page.on('console', (m) => {
       if (m.type() === 'error') errors.push(m.text());
@@ -82,8 +94,8 @@ try {
       await page.screenshot({ path: join(out, `${tag} ${p.name} ${width} full.png`), fullPage: true });
       console.log(`wrote ${p.name} at ${width}`);
     }
-    // Ask the MIS: the panel open on the overview, then answered, at laptop width and above.
-    if (width >= 1000 && !skipAsk) {
+    // Ask the MIS: the panel open on the overview, then answered, at every requested width.
+    if (!skipAsk) {
       await page.goto(`${base}/`, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
       await page.waitForSelector('#sales table.mis', { timeout: 15000 });

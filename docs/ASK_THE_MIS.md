@@ -5,12 +5,12 @@ What happens when someone asks the "Ask the MIS" panel a question, and why the a
 ## What happens, step by step
 
 1. The reader opens the panel with Ctrl+K, Cmd+K, or the "Ask the MIS" button, and types one question.
-2. The service picks the files the question needs: the division roll-up always, plus one vertical file and one engineer file if the question names one.
+2. The service supplies the division roll-up and a compact executive-analysis file covering company-wide engineer rankings, every vertical's monthly results and comparable quarters. It also adds one detailed vertical and engineer file when the question names them.
 3. Those files, a fixed set of rules, and a field guide defining every term go to Claude on the principal's own subscription, through the command line, on this server, and no further.
-4. The model quotes figures exactly as published, never calculates, and names the report page where those figures appear.
+4. The model acts as a management analyst: it compares, ranks and calculates from those figures, explains the finding in plain words and names the report page where the underlying figures appear.
 5. The model also writes, under its answer, one citation per figure: the exact place in the data the figure came from. Code with no interest in agreeing follows every citation, confirms the value matches to the digit, confirms the sentence names the right row, and for a "which is highest" question confirms that row really is the extreme of its table.
 6. A clean answer and its page link are shown. A draft that fails any check is tried once more and, if it fails again, withheld: the reader is told the draft could not be shown and is pointed at the nearest report.
-7. When the data genuinely has no answer, the model says so rather than guess.
+7. When a requested field or period genuinely does not exist, the model names exactly what is missing and gives the closest useful answer the MIS can support rather than stopping at a generic refusal.
 
 ## Why a number cannot be invented
 
@@ -22,8 +22,8 @@ The panel runs on the principal's existing Claude subscription through the comma
 
 ## What it will and will not compute
 
-It can add, subtract, take a share or project a run rate from published figures, but only in the open: it cites every input, calls the result a derived figure, and shows the working under the answer. The service recomputes that working itself before anything is shown, so a derived figure that does not add up is withheld. It will not present a computed figure as a published one, and it will not forecast beyond what the published figures can be combined into. Each question is answered on its own; the conversation stays on screen while the reader moves between reports and is kept only in that browser tab, never on the server; and it cannot see anything outside the published tables, including who runs the company.
+It can add, subtract, rank, take a share, compare quarters, calculate month-on-month movement or project a run rate from published figures. It cites every input, labels a new result as calculated and shows the working under the answer. The service recomputes that working itself before anything is shown, so a calculation that does not add up is withheld. For an unqualified "best salesperson" question it uses YTD revenue and also reports GM and budget performance; for "best vertical" it uses revenue variance against budget for the requested period. Each question is answered on its own; the conversation stays on screen while the reader moves between reports and is kept only in that browser tab, never on the server.
 
-When the data does not hold an answer, the panel says exactly this, every time:
+When the requested field truly does not exist, the panel begins with this and then explains the missing field and closest available analysis:
 
-**"The published data does not carry that."**
+**"The MIS does not contain that specific information."**
