@@ -215,7 +215,11 @@ try {
   // 2. sorting: the variance column is the default sort, largest shortfall first; clicking flips it
   const firstBefore = (await page.locator('#sales tbody tr').first().locator('td').first().innerText()).trim();
   const variances = await page.locator('#sales tbody tr:not(.total) td:nth-child(4)').allInnerTexts();
-  const parsed = variances.map((v) => Number(v.replace(/[^\d.-]/g, '').replace('−', '-')) * (v.includes('−') ? -1 : 1));
+  const parsed = variances.map((v) => {
+    const value = Number(v.match(/[\d.]+/)?.[0] ?? NaN);
+    const scale = /bn\b/i.test(v) ? 1_000_000 : /m\b/i.test(v) ? 1_000 : 1;
+    return value * scale * (v.includes('−') || v.includes('-') ? -1 : 1);
+  });
   const ascending = parsed.every((v, i) => i === 0 || v >= parsed[i - 1]!);
   check(ascending, `Overview sales rows sort by variance with the largest shortfall first (first row ${firstBefore})`);
   await page.locator('#sales th[aria-sort] button', { hasText: 'Variance' }).click();
@@ -790,7 +794,7 @@ try {
     console.log('Ask mode: mocked transport; model/backend integration is not measured.');
     await ap.route('**/api/ask', async route => {
       await new Promise(resolve => setTimeout(resolve, 350));
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'YTD revenue is AED 134,995 thousand against a budget of AED 137,845 thousand.', page: { to: '/sales', label: 'Sales report' }, refused: false }) });
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'YTD revenue is AED 135 million against a budget of AED 137.8 million.', page: { to: '/sales', label: 'Sales report' }, refused: false }) });
     });
   }
   // 19. a suggested question round-trips to an answer with a page link

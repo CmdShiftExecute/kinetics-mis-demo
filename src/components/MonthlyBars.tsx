@@ -5,7 +5,7 @@ import { area as d3area, line as d3line } from 'd3-shape';
 import { max } from 'd3-array';
 import { motion, useReducedMotion } from 'motion/react';
 import type { MonthPoint } from '../../data/schema';
-import { cx, k, signedK } from '../lib/format';
+import { AED_COMPACT_GUIDE, cx, k, signedK } from '../lib/format';
 import { GROUP_IN_VIEW, mark } from './ChartMotion';
 import { useWidth } from './useWidth';
 
@@ -127,7 +127,7 @@ export function MonthlyBars({ points, year, subject, id, mode, height = 250 }: P
   return (
     <div className="chart-wrap" ref={ref}>
       <p className="chart-axis-note">
-        AED thousand. {mode === 'columns' ? 'Each month against its own phased budget; the axis starts at zero.' : `Running total from January, actual to ${points[lastActual - 1]?.month ?? 'date'} then forecast, against the phased budget run to the same month.`}
+        {AED_COMPACT_GUIDE}. {mode === 'columns' ? 'Each month against its own phased budget; the axis starts at zero.' : `Running total from January, actual to ${points[lastActual - 1]?.month ?? 'date'} then forecast, against the phased budget run to the same month.`}
       </p>
       <svg className="chart" width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${mode === 'columns' ? 'Monthly revenue against budget' : 'Cumulative revenue against plan'} for ${subject}. Exact values are in the table below.`} tabIndex={0} onPointerMove={onMove} onPointerLeave={() => setHover(null)} onKeyDown={onKey} onFocus={() => setHover(lastActual || 1)} onBlur={() => setHover(null)} id={id}>
         <rect className="capture" x={0} y={0} width={width} height={height} fill="transparent" />
@@ -224,7 +224,7 @@ export function MonthlyBars({ points, year, subject, id, mode, height = 250 }: P
       {mode === 'cumulative' && (
         <>
           <p className="chart-axis-note" style={{ marginTop: 'var(--s-md)' }}>
-            Revenue to date less plan to date, AED thousand, zero baseline. The year ends {endGap.gap < 0 ? 'behind plan' : 'ahead of plan'} at {signedK(endGap.gap)}.
+            Revenue to date less plan to date, {AED_COMPACT_GUIDE}, zero baseline. The year ends {endGap.gap < 0 ? 'behind plan' : 'ahead of plan'} at {signedK(endGap.gap)}.
           </p>
           <svg className="chart vchart" width={width} height={gh} viewBox={`0 0 ${width} ${gh}`} role="img" aria-label={`Cumulative gap to plan for ${subject}. Exact values are in the table below.`} tabIndex={0} onPointerMove={onMove} onPointerLeave={() => setHover(null)} onKeyDown={onKey} onFocus={() => setHover(lastActual || 1)} onBlur={() => setHover(null)}>
             <rect className="capture" x={0} y={0} width={width} height={gh} fill="transparent" />

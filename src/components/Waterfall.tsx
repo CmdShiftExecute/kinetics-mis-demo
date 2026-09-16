@@ -3,7 +3,7 @@ import type { KeyboardEvent, PointerEvent } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { motion, useReducedMotion } from 'motion/react';
 import type { PlGroup, PlRungKey } from '../../data/schema';
-import { cx, k, signedK } from '../lib/format';
+import { AED_COMPACT_GUIDE, cx, k, signedK } from '../lib/format';
 import { GROUP_IN_VIEW, mark } from './ChartMotion';
 import { useWidth } from './useWidth';
 
@@ -96,7 +96,7 @@ export function Waterfall({ group, id, height = 250 }: { group: PlGroup; id: str
 
   return (
     <div className="chart-wrap" ref={ref}>
-      <p className="chart-axis-note">AED thousand, full-year forecast. Costs step the level down from gross margin; the tick across each subtotal is its budget.</p>
+      <p className="chart-axis-note">{AED_COMPACT_GUIDE}, full-year forecast. Costs step the level down from gross margin; the tick across each subtotal is its budget.</p>
       <svg className="chart wfall" width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Profit and loss bridge from gross margin to BU-level net profit, full-year forecast, with budget marks. The exact ladder is in the table below." tabIndex={0} onPointerMove={onMove} onPointerLeave={() => setHover(null)} onKeyDown={onKey} onFocus={() => setHover(0)} onBlur={() => setHover(null)} id={id}>
         <rect className="capture" x={m.left} y={m.top - 10} width={Math.max(0, width - m.left - m.right)} height={Math.max(0, height - m.top - m.bottom + 10)} fill="transparent" />
         {hover != null && <rect className="rowhi" x={m.left + colW * hover} y={m.top - 10} width={colW} height={height - m.top - m.bottom + 10} aria-hidden="true" />}

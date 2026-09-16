@@ -7,8 +7,9 @@
  *
  * Run:  bun scripts/ask_regression.ts [--base https://node-ss.tail640a1e.ts.net:926] [--out <dir>] [--insecure]
  *
- * A question passes when every expected figure appears verbatim (thousands
- * separators ignored), the page link is one of the expected pages, and the
+ * A question passes when every expected figure appears in the executive
+ * wording used by Ask the MIS (AED thousand, million or billion), the page
+ * link is one of the expected pages, and the
  * service did not withhold the answer. An unanswerable question passes when the
  * answer carries the refusal wording; a derived question passes only when the
  * service returned verified working. The gate fails below 31 of 33. Latency
@@ -45,7 +46,13 @@ const engineer = (slug: string) => read<EngineerData>(`engineers/${slug}.json`);
 
 /* ---------- expected-figure formatting: what the panel would print ---------- */
 
-const k = (n: number) => Math.abs(Math.round(n)).toLocaleString('en-GB');
+const k = (n: number) => {
+  const value = Math.abs(n);
+  const rounded = (amount: number) => amount.toFixed(1).replace(/\.0$/, '');
+  if (value >= 1_000_000) return `AED ${rounded(value / 1_000_000)} billion`;
+  if (value >= 1_000) return `AED ${rounded(value / 1_000)} million`;
+  return `AED ${Math.round(value).toLocaleString('en-GB')} thousand`;
+};
 const pct = (n: number) => `${Math.abs(n).toFixed(1)}%`;
 const x = (n: number) => `${Math.abs(n).toFixed(1)}`;
 

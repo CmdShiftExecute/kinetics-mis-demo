@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { ForecastRow, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
-import { MONTHS, k, signedK, signedPct } from '../lib/format';
+import { AED_COMPACT_GUIDE, MONTHS, k, signedK, signedPct } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
@@ -71,7 +71,7 @@ export default function PipelineReport() {
           <p className="page-sub">Revenue forecast and pipeline by vertical, full year {meta.fiscalYear}</p>
         </div>
         <p className="page-basis">
-          AED thousand
+          {AED_COMPACT_GUIDE}
           <br />
           {meta.periodLabel} actual, {meta.nearMonth} onward forecast, FY budget
         </p>

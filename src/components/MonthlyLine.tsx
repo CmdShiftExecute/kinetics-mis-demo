@@ -6,7 +6,7 @@ import { max, min } from 'd3-array';
 import { animate, motion, useReducedMotion } from 'motion/react';
 import type { AnimationPlaybackControls } from 'motion/react';
 import type { MonthPoint } from '../../data/schema';
-import { cx, k, signedK } from '../lib/format';
+import { AED_COMPACT_GUIDE, cx, k, signedK } from '../lib/format';
 import { GROUP_IN_VIEW, mark } from './ChartMotion';
 
 interface Props {
@@ -147,7 +147,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
   return (
     <div className="chart-wrap" ref={ref}>
       <p className="chart-axis-note">
-        AED thousand. {yMin > 0 ? `Revenue axis starts at ${k(yMin)}, not zero.` : 'Revenue axis starts at zero.'} {lastActual ? `Actual to ${points[lastActual.i - 1]!.month}, forecast after.` : ''}
+        {AED_COMPACT_GUIDE}. {yMin > 0 ? `Revenue axis starts at ${k(yMin)}, not zero.` : 'Revenue axis starts at zero.'} {lastActual ? `Actual to ${points[lastActual.i - 1]!.month}, forecast after.` : ''}
       </p>
       <svg
         className="chart"
@@ -244,7 +244,7 @@ export function MonthlyLine({ points, year, height = 230, subject, id }: Props) 
       </div>
 
       <p className="chart-axis-note" style={{ marginTop: 'var(--s-lg)' }}>
-        Variance to budget by month: actual (or forecast) less budget, AED thousand, zero baseline.
+        Variance to budget by month: actual (or forecast) less budget, {AED_COMPACT_GUIDE}, zero baseline.
       </p>
       <svg
         className="chart vchart"

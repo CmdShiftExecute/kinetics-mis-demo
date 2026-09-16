@@ -5,7 +5,7 @@ import type { Rollup, SalesRow } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
 import { useSort } from '../lib/sort';
-import { cx, k, mil, pct, signedK, signedPct } from '../lib/format';
+import { AED_COMPACT_GUIDE, cx, k, mil, pct, signedK, signedPct } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
@@ -52,7 +52,7 @@ export default function Overview() {
   const orderBook = sales.total.openOrders + sales.total.expectedOrders;
   const salesDefinitions = { ...definitions, orderBookSnapshot: {
     key: 'orderBookSnapshot', term: 'Order book snapshot',
-    text: `AED thousand, ${meta.currentMonthLabel}: ${k(sales.total.openOrders)} open orders plus ${k(sales.total.expectedOrders)} expected orders, ${k(orderBook)} combined. Expected orders are not secured business.`,
+    text: `${AED_COMPACT_GUIDE}. ${meta.currentMonthLabel}: ${k(sales.total.openOrders)} open orders plus ${k(sales.total.expectedOrders)} expected orders, ${k(orderBook)} combined. Expected orders are not secured business.`,
   } };
   const asOf = meta.dataAsOfLabel;
   const largestShortfall = [...sales.rows].filter(row => row.dRevenue < 0).sort((a, b) => a.dRevenue - b.dRevenue)[0];
@@ -69,7 +69,7 @@ export default function Overview() {
           </p>
         </div>
         <p className="page-basis">
-          Headlines AED million · Tables AED thousand
+          {AED_COMPACT_GUIDE}
           <br />
           {meta.nearMonth.split(' ')[0]} onward forecast · FY {meta.fiscalYear}
         </p>
@@ -125,7 +125,7 @@ export default function Overview() {
 
       <div className="overview-grid">
         {/* 1. Sales against plan */}
-        <Section id="sales" title="Sales" note={`${meta.periodLabel} · AED thousand`} link={{ to: '/sales', label: 'Full sales report' }} source={sources['rollup.sales']} asOf={asOf} defs={['ytdRevenue', 'ytdBudget', 'variance', 'gmPct', 'openOrders', 'expectedOrders', 'orderBookSnapshot']} definitions={salesDefinitions} compact>
+        <Section id="sales" title="Sales" note={`${meta.periodLabel} · ${AED_COMPACT_GUIDE}`} link={{ to: '/sales', label: 'Full sales report' }} source={sources['rollup.sales']} asOf={asOf} defs={['ytdRevenue', 'ytdBudget', 'variance', 'gmPct', 'openOrders', 'expectedOrders', 'orderBookSnapshot']} definitions={salesDefinitions} compact>
           <p className="section-takeaway">Gross margin <strong>{pct(o.sales.ytdGmPct)}</strong> · Budget {pct(o.sales.budgetGmPct)}</p>
           <div className="scroll-x">
             <table className="mis compact">
@@ -178,7 +178,7 @@ export default function Overview() {
         </Section>
 
         {/* 2. Pipeline */}
-        <Section id="pipeline" title="Pipeline" note={`FY ${meta.fiscalYear} · AED thousand`} link={{ to: '/pipeline', label: 'Full pipeline report' }} source={sources['rollup.monthly']} asOf={asOf} defs={['fyForecast', 'fyBudget', 'variance']} definitions={definitions} compact>
+        <Section id="pipeline" title="Pipeline" note={`FY ${meta.fiscalYear} · ${AED_COMPACT_GUIDE}`} link={{ to: '/pipeline', label: 'Full pipeline report' }} source={sources['rollup.monthly']} asOf={asOf} defs={['fyForecast', 'fyBudget', 'variance']} definitions={definitions} compact>
           <Strip
             cols={3}
             items={[
@@ -194,7 +194,7 @@ export default function Overview() {
         </Section>
 
         {/* 3. Net profit */}
-        <Section id="net-profit" title="Net profit" note="Division after netting · AED thousand" link={{ to: '/net-profit', label: 'Full profit report' }} source={sources['rollup.pl']} asOf={asOf} defs={['plColumns', 'buProfitability', 'buNetProfit']} definitions={definitions} compact>
+        <Section id="net-profit" title="Net profit" note={`Division after netting · ${AED_COMPACT_GUIDE}`} link={{ to: '/net-profit', label: 'Full profit report' }} source={sources['rollup.pl']} asOf={asOf} defs={['plColumns', 'buProfitability', 'buNetProfit']} definitions={definitions} compact>
           <div className="scroll-x">
             <table className="mis compact">
               <thead>
@@ -236,7 +236,7 @@ export default function Overview() {
         </Section>
 
         {/* 4. Receivables and working capital */}
-        <Section id="receivables" title="Receivables & working capital" note={`${meta.currentMonthLabel} month end · AED thousand`} link={{ to: '/receivables', label: 'Receivables report' }} source={sources['rollup.receivables']} asOf={asOf} defs={['netToCollect', 'totalOutstanding', 'pastDue', 'agedOverOneYear', 'workingCapital']} definitions={definitions} compact>
+        <Section id="receivables" title="Receivables & working capital" note={`${meta.currentMonthLabel} month end · ${AED_COMPACT_GUIDE}`} link={{ to: '/receivables', label: 'Receivables report' }} source={sources['rollup.receivables']} asOf={asOf} defs={['netToCollect', 'totalOutstanding', 'pastDue', 'agedOverOneYear', 'workingCapital']} definitions={definitions} compact>
           <div className="scroll-x">
             <table className="mis compact">
               <thead>

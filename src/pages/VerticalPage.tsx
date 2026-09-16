@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router';
 import type { VerticalData, VerticalIndexEntry } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateIndex, validateVertical } from '../lib/validate';
-import { MONTHS, count, cx, dateLabel, k, pct, pts, signedK, signedPct } from '../lib/format';
+import { AED_COMPACT_GUIDE, MONTHS, count, cx, dateLabel, k, pct, pts, signedK, signedPct } from '../lib/format';
 import { Crumbs, Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
@@ -73,7 +73,7 @@ export default function VerticalPage() {
           )}
         </div>
         <p className="page-basis">
-          AED thousand
+          {AED_COMPACT_GUIDE}
           <br />
           {data.isLargest ? 'The largest vertical' : 'Attributed basis'}
         </p>

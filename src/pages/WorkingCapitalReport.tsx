@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
-import { count, k, pct, signedK } from '../lib/format';
+import { AED_COMPACT_GUIDE, count, k, pct, signedK } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
@@ -99,7 +99,7 @@ export default function WorkingCapitalReport() {
           <p className="page-sub">Receivables, unbilled and inventory by vertical at {meta.currentMonthLabel} month end</p>
         </div>
         <p className="page-basis">
-          AED thousand
+          {AED_COMPACT_GUIDE}
           <br />
           Stock at cost
         </p>

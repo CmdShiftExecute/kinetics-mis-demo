@@ -23,6 +23,7 @@ const out = arg('out', join(process.cwd(), 'screenshots'));
 const insecure = args.includes('--insecure');
 const tag = arg('tag', 'halvard-mis');
 const widths = arg('widths', '1440,1024,390').split(',').map((w) => Number(w));
+const skipAsk = args.includes('--skip-ask');
 
 const pages = [
   { path: '/', name: 'overview' },
@@ -68,12 +69,21 @@ try {
         console.error(`Document width ${docW}px exceeds viewport ${width}px on ${p.path}`);
         process.exitCode = 1;
       }
+      const frame = await page.evaluate(() => ({
+        scrollX: window.scrollX,
+        wrapLeft: document.querySelector('.wrap')?.getBoundingClientRect().left ?? -1,
+        headingLeft: document.querySelector('h1')?.getBoundingClientRect().left ?? -1,
+      }));
+      if (frame.scrollX !== 0 || frame.wrapLeft < 0 || frame.headingLeft < 0) {
+        console.error(`Page is shifted left on ${p.path} at ${width}px: ${JSON.stringify(frame)}`);
+        process.exitCode = 1;
+      }
       await page.screenshot({ path: join(out, `${tag} ${p.name} ${width}.png`), fullPage: false });
       await page.screenshot({ path: join(out, `${tag} ${p.name} ${width} full.png`), fullPage: true });
       console.log(`wrote ${p.name} at ${width}`);
     }
     // Ask the MIS: the panel open on the overview, then answered, at laptop width and above.
-    if (width >= 1000) {
+    if (width >= 1000 && !skipAsk) {
       await page.goto(`${base}/`, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
       await page.waitForSelector('#sales table.mis', { timeout: 15000 });

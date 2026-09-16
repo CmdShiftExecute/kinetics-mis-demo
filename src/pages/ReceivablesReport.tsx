@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { ReasonKey, ReceivableSummaryRow, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
-import { k, pct, signedK } from '../lib/format';
+import { AED_COMPACT_GUIDE, k, pct, signedK } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
@@ -84,7 +84,7 @@ export default function ReceivablesReport() {
           </p>
         </div>
         <p className="page-basis">
-          AED thousand
+          {AED_COMPACT_GUIDE}
           <br />
           {cur} month end against {prev} month end
         </p>

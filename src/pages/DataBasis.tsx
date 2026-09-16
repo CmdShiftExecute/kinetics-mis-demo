@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { Reconciliation, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateReconciliation, validateRollup } from '../lib/validate';
-import { count, cx, k } from '../lib/format';
+import { AED_COMPACT_GUIDE, count, cx, k } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Strip } from '../components/Strip';
@@ -80,7 +80,7 @@ export default function DataBasis() {
           </div>
           <div>
             <dt>Unit</dt>
-            <dd>{meta.currency} thousand throughout, except where a sentence states millions.</dd>
+            <dd>{AED_COMPACT_GUIDE}. Source values remain stored in AED thousands.</dd>
           </div>
           <div>
             <dt>Time</dt>

@@ -6,7 +6,7 @@ export interface StripItem {
   label: string;
   /** The figure, unformatted; the component applies the formatter. */
   value: number;
-  /** Formatter, defaults to AED thousands. */
+  /** Formatter, defaults to compact AED units. */
   f?: (n: number) => string;
   sub?: string;
   bad?: boolean;

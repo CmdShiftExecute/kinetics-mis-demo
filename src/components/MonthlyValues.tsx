@@ -1,5 +1,5 @@
 import type { MonthPoint } from '../../data/schema';
-import { cx, k, signedK } from '../lib/format';
+import { AED_COMPACT_GUIDE, cx, k, signedK } from '../lib/format';
 
 /**
  * The exact monthly figures behind whichever view of the chart is on screen. It
@@ -10,7 +10,7 @@ import { cx, k, signedK } from '../lib/format';
 export function MonthlyValues({ points, year, id }: { points: MonthPoint[]; year: number; id: string }) {
   return (
     <details className="values" id={`${id}-values`}>
-      <summary>Monthly values, AED thousand</summary>
+      <summary>Monthly values, {AED_COMPACT_GUIDE}</summary>
       <table className="mis compact">
         <thead>
           <tr>

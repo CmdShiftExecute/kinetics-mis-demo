@@ -7,7 +7,7 @@ import { useReveal } from './Reveal';
 interface Props {
   id: string;
   title: string;
-  /** Period and unit, e.g. "AED thousands, January to August 2026". */
+  /** Period and unit, e.g. "AED · m = million, January to August 2026". */
   note?: string;
   intro?: ReactNode;
   link?: { to: string; label: string };

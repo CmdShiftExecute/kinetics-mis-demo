@@ -3,7 +3,7 @@ import { Link, Navigate, useParams } from 'react-router';
 import type { EngineerData } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateEngineer } from '../lib/validate';
-import { MONTHS, count, cx, k, mult, pct, signedK, signedPct } from '../lib/format';
+import { AED_COMPACT_GUIDE, MONTHS, count, cx, k, mult, pct, signedK, signedPct } from '../lib/format';
 import { Crumbs, Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
@@ -79,7 +79,7 @@ export default function EngineerPage() {
           </nav>
         </div>
         <p className="page-basis">
-          AED thousand
+          {AED_COMPACT_GUIDE}
           <br />
           No profit and loss: costs are held at the vertical
         </p>

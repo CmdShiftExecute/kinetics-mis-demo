@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { PlRungKey, ProfitabilityRow, Rollup } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
-import { cx, k, pct, signedK } from '../lib/format';
+import { AED_COMPACT_GUIDE, cx, k, pct, signedK } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
@@ -68,7 +68,7 @@ export default function NetProfitReport() {
           <p className="page-sub">Profit and loss summary and vertical profitability, FY {meta.fiscalYear}</p>
         </div>
         <p className="page-basis">
-          AED thousand
+          {AED_COMPACT_GUIDE}
           <br />
           YTD actual, FY forecast, FY budget
         </p>

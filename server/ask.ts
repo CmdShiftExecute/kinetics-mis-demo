@@ -165,8 +165,8 @@ async function answer(question: string, signal: AbortSignal, onCall: () => boole
   const t0 = Date.now();
   let a = await attempt();
   let retried = false;
-  if ((a.finished.selfCorrected || !a.cites.ok) && Date.now() - t0 < CONFIG.retryWithinMs && onCall()) {
-    // A draft that changed its mind, or whose figures do not trace, is never shown. One more try on the same cached context, then withhold.
+  if ((a.finished.selfCorrected || a.finished.unreadableMoney.length > 0 || !a.cites.ok) && Date.now() - t0 < CONFIG.retryWithinMs && onCall()) {
+    // A draft that changed its mind, uses raw large thousands, or whose figures do not trace is never shown. One more try on the same cached context, then withhold.
     retried = true;
     a = await attempt();
   }
@@ -241,6 +241,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse) {
     if (!cites.ok) {
       done('blocked', { ...meta, reason: 'citation', problems: cites.problems });
       return send(res, 200, { ...base, answer: `The draft answer carried a figure that could not be traced to its row in the published data, so it was withheld. Ask again in plainer words, or open ${finished.page.label}.`, refused: true, blocked: true });
+    }
+    if (finished.unreadableMoney.length) {
+      done('blocked', { ...meta, reason: 'money-style', figures: finished.unreadableMoney });
+      return send(res, 200, { ...base, answer: `The draft answer used a large raw-thousands figure, so it was withheld. Ask again, or open ${finished.page.label}.`, refused: true, blocked: true });
     }
     if (finished.unverified.length) {
       done('blocked', { ...meta, reason: 'audit', unverified: finished.unverified });

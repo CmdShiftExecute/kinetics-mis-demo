@@ -8,6 +8,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium, type Page } from 'playwright';
 import type { Rollup } from '../data/schema';
+import { k, mil } from '../src/lib/format';
 
 const args = process.argv.slice(2);
 const option = (name: string, fallback: string) => {
@@ -91,9 +92,6 @@ async function headerVisible(page: Page) {
     return { header: { top: header.top, bottom: header.bottom }, heading: { top: heading.top, bottom: heading.bottom }, visible: header.top >= -1 && header.bottom > 0 };
   });
 }
-function million(value: number, decimals = 1) {
-  return 'AED ' + (Math.abs(value) / 1000).toFixed(decimals) + 'm';
-}
 function signedPercent(value: number) {
   return (value > 0 ? '+' : value < 0 ? '−' : '') + Math.abs(value).toFixed(1) + '%';
 }
@@ -104,28 +102,28 @@ try {
   await ready(page);
   const rollup = await page.evaluate(async () => (await fetch('/data/rollup.json')).json()) as Rollup;
   const headlineExpected = [
-    million(rollup.overview.sales.ytdRevenue),
-    million(rollup.overview.delivery.fyForecast),
-    million(rollup.overview.profit.forecast.buNetProfit),
-    million(rollup.overview.receivables.pastDue),
+    mil(rollup.overview.sales.ytdRevenue),
+    mil(rollup.overview.delivery.fyForecast),
+    mil(rollup.overview.profit.forecast.buNetProfit),
+    mil(rollup.overview.receivables.pastDue),
   ];
   const headlineActual = await page.locator('#answers .big').allInnerTexts();
   check(headlineActual.length === 4 && headlineExpected.every((value, i) => headlineActual[i] === value), 'Four headline values match rollup.json', headlineActual.join(' | '));
   const businessRows = await page.locator('#sales tbody tr:not(.total)').count();
   const totalText = await page.locator('#sales tbody tr.total').innerText();
-  const totalValues = [rollup.sales.total.ytdRevenue, rollup.sales.total.budgetRevenue, rollup.sales.total.dRevenue].map((value: number) => value.toLocaleString('en-GB').replace('-', '−'));
+  const totalValues = [rollup.sales.total.ytdRevenue, rollup.sales.total.budgetRevenue, rollup.sales.total.dRevenue].map(k);
   check(businessRows === 10 && totalText.includes(rollup.sales.total.name) && totalValues.every((value: string) => totalText.includes(value)), 'Sales table retains ten businesses and rollup total values', totalText.replace(/\s+/g, ' '));
   const overview = await overviewFingerprint(page);
-  for (const text of ['6,198', '11,320', '12,581', '106,932', '59,132', '5,529', '102,653', '9,053', '23,177', '134,883', '83.1% of net to collect']) {
+  for (const text of [6_198, 11_320, 12_581, 106_932, 59_132, 5_529, 102_653, 9_053, 23_177, 134_883].map(k).concat('83.1% of net to collect')) {
     check(overview.includes(text), 'Overview retains exact analytic string', text);
   }
   const worstShortfall = rollup.sales.rows.reduce((worst, row) => row.dRevenue < worst.dRevenue ? row : worst);
   const priorityText = await page.locator('.attention').innerText();
   const priorityExpected = [
     worstShortfall.name,
-    million(Math.abs(worstShortfall.dRevenue), 2) + ' largest YTD shortfall',
+    mil(Math.abs(worstShortfall.dRevenue), 2) + ' largest YTD shortfall',
     signedPercent(worstShortfall.dRevenuePct) + ' vs YTD budget.',
-    million(rollup.overview.receivables.agedOverOneYear) + ' aged over a year',
+    mil(rollup.overview.receivables.agedOverOneYear) + ' aged over a year',
     rollup.overview.receivables.concentration.share.toFixed(1) + '% of net receivables',
     String(rollup.overview.profit.lossMakers.length) + (rollup.overview.profit.lossMakers.length === 1 ? ' business forecasts a loss' : ' businesses forecast a loss'),
   ];

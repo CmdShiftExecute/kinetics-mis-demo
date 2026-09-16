@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { Rollup, SalesRow } from '../../data/schema';
 import { useJson } from '../lib/data';
 import { validateRollup } from '../lib/validate';
-import { k, pct, pts, signedK, signedPct } from '../lib/format';
+import { AED_COMPACT_GUIDE, k, pct, pts, signedK, signedPct } from '../lib/format';
 import { Masthead } from '../components/Masthead';
 import { Section } from '../components/Section';
 import { Num } from '../components/Num';
@@ -67,7 +67,7 @@ export default function SalesReport() {
           <p className="page-sub">Sales performance by vertical, {meta.periodLabel}</p>
         </div>
         <p className="page-basis">
-          AED thousand
+          {AED_COMPACT_GUIDE}
           <br />
           YTD actual against YTD budget, same months
         </p>

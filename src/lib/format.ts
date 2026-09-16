@@ -1,15 +1,22 @@
 /** Typographic minus, never a hyphen, for negative figures. */
 export const MINUS = '−';
+export const AED_COMPACT_GUIDE = 'AED · k = thousand · m = million · bn = billion';
 
 const grouped = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
+const scaled = (n: number, d = 1) => new Intl.NumberFormat('en-GB', { maximumFractionDigits: d }).format(n);
 
-/** AED thousands with grouping. */
+/** Compact AED amount from a value stored in thousands. */
 export function k(n: number): string {
-  const s = grouped.format(Math.abs(Math.round(n)));
+  const absolute = Math.abs(n);
+  const s = absolute >= 1_000_000
+    ? `${scaled(absolute / 1_000_000)}bn`
+    : absolute >= 1_000
+      ? `${scaled(absolute / 1_000)}m`
+      : `${grouped.format(Math.round(absolute))}k`;
   return n < 0 ? `${MINUS}${s}` : s;
 }
 
-/** Signed AED thousands, for variances. */
+/** Signed compact AED amount, for variances. */
 export function signedK(n: number): string {
   if (n > 0) return `+${k(n)}`;
   return k(n);
@@ -35,10 +42,15 @@ export function pts(n: number): string {
   return s;
 }
 
-/** AED millions from thousands for prose, e.g. "AED 12.3m". Tables stay in thousands. */
+/** AED-prefixed compact amount for headline figures. */
 export function mil(thousands: number, d = 1): string {
-  const v = Math.abs(thousands) / 1000;
-  return `${thousands < 0 ? MINUS : ''}AED ${v.toFixed(d)}m`;
+  const absolute = Math.abs(thousands);
+  const amount = absolute >= 1_000_000
+    ? `${scaled(absolute / 1_000_000, d)}bn`
+    : absolute >= 1_000
+      ? `${scaled(absolute / 1_000, d)}m`
+      : `${grouped.format(Math.round(absolute))}k`;
+  return `${thousands < 0 ? MINUS : ''}AED ${amount}`;
 }
 
 /** A multiple, e.g. "2.4x". */

@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { VerticalIndexEntry } from '../data/schema';
-import { CHARS_PER_TOKEN, CONTEXT_TOKEN_CAP, REFUSAL, REFUSAL_RE, SYSTEM_PROMPT, auditFigures, buildSystemPrompt, buildUserPrompt, capLength, cleanProse, bindPage, checkCitations, checkDerivations, evaluate, extremesList, figureMatches, figureToken, finish, fitContext, hasSelfCorrection, isWhitelisted, minify, numbersIn, parseCitations, parseDerivations, resolvePage, resolvePath, select } from './grounding';
+import { CHARS_PER_TOKEN, CONTEXT_TOKEN_CAP, REFUSAL, REFUSAL_RE, SYSTEM_PROMPT, auditFigures, buildSystemPrompt, buildUserPrompt, capLength, cleanProse, bindPage, checkCitations, checkDerivations, evaluate, extremesList, figureMatches, figureToken, finish, fitContext, hasSelfCorrection, isWhitelisted, minify, numbersIn, parseCitations, parseDerivations, resolvePage, resolvePath, select, unreadableMoneyFigures } from './grounding';
 
 const dataDir = join(import.meta.dirname, '..', 'public', 'data');
 const index = JSON.parse(readFileSync(join(dataDir, 'index.json'), 'utf8')) as VerticalIndexEntry[];
@@ -15,9 +15,19 @@ describe('the rules', () => {
     for (const phrase of ['Quote figures exactly', 'Never calculate', REFUSAL, 'Source: <page>', 'synthetic demonstration set', 'two to four sentences', 'no em dashes', 'A superlative is a comparison of published values', 'Where each figure is shown', 'never revise, correct or contradict yourself', 'the ranking is by the AED variance']) {
       expect(SYSTEM_PROMPT).toContain(phrase);
     }
+    expect(SYSTEM_PROMPT).toContain('AED 100.5 million');
+    expect(SYSTEM_PROMPT).not.toContain('Never round, never convert to millions');
   });
   test('contain no em or en dash', () => {
     expect(/[\u2014\u2013]/.test(SYSTEM_PROMPT)).toBe(false);
+  });
+});
+
+describe('executive money wording', () => {
+  test('rejects raw thousand figures once the value reaches a million dirhams', () => {
+    expect(unreadableMoneyFigures('Revenue was 100,505 AED thousand.')).toEqual(['100,505 AED thousand']);
+    expect(unreadableMoneyFigures('Revenue was AED 100.5 million.')).toEqual([]);
+    expect(unreadableMoneyFigures('Revenue was AED 785 thousand.')).toEqual([]);
   });
 });
 
@@ -181,6 +191,11 @@ describe('auditFigures', () => {
     expect(auditFigures('The total is 999,999,123 AED thousand and margin 12.34%.', published)).toEqual(['999,999,123', '12.34']);
     expect(auditFigures('That is AED 135.005 million.', published)).toEqual(['135.005']);
   });
+  test('accepts a one-decimal million label for the exact stored AED-thousand value', () => {
+    const compactPublished = numbersIn(JSON.stringify({ revenue: 100_505 }));
+    expect(auditFigures('Revenue was AED 100.5 million.', compactPublished)).toEqual([]);
+    expect(auditFigures('Revenue was AED 100.7 million.', compactPublished)).toEqual(['100.7']);
+  });
   test('allows years, months and small counts, but not a small number with a unit', () => {
     expect(auditFigures('Across 10 verticals and 24 engineers in 2026, data as of 07 Sep 2026.', published)).toEqual([]);
     expect(auditFigures('Gross margin was 29% and past due is 17 percent of the book.', new Set())).toEqual(['29', '17']);
@@ -284,6 +299,9 @@ describe('citations', () => {
     expect(figureMatches('1.8', -1764)).toBe(false);
     expect(figureMatches('-927', 927)).toBe(false);
     expect(figureMatches('+1,764', -1764)).toBe(false);
+    expect(figureMatches('AED 100.5 million', 100_505)).toBe(true);
+    expect(figureMatches('negative AED 1.8 million', -1_764)).toBe(true);
+    expect(figureMatches('AED 100.7 million', 100_505)).toBe(false);
   });
   test('a cited figure with its unit in the Cite line still counts as cited', () => {
     const r = checkCitations(`Vertical Transport is forecast at ${fmt(vt.dRevenue)} AED thousand below budget.`, [{ figure: `-${fmt(vt.dRevenue)} AED thousand`, path: 'rollup.sales.rows[vertical-transport].dRevenue' }], files, index);
