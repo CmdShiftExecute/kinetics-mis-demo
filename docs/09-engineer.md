@@ -1,6 +1,8 @@
 # Engineer
 
-One sales engineer's own book: product lines, monthly run, targets, unbilled projects, and the customers who owe them. No screenshot is included in this guide; the page shares its table and strip conventions with the vertical detail page.
+<img src="assets/engineer-hero.png" alt="One sales engineer page" width="100%" />
+
+One sales engineer's own book: product lines, monthly run, targets, unbilled projects, and the customers who owe them.
 
 ## What is on the page
 

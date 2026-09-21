@@ -1,6 +1,8 @@
 # Customer aging
 
-The full, drillable customer-level receivables table for one vertical, the detail sitting behind that vertical's engineer-level receivables summary. No screenshot is included in this guide; the page shares its table and strip conventions with the vertical detail page above.
+<img src="assets/customer-aging-hero.png" alt="Receivables by customer for one vertical" width="100%" />
+
+The full, drillable customer-level receivables table for one vertical, the detail sitting behind that vertical's engineer-level receivables summary.
 
 ## What is on the page
 
