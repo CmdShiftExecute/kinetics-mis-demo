@@ -5,7 +5,8 @@
  * two naming an engineer, five the data cannot answer, three that need a
  * derived figure with its working.
  *
- * Run:  bun scripts/ask_regression.ts [--base https://node-ss.tail640a1e.ts.net:926] [--out <dir>] [--insecure]
+ * Run:  bun scripts/ask_regression.ts [--base https://your.host.example:926] [--out <dir>] [--insecure]
+ *       The default base is the local preview at http://127.0.0.1:4180.
  *
  * A question passes when every expected figure appears in the executive
  * wording used by Ask the MIS (AED thousand, million or billion), the page

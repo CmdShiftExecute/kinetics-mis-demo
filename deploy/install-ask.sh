@@ -2,7 +2,7 @@
 # Installs or re-installs the Ask the MIS service on node-ss. Idempotent: run it after any change
 # to server/, deploy/kinetics-ask.service or deploy/nginx-ask.conf, or after regenerating the data.
 #
-#   bash /home/sharmas0910/code/kinetics-mis-demo/deploy/install-ask.sh
+#   bash "$(git rev-parse --show-toplevel)/deploy/install-ask.sh"
 #
 # What it does, every time:
 #   1. run/ exists, owned by the user with group www-data and the setgid bit, so the socket the
@@ -16,13 +16,19 @@
 #      provider is set to api.
 set -euo pipefail
 
-REPO=/home/sharmas0910/code/kinetics-mis-demo
-SITE=/etc/nginx/sites-enabled/kinetics-mis-demo
+REPO=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+SITE=${ASK_SITE:-/etc/nginx/sites-enabled/kinetics-mis-demo}
 UNIT=kinetics-ask.service
 UNIT_SRC="$REPO/deploy/$UNIT"
 UNIT_DST="$HOME/.config/systemd/user/$UNIT"
-SNIPPET="$REPO/deploy/nginx-ask.conf"
+SNIPPET_TEMPLATE="$REPO/deploy/nginx-ask.conf"
 SOCK="$REPO/run/ask.sock"
+
+# The nginx snippet is a template so no host path is committed; it is rendered for this checkout.
+SNIPPET=$(mktemp -t kinetics-ask-nginx.XXXXXX)
+trap 'rm -f "$SNIPPET"' EXIT
+sed -e "s|__ASK_SOCK__|$SOCK|g" "$SNIPPET_TEMPLATE" > "$SNIPPET"
+grep -q '__ASK_SOCK__' "$SNIPPET" && { echo "a placeholder was left unrendered in $SNIPPET"; exit 1; }
 
 say() { printf '%s %s\n' "$(date '+%H:%M:%S')" "$*"; }
 
