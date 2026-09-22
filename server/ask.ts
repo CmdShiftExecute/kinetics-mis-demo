@@ -19,7 +19,7 @@
  * run/ask.log.jsonl with a GST stamp, the question's length (never its text),
  * tokens, latency, provider and outcome. Nothing else is stored.
  *
- * Run:  bun server/ask.ts   (the systemd user unit deploy/kinetics-ask.service does this)
+ * Run:  bun server/ask.ts   (the systemd user unit deploy/ask.service does this)
  */
 
 import { createServer } from 'node:http';

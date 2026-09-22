@@ -2,7 +2,7 @@
 
 # Management Information System
 
-*A zero-backend management information system for a fictional, unnamed multi-divisional engineering group, built to answer five questions a division head asks every month.*
+*A management information system dashboard for a fictional, unnamed multi-divisional engineering group, built to answer five questions a division head asks every month.*
 
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
@@ -10,19 +10,26 @@
 ![Tailwind](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![Motion](https://img.shields.io/badge/Motion-animation-000000?style=for-the-badge)
 ![Bun](https://img.shields.io/badge/Bun-runtime-000000?style=for-the-badge&logo=bun&logoColor=white)
-[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20Live%20Demo-000000?style=for-the-badge)](https://kinetics-mis-demo.vercel.app/)
+![MIT licence](https://img.shields.io/badge/Licence-MIT-000000?style=for-the-badge)
+[![Live Demo](https://img.shields.io/badge/%E2%96%B6%20Live%20Demo-000000?style=for-the-badge)](https://management-information-system-dashboard.vercel.app/)
+
+## In one glance
+
+- Answers five questions a division head asks every month: sales versus budget, revenue forecast, expected net profit, where the gaps are, and where working capital is tied up.
+- Every figure is synthetic, generated from one seed by one script and checked by 527 reconciliation assertions; no real company, person or figure appears anywhere in this repository.
+- A static Vite and React site with zero browser-side computation: every chart, table and headline figure is a sort, a filter or a format of finished JSON already written to disk.
+
+## Live demo
+
+**https://management-information-system-dashboard.vercel.app/**
+
+<img src="docs/assets/overview-hero.png" alt="Management Information System overview page" width="100%" />
 
 ## What it is
 
 This Management Information System is built for a fictional, unnamed multi-divisional engineering group. It answers the five questions a division head asks in order: how is sales performing against plan, what revenue will be delivered this year, what profit is expected after costs, which businesses explain the gaps, and where is working capital tied up. Every figure on the page states its measure, its period and its comparator, so nothing appears as a bare number a reader has to interpret from context.
 
 The whole application turns on one design rule: nothing is computed in the browser. It is a static Vite and React site sitting on top of finished JSON tables written by a generator, and every table, chart and headline figure is a sort, a filter or a format of data that already exists on disk. If a number on screen is wrong, the fix belongs in the generator, never in a component. All data is synthetic, generated from one seed. No real company, person or figure appears anywhere in this repository.
-
-## Live demo
-
-**https://kinetics-mis-demo.vercel.app/**
-
-<img src="docs/assets/overview-hero.png" alt="Management Information System overview page" width="100%" />
 
 ## Highlights
 
@@ -90,10 +97,30 @@ Three named themes, Parchment, Light and Dark, are chosen before first paint by 
 4. `bun run dev` starts the Vite dev server, or `bun run preview` serves the production build at `127.0.0.1:4180`.
 5. `bun run ask` starts the Ask the MIS answer service on its own socket, separately, if you want the question panel to answer for real; `bun run preview` proxies `/api/ask` to it the same way the live site does. Without this running, the panel still renders, it simply cannot produce an answer.
 
+## Use it with your own data
+
+Every figure on every page comes from `public/data/*.json`; no page computes a number itself. To point this at your own numbers:
+
+1. Replace the body of `scripts/generate_demo_data.ts` with your own data source, keeping its output shape: `rollup.json` (division roll-up), `index.json` (the list of verticals), one `<slug>.json` per vertical and one engineer file per sales engineer. `data/schema.ts` is the contract every reader assumes.
+2. Run `bun run data` to write the new JSON, then `bun run reconcile` to check every cross-table equality against what you wrote. A reconciliation failure names the exact assertion and the two values that disagree.
+3. `src/lib/suite.ts` is the only place a sibling deployment's address is written; set `VITE_SUITE_MIS`, `VITE_SUITE_WMS` and `VITE_SUITE_PIS` at build time rather than editing it, if you run the sibling demos on your own hosts.
+
+Nothing else in `src/` reads anything but the JSON under `public/data/`, so a correct regeneration is the whole of "using your own data."
+
+## Roadmap
+
+- A second synthetic dataset (a smaller division, a different mix of verticals) to prove the generator's rules hold outside the one seed shipped here.
+- CSV export from every table, not only the ones that already carry it, so a reader can take a filtered view into a spreadsheet.
+- A saved-view link (the current filters and theme encoded in the URL) so a specific slice of a vertical or an engineer's book can be shared directly.
+
 ## Sibling demos
 
-- **Project Intelligence System**: a scored market register and relevance matrix across thousands of synthetic projects. [github.com/CmdShiftExecute/kinetics-bnc-demo](https://github.com/CmdShiftExecute/kinetics-bnc-demo) · [live demo](https://kinetics-pis-demo.vercel.app/)
-- **Warehouse Information System**: a warehouse management demo sharing this app's design system and component patterns. [github.com/CmdShiftExecute/kinetics-wms-demo](https://github.com/CmdShiftExecute/kinetics-wms-demo) · [live demo](https://kinetics-wms-demo.vercel.app/)
+- **Project Intelligence System**: a scored market register and relevance matrix across thousands of synthetic projects. [github.com/CmdShiftExecute/project-intelligence-system](https://github.com/CmdShiftExecute/project-intelligence-system) · [live demo](https://project-intelligence-system-dashboard.vercel.app/)
+- **Warehouse Management System**: a warehouse management demo sharing this app's design system and component patterns. [github.com/CmdShiftExecute/warehouse-management-system](https://github.com/CmdShiftExecute/warehouse-management-system) · [live demo](https://warehouse-management-system-dashboard.vercel.app/)
+
+## License
+
+[MIT](LICENSE).
 
 ---
 

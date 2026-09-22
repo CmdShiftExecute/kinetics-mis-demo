@@ -10,9 +10,47 @@
         document.documentElement.dataset.theme = theme === 'light' || theme === 'dark' ? theme : 'parchment';
       } catch { document.documentElement.dataset.theme = 'parchment'; }
     </script>
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="Management information system dashboard for sales, pipeline, net profit, receivables and working capital, with a grounded Ask-the-MIS question and answer panel." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://management-information-system-dashboard.vercel.app/" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Management Information System</title>
+
+    <meta property="og:title" content="Management Information System" />
+    <meta property="og:description" content="Management information system dashboard: sales vs budget, pipeline forecast, net-profit bridge, receivables ageing and working capital, plus a grounded Ask-the-MIS panel." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://management-information-system-dashboard.vercel.app/" />
+    <meta property="og:image" content="https://management-information-system-dashboard.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Management Information System" />
+    <meta name="twitter:description" content="Management information system dashboard: sales vs budget, pipeline forecast, net-profit bridge, receivables ageing and working capital, plus a grounded Ask-the-MIS panel." />
+    <meta name="twitter:image" content="https://management-information-system-dashboard.vercel.app/og.png" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Management Information System",
+      "description": "Management information system dashboard for a multi-divisional business: sales vs budget, pipeline forecast, net-profit bridge, receivables ageing and working capital, plus a grounded Ask-the-MIS panel.",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": "https://management-information-system-dashboard.vercel.app/",
+      "image": "https://management-information-system-dashboard.vercel.app/og.png",
+      "author": {
+        "@type": "Person",
+        "name": "Shashank Sharma"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "license": "https://github.com/CmdShiftExecute/management-information-system/blob/main/LICENSE"
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -21,7 +21,7 @@ const arg = (name: string, fallback: string) => {
 const base = arg('base', 'http://127.0.0.1:4180').replace(/\/$/, '');
 const out = arg('out', join(process.cwd(), 'screenshots'));
 const insecure = args.includes('--insecure');
-const tag = arg('tag', 'kinetics-mis');
+const tag = arg('tag', 'mis');
 const widths = arg('widths', '1440,1024,390').split(',').map((w) => Number(w));
 const skipAsk = args.includes('--skip-ask');
 const mockAsk = args.includes('--mock-ask');

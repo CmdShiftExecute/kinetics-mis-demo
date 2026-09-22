@@ -39,7 +39,7 @@ export interface AskState {
   turns: Turn[];
 }
 
-const KEY = 'kinetics-ask-mis';
+const KEY = 'mis-ask';
 const EMPTY: AskState = { open: false, openedAt: 0, turns: [] };
 
 function load(): AskState {

@@ -8,8 +8,8 @@
 # OUTPUT, never a rebuild of its own, so what Vercel serves is what the caller just built
 # and gated. Two callers, one script: the GitHub Action (.github/workflows/publish.yml)
 # on every push to main, with the token held as the repository secret VERCEL_TOKEN; and
-# ~/server-ops/bin/kinetics-vercel-deploy.sh on node-ss by hand, which sources the token
-# from ~/.vercel_token and calls this. The token is read from the environment only.
+# the node-ss deploy wrapper for this repo, run by hand, which sources the token from
+# ~/.vercel_token and calls this. The token is read from the environment only.
 #
 # Two things every one of these apps needs and a bare static upload does not give:
 #   1. A single-page-app fallback. The app uses path-based routing (BrowserRouter), so

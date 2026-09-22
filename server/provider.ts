@@ -57,7 +57,7 @@ const CLI_FLAGS = ['-p', '--output-format', 'json', '--setting-sources', '', '--
  * prompt is written once, named by its hash, and reused. It holds published
  * data and the rules only, never a question.
  */
-const promptDir = process.env.ASK_PROMPT_DIR ?? join(tmpdir(), 'kinetics-ask-prompts');
+const promptDir = process.env.ASK_PROMPT_DIR ?? join(tmpdir(), 'mis-ask-prompts');
 export function systemPromptFile(system: string): string {
   mkdirSync(promptDir, { recursive: true, mode: 0o700 });
   const path = join(promptDir, `${createHash('sha256').update(system).digest('hex').slice(0, 24)}.txt`);
