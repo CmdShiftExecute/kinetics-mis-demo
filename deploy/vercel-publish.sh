@@ -15,7 +15,9 @@
 #   1. A single-page-app fallback. The app uses path-based routing (BrowserRouter), so
 #      /projects is not a file on disk. Without the rewrite, every deep link and every
 #      page refresh returns 404 and only the homepage works.
-#   2. noindex headers. This is a closed client demo and must not reach a search engine.
+#   2. Nothing that blocks indexing. This is a public-launch repo: index.html carries
+#      "index, follow" plus OG, Twitter and JSON-LD tags, and public/robots.txt and
+#      public/sitemap.xml are built into dist/. A noindex header here would silently undo that.
 set -euo pipefail
 
 PROJECT=${1:?vercel project name required}
@@ -40,14 +42,14 @@ cat > "$STAGE/vercel.json" <<'JSON'
   "rewrites": [{ "source": "/((?!assets/|data/|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }],
   "headers": [
     { "source": "/(.*)", "headers": [
-      { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
       { "key": "X-Content-Type-Options", "value": "nosniff" },
       { "key": "Referrer-Policy", "value": "no-referrer" }
     ]}
   ]
 }
 JSON
-printf 'User-agent: *\nDisallow: /\n' > "$STAGE/robots.txt"
+# robots.txt and sitemap.xml are committed under public/ and already copied into $DIST by Vite;
+# this staging step must leave them exactly as built, never overwrite them.
 
 echo "publishing $PROJECT from $DIST ($(du -sh "$DIST" | cut -f1))"
 
