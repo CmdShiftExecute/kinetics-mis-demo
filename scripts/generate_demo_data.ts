@@ -1,5 +1,5 @@
 /**
- * Deterministic synthetic data for the Halvard MIS demo.
+ * Deterministic synthetic data for the Management Information System demo.
  *
  * Run:  bun scripts/generate_demo_data.ts
  * Out:  public/data/rollup.json, index.json, verticals/<slug>.json, engineers/<slug>.json
@@ -97,8 +97,8 @@ const FY = 2026;
 const SEASON = [0.07, 0.075, 0.088, 0.082, 0.084, 0.08, 0.078, 0.083, 0.086, 0.09, 0.092, 0.092];
 
 const META: Meta = {
-  company: 'Halvard Engineering Group',
-  division: 'Building Technologies Division',
+  company: 'A multi-divisional engineering group',
+  division: 'Mechanical, electrical and facilities contracting',
   fiscalYear: FY,
   periodLabel: `January to ${MONTHS_LONG[MONTHS_ELAPSED - 1]} ${FY}`,
   monthsElapsed: MONTHS_ELAPSED,
@@ -299,7 +299,7 @@ const CUSTOMERS = [
   'Greenway Districts',
   'Harbourline Aviation Services',
 ];
-const GROUP_CUSTOMERS = ['Halvard Contracting (group)', 'Halvard Facilities Management (group)'];
+const GROUP_CUSTOMERS = ['Affiliate Contracting (group)', 'Affiliate Facilities Management (group)'];
 
 /** Payment terms and the number of days after the invoice date at which a balance becomes past due. */
 const TERMS: { label: string; days: number }[] = [

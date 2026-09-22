@@ -206,7 +206,7 @@ try {
   await context.close();
 
   const invalid = await pageFor(browser, 1280);
-  await invalid.context.addInitScript(() => localStorage.setItem('halvard-mis-theme', 'invalid'));
+  await invalid.context.addInitScript(() => localStorage.setItem('mis-theme', 'invalid'));
   await ready(invalid.page);
   check((await themeState(invalid.page)).theme === 'parchment' && await invalid.page.locator('#sales table.mis').count() === 1, 'Invalid stored theme falls back without blocking render');
   check(invalid.askCalls() === 0, 'Invalid-storage check made no Ask MIS API calls');

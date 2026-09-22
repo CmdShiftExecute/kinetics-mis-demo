@@ -1,7 +1,7 @@
 {
  "meta": {
-  "company": "Halvard Engineering Group",
-  "division": "Building Technologies Division",
+  "company": "A multi-divisional engineering group",
+  "division": "Mechanical, electrical and facilities contracting",
   "fiscalYear": 2026,
   "periodLabel": "January to August 2026",
   "monthsElapsed": 8,
@@ -15,7 +15,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-16T18:53:46+04:00"
+  "generatedAt": "2026-09-22T16:07:40+04:00"
  },
  "sources": {
   "rollup.sales": {
@@ -1692,7 +1692,7 @@
       "remark": "Legal notice issued 02 Sep 2026"
      },
      {
-      "customer": "Halvard Facilities Management (group)",
+      "customer": "Affiliate Facilities Management (group)",
       "engineer": "Dinesh Iyer",
       "engineerSlug": "dinesh-iyer",
       "vertical": "electrical-distribution",
@@ -1852,7 +1852,7 @@
     },
     "largest": [
      {
-      "customer": "Halvard Facilities Management (group)",
+      "customer": "Affiliate Facilities Management (group)",
       "engineer": "Meera Dsouza",
       "engineerSlug": "meera-dsouza",
       "vertical": "pumps-and-water",
@@ -1966,7 +1966,7 @@
     },
     "largest": [
      {
-      "customer": "Halvard Contracting (group)",
+      "customer": "Affiliate Contracting (group)",
       "engineer": "Ananya Kapoor",
       "engineerSlug": "ananya-kapoor",
       "vertical": "metering",
@@ -2023,7 +2023,7 @@
     },
     "largest": [
      {
-      "customer": "Halvard Contracting (group)",
+      "customer": "Affiliate Contracting (group)",
       "engineer": "Nadia Zaki",
       "engineerSlug": "nadia-zaki",
       "vertical": "automation",
@@ -2080,7 +2080,7 @@
     },
     "largest": [
      {
-      "customer": "Halvard Contracting (group)",
+      "customer": "Affiliate Contracting (group)",
       "engineer": "Rami Aziz",
       "engineerSlug": "rami-aziz",
       "vertical": "fabrication",
@@ -2126,7 +2126,7 @@
       "remark": "Client disputes variation on order 4852, credit note under review"
      },
      {
-      "customer": "Halvard Facilities Management (group)",
+      "customer": "Affiliate Facilities Management (group)",
       "engineer": "Faisal Reyes",
       "engineerSlug": "faisal-reyes",
       "vertical": "trading",
@@ -2183,7 +2183,7 @@
       "remark": "Awaiting consultant certification of payment certificate 7"
      },
      {
-      "customer": "Halvard Contracting (group)",
+      "customer": "Affiliate Contracting (group)",
       "engineer": "Priya Kulkarni",
       "engineerSlug": "priya-kulkarni",
       "vertical": "services",
@@ -2287,7 +2287,7 @@
      "remark": "Legal notice issued 02 Sep 2026"
     },
     {
-     "customer": "Halvard Facilities Management (group)",
+     "customer": "Affiliate Facilities Management (group)",
      "engineer": "Dinesh Iyer",
      "engineerSlug": "dinesh-iyer",
      "vertical": "electrical-distribution",
@@ -2313,7 +2313,7 @@
   "largestByReason": {
    "internalGroup": [
     {
-     "customer": "Halvard Facilities Management (group)",
+     "customer": "Affiliate Facilities Management (group)",
      "engineer": "Dinesh Iyer",
      "engineerSlug": "dinesh-iyer",
      "vertical": "electrical-distribution",
@@ -2324,7 +2324,7 @@
      "remark": "Intercompany offset agreed with group finance, posting in September"
     },
     {
-     "customer": "Halvard Contracting (group)",
+     "customer": "Affiliate Contracting (group)",
      "engineer": "Nadia Zaki",
      "engineerSlug": "nadia-zaki",
      "vertical": "automation",
@@ -2335,7 +2335,7 @@
      "remark": "Intercompany offset agreed with group finance, posting in September"
     },
     {
-     "customer": "Halvard Facilities Management (group)",
+     "customer": "Affiliate Facilities Management (group)",
      "engineer": "Meera Dsouza",
      "engineerSlug": "meera-dsouza",
      "vertical": "pumps-and-water",
@@ -2346,7 +2346,7 @@
      "remark": "Group settlement scheduled for the Q4 intercompany run"
     },
     {
-     "customer": "Halvard Contracting (group)",
+     "customer": "Affiliate Contracting (group)",
      "engineer": "Ananya Kapoor",
      "engineerSlug": "ananya-kapoor",
      "vertical": "metering",
@@ -2357,7 +2357,7 @@
      "remark": "Intercompany offset agreed with group finance, posting in September"
     },
     {
-     "customer": "Halvard Contracting (group)",
+     "customer": "Affiliate Contracting (group)",
      "engineer": "Rami Aziz",
      "engineerSlug": "rami-aziz",
      "vertical": "fabrication",

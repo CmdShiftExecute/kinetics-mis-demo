@@ -2,7 +2,7 @@
 
 Revenue forecast and pipeline by vertical for the full fiscal year, plus the division's monthly revenue run.
 
-<img src="assets/pipeline.png" alt="Halvard MIS pipeline page, revenue forecast and pipeline by vertical" width="100%" />
+<img src="assets/pipeline.png" alt="Management Information System pipeline page, revenue forecast and pipeline by vertical" width="100%" />
 
 ## What is on the page
 

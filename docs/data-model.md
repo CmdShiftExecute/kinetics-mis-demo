@@ -37,7 +37,7 @@ Every money value is an integer in AED thousands. Percentages are plain numbers 
 
 ## Reconciliation
 
-`bun run reconcile` re-reads the written JSON files, independently of the generator's own in-memory checks, and asserts that every figure published in more than one place ties exactly: 527 of 527 assertions pass. The assertions are organised in three tiers: division level, vertical level (looped over all ten verticals), and per-row, one assertion for every individual customer's aging buckets and every individual unbilled project's age bands, which is why the bulk of the 527 count comes from row-level checks rather than summary-level ones. The script is idempotent: a re-run against an unchanged dataset reports the result unchanged and does not rewrite the file, so it can run safely as a verification step without ever dirtying a clean working tree.
+`bun run reconcile` re-reads the written JSON files, independently of the generator's own in-memory checks, and asserts that every figure published in more than one place ties exactly: 527 of 527 assertions pass. The assertions are organised in three tiers: division level, vertical level (looped over every vertical), and per-row, one assertion for every individual customer's aging buckets and every individual unbilled project's age bands, which is why the bulk of the 527 count comes from row-level checks rather than summary-level ones. The script is idempotent: a re-run against an unchanged dataset reports the result unchanged and does not rewrite the file, so it can run safely as a verification step without ever dirtying a clean working tree.
 
 ## Regenerating
 

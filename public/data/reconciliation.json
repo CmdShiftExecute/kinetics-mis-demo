@@ -1,5 +1,5 @@
 {
- "checkedAt": "2026-09-12T02:57:40+04:00",
+ "checkedAt": "2026-09-22T16:07:36+04:00",
  "policy": [
   "Every money value is an integer in AED thousands, rounded once at the lowest level the generator produces: one product line in one month.",
   "Every total is a sum of those integers. Sales, forecast, profit and loss, monthly series, vertical files and engineer files therefore tie exactly, with no display rounding.",
@@ -620,8 +620,8 @@
    "pass": true
   },
   {
-   "id": "electrical-distribution-dinesh-iyer-halvard-facilities-management-group--buckets",
-   "statement": "Electrical Distribution: Halvard Facilities Management (group) aging buckets sum to total outstanding",
+   "id": "electrical-distribution-dinesh-iyer-affiliate-facilities-management-group--buckets",
+   "statement": "Electrical Distribution: Affiliate Facilities Management (group) aging buckets sum to total outstanding",
    "left": 7803,
    "right": 7803,
    "pass": true
@@ -1355,8 +1355,8 @@
    "pass": true
   },
   {
-   "id": "pumps-and-water-meera-dsouza-halvard-facilities-management-group--buckets",
-   "statement": "Pumps and Water: Halvard Facilities Management (group) aging buckets sum to total outstanding",
+   "id": "pumps-and-water-meera-dsouza-affiliate-facilities-management-group--buckets",
+   "statement": "Pumps and Water: Affiliate Facilities Management (group) aging buckets sum to total outstanding",
    "left": 876,
    "right": 876,
    "pass": true
@@ -1600,8 +1600,8 @@
    "pass": true
   },
   {
-   "id": "vertical-transport-divya-bhatt-halvard-facilities-management-group--buckets",
-   "statement": "Vertical Transport: Halvard Facilities Management (group) aging buckets sum to total outstanding",
+   "id": "vertical-transport-divya-bhatt-affiliate-facilities-management-group--buckets",
+   "statement": "Vertical Transport: Affiliate Facilities Management (group) aging buckets sum to total outstanding",
    "left": 243,
    "right": 243,
    "pass": true
@@ -1803,8 +1803,8 @@
    "pass": true
   },
   {
-   "id": "metering-ananya-kapoor-halvard-contracting-group--buckets",
-   "statement": "Metering: Halvard Contracting (group) aging buckets sum to total outstanding",
+   "id": "metering-ananya-kapoor-affiliate-contracting-group--buckets",
+   "statement": "Metering: Affiliate Contracting (group) aging buckets sum to total outstanding",
    "left": 665,
    "right": 665,
    "pass": true
@@ -2006,8 +2006,8 @@
    "pass": true
   },
   {
-   "id": "automation-nadia-zaki-halvard-contracting-group--buckets",
-   "statement": "Automation: Halvard Contracting (group) aging buckets sum to total outstanding",
+   "id": "automation-nadia-zaki-affiliate-contracting-group--buckets",
+   "statement": "Automation: Affiliate Contracting (group) aging buckets sum to total outstanding",
    "left": 1018,
    "right": 1018,
    "pass": true
@@ -2237,8 +2237,8 @@
    "pass": true
   },
   {
-   "id": "fabrication-rami-aziz-halvard-contracting-group--buckets",
-   "statement": "Fabrication: Halvard Contracting (group) aging buckets sum to total outstanding",
+   "id": "fabrication-rami-aziz-affiliate-contracting-group--buckets",
+   "statement": "Fabrication: Affiliate Contracting (group) aging buckets sum to total outstanding",
    "left": 520,
    "right": 520,
    "pass": true
@@ -2419,8 +2419,8 @@
    "pass": true
   },
   {
-   "id": "trading-faisal-reyes-halvard-facilities-management-group--buckets",
-   "statement": "Trading: Halvard Facilities Management (group) aging buckets sum to total outstanding",
+   "id": "trading-faisal-reyes-affiliate-facilities-management-group--buckets",
+   "statement": "Trading: Affiliate Facilities Management (group) aging buckets sum to total outstanding",
    "left": 115,
    "right": 115,
    "pass": true
@@ -2615,8 +2615,8 @@
    "pass": true
   },
   {
-   "id": "services-priya-kulkarni-halvard-contracting-group--buckets",
-   "statement": "Services: Halvard Contracting (group) aging buckets sum to total outstanding",
+   "id": "services-priya-kulkarni-affiliate-contracting-group--buckets",
+   "statement": "Services: Affiliate Contracting (group) aging buckets sum to total outstanding",
    "left": 321,
    "right": 321,
    "pass": true

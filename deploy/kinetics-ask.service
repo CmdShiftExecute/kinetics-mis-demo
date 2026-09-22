@@ -1,4 +1,4 @@
-# Ask the MIS answer service for the Halvard MIS demo (kinetics-mis-demo).
+# Ask the MIS answer service for the Management Information System demo (kinetics-mis-demo).
 # Installed by deploy/install-ask.sh into ~/.config/systemd/user/. Edit here, then re-run the installer.
 # Paths use the systemd %h specifier (the running user's home), so nothing host-specific is committed.
 #
@@ -8,7 +8,7 @@
 # re-run the installer. Nothing here sets a key.
 
 [Unit]
-Description=Halvard MIS demo, Ask the MIS answer service (Unix socket, Claude on the subscription)
+Description=Management Information System demo, Ask the MIS answer service (Unix socket, Claude on the subscription)
 After=network.target
 
 [Service]

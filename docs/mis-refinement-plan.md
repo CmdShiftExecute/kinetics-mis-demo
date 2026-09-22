@@ -6,7 +6,7 @@ Scope: refine the existing MIS only; preserve technical identity, financial data
 
 - Four prominent questions: revenue so far, year-end revenue, year-end profit, cash overdue. Each shows one comparator. Order book and working capital remain visible directly beneath, with open versus expected orders distinguished.
 - Three management priorities link to evidence: collection exposure, revenue shortfalls by business, and forecast losses. Derived from existing rollup data; no fabricated urgency, owners or targets.
-- Keep all ten sales rows, sorting, total/netting reconciliation, monthly actual/forecast/budget chart with its three modes, complete profit comparison, loss makers, absent YTD profit-budget caveat, concentration denominator, aging, provisions and working-capital components.
+- Keep all sales rows, sorting, total/netting reconciliation, monthly actual/forecast/budget chart with its three modes, complete profit comparison, loss makers, absent YTD profit-budget caveat, concentration denominator, aging, provisions and working-capital components.
 - Cut duplicate introductory arithmetic. Retain units/period once near headings, precise values in tables, methods/source in existing disclosures. No collapsed primary analytical blocks.
 - Keep top navigation persistent. Add module access, page-section selection and three named themes using native keyboard controls. Preserve Ask the MIS and its state model.
 - Parchment retains current palette; Light uses white; Dark uses charcoal with separately checked inks, hazard and chart colors. Storage failure must not block rendering. Reduced-motion behavior retained.

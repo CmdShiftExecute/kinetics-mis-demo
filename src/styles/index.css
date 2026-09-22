@@ -164,10 +164,10 @@ p {
 .mast {
   padding-top: var(--s-xl);
 }
-/* Three columns with equal outer tracks, so the system title is centred on the page, not within a leftover column. */
+/* Two columns: system title and stamp on the left, controls on the right. */
 .mast-row {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto;
   align-items: end;
   gap: var(--s-xl);
 }
@@ -176,21 +176,6 @@ p {
 }
 .mast-row .stamp {
   flex-wrap: nowrap;
-}
-.mast-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.wordmark {
-  font-size: 28px;
-  letter-spacing: 0.02em;
-}
-.mast-division {
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-2);
 }
 /* The system's name at the page-heading size, so the masthead says which system this is. */
 .mast-system {
@@ -1856,10 +1841,8 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
   background: var(--paper);
   padding-top: 18px;
 }
-.mast-row { grid-template-columns: auto 1fr auto; align-items: center; gap: 28px; }
-.mast-brand { gap: 5px; }
+.mast-row { grid-template-columns: 1fr auto; align-items: center; gap: 28px; }
 .mast-system { font-size: 16px; white-space: normal; margin: 0 0 6px; }
-.mast-identity { padding-left: 26px; border-left: 1px solid var(--rule); }
 .mast-identity .stamp { justify-content: flex-start; font-size: 10px; }
 .mast-identity .stamp > div { display: flex; gap: 8px; }
 .mast-identity .stamp dt, .mast-identity .stamp dd { margin: 0; }
@@ -1937,7 +1920,6 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
 .overview-grid .strip .big { font-size: 18px; }
 @media (max-width: 1100px) {
   .mast-row { gap: 16px; }
-  .mast-identity { padding-left: 16px; }
   .mast-system { font-size: 13px; }
   .mast-tools { gap: 8px; }
   .nav { gap: 10px 16px; }
@@ -1969,8 +1951,6 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
   .overview-grid .sec-head { flex-wrap: wrap; }
 }
 @media (max-width: 440px) {
-  .mast-brand .wordmark { font-size: 24px; }
-  .mast-division { font-size: 10px; }
   .mast-tools { gap: 5px; }
   .mast-row { gap: 10px; }
   .overview .strip.answers .big { font-size: 26px; }
@@ -1990,7 +1970,6 @@ html { scroll-padding-top: var(--mast-offset, 210px); }
 }
 .pipeline-context { font-size: 11px; color: var(--ink-2); margin: 10px 0 0; }
 @media (max-width: 760px) {
-  .mast-brand { order: 1; }
   .mast-tools { order: 2; }
   .mast-identity { display: block; grid-column: 1 / -1; order: 3; padding: 0; border: 0; }
   .mast-identity .mast-system { display: none; }

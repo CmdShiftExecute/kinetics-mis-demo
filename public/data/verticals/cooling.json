@@ -1,7 +1,7 @@
 {
  "meta": {
-  "company": "Halvard Engineering Group",
-  "division": "Building Technologies Division",
+  "company": "A multi-divisional engineering group",
+  "division": "Mechanical, electrical and facilities contracting",
   "fiscalYear": 2026,
   "periodLabel": "January to August 2026",
   "monthsElapsed": 8,
@@ -15,7 +15,7 @@
   "currency": "AED",
   "unit": "thousand",
   "seed": 20260911,
-  "generatedAt": "2026-09-16T18:53:46+04:00"
+  "generatedAt": "2026-09-22T16:07:40+04:00"
  },
  "slug": "cooling",
  "name": "Cooling",

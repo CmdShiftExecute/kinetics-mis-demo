@@ -2,8 +2,8 @@
 
 The front page. It answers five questions in a fixed order: how is sales performing against plan, what revenue will be delivered this year, what profit is expected after costs, which businesses explain the gaps, and where is working capital tied up. Every figure names its measure, its period and its comparator in the surrounding prose, so nothing reads as a bare number.
 
-<img src="assets/overview-hero.png" alt="Halvard MIS overview page, headline band and management attention band" width="100%" />
-<img src="assets/overview-detail.png" alt="Halvard MIS overview page, net profit and receivables sections" width="100%" />
+<img src="assets/overview-hero.png" alt="Management Information System overview page, headline band and management attention band" width="100%" />
+<img src="assets/overview-detail.png" alt="Management Information System overview page, net profit and receivables sections" width="100%" />
 
 ## What is on the page
 

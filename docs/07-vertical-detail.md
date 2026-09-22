@@ -1,8 +1,8 @@
 # Vertical detail
 
-One vertical's full sheet, the largest and most detailed page template in the app, reused by every one of the ten verticals. Six blocks, plus a seventh for the one vertical that runs a factory.
+One vertical's full sheet, the largest and most detailed page template in the app, reused by every vertical in the multi-vertical organisation. Six blocks, plus a seventh for the one vertical that runs a factory.
 
-<img src="assets/vertical-detail.png" alt="Halvard MIS vertical detail page for Mechanical Systems" width="100%" />
+<img src="assets/vertical-detail.png" alt="Management Information System vertical detail page for Mechanical Systems" width="100%" />
 
 ## What is on the page
 
@@ -21,7 +21,7 @@ A vertical's sheet total covers every row shown on the sheet, including product 
 
 ## Interactions
 
-The engineer-and-product table opens a keyboard-accessible disclosure showing every product-line sub-total across the whole sheet. Vertical names in the header row navigate between all ten verticals without leaving this page template.
+The engineer-and-product table opens a keyboard-accessible disclosure showing every product-line sub-total across the whole sheet. Vertical names in the header row navigate between every vertical without leaving this page template.
 
 ## See also
 

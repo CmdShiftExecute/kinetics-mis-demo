@@ -2,8 +2,8 @@
 
 Where working capital is tied up across receivables, unbilled work and inventory, by vertical.
 
-<img src="assets/working-capital-hero.png" alt="Halvard MIS working capital page, headline strip" width="100%" />
-<img src="assets/working-capital-detail.png" alt="Halvard MIS working capital page, inventory by vertical" width="100%" />
+<img src="assets/working-capital-hero.png" alt="Management Information System working capital page, headline strip" width="100%" />
+<img src="assets/working-capital-detail.png" alt="Management Information System working capital page, inventory by vertical" width="100%" />
 
 ## What is on the page
 

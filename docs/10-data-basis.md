@@ -2,7 +2,7 @@
 
 The transparency page: where every figure comes from, what every term means, the generator's own precision policy, the machine-run reconciliation result, and the list of synthetic assumptions.
 
-<img src="assets/data-basis.png" alt="Halvard MIS data basis page, reporting basis and reconciliation" width="100%" />
+<img src="assets/data-basis.png" alt="Management Information System data basis page, reporting basis and reconciliation" width="100%" />
 
 ## What is on the page
 

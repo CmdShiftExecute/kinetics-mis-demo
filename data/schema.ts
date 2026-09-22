@@ -1,5 +1,5 @@
 /**
- * Data contract for the Halvard MIS demo.
+ * Data contract for the Management Information System demo.
  *
  * Every figure the browser shows is read from JSON produced by
  * scripts/generate_demo_data.ts. Nothing is computed at runtime beyond

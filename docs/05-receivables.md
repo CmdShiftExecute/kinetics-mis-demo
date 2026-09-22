@@ -2,7 +2,7 @@
 
 The division-wide receivables position: net-to-collect trend, past due, aging, and why balances are not collected.
 
-<img src="assets/receivables.png" alt="Halvard MIS receivables page, receivables by vertical" width="100%" />
+<img src="assets/receivables.png" alt="Management Information System receivables page, receivables by vertical" width="100%" />
 
 ## What is on the page
 

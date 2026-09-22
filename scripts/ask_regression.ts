@@ -122,7 +122,7 @@ const questions: Q[] = [
   { id: 25, kind: 'engineer', question: "What is Rohan Pillai's ROI year to date?", figures: [x(rohan.headline.roiYtd)], pages: [engRoute(rohan), '/v/electrical-distribution'], refusal: false },
   { id: 26, kind: 'unanswerable', question: 'What was the gross margin in the third quarter of last year?', figures: [], pages: [], refusal: true },
   { id: 27, kind: 'unanswerable', question: 'What was division revenue in fiscal year 2024?', figures: [], pages: [], refusal: true },
-  { id: 28, kind: 'unanswerable', question: 'Who is the managing director of Halvard?', figures: [], pages: [], refusal: true },
+  { id: 28, kind: 'unanswerable', question: 'Who is the managing director of the group?', figures: [], pages: [], refusal: true },
   { id: 29, kind: 'unanswerable', question: 'What is the cash balance in the bank today?', figures: [], pages: [], refusal: true },
   { id: 30, kind: 'unanswerable', question: 'What will division revenue be next year?', figures: [], pages: [], refusal: true },
   { id: 31, kind: 'derived', question: 'What is the combined year to date revenue of Cooling and Metering?', figures: [k(coolingRow.ytdRevenue + meteringRow.ytdRevenue)], pages: ['/', '/sales'], refusal: false },

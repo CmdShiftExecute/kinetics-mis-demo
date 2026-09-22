@@ -2,7 +2,7 @@
 
 The full sales performance report by vertical and by engineer, plus the complete netting disclosure: every shared product line individually, not just the summary sentence shown on the Overview.
 
-<img src="assets/sales.png" alt="Halvard MIS sales page, sales performance by vertical" width="100%" />
+<img src="assets/sales.png" alt="Management Information System sales page, sales performance by vertical" width="100%" />
 
 ## What is on the page
 

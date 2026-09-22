@@ -1,8 +1,8 @@
-<img src="docs/assets/banner.png" alt="Halvard MIS" width="100%" />
+<img src="docs/assets/banner.png" alt="Management Information System" width="100%" />
 
-# Halvard MIS
+# Management Information System
 
-*A zero-backend management information system for a fictional engineering division, built to answer five questions a division head asks every month.*
+*A zero-backend management information system for a fictional, unnamed multi-divisional engineering group, built to answer five questions a division head asks every month.*
 
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
@@ -14,7 +14,7 @@
 
 ## What it is
 
-Halvard MIS is a management information system for a fictional engineering group, Halvard Engineering Group, Building Technologies Division. It answers the five questions a division head asks in order: how is sales performing against plan, what revenue will be delivered this year, what profit is expected after costs, which businesses explain the gaps, and where is working capital tied up. Every figure on the page states its measure, its period and its comparator, so nothing appears as a bare number a reader has to interpret from context.
+This Management Information System is built for a fictional, unnamed multi-divisional engineering group. It answers the five questions a division head asks in order: how is sales performing against plan, what revenue will be delivered this year, what profit is expected after costs, which businesses explain the gaps, and where is working capital tied up. Every figure on the page states its measure, its period and its comparator, so nothing appears as a bare number a reader has to interpret from context.
 
 The whole application turns on one design rule: nothing is computed in the browser. It is a static Vite and React site sitting on top of finished JSON tables written by a generator, and every table, chart and headline figure is a sort, a filter or a format of data that already exists on disk. If a number on screen is wrong, the fix belongs in the generator, never in a component. All data is synthetic, generated from one seed. No real company, person or figure appears anywhere in this repository.
 
@@ -22,11 +22,11 @@ The whole application turns on one design rule: nothing is computed in the brows
 
 **https://kinetics-mis-demo.vercel.app/**
 
-<img src="docs/assets/overview-hero.png" alt="Halvard MIS overview page" width="100%" />
+<img src="docs/assets/overview-hero.png" alt="Management Information System overview page" width="100%" />
 
 ## Highlights
 
-- Ten business verticals (electrical distribution, cooling, mechanical systems, pumps and water, vertical transport, metering, automation, fabrication, trading and services), each with its own full sheet of sales, profit, targets, inventory, unbilled work and receivables.
+- Multi-vertical (electrical distribution, cooling, mechanical systems, pumps and water, vertical transport, metering, automation, fabrication, trading and services), each with its own full sheet of sales, profit, targets, inventory, unbilled work and receivables.
 - 527 of 527 reconciliation assertions pass, checked independently of the generator by re-reading the written JSON and asserting every figure published in more than one place ties exactly.
 - 165 browser interaction checks (Playwright, against a served build) cover page structure, keyboard traversal, chart behaviour and error resilience, including negative controls that prove each check can actually fail.
 - Three named themes, Parchment, Light and Dark, measured across 75 contrast pairs by a gate that reads the color tokens directly out of the stylesheet, so the palette cannot silently drift out of WCAG compliance.
@@ -92,8 +92,8 @@ Three named themes, Parchment, Light and Dark, are chosen before first paint by 
 
 ## Sibling demos
 
-- **Halvard PIS**: a scored market register and relevance matrix across thousands of synthetic projects. [github.com/CmdShiftExecute/kinetics-bnc-demo](https://github.com/CmdShiftExecute/kinetics-bnc-demo) · [live demo](https://kinetics-pis-demo.vercel.app/)
-- **Halvard Central Store**: a warehouse management demo sharing this app's design system and component patterns. [github.com/CmdShiftExecute/kinetics-wms-demo](https://github.com/CmdShiftExecute/kinetics-wms-demo) · [live demo](https://kinetics-wms-demo.vercel.app/)
+- **Project Intelligence System**: a scored market register and relevance matrix across thousands of synthetic projects. [github.com/CmdShiftExecute/kinetics-bnc-demo](https://github.com/CmdShiftExecute/kinetics-bnc-demo) · [live demo](https://kinetics-pis-demo.vercel.app/)
+- **Warehouse Information System**: a warehouse management demo sharing this app's design system and component patterns. [github.com/CmdShiftExecute/kinetics-wms-demo](https://github.com/CmdShiftExecute/kinetics-wms-demo) · [live demo](https://kinetics-wms-demo.vercel.app/)
 
 ---
 
